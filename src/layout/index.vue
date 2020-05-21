@@ -1,27 +1,24 @@
 <template>
-   <v-app>
-    <AppHeader></AppHeader>
+  <div id="app">
+    <TopNav></TopNav>
 
-    <v-content>
-      <transition name="fade">
-            <router-view></router-view>
-      </transition>
-    </v-content>
-
+    <b-container>
+      <router-view></router-view>
+    </b-container>
     <AppFooter></AppFooter>
-   </v-app>
-
+  </div>
 </template>
 
 <script>
-import AppHeader from './Header.vue'
-import AppFooter from './Footer.vue'
+import AppFooter from "./Footer.vue";
+import TopNav from "./TopNav";
 
 export default {
-  name: 'AppLayout',
+  name: "AppLayout",
   components: {
-    AppHeader,
+    TopNav,
     AppFooter
   }
-}
-</script>s
+};
+</script>
+s

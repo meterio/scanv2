@@ -1,5 +1,9 @@
 @import "reset";
 
+// import bootstrap style
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+
 @import "variables";
 @import "medias";
 @import "global";

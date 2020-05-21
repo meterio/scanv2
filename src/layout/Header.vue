@@ -1,6 +1,6 @@
 <template>
   <div class="header wrapper">
-    <UiToastList/>
+    <UiToastList />
 
     <div class="menu-wrapper">
       <ul class="menu">
@@ -18,35 +18,35 @@
         <li v-if="$currentUser.id">
           <router-link :to="{ name: 'profile' }">profile</router-link>
         </li>
-        <li v-if="$currentUser.id"><span class="logout-button" @click="logout()">logout</span></li>
+        <li v-if="$currentUser.id">
+          <span class="logout-button" @click="logout()">logout</span>
+        </li>
         <li>
-          <UiHeaderDropdownMenu/>
+          <UiHeaderDropdownMenu />
         </li>
       </ul>
     </div>
-
   </div>
-
 </template>
 
 <script>
-import { AuthService } from '../services/auth.service'
+import { AuthService } from "../services/auth.service";
 
-import UiHeaderDropdownMenu from '@/components/UiHeaderDropdownMenu.vue'
-import UiToastList from '@/components/UiToastList'
+import UiHeaderDropdownMenu from "@/components/UiHeaderDropdownMenu.vue";
+import UiToastList from "@/components/UiToastList";
 
 export default {
-  name: 'Header',
+  name: "Header",
   components: {
     UiToastList,
     UiHeaderDropdownMenu
   },
   methods: {
-    async logout () {
-      await AuthService.makeLogout()
+    async logout() {
+      await AuthService.makeLogout();
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -79,7 +79,6 @@ export default {
 
     li {
       padding: 15px;
-
     }
 
     &.side {
