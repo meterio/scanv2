@@ -1,82 +1,290 @@
-html,
-body,
-#app {
-  min-height: 100vh;
-}
-
 body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-family: Lato, Helvetica, Arial, sans-serif;
-}
-
-#app {
-  background-color: #efeeed;
-  display: flex;
-  flex-direction: column;
-}
-
-img {
-  vertical-align: top;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-// firefox fix 'shaking font inside button'
-input[type="button"],
-button {
+  background-color: $back-color;
+  font-family: $font;
+  margin: 0;
   padding: 0;
 }
 
-//.page {
-//  height: 100%;
-//  width: 100%;
-//  background-color: green;
-//}
-
-.clearfix::after {
-  display: table;
-  clear: both;
-  content: "";
+.select-temp{
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='13' height='8' viewBox='0 0 13 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6.5 6L12 1' stroke='%23A6B5CC' stroke-width='2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat, repeat;
+    background-position: right .7em top 50%, 0 0;
+    background-size: .65em auto, 100%;
 }
 
-.is-active {
-  //border-radius: 5px;
-  //border: 3px solid #bebebe;
-  //padding: 5px 15px;
-}
-
-.wrapper {
+.container {
   width: 100%;
-  min-width: 300px; // and paddind + 10 + 10
-
-  margin: 0 auto;
-  padding: 0 10px;
-
-  box-sizing: border-box;
-
-  @include media_desktop {
-    max-width: 1200px;
-    // background: red;
-  }
-
-  @include media_tablet {
-    // background: yellow;
-    max-width: 1024px;
-  }
-
-  @include media_mobile {
-    // background: green;
-  }
+  margin-left: auto;
+  margin-right: auto;
 }
 
-// routes transition animation
-.fade-enter-active {
-  transition: opacity 0.8s;
+
+/***************  Blockchain div  ********************/
+.col-row h3,.col-row-primary{
+  color: $primary-font-color;
+  font-weight: normal;
 }
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
+
+.col-row span,.col-row-primary span,.col-row-secondary{
+  color: $secondary-font-color;
+  font-size: 13px;
 }
+
+.card-title,.col-row-third{
+  color: $third-font-color !important;
+}
+
+.table-col label{
+  background-color: #EBEEF6;
+  border-radius: 5px;
+  font-size: 13px;
+  padding: 2px 4px 2px 4px;
+  display: inline-block;
+}
+
+.container-pos{
+    width: 80%;
+    margin: 0 auto;
+    //height: 70px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    border-bottom: 1px solid $border-color;
+}
+
+.container-pos a{
+    text-decoration: none;
+    text-align: center;
+    padding: 10px 20px;
+    display: inline-block;   
+}
+
+.container-pos .active{
+  color: $primary-color;
+  border-bottom: 1px solid $primary-color;
+}
+
+
+.data-container{
+    display: grid;
+    grid-gap: 0;
+    width: 80%;
+    margin: 0 auto;
+    //background-color: black;
+    grid-template-columns: 50% 50%;
+    grid-template-areas: 'upper-grid upper-grid'
+    'down-grid down-grid'
+    'left-grid right-grid'
+;
+}
+
+.upper-grid{
+    display: grid;
+    grid-area: upper-grid;
+    width: 100%;
+    height: 244px;
+    //border: 1px solid $border-color;
+    box-sizing: border-box;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    background-color: $back-white;
+    grid-template-columns: 24.5% 0.5% 24.5% 1% 24.5% 0.5% 24.5%;
+    grid-template-areas: 'upper-grid-class1 upper-grid-class1 upper-grid-class1 divider1 upper-grid-class2 upper-grid-class2 upper-grid-class2'
+    'horizontal-divider horizontal-divider horizontal-divider horizontal-divider horizontal-divider horizontal-divider horizontal-divider'
+    'upper-grid-class3 divider3 upper-grid-class4 divider2 upper-grid-class5 divider4 upper-grid-class6'
+    ;
+}
+
+.down-grid{
+    display: grid;
+    grid-area: down-grid;
+    width: 100%;
+    height: 244px;
+    //border: 1px solid $border-color;
+    box-sizing: border-box;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    margin-top: 4%;
+    background-color: $back-white;
+    grid-template-columns: 24.5% 24.5% 2% 24.5% 24.5%;
+    grid-template-areas: 'down-grid-class1 down-grid-class1 down-divider1  down-grid-class2 down-grid-class2'
+    'down-horizontal-divider down-horizontal-divider down-horizontal-divider down-horizontal-divider down-horizontal-divider'
+    'down-grid-class3 down-divider2 down-grid-class4 down-divider3 down-grid-class5'
+    ;
+}
+
+.left-grid{
+    grid-area: left-grid;
+    width: 96%;
+    //height: 430px;
+    height: auto;
+    //border: 1px solid $border-color;
+    box-sizing: border-box;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    margin-top: 8%;
+    background-color: $back-white;
+}
+
+.right-grid{
+    grid-area: right-grid;
+    width: 96%;
+    //height: 430px;
+    height: auto;
+    //border: 1px solid $border-color;
+    box-sizing: border-box;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    margin-top: 8%;
+    margin-left: 4%;
+    background-color: $back-white;
+}
+
+.upper-grid-class1{
+    grid-area: upper-grid-class1;
+    text-align: center;
+    padding-bottom: 14px;
+}
+
+.upper-grid-class2{
+    grid-area: upper-grid-class2;
+    text-align: center;
+    padding-bottom: 14px;
+}
+
+.upper-grid-class3{
+    grid-area: upper-grid-class3;
+    text-align: center;
+    padding-bottom: 14px;
+}
+
+.upper-grid-class4{
+    grid-area: upper-grid-class4;
+    text-align: center;
+    padding-bottom: 14px;
+}
+
+.upper-grid-class5{
+    grid-area: upper-grid-class5;
+    text-align: center;
+    padding-bottom: 14px;
+}
+
+.upper-grid-class6{
+    grid-area: upper-grid-class6;
+    text-align: center;
+    padding-bottom: 14px;
+}
+
+.upper-grid .banner-divider1 {
+    grid-area: divider1;
+    max-width: 1px;
+    min-width: 1px;
+    background-color: #ebeef6;
+    height: 67%;
+    margin-top: 78%;
+  }
+
+.upper-grid .banner-divider2 {
+    grid-area: divider2;
+    max-width: 1px;
+    min-width: 1px;
+    background-color: #ebeef6;
+    height: 67%;
+    margin-top: 78%;
+}
+
+.upper-grid .banner-divider3 {
+    grid-area: divider3;
+    max-width: 1px;
+    min-width: 1px;
+    background-color: #ebeef6;
+    height: 67%;
+    margin-top: 78%;
+}
+
+  .upper-grid .banner-divider4 {
+    grid-area: divider4;
+    max-width: 1px;
+    min-width: 1px;
+    background-color: #ebeef6;
+    height: 67%;
+    margin-top: 78%;
+  }
+
+  .upper-grid .banner-horizontal-divider {
+    grid-area: horizontal-divider;
+    max-width: 94%;
+    background-color: #ebeef6;
+    height: 1px;
+    margin-left: 3%;
+  }
+
+.down-grid-class1{
+    grid-area: down-grid-class1;
+    text-align: center;
+    padding-bottom: 14px;
+}
+
+.down-grid-class2{
+    grid-area: down-grid-class2;
+    text-align: center;
+    padding-bottom: 14px;
+}
+
+.down-grid-class3{
+    grid-area: down-grid-class3;
+    text-align: center;
+    padding-bottom: 14px;
+    margin-left: 70px;
+}
+
+.down-grid-class4{
+    grid-area: down-grid-class4;
+    text-align: center;
+    width: 100px;
+    margin-left: -57px;
+}
+
+.down-grid-class5{
+    grid-area: down-grid-class5;
+    text-align: center;
+    padding-bottom: 14px;
+    margin-right: 142px;
+}
+
+.down-grid .banner-divider1 {
+    grid-area: down-divider1;
+    max-width: 1px;
+    min-width: 1px;
+    background-color: #ebeef6;
+    height: 67%;
+    margin-top: 78%;
+  }
+
+  .down-grid .banner-divider2 {
+    grid-area: down-divider2;
+    max-width: 1px;
+    min-width: 1px;
+    background-color: #ebeef6;
+    height: 80%;
+    margin-top: 1%;
+    margin-left: 23%;
+  }
+
+  .down-grid .banner-divider3 {
+    grid-area: down-divider3;
+    max-width: 1px;
+    min-width: 1px;
+    background-color: #ebeef6;
+    height: 80%;
+    margin-top: 1%;
+    margin-left: 56%;
+  }
+  
+  .down-grid .banner-horizontal-divider {
+    grid-area: down-horizontal-divider;
+    max-width: 94%;
+    background-color: #ebeef6;
+    height: 1px;
+    margin-left: 3%;
+  }
