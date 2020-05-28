@@ -1,20 +1,43 @@
 <template>
-  <div class="homebanner">
-    <div class="container">
-      <h1 class="title">Meter Blockchain Exlorer</h1>
-      <Search />
+  <div class="home">
+    <!-- search banner -->
+    <div class="search-banner">
+      <div class="container">
+        <h1 class="title">Meter Blockchain Exlorer</h1>
+        <Search />
+      </div>
     </div>
+
+    <!-- TODO:tab nav -->
+
+    <!-- card list -->
+    <b-container class="card">
+      <b-row>
+        <b-col class="border-r"><DataCard /></b-col>
+        <b-col><DataCard /></b-col>
+      </b-row>
+      <hr />
+
+      <b-row>
+        <b-col class="border-r"><DataCard /></b-col>
+        <b-col class="border-r"><DataCard /></b-col>
+        <b-col class="border-r"><DataCard /></b-col>
+        <b-col><DataCard /></b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
 <script>
 import Search from "@/components/Search.vue";
+import DataCard from "@/components/DataCard.vue";
 
 export default {
   name: "Home",
 
   components: {
-    Search
+    Search,
+    DataCard
   },
 
   data() {
@@ -26,18 +49,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.homebanner {
+.search-banner {
   background-image: url("~@/assets/background.png");
   height: 210px;
   background-size: cover;
   display: flex;
   padding-top: 50px;
+
+  .title {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+  }
 }
 
-.homebanner .title {
-  color: #fff;
-  font-size: 20px;
-  font-weight: 400;
-  text-align: center;
+.card {
+  margin: 1rem auto;
+  padding: 1rem;
+
+  hr {
+    border-color: $border-light;
+  }
+
+  .border-r {
+    border-right: 1px solid $border-light;
+  }
 }
 </style>

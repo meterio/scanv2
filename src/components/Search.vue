@@ -35,7 +35,6 @@ export default {
 
   .search-select {
     .btn {
-      background-color: $back-white;
       margin: -6px;
     }
   }
