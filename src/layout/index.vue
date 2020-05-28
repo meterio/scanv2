@@ -1,23 +1,21 @@
 <template>
   <div id="app">
     <TopNav></TopNav>
-
-    <b-container>
-      <router-view></router-view>
-    </b-container>
-    <AppFooter></AppFooter>
+    <!-- router content -->
+    <router-view></router-view>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
-import AppFooter from "./Footer.vue";
+import Footer from "./Footer.vue";
 import TopNav from "./TopNav";
 
 export default {
   name: "AppLayout",
   components: {
     TopNav,
-    AppFooter
+    Footer
   }
 };
 </script>
