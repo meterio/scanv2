@@ -11,7 +11,7 @@
       <!-- column: height_post -->
       <template v-slot:cell(height_post)="data">
         <div class="dt-row">
-          <div class="block-icon"></div>
+          <div class="icon icon-mint-active"></div>
           <span>{{ data.value }}</span>
         </div>
       </template>
@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  name: "DataTable",
+  name: "ActiveAuctions",
   data() {
     return {
       // Note `isActive` is left out and will not appear in the rendered table
@@ -81,50 +81,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.table-container {
-  margin-top: 30px;
-  margin-bottom: 10px;
-
-  .title {
-    color: #5c6f8c;
-    font-size: 16px;
-  }
-}
-
-.data-table {
-  background-color: #fff;
-  border-radius: 5px;
-
-  thead {
-    th {
-      color: #5c6f8c;
-      font-size: 14px;
-      text-align: center;
-    }
-  }
-
-  .dt-row {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 50px;
-    margin: 0.5rem;
-
-    .block-icon {
-      background-image: url("~@/assets/hammer_primary.png");
-      background-color: #d9e8ff;
-      background-repeat: no-repeat;
-      background-position: center;
-      width: 50px;
-      height: 50px;
-      border-radius: 5px;
-    }
-
-    .primary {
-      color: #287df9;
-    }
-  }
-}
-</style>

@@ -22,18 +22,23 @@
     </div>
 
     <!-- active auctions -->
-    <DataTable></DataTable>
+    <ActiveAuctions></ActiveAuctions>
+
+    <!-- past auctions -->
+    <PastAuctions />
   </div>
 </template>
 
 <script>
-import DataTable from "@/components/DataTable.vue";
+import ActiveAuctions from "@/components/ActiveAuctions.vue";
+import PastAuctions from "@/components/PastAuctions.vue";
 
 export default {
   name: "Home",
 
   components: {
-    DataTable
+    ActiveAuctions,
+    PastAuctions
   },
 
   data() {

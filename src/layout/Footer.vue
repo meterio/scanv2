@@ -59,6 +59,7 @@ export default {
 
 <style lang="scss" scoped>
 footer {
+  flex-shrink: 0;
   width: 100%;
   background-color: $back-white;
   color: $third-font-color;

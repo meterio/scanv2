@@ -1,9 +1,25 @@
-body {
-  background-color: $back-color;
-  font-family: $font;
-  margin: 0;
-  padding: 0;
-}
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    background-color: $back-color;
+    font-family: $font;
+    margin: 0;
+    padding: 0;
+  }
+
+  // footer stick to bottom
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .main-container {
+    flex: 1 0 auto;
+  }
+
 
 .select-temp{
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='13' height='8' viewBox='0 0 13 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6.5 6L12 1' stroke='%23A6B5CC' stroke-width='2'/%3E%3C/svg%3E");
@@ -288,3 +304,5 @@ body {
     height: 1px;
     margin-left: 3%;
   }
+
+

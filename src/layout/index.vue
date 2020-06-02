@@ -1,8 +1,14 @@
 <template>
   <div id="app">
-    <TopNav></TopNav>
-    <!-- router content -->
-    <router-view></router-view>
+    <main class="main-container">
+      <!-- top nav -->
+      <TopNav></TopNav>
+
+      <!-- router content -->
+      <router-view></router-view>
+    </main>
+
+    <!-- footer -->
     <Footer></Footer>
   </div>
 </template>
