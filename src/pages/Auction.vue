@@ -1,6 +1,6 @@
 <template>
   <div class="auction">
-    <!-- search banner -->
+    <!-- banner -->
     <div class="banner">
       <div class="container">
         <b-row>
@@ -21,63 +21,19 @@
       </div>
     </div>
 
-    <!-- TODO:tab nav -->
-
-    <!-- card list -->
-    <!-- block statistic -->
-    <b-container class="card">
-      <b-row>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col><DataCard /></b-col>
-      </b-row>
-      <hr />
-
-      <b-row>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col><DataCard /></b-col>
-      </b-row>
-    </b-container>
-
-    <!-- node statistic -->
-    <b-container class="card">
-      <b-row>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col><DataCard /></b-col>
-      </b-row>
-      <hr />
-
-      <b-row>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col><DataCard /></b-col>
-      </b-row>
-    </b-container>
-
-    <b-container>
-      <b-row>
-        <b-col>
-          <RecentBlocks />
-        </b-col>
-        <b-col>
-          <RecentBlocks />
-        </b-col>
-      </b-row>
-    </b-container>
+    <!-- active auctions -->
+    <DataTable></DataTable>
   </div>
 </template>
 
 <script>
-import DataCard from "@/components/DataCard.vue";
-import RecentBlocks from "@/components/RecentBlocks.vue";
+import DataTable from "@/components/DataTable.vue";
 
 export default {
   name: "Home",
 
   components: {
-    DataCard,
-    RecentBlocks
+    DataTable
   },
 
   data() {
