@@ -1,10 +1,23 @@
 <template>
-  <div class="home">
+  <div class="auction">
     <!-- search banner -->
-    <div class="search-banner">
+    <div class="banner">
       <div class="container">
-        <h1 class="title">Meter Blockchain Exlorer</h1>
-        <Search />
+        <b-row>
+          <b-col class="border-r">
+            <div class="box">
+              <p class="label">MTRG(Price)</p>
+              <p class="value">12.9 USD</p>
+            </div>
+          </b-col>
+
+          <b-col>
+            <div class="box">
+              <p class="label">MTRG(Price)</p>
+              <p class="value">12.9 USD</p>
+            </div>
+          </b-col>
+        </b-row>
       </div>
     </div>
 
@@ -56,7 +69,6 @@
 </template>
 
 <script>
-import Search from "@/components/Search.vue";
 import DataCard from "@/components/DataCard.vue";
 import RecentBlocks from "@/components/RecentBlocks.vue";
 
@@ -64,7 +76,6 @@ export default {
   name: "Home",
 
   components: {
-    Search,
     DataCard,
     RecentBlocks
   },
@@ -78,18 +89,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.search-banner {
+.banner {
   background-image: url("~@/assets/banner_bg.png");
-  height: 210px;
+  height: 164px;
   background-size: cover;
   display: flex;
   padding-top: 50px;
 
-  .title {
+  .border-r {
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .box {
     color: #fff;
-    font-size: 20px;
-    font-weight: 400;
     text-align: center;
+
+    .label {
+      font-size: 14px;
+    }
+
+    .value {
+      font-size: 24px;
+      font-weight: 600;
+    }
   }
 }
 
