@@ -1,25 +1,61 @@
 <template>
-  <b-container>
-    <b-row>
-      <b-col class="border-r">
-        <div class="box">
-          <p class="label">MTRG(Price)</p>
-          <p class="value">12.9 USD</p>
-        </div>
-      </b-col>
+  <div class="mining">
+    <!-- block statistic -->
+    <DataDashboard v-bind:rows="block_data"></DataDashboard>
 
-      <b-col>
-        <div class="box">
-          <p class="label">MTRG(Price)</p>
-          <p class="value">12.9 USD</p>
-        </div>
-      </b-col>
-    </b-row>
-  </b-container>
+    <HashRateChart></HashRateChart>
+  </div>
 </template>
 
 <script>
-export default {};
+import DataDashboard from "@/components/DataDashboard.vue";
+import HashRateChart from "@/components/HashRateChart.vue";
+
+export default {
+  name: "Mining",
+  components: {
+    DataDashboard,
+    HashRateChart
+  },
+  data() {
+    return {
+      block_data: [
+        [
+          {
+            content: "2351",
+            label: "Block Height"
+          },
+          {
+            content: "0.9 USD",
+            label: "Price (MTR)"
+          },
+          {
+            content: "233",
+            label: "Circulations"
+          }
+        ],
+        [
+          {
+            content: "1.2 PH/s",
+            label: "Network Hash Rate"
+          },
+          {
+            content: "12 MTR",
+            label: "(TH/s)/Day"
+          },
+          {
+            content: "4.5 USD",
+            label: "MTR Cost Parity"
+          }
+        ]
+      ]
+    };
+  }
+};
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.mining {
+  margin-top: 30px;
+}
+</style>

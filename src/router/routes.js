@@ -1,6 +1,8 @@
 // single pages
-import homePage from "../pages/Home.vue";
-import auctionPage from "../pages/Auction.vue";
+import homePage from "@/pages/Home.vue";
+import auctionPage from "@/pages/Auction.vue";
+import MiningPage from "@/pages/Mining.vue";
+
 import notFoundPage from "../pages/NotFound.vue";
 import { routePropResolver } from "./util";
 import { DOMAIN_TITLE } from "../.env";
@@ -17,6 +19,12 @@ export const routes = [
     name: "action",
     component: auctionPage,
     meta: { title: `${DOMAIN_TITLE} | auction` }
+  },
+  {
+    path: "/mining",
+    name: "mining",
+    component: MiningPage,
+    meta: { title: `${DOMAIN_TITLE} | mining` }
   },
   {
     path: "*",
