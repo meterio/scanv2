@@ -12,35 +12,10 @@
 
     <!-- card list -->
     <!-- block statistic -->
-    <b-container class="card">
-      <b-row>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col><DataCard /></b-col>
-      </b-row>
-      <hr />
-
-      <b-row>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col><DataCard /></b-col>
-      </b-row>
-    </b-container>
+    <DataDashboard v-bind:rows="block_data"></DataDashboard>
 
     <!-- node statistic -->
-    <b-container class="card">
-      <b-row>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col><DataCard /></b-col>
-      </b-row>
-      <hr />
-
-      <b-row>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col class="border-r"><DataCard /></b-col>
-        <b-col><DataCard /></b-col>
-      </b-row>
-    </b-container>
+    <DataDashboard v-bind:rows="node_data"></DataDashboard>
 
     <b-container>
       <b-row>
@@ -57,7 +32,7 @@
 
 <script>
 import Search from "@/components/Search.vue";
-import DataCard from "@/components/DataCard.vue";
+import DataDashboard from "@/components/DataDashboard.vue";
 import RecentBlocks from "@/components/RecentBlocks.vue";
 
 export default {
@@ -65,13 +40,70 @@ export default {
 
   components: {
     Search,
-    DataCard,
+    DataDashboard,
     RecentBlocks
   },
 
   data() {
     return {
-      msg: "Welcome to Index!!!"
+      msg: "Welcome to Index!!!",
+      block_data: [
+        [
+          {
+            content: "$ 21.35",
+            label: "MTRG Price",
+            change: "+4.5%"
+          },
+          {
+            content: "2351 MTRG",
+            label: "Average Daily Reward Pool"
+          }
+        ],
+        [
+          {
+            content: "33333",
+            label: "Block Height"
+          },
+          {
+            content: "55555",
+            label: "K Block Height"
+          },
+          {
+            content: "55%",
+            label: "Stacked"
+          },
+          {
+            content: "2343",
+            label: "Validators"
+          }
+        ]
+      ],
+      node_data: [
+        [
+          {
+            content: "235",
+            label: "Validators"
+          },
+          {
+            content: "235 MTRG",
+            label: "Total Stacking"
+          }
+        ],
+        [
+          {
+            content: "235",
+            label: "Height"
+          },
+          {
+            content: "12.4 USD",
+            label: "Price"
+          },
+          {
+            content: "78/90",
+            label: "Online/ Toal Node"
+          }
+        ]
+      ]
     };
   }
 };

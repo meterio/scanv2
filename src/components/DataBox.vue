@@ -50,14 +50,17 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+
   .data-box-content {
     height: 100%;
   }
+
   .data-box-content.loading {
     min-height: 200px;
     opacity: 0.3;
     pointer-events: none;
   }
+
   .spinner-wrapper {
     position: absolute;
   }
@@ -67,9 +70,11 @@ export default {
     text-align: center;
     padding: 30px;
     font-size: 16px;
+
     .title {
       font-size: 20px;
     }
+
     .smile {
       font-size: 120px;
       padding-bottom: 20px;

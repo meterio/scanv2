@@ -1,16 +1,17 @@
 <template>
   <div class="data-card">
-    <h3 class="title">
-      $21.56
-      <span class="change">(+4.3%)</span>
+    <h3 class="content">
+      {{ data.content }}
+      <span v-if="data.change" class="change">({{ data.change }})</span>
     </h3>
-    <p class="label">MTRG Price</p>
+    <p class="label">{{ data.label }}</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: "DataCard"
+  name: "DataCard",
+  props: ["data"]
 };
 </script>
 
@@ -22,7 +23,7 @@ export default {
   justify-content: center;
   align-items: center;
 
-  .title {
+  .content {
     color: #0c2954;
     font-weight: normal;
     font-size: 1.17rem;
