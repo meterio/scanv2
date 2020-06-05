@@ -10,6 +10,8 @@
   .data-table {
     background-color: #fff;
     border-radius: 5px;
+    padding: 0;
+    margin: 0;
   
     thead {
       th {
@@ -25,6 +27,7 @@
       align-items: center;
       height: 50px;
       margin: 0.5rem;
+      color: #0C2954;
   
       .icon {
         background-repeat: no-repeat;
@@ -46,6 +49,14 @@
   
       .primary {
         color: #287df9;
+      }
+
+      .time {
+        color: #A6B5CC;
+      }
+
+      .link {
+        color: #287DF9;
       }
     }
   }

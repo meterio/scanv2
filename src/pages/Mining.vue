@@ -4,18 +4,42 @@
     <DataDashboard v-bind:rows="block_data"></DataDashboard>
 
     <HashRateChart></HashRateChart>
+
+    <DataTable :data="mining_reward_data">
+      <!-- column: height_post -->
+      <template v-slot:cell(time)="data">
+        <div class="dt-row">
+          <span class="time">{{ data.value }}</span>
+        </div>
+      </template>
+
+      <template v-slot:cell(more)="data">
+        <div class="dt-row">
+          <a class="link" :href="data.value">Mining Reward List</a>
+        </div>
+      </template>
+
+      <!-- default column format -->
+      <template v-slot:cell()="data">
+        <div class="dt-row">
+          <span>{{ data.value }}</span>
+        </div>
+      </template>
+    </DataTable>
   </div>
 </template>
 
 <script>
 import DataDashboard from "@/components/DataDashboard.vue";
 import HashRateChart from "@/components/HashRateChart.vue";
+import DataTable from "@/components/DataTable.vue";
 
 export default {
   name: "Mining",
   components: {
     DataDashboard,
-    HashRateChart
+    HashRateChart,
+    DataTable
   },
   data() {
     return {
@@ -48,7 +72,49 @@ export default {
             label: "MTR Cost Parity"
           }
         ]
-      ]
+      ],
+
+      mining_reward_data: {
+        fields: [
+          {
+            key: "kblock_height",
+            label: "Kblock Height (PoS)"
+          },
+          {
+            key: "height",
+            label: "Height (PoW)"
+          },
+          {
+            key: "amount",
+            label: "Amount"
+          },
+          {
+            key: "time",
+            label: "Time"
+          },
+
+          {
+            key: "more",
+            label: "More"
+          }
+        ],
+        items: [
+          {
+            kblock_height: "274",
+            height: "1274",
+            amount: "2,89,789 MTR",
+            time: "12 sec ago",
+            more: "tx 1"
+          },
+          {
+            kblock_height: "274",
+            height: "1274",
+            amount: "2,89,789 MTR",
+            time: "12 sec ago",
+            more: "tx 1"
+          }
+        ]
+      }
     };
   }
 };

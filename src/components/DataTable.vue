@@ -1,129 +1,48 @@
 <template>
-  <b-container class="table-container">
-    <h3 class="title">Active Auctions (MTRG)</h3>
-    <b-table
-      borderless
-      hover
-      class="data-table"
-      :items="items"
-      :fields="fields"
-    >
-      <!-- column: height_post -->
-      <template v-slot:cell(height_post)="data">
-        <div class="dt-row">
-          <div class="block-icon"></div>
-          <span>{{ data.value }}</span>
-        </div>
-      </template>
-
-      <template v-slot:cell(expected_final_price)="data">
-        <div class="dt-row">
-          <span class="primary">{{ data.value }}</span>
-        </div>
-      </template>
-
-      <!-- default column format -->
-      <template v-slot:cell()="data">
-        <div class="dt-row">
-          <span>{{ data.value }}</span>
-        </div>
-      </template>
-    </b-table>
+  <b-container class="table-container data-table-container">
+    <b-card title="Mining Rewards">
+      <b-table
+        hover
+        class="data-table"
+        :items="data.items"
+        :fields="data.fields"
+      >
+        <template
+          v-for="slotName in Object.keys($scopedSlots)"
+          v-slot:[slotName]="slotScope"
+        >
+          <slot :name="slotName" v-bind="slotScope"></slot>
+        </template>
+      </b-table>
+    </b-card>
   </b-container>
 </template>
 
 <script>
 export default {
   name: "DataTable",
-  data() {
-    return {
-      // Note `isActive` is left out and will not appear in the rendered table
-      fields: [
-        {
-          key: "height_post",
-          label: "Height(POS)"
-        },
-        {
-          key: "settlement_k_block",
-          label: "Settlement K Block"
-        },
-        {
-          key: "mtr_received",
-          label: "MTR Received"
-        },
-        {
-          key: "mtrg_on_auction",
-          label: "MTRG on Auction"
-        },
-
-        {
-          key: "expected_final_price",
-          label: "Expected Final Price"
-        }
-      ],
-      items: [
-        {
-          height_post: "17894 - 34789",
-          settlement_k_block: "1274",
-          mtr_received: "2,89,789 MTR",
-          mtrg_on_auction: "56,9080 MTRG",
-          expected_final_price: "3.45 USD"
-        },
-        {
-          height_post: "17894 - 34789",
-          settlement_k_block: "1274",
-          mtr_received: "2,89,789 MTR",
-          mtrg_on_auction: "56,9080 MTRG",
-          expected_final_price: "3.45 USD"
-        }
-      ]
-    };
-  }
+  props: ["data"]
 };
 </script>
 
 <style lang="scss">
-.table-container {
-  margin-top: 30px;
-  margin-bottom: 10px;
-
-  .title {
-    color: #5c6f8c;
-    font-size: 16px;
-  }
-}
-
-.data-table {
-  background-color: #fff;
-  border-radius: 5px;
-
-  thead {
-    th {
-      color: #5c6f8c;
-      font-size: 14px;
-      text-align: center;
-    }
+.data-table-container {
+  .card-title {
+    color: #0c2954 !important;
+    font-size: 20px;
   }
 
-  .dt-row {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 50px;
-    margin: 0.5rem;
-
-    .block-icon {
-      background-image: url("~@/assets/hammer_primary.png");
-      background-color: #d9e8ff;
-      background-repeat: no-repeat;
-      background-position: center;
-      width: 50px;
-      height: 50px;
-      border-radius: 5px;
+  .data-table {
+    thead {
+      th {
+        border: none;
+      }
     }
 
-    .primary {
-      color: #287df9;
+    tbody {
+      td {
+        border-top: 1px solid #e5e5e5;
+      }
     }
   }
 }
