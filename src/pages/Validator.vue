@@ -1,14 +1,13 @@
 <template>
-  <div class="mining">
-    <!-- block statistic -->
-    <DataDashboard v-bind:rows="block_data"></DataDashboard>
+  <div class="validator">
+    <DataDashboard :rows="validator_data"></DataDashboard>
 
-    <HashRateChart></HashRateChart>
+    <ValidatorTable></ValidatorTable>
 
-    <DataTable :data="mining_reward_data">
+    <DataTable :data="epoch_reward_data">
       <template v-slot:cell(more)="data">
         <div class="dt-row">
-          <a class="link" :href="data.value">Mining Reward List</a>
+          <a class="link" :href="data.value">Epoch Reward List</a>
         </div>
       </template>
     </DataTable>
@@ -17,50 +16,45 @@
 
 <script>
 import DataDashboard from "@/components/DataDashboard.vue";
-import HashRateChart from "@/components/HashRateChart.vue";
+import ValidatorTable from "@/components/ValidatorTable.vue";
 import DataTable from "@/components/DataTable.vue";
 
 export default {
-  name: "Mining",
+  name: "Validator",
   components: {
     DataDashboard,
-    HashRateChart,
+    ValidatorTable,
     DataTable
   },
   data() {
     return {
-      block_data: [
+      validator_data: [
         [
           {
             content: "2351",
-            label: "Block Height"
+            label: "Validators"
           },
           {
-            content: "0.9 USD",
-            label: "Price (MTR)"
-          },
-          {
-            content: "233",
-            label: "Circulations"
+            content: "2351",
+            label: "Total Staking"
           }
         ],
         [
           {
-            content: "1.2 PH/s",
-            label: "Network Hash Rate"
+            content: "2351",
+            label: "Height"
           },
           {
-            content: "12 MTR",
-            label: "(TH/s)/Day"
+            content: "12.4 USD",
+            label: "Price"
           },
           {
-            content: "4.5 USD",
-            label: "MTR Cost Parity"
+            content: "79/90",
+            label: "Online/ Total Node"
           }
         ]
       ],
-
-      mining_reward_data: {
+      epoch_reward_data: {
         fields: [
           {
             key: "kblock_height",
@@ -106,8 +100,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.mining {
-  margin-top: 30px;
-}
-</style>
+<style></style>

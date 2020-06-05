@@ -13,6 +13,18 @@
         >
           <slot :name="slotName" v-bind="slotScope"></slot>
         </template>
+
+        <template v-slot:cell(time)="data">
+          <div class="dt-row">
+            <span class="time">{{ data.value }}</span>
+          </div>
+        </template>
+
+        <template v-slot:cell()="data">
+          <div class="dt-row">
+            <span>{{ data.value }}</span>
+          </div>
+        </template>
       </b-table>
     </b-card>
   </b-container>

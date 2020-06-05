@@ -2,6 +2,7 @@
 import homePage from "@/pages/Home.vue";
 import auctionPage from "@/pages/Auction.vue";
 import MiningPage from "@/pages/Mining.vue";
+import ValidatorPage from "@/pages/Validator.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
 import { routePropResolver } from "./util";
@@ -25,6 +26,12 @@ export const routes = [
     name: "mining",
     component: MiningPage,
     meta: { title: `${DOMAIN_TITLE} | mining` }
+  },
+  {
+    path: "/validator",
+    name: "validator",
+    component: ValidatorPage,
+    meta: { title: `${DOMAIN_TITLE} | validator` }
   },
   {
     path: "*",
