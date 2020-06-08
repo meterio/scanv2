@@ -5,6 +5,26 @@
       color: #5c6f8c;
       font-size: 16px;
     }
+
+
+    .pagination {
+
+      .page-item {
+
+        .page-link {
+          border: none;
+          color: #0C2954;
+        }
+
+        &.active {
+          .page-link{
+            background-color: #fff;
+            color: #007bff;
+          }
+        }
+
+      }
+    }
   }
   
   .data-table {
@@ -59,4 +79,5 @@
         color: #287DF9;
       }
     }
+
   }

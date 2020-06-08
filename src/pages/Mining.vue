@@ -5,7 +5,7 @@
 
     <HashRateChart></HashRateChart>
 
-    <DataTable :data="mining_reward_data">
+    <DataTable :title="mining_reward.title" :data="mining_reward.data">
       <template v-slot:cell(more)="data">
         <div class="dt-row">
           <a class="link" :href="data.value">Mining Reward List</a>
@@ -60,46 +60,49 @@ export default {
         ]
       ],
 
-      mining_reward_data: {
-        fields: [
-          {
-            key: "kblock_height",
-            label: "Kblock Height (PoS)"
-          },
-          {
-            key: "height",
-            label: "Height (PoW)"
-          },
-          {
-            key: "amount",
-            label: "Amount"
-          },
-          {
-            key: "time",
-            label: "Time"
-          },
+      mining_reward: {
+        title: "Mining Rewards",
+        data: {
+          fields: [
+            {
+              key: "kblock_height",
+              label: "Kblock Height (PoS)"
+            },
+            {
+              key: "height",
+              label: "Height (PoW)"
+            },
+            {
+              key: "amount",
+              label: "Amount"
+            },
+            {
+              key: "time",
+              label: "Time"
+            },
 
-          {
-            key: "more",
-            label: "More"
-          }
-        ],
-        items: [
-          {
-            kblock_height: "274",
-            height: "1274",
-            amount: "2,89,789 MTR",
-            time: "12 sec ago",
-            more: "tx 1"
-          },
-          {
-            kblock_height: "274",
-            height: "1274",
-            amount: "2,89,789 MTR",
-            time: "12 sec ago",
-            more: "tx 1"
-          }
-        ]
+            {
+              key: "more",
+              label: "More"
+            }
+          ],
+          items: [
+            {
+              kblock_height: "274",
+              height: "1274",
+              amount: "2,89,789 MTR",
+              time: "12 sec ago",
+              more: "tx 1"
+            },
+            {
+              kblock_height: "274",
+              height: "1274",
+              amount: "2,89,789 MTR",
+              time: "12 sec ago",
+              more: "tx 1"
+            }
+          ]
+        }
       }
     };
   }
