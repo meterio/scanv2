@@ -80,4 +80,32 @@
       }
     }
 
+  // badge
+  .badge {
+    line-height: 1.5;
+    padding: 0.4rem 0.8rem;
+    font-size: 90%;
+
+    svg {
+      margin-right: 0.2rem;
+    }
+
+    &.badge-primary {
+      color: #287DF9;
+      background-color: #E9F2FF;
+    }
+
+    &.badge-success {
+      color: #20AC69;
+      background-color: rgba(32,172,105, 0.12);
+    }
+
+
+    &.badge-failed {
+      color: rgba(244,133,133, 01);
+      background-color: rgba(244,133,133, 0.12);
+    }
   }
+
+  }
+
