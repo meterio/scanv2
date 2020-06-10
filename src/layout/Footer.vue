@@ -31,13 +31,14 @@
               </ul>
             </div>
             <ul class="social-icons">
-              <li><i class="fab fa-github"></i></li>
-              <li><i class="fab fa-twitter"></i></li>
-              <li><i class="fab fa-youtube"></i></li>
-              <li><i class="fab fa-telegram"></i></li>
-              <li><i class="fab fa-discord"></i></li>
-              <li><i class="fab fa-weixin"></i></li>
-              <li><i class="fab fa-instagram"></i></li>
+              <li v-for="social in socials" :key="social.key">
+                <a
+                  v-if="!social.type"
+                  target="__blank"
+                  :href="social.value"
+                  :class="['icon', `icon-${social.key}`]"
+                ></a>
+              </li>
             </ul>
           </div>
         </b-col>
@@ -51,7 +52,38 @@ export default {
   name: "Footer",
   data() {
     return {
-      currentYear: new Date().getFullYear()
+      currentYear: new Date().getFullYear(),
+      socials: [
+        {
+          key: "github",
+          value: "https://github.com"
+        },
+        {
+          key: "telegram",
+          value: "https://github.com"
+        },
+        {
+          key: "instagram",
+          value: "https://github.com"
+        },
+        {
+          key: "twitter",
+          value: "https://github.com"
+        },
+        {
+          key: "discord",
+          value: "https://github.com"
+        },
+        {
+          key: "youtube",
+          value: "https://github.com"
+        },
+        {
+          key: "wechat",
+          type: "image",
+          value: "https://github.com"
+        }
+      ]
     };
   }
 };
@@ -136,5 +168,41 @@ footer .desktop-btn {
 footer ul {
   list-style: none;
   padding-left: 0;
+}
+
+.icon {
+  display: block;
+  width: 23px;
+  height: 23px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 23px auto;
+
+  &.icon-github {
+    background-image: url("~@/assets/socials/github.svg");
+  }
+  &.icon-wechat {
+    background-image: url("~@/assets/socials/wechat.svg");
+  }
+
+  &.icon-youtube {
+    background-image: url("~@/assets/socials/youtube.svg");
+  }
+
+  &.icon-twitter {
+    background-image: url("~@/assets/socials/twitter.svg");
+  }
+
+  &.icon-instagram {
+    background-image: url("~@/assets/socials/instagram.svg");
+  }
+
+  &.icon-discord {
+    background-image: url("~@/assets/socials/discord.svg");
+  }
+
+  &.icon-telegram {
+    background-image: url("~@/assets/socials/telegram.svg");
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="light" variant="light" class="px-4 py-3">
-      <b-navbar-brand href="#" class="mr-5">
+      <b-navbar-brand href="/" class="mr-5">
         <b-img src="@/assets/logo.svg" height="32" />
       </b-navbar-brand>
 
@@ -40,17 +40,21 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item>Dashboard</b-nav-item>
+          <b-nav-item>
+            <router-link :to="{ name: 'home' }">Dashboard</router-link>
+          </b-nav-item>
 
           <b-nav-item-dropdown text="Blockchain" right>
-            <b-dropdown-item href="#">PoS</b-dropdown-item>
-            <b-dropdown-item href="#">PoW</b-dropdown-item>
+            <b-dropdown-item href="/validator">PoS</b-dropdown-item>
+            <b-dropdown-item href="/mining">PoW</b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Resources" right>
             <b-dropdown-item href="#">Wallet</b-dropdown-item>
           </b-nav-item-dropdown>
 
-          <b-nav-item>Auctions</b-nav-item>
+          <b-nav-item>
+            <router-link :to="{ name: 'auction' }">Auctions</router-link>
+          </b-nav-item>
 
           <b-dropdown text="EN" variant="outline-secondary">
             <b-dropdown-item href="#">EN</b-dropdown-item>

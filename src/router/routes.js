@@ -14,13 +14,13 @@ import { DOMAIN_TITLE } from "../.env";
 export const routes = [
   {
     path: "/",
-    name: "index",
+    name: "home",
     component: homePage,
     meta: { title: `${DOMAIN_TITLE} | home` }
   },
   {
     path: "/auction",
-    name: "action",
+    name: "auction",
     component: auctionPage,
     meta: { title: `${DOMAIN_TITLE} | auction` }
   },
