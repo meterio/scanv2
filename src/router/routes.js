@@ -5,6 +5,7 @@ import MiningPage from "@/pages/Mining.vue";
 import ValidatorPage from "@/pages/Validator.vue";
 import ValidatorDetailpage from "@/pages/ValidatorDetail.vue";
 import BlockDetailpage from "@/pages/BlockDetail.vue";
+import TransactionDetailPage from "@/pages/TranscationDetail.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
 import { routePropResolver } from "./util";
@@ -46,6 +47,12 @@ export const routes = [
     name: "BlockDetail",
     component: BlockDetailpage,
     meta: { title: `${DOMAIN_TITLE} | block detail` }
+  },
+  {
+    path: "/tx-detail",
+    name: "TransactionDetail",
+    component: TransactionDetailPage,
+    meta: { title: `${DOMAIN_TITLE} | transaction detail` }
   },
   {
     path: "*",

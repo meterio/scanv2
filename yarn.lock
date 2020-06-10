@@ -8385,6 +8385,13 @@ stylelint-config-standard@~18.3.0:
   dependencies:
     stylelint-config-recommended "^2.2.0"
 
+stylelint-prettier@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.npm.taobao.org/stylelint-prettier/download/stylelint-prettier-1.1.2.tgz#2b19abe40789c380bffee3d4267c413d981a86ea"
+  integrity sha1-Kxmr5AeJw4C//uPUJnxBPZgahuo=
+  dependencies:
+    prettier-linter-helpers "^1.0.0"
+
 stylelint-scss@^3.17.2:
   version "3.17.2"
   resolved "https://registry.npm.taobao.org/stylelint-scss/download/stylelint-scss-3.17.2.tgz#4d849a153f9241834396f5880db2c3c964def4e3"

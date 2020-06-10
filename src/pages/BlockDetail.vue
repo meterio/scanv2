@@ -34,10 +34,7 @@
 
       <template v-slot:cell(result)="data">
         <div class="dt-row">
-          <b-badge pill :variant="data.value">
-            <b-icon :icon="resultIcon(data.value)"></b-icon>
-            <span>{{ data.value }}</span>
-          </b-badge>
+          <StatusTag :status="data.value"></StatusTag>
         </div>
       </template>
     </DataTable>
@@ -46,22 +43,13 @@
 
 <script>
 import DataTable from "@/components/DataTable.vue";
+import StatusTag from "@/components/StatusTag.vue";
+
 export default {
   name: "BlockDetail",
   components: {
-    DataTable
-  },
-  methods: {
-    resultIcon: function(result) {
-      if (result === "success") {
-        return "check";
-      }
-
-      if (result === "failed") {
-        return "x";
-      }
-      return null;
-    }
+    DataTable,
+    StatusTag
   },
   data() {
     return {

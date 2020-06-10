@@ -1,111 +1,92 @@
 .table-container {
-    margin-top: 30px;
-  
-    .title {
-      color: #5c6f8c;
-      font-size: 16px;
-    }
+  margin-top: 30px;
 
+  .title {
+    color: #5c6f8c;
+    font-size: 16px;
+  }
 
-    .pagination {
+  .pagination {
+    .page-item {
+      .page-link {
+        border: none;
+        color: #0c2954;
+      }
 
-      .page-item {
-
+      &.active {
         .page-link {
-          border: none;
-          color: #0C2954;
+          background-color: #fff;
+          color: #007bff;
         }
-
-        &.active {
-          .page-link{
-            background-color: #fff;
-            color: #007bff;
-          }
-        }
-
       }
     }
   }
-  
-  .data-table {
-    background-color: #fff;
-    border-radius: 5px;
-    padding: 0;
-    margin: 0;
-  
-    thead {
-      th {
-        color: #5c6f8c;
-        font-size: 14px;
-        text-align: center;
-      }
+}
+
+.data-table {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 0;
+  margin: 0;
+
+  thead {
+    th {
+      color: #5c6f8c;
+      font-size: 14px;
+      text-align: center;
     }
-  
-    .dt-row {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
+  }
+
+  .dt-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 50px;
+    margin: 0.5rem;
+    color: #0c2954;
+
+    .icon {
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 50px;
       height: 50px;
-      margin: 0.5rem;
-      color: #0C2954;
-  
-      .icon {
-        background-repeat: no-repeat;
-        background-position: center;
-        width: 50px;
-        height: 50px;
-        border-radius: 5px;
-  
-        &.icon-mint-active {
-          background-image: url("~@/assets/hammer_primary.png");
-          background-color: #d9e8ff;
-        }
-  
-        &.icon-mint-past {
-          background-image: url("~@/assets/hammer_secondary.png");
-          background-color: #ebeef6;
-        }
+      border-radius: 5px;
+
+      &.icon-mint-active {
+        background-image: url("~@/assets/hammer_primary.png");
+        background-color: #d9e8ff;
       }
-  
-      .primary {
+
+      &.icon-mint-past {
+        background-image: url("~@/assets/hammer_secondary.png");
+        background-color: #ebeef6;
+      }
+    }
+
+    .primary {
+      color: #287df9;
+    }
+
+    .time {
+      color: #a6b5cc;
+    }
+
+    .link {
+      color: #287df9;
+    }
+
+    .badge {
+      padding: 0.4rem 0.8rem !important;
+      font-size: 90% !important;
+
+      svg {
+        margin-right: 0.2rem;
+      }
+
+      &.badge-primary {
         color: #287df9;
+        background-color: #e9f2ff;
       }
-
-      .time {
-        color: #A6B5CC;
-      }
-
-      .link {
-        color: #287DF9;
-      }
-    }
-
-  // badge
-  .badge {
-    line-height: 1.5;
-    padding: 0.4rem 0.8rem;
-    font-size: 90%;
-
-    svg {
-      margin-right: 0.2rem;
-    }
-
-    &.badge-primary {
-      color: #287DF9;
-      background-color: #E9F2FF;
-    }
-
-    &.badge-success {
-      color: #20AC69;
-      background-color: rgba(32,172,105, 0.12);
-    }
-
-
-    &.badge-failed {
-      color: rgba(244,133,133, 01);
-      background-color: rgba(244,133,133, 0.12);
     }
   }
-
-  }
-
+}
