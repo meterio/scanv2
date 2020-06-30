@@ -19,10 +19,10 @@
 
     <b-container>
       <b-row>
-        <b-col>
+        <b-col cols="12" md="6">
           <RecentBlocks />
         </b-col>
-        <b-col>
+        <b-col cols="12" md="6">
           <RecentBlocks />
         </b-col>
       </b-row>

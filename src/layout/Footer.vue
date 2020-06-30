@@ -2,21 +2,25 @@
   <footer>
     <b-container>
       <b-row>
-        <b-col>
+        <b-col cols="12" md="6">
           <div class="footer-meter">
-            <img class="logo" src="@/assets/meter-logo.png" alt="logo" />
-            <div class="copyright">
-              <p>Copyright © 2019-{{ currentYear }}</p>
-              <p>Decentralized Finance Labs inc.</p>
+            <div class="brand">
+              <img class="logo" src="@/assets/meter-logo.png" alt="logo" />
+              <div class="copyright">
+                <p>Copyright © 2019-{{ currentYear }}</p>
+                <p>Decentralized Finance Labs inc.</p>
+              </div>
             </div>
-            <br />
-            <p class="blue">Download Meter Wallets!</p>
-            <button class="desktop-btn">
-              <i class="fas fa-laptop"></i>Desktop Wallets
-            </button>
+
+            <div class="download-wallet">
+              <p class="blue">Download Meter Wallets!</p>
+              <button class="desktop-btn">
+                <i class="fas fa-laptop"></i>Desktop Wallets
+              </button>
+            </div>
           </div>
         </b-col>
-        <b-col>
+        <b-col cols="12" md="6">
           <div class="footer-social">
             <div class="sitemap">
               <ul class="footer-menu">
@@ -97,112 +101,140 @@ footer {
   color: $third-font-color;
   margin-top: 20px;
   padding: 20px 0;
-}
 
-.footer-meter {
-  grid-area: footer-meter;
-  height: 100%;
-
-  .logo {
-    width: 100px;
-    margin: 6px;
+  ul {
+    list-style: none;
+    padding-left: 0;
   }
 
-  .copyright {
-    font-size: 12px;
+  .fa,
+  .fas {
+    padding-right: 8px;
+  }
 
-    p {
-      margin: 0;
+  // left side
+  .footer-meter {
+    grid-area: footer-meter;
+    height: 100%;
+    @include media("<=desktop") {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .brand {
+      .logo {
+        width: 100px;
+        margin: 6px;
+      }
+
+      .copyright {
+        font-size: 12px;
+        p {
+          margin: 0;
+        }
+      }
+    }
+
+    .download-wallet {
+      @include media("<=desktop") {
+        display: none;
+      }
+
+      .desktop-btn {
+        background-color: $primary-color;
+        color: white;
+        width: 184px;
+        height: 52px;
+        font-size: 16px;
+        //font-weight: 600;
+        border: none;
+        border-radius: 4px;
+      }
     }
   }
-}
 
-.fa,
-.fas {
-  padding-right: 8px;
-}
+  // right side
+  .footer-social {
+    grid-area: footer-social;
+    height: 100%;
+    padding-top: 16px;
 
-footer .footer-social {
-  grid-area: footer-social;
-  height: 100%;
-  padding-top: 16px;
-}
+    .sitemap {
+      display: flex;
+      justify-content: flex-end;
 
-.social-icons {
-  display: flex;
-  float: right;
-  margin-top: 20px;
+      @include media("<=desktop") {
+        justify-content: space-evenly;
+      }
 
-  li {
-    padding-left: 20px;
-    text-align: right;
-    font-size: 23px;
-  }
-}
+      .footer-menu {
+        @include media(">desktop") {
+          margin-left: 60px;
+        }
 
-.sitemap {
-  display: flex;
-  justify-content: flex-end;
-
-  .footer-menu {
-    margin-left: 60px;
-
-    li {
-      text-align: center;
-      padding-bottom: 20px;
+        li {
+          text-align: center;
+          padding-bottom: 20px;
+        }
+      }
     }
-  }
-}
 
-footer .desktop-btn {
-  background-color: $primary-color;
-  color: white;
-  width: 184px;
-  height: 52px;
-  font-size: 16px;
-  //font-weight: 600;
-  border: none;
-  border-radius: 4px;
-}
+    .social-icons {
+      display: flex;
 
-footer ul {
-  list-style: none;
-  padding-left: 0;
-}
+      @include media(">desktop") {
+        float: right;
+        margin-top: 20px;
+      }
 
-.icon {
-  display: block;
-  width: 23px;
-  height: 23px;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 23px auto;
+      @include media("<=desktop") {
+        justify-content: center;
+      }
 
-  &.icon-github {
-    background-image: url("~@/assets/socials/github.svg");
-  }
-  &.icon-wechat {
-    background-image: url("~@/assets/socials/wechat.svg");
-  }
+      li {
+        padding-left: 20px;
+        text-align: right;
+        font-size: 23px;
 
-  &.icon-youtube {
-    background-image: url("~@/assets/socials/youtube.svg");
-  }
+        .icon {
+          display: block;
+          width: 23px;
+          height: 23px;
+          background-repeat: no-repeat;
+          background-position: center center;
+          background-size: 23px auto;
 
-  &.icon-twitter {
-    background-image: url("~@/assets/socials/twitter.svg");
-  }
+          &.icon-github {
+            background-image: url("~@/assets/socials/github.svg");
+          }
+          &.icon-wechat {
+            background-image: url("~@/assets/socials/wechat.svg");
+          }
 
-  &.icon-instagram {
-    background-image: url("~@/assets/socials/instagram.svg");
-  }
+          &.icon-youtube {
+            background-image: url("~@/assets/socials/youtube.svg");
+          }
 
-  &.icon-discord {
-    background-image: url("~@/assets/socials/discord.svg");
-  }
+          &.icon-twitter {
+            background-image: url("~@/assets/socials/twitter.svg");
+          }
 
-  &.icon-telegram {
-    background-image: url("~@/assets/socials/telegram.svg");
+          &.icon-instagram {
+            background-image: url("~@/assets/socials/instagram.svg");
+          }
+
+          &.icon-discord {
+            background-image: url("~@/assets/socials/discord.svg");
+          }
+
+          &.icon-telegram {
+            background-image: url("~@/assets/socials/telegram.svg");
+          }
+        }
+      }
+    }
   }
 }
 </style>
