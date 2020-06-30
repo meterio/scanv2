@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loading" class="loading">
+  <div class="loading">
     <b-spinner variant="primary" type="grow" label="Spinning"></b-spinner>
     <p>Loading...</p>
   </div>
@@ -7,10 +7,7 @@
 
 <script>
 export default {
-  name: "Loading",
-  props: {
-    loading: { type: Boolean, default: true }
-  }
+  name: "Loading"
 };
 </script>
 

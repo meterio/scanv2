@@ -2,7 +2,7 @@
   <b-container class="container">
     <b-card body-class="block-card-body" header="Recent Blocks">
       <b-card-text>
-        <Loading :loading="loading" />
+        <Loading v-if="loading" />
 
         <ul v-if="!loading" class="block-list">
           <li
