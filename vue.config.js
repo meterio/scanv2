@@ -1,4 +1,9 @@
+const debug = process.env.NODE_ENV !== "production";
+
 module.exports = {
+  configureWebpack: {
+    devtool: "source-map"
+  },
   chainWebpack: config => {
     config.module
       .rule("vue")
@@ -31,6 +36,18 @@ module.exports = {
           @import "@/scss/_mixins.scss";
           @import "@/scss/_color.scss";
         `
+      }
+    }
+  },
+  devServer: {
+    proxy: {
+      "/api": {
+        target: "http://34.210.241.7:4000/api/", //对应自己的接口
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          "^/api": ""
+        }
       }
     }
   }

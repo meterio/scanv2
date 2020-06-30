@@ -46,6 +46,7 @@ export default {
 
   data() {
     return {
+      // fake data
       msg: "Welcome to Index!!!",
       block_data: [
         [

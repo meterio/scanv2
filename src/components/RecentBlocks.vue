@@ -1,87 +1,33 @@
 <template>
   <b-container class="container">
-    <b-card header="Recent Blocks">
+    <b-card body-class="block-card-body" header="Recent Blocks">
       <b-card-text>
-        <ul class="block-ul">
-          <li>
-            <b-row>
-              <b-col>
-                <div class="height-view">
-                  <div class="block-icon"></div>
+        <Loading :loading="loading" />
 
-                  <div class="height">
-                    <h4 class="number">83984</h4>
-                    <span class="ago">23 sec ago</span>
-                  </div>
-                </div>
-              </b-col>
+        <ul v-if="!loading" class="block-list">
+          <li
+            class="block-detail"
+            :key="block.id"
+            v-for="block in recent_blocks"
+          >
+            <div class="height-view">
+              <div class="block-icon"></div>
 
-              <b-col>
-                <div class="signed-view">
-                  <p>Signed by <a href="#">HQ</a></p>
-                </div>
-              </b-col>
+              <div class="height">
+                <h4 class="number">{{ block.number }}</h4>
+                <span class="ago">{{ timeFromNow(block.timestamp) }}</span>
+              </div>
+            </div>
 
-              <b-col>
-                <div class="detail-view">
-                  <span class="detail">45 tx</span>
-                </div>
-              </b-col>
-            </b-row>
-          </li>
-
-          <li>
-            <b-row>
-              <b-col>
-                <div class="height-view">
-                  <div class="block-icon"></div>
-
-                  <div class="height">
-                    <h4 class="number">83984</h4>
-                    <span class="ago">23 sec ago</span>
-                  </div>
-                </div>
-              </b-col>
-
-              <b-col>
-                <div class="signed-view">
-                  <p>Signed by <a href="#">HQ</a></p>
-                </div>
-              </b-col>
-
-              <b-col>
-                <div class="detail-view">
-                  <span class="detail">45 tx</span>
-                </div>
-              </b-col>
-            </b-row>
-          </li>
-
-          <li>
-            <b-row>
-              <b-col>
-                <div class="height-view">
-                  <div class="block-icon"></div>
-
-                  <div class="height">
-                    <h4 class="number">83984</h4>
-                    <span class="ago">23 sec ago</span>
-                  </div>
-                </div>
-              </b-col>
-
-              <b-col>
-                <div class="signed-view">
-                  <p>Signed by <a href="#">HQ</a></p>
-                </div>
-              </b-col>
-
-              <b-col>
-                <div class="detail-view">
-                  <span class="detail">45 tx</span>
-                </div>
-              </b-col>
-            </b-row>
+            <div class="signed-view">
+              <p>
+                Signed by
+              </p>
+              <a href="#">{{ address(block.signer) }}</a>
+            </div>
+            <div class="detail-view">
+              <span class="detail">{{ block.txCount }} tx</span>
+            </div>
           </li>
         </ul>
       </b-card-text>
@@ -90,8 +36,34 @@
 </template>
 
 <script>
+import Loading from "@/components/Loading";
+import { fromNow } from "@/utils/time";
+import { shortAddress } from "@/utils/address";
+
 export default {
-  name: "RecentBlocks"
+  name: "RecentBlocks",
+  components: {
+    Loading
+  },
+  data() {
+    return {
+      loading: true,
+      recent_blocks: []
+    };
+  },
+  async mounted() {
+    const res = await this.$api.block.getRecentBlocks();
+    this.loading = false;
+    this.recent_blocks = res.blocks.splice(0, 5);
+  },
+  methods: {
+    timeFromNow(time) {
+      return fromNow(time * 1000);
+    },
+    address(addr) {
+      return shortAddress(addr);
+    }
+  }
 };
 </script>
 
@@ -99,12 +71,23 @@ export default {
 .container {
   margin: 20px auto;
   padding: 0;
+
+  ul.block-list {
+    margin: 0;
+
+    li.block-detail {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 60px;
+    }
+  }
 }
 
-.block-ul {
-  li {
-    margin: 10px 0;
-  }
+.block-card-body {
+  position: relative;
+  min-height: 400px;
 }
 
 .height-view {
@@ -151,6 +134,10 @@ export default {
     font-size: 14px;
     color: #5c6f8c;
     margin: 0;
+  }
+
+  a {
+    font-size: 14px;
   }
 }
 
