@@ -23,7 +23,7 @@
           <RecentBlocks />
         </b-col>
         <b-col cols="12" md="6">
-          <RecentBlocks />
+          <RecentTxs />
         </b-col>
       </b-row>
     </b-container>
@@ -34,6 +34,7 @@
 import Search from "@/components/Search.vue";
 import DataDashboard from "@/components/DataDashboard.vue";
 import RecentBlocks from "@/components/RecentBlocks.vue";
+import RecentTxs from "@/components/RecentTxs.vue";
 
 export default {
   name: "Home",
@@ -41,7 +42,8 @@ export default {
   components: {
     Search,
     DataDashboard,
-    RecentBlocks
+    RecentBlocks,
+    RecentTxs
   },
 
   data() {
