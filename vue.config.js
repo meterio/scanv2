@@ -42,7 +42,7 @@ module.exports = {
   devServer: {
     proxy: {
       "/api": {
-        target: "http://34.210.241.7:4000/api/", //对应自己的接口
+        target: "http://bridge-api.meter.io:5000/api/", //对应自己的接口
         changeOrigin: true,
         ws: true,
         pathRewrite: {
