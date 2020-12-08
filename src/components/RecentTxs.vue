@@ -10,11 +10,12 @@
               <div class="block-icon"></div>
 
               <div class="height">
-                <h4 class="number">{{ tx.meta.blockNumber }}</h4>
-                <router-link to="#">{{ address(tx.txID) }}</router-link>
-                <span class="ago">{{
-                  timeFromNow(tx.meta.blockTimestamp)
-                }}</span>
+                <h4 class="number">{{ tx.block.number }}</h4>
+                <router-link
+                  :to="{ name: 'txDetail', params: { hash: tx.hash } }"
+                  >{{ address(tx.hash) }}</router-link
+                >
+                <span class="ago">{{ timeFromNow(tx.block.timestamp) }}</span>
               </div>
             </div>
 
@@ -35,12 +36,12 @@ import { shortAddress } from "@/utils/address";
 export default {
   name: "RecentTxs",
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
       loading: true,
-      recent_txs: []
+      recent_txs: [],
     };
   },
   async mounted() {
@@ -54,8 +55,8 @@ export default {
     },
     address(addr) {
       return shortAddress(addr);
-    }
-  }
+    },
+  },
 };
 </script>
 

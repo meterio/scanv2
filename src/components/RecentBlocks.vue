@@ -14,15 +14,23 @@
               <div class="block-icon"></div>
 
               <div class="height">
-                <h4 class="number">{{ block.number }}</h4>
+                <h4 class="number">
+                  <router-link
+                    :to="{
+                      name: 'blockDetail',
+                      params: { revision: block.number },
+                    }"
+                  >
+                    {{ block.number }}</router-link
+                  >
+                </h4>
+
                 <span class="ago">{{ timeFromNow(block.timestamp) }}</span>
               </div>
             </div>
 
             <div class="signed-view">
-              <p>
-                Signed by
-              </p>
+              <p>Signed by</p>
               <a href="#">{{ address(block.signer) }}</a>
             </div>
             <div class="detail-view">
@@ -43,12 +51,12 @@ import { shortAddress } from "@/utils/address";
 export default {
   name: "RecentBlocks",
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
       loading: true,
-      recent_blocks: []
+      recent_blocks: [],
     };
   },
   async mounted() {
@@ -62,8 +70,8 @@ export default {
     },
     address(addr) {
       return shortAddress(addr);
-    }
-  }
+    },
+  },
 };
 </script>
 

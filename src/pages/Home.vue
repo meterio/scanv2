@@ -35,6 +35,9 @@ import Search from "@/components/Search.vue";
 import DataDashboard from "@/components/DataDashboard.vue";
 import RecentBlocks from "@/components/RecentBlocks.vue";
 import RecentTxs from "@/components/RecentTxs.vue";
+import { fromNow, formatTime } from "@/utils/time";
+import { shortHash, shortAddress } from "@/utils/address";
+import BigNumber from "bignumber.js";
 
 export default {
   name: "Home",
@@ -43,7 +46,7 @@ export default {
     Search,
     DataDashboard,
     RecentBlocks,
-    RecentTxs
+    RecentTxs,
   },
 
   data() {
@@ -55,60 +58,105 @@ export default {
           {
             content: "$ 21.35",
             label: "MTRG Price",
-            change: "+4.5%"
+            change: "+4.5%",
           },
           {
             content: "2351 MTRG",
-            label: "Average Daily Reward Pool"
-          }
+            label: "Average Daily Reward Pool",
+          },
         ],
         [
           {
             content: "33333",
-            label: "Block Height"
+            label: "Block Height",
           },
           {
             content: "55555",
-            label: "K Block Height"
+            label: "K Block Height",
           },
           {
             content: "55%",
-            label: "Stacked"
+            label: "Stacked",
           },
           {
             content: "2343",
-            label: "Validators"
-          }
-        ]
+            label: "Validators",
+          },
+        ],
       ],
       node_data: [
         [
           {
             content: "235",
-            label: "Validators"
+            label: "Validators",
           },
           {
             content: "235 MTRG",
-            label: "Total Stacking"
-          }
+            label: "Total Stacking",
+          },
         ],
         [
           {
             content: "235",
-            label: "Height"
+            label: "Height",
           },
           {
             content: "12.4 USD",
-            label: "Price"
+            label: "Price",
           },
           {
             content: "78/90",
-            label: "Online/ Toal Node"
-          }
-        ]
-      ]
+            label: "Online/ Toal Node",
+          },
+        ],
+      ],
     };
-  }
+  },
+  async mounted() {
+    const res = await this.$api.metric.getAll();
+    this.loading = false;
+    const { mtr, mtrg, pos, pow } = res;
+
+    this.block_data = [
+      [
+        { label: "MTRG Price", content: mtrg.price, change: mtrg.priceChange },
+        {
+          label: "Average Daily Reward Pool",
+          content: new BigNumber(mtrg.avgDailyReward).dividedBy(1e18),
+        },
+        { label: "Block Height", content: pos.best },
+        { label: "K Block Height", content: pos.kblock },
+        { label: "Stacked", content: "?10%" },
+        { label: "Validators", content: pos.validators },
+      ],
+    ];
+    this.node_data = [
+      [
+        { label: "Validators", content: pos.validators },
+        {
+          label: "Total Stacking",
+          content: new BigNumber(mtrg.totalStaked).dividedBy(1e18),
+        },
+        { label: "Height", content: pow.best },
+        { label: "Price", content: mtr.price, change: mtr.priceChange },
+        {
+          label: "Online/ Toal Node",
+          content: `${pos.onlineNodes}/${pos.totalNodes}`,
+        },
+      ],
+    ];
+  },
+  methods: {
+    timeFromNow(time) {
+      return fromNow(time * 1000);
+    },
+    address(addr) {
+      return shortAddress(addr);
+    },
+    shortHash(hash) {
+      return shortHash(hash);
+    },
+  },
 };
 </script>
 

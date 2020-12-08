@@ -1,28 +1,28 @@
 <template>
   <div class="block-detail">
     <b-container class="summary">
-      <h2 class="title">Block / #788494</h2>
+      <h2 class="title">Block #{{ block.Number }}</h2>
 
       <b-card>
-        <b-row class="row" :key="index" v-for="(row, index) in summary_info">
+        <b-row class="row" :key="value" v-for="(value, key) in block">
           <b-col cols="2">
-            <span class="label">{{ row.label }}</span>
+            <span class="label">{{ key }}</span>
           </b-col>
           <b-col cols="10">
-            <span class="value">{{ row.value }}</span>
+            <span class="value">{{ value }}</span>
           </b-col>
         </b-row>
       </b-card>
     </b-container>
 
-    <DataTable
-      :title="transaction.title"
-      :data="transaction.data"
-      :pagination="transaction.pagination"
-    >
-      <template v-slot:cell(trx_hash)="data">
+    <DataTable title="Transaction" :data="txs.data" :pagination="pagination">
+      <template v-slot:cell(hash)="data">
         <div class="dt-row">
-          <a class="link" :href="data.value">{{ data.value }}</a>
+          <router-link
+            class="link"
+            :to="{ name: 'txDetail', params: { hash: data.value } }"
+            >{{ shortHash(data.value) }}</router-link
+          >
         </div>
       </template>
 
@@ -44,98 +44,100 @@
 <script>
 import DataTable from "@/components/DataTable.vue";
 import StatusTag from "@/components/StatusTag.vue";
-
+import { fromNow, formatTime } from "@/utils/time";
+import { shortHash, shortAddress } from "@/utils/address";
+import BigNumber from "bignumber.js";
 export default {
   name: "BlockDetail",
   components: {
     DataTable,
-    StatusTag
+    StatusTag,
   },
   data() {
     return {
-      summary_info: [
-        {
-          label: "Height",
-          value: "78923"
-        },
-        {
-          label: "Block Time",
-          value: "13h ago ( 2020-05-01 07:47:22 )"
-        },
-        {
-          label: "No of Transactions",
-          value: "3"
-        },
-        {
-          label: "Block Hash",
-          value:
-            "77F71E09756E38CA5FD928C933E98EAD92E8BAC7C8FEE36E615C24FFB18BDD6E"
-        }
-      ],
-
-      transaction: {
-        title: "Transactions",
+      block: {},
+      pagination: {
+        show: true,
+        align: "center",
+      },
+      txs: {
         data: {
           fields: [
             {
-              key: "trx_hash",
-              label: "Trx Hash"
+              key: "hash",
+              label: "Hash",
             },
             {
               key: "type",
-              label: "Type"
-            },
-            {
-              key: "height",
-              label: "Height"
+              label: "Type",
             },
             {
               key: "amount",
-              label: "Amount"
+              label: "Amount",
             },
             {
-              key: "fees",
-              label: "Fees"
+              key: "fee",
+              label: "Fee",
             },
             {
               key: "result",
-              label: "Result"
+              label: "Result",
             },
-            {
-              key: "time",
-              label: "Time"
-            }
           ],
-          items: [
-            {
-              trx_hash: "asdhfak...1231dsaf",
-              type: "Multisend",
-              height: "123545",
-              amount: "894.2 MTR",
-              fees: "0.05 MTR",
-              result: "success",
-              time: "13h ago"
-            },
-            {
-              trx_hash: "asdhfak...1231dsaf",
-              type: "Multisend",
-              height: "123545",
-              amount: "894.2 MTR",
-              fees: "0.05 MTR",
-              result: "failed",
-              time: "13h ago"
-            }
-          ]
+          items: [],
         },
-        pagination: {
-          show: true,
-          align: "center"
-        }
-      }
+      },
     };
-  }
+  },
+  async mounted() {
+    const { revision } = this.$route.params;
+    const res = await this.$api.block.getBlockDetail(revision);
+    this.loading = false;
+    const b = res.block;
+    this.block = {
+      Hash: b.hash,
+      Number: b.number,
+      "Block Type": b.blockType === 1 ? "KBlock" : "MBlock",
+      "KBlock Height": b.lastKBlockHeight,
+      Epoch: b.epoch,
+      "QC Height": b.qcHeight,
+      Signer: b.signer,
+      "Gas Used": b.gasUsed,
+      "No. of Transactions": b.txCount,
+      Timestamp:
+        fromNow(b.timestamp * 1000) +
+        " (" +
+        formatTime(b.timestamp * 1000) +
+        ")",
+    };
+    let items = [];
+    if (res.block.txSummaries) {
+      items = res.block.txSummaries.map((tx) => {
+        return {
+          hash: tx.hash,
+          type: tx.type,
+          amount: tx.amountStr,
+          fee: tx.feeStr,
+          result: tx.reverted ? "reverted" : "success",
+        };
+      });
+    }
+    this.txs.data.items = items;
+  },
+  methods: {
+    timeFromNow(time) {
+      return fromNow(time * 1000);
+    },
+    address(addr) {
+      return shortAddress(addr);
+    },
+    shortHash(hash) {
+      return shortHash(hash);
+    },
+  },
 };
 </script>
+
 
 <style lang="scss" scoped>
 .block-detail {
