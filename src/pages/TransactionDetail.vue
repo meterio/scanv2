@@ -62,6 +62,7 @@ export default {
       clauses: {
         data: {
           fields: [
+            { key: "index", label: "Index" },
             { key: "to", label: "To" },
             { key: "amount", label: "Amount" },
             { key: "data", label: "Data" },
@@ -93,12 +94,14 @@ export default {
     this.tx = tx;
     let clauses = [];
     if (tx.clauseCount > 0) {
+      let index = 1;
       clauses = tx.clauses.map((c) => {
         const amount = new BigNumber(c.value).dividedBy(1e18).toFixed();
         const token = c.token === 0 ? "MTR" : "MTRG";
         return {
           ...c,
           amount: `${amount} ${token}`,
+          index: index++,
         };
       });
     }
