@@ -122,7 +122,7 @@ export default {
         { label: "MTRG Price", content: mtrg.price, change: mtrg.priceChange },
         {
           label: "Average Daily Reward Pool",
-          content: new BigNumber(mtrg.avgDailyReward).dividedBy(1e18),
+          content: new BigNumber(mtrg.avgDailyReward).dividedBy(1e18).toFixed(),
         },
         { label: "Block Height", content: pos.best },
         { label: "K Block Height", content: pos.kblock },
@@ -135,7 +135,7 @@ export default {
         { label: "Validators", content: pos.validators },
         {
           label: "Total Stacking",
-          content: new BigNumber(mtrg.totalStaked).dividedBy(1e18),
+          content: new BigNumber(mtrg.totalStaked).dividedBy(1e18).toFixed(),
         },
         { label: "Height", content: pow.best },
         { label: "Price", content: mtr.price, change: mtr.priceChange },

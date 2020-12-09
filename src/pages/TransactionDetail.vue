@@ -94,7 +94,7 @@ export default {
     let clauses = [];
     if (tx.clauseCount > 0) {
       clauses = tx.clauses.map((c) => {
-        const amount = new BigNumber(c.value).dividedBy(1e18);
+        const amount = new BigNumber(c.value).dividedBy(1e18).toFixed();
         const token = c.token === 0 ? "MTR" : "MTRG";
         return {
           ...c,

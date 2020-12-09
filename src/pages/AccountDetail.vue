@@ -46,11 +46,15 @@ export default {
       { key: "Address", value: account.address },
       {
         key: "MTR Balance",
-        value: `${new BigNumber(account.mtrBalance).dividedBy(1e18)} MTR`,
+        value: `${new BigNumber(account.mtrBalance)
+          .dividedBy(1e18)
+          .toFixed()} MTR`,
       },
       {
         key: "MTRG Balance",
-        value: `${new BigNumber(account.mtrgBalance).dividedBy(1e18)} MTRG`,
+        value: `${new BigNumber(account.mtrgBalance)
+          .dividedBy(1e18)
+          .toFixed()} MTRG`,
       },
       {
         key: "First Seen",
