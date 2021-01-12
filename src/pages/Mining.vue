@@ -3,9 +3,13 @@
     <!-- block statistic -->
     <DataDashboard v-bind:rows="block_data"></DataDashboard>
 
-    <HashRateChart></HashRateChart>
+    <HashRateChart class="px-0"></HashRateChart>
 
-    <DataTable :title="mining_reward.title" :data="mining_reward.data">
+    <DataTable
+      :title="mining_reward.title"
+      :data="mining_reward.data"
+      class="px-0"
+    >
       <template v-slot:cell(more)="data">
         <div class="dt-row">
           <a class="link" :href="data.value">Mining Reward List</a>
@@ -25,7 +29,7 @@ export default {
   components: {
     DataDashboard,
     HashRateChart,
-    DataTable
+    DataTable,
   },
   data() {
     return {
@@ -33,31 +37,31 @@ export default {
         [
           {
             content: "2351",
-            label: "Block Height"
+            label: "Block Height",
           },
           {
             content: "0.9 USD",
-            label: "Price (MTR)"
+            label: "Price (MTR)",
           },
           {
             content: "233",
-            label: "Circulations"
-          }
+            label: "Circulations",
+          },
         ],
         [
           {
             content: "1.2 PH/s",
-            label: "Network Hash Rate"
+            label: "Network Hash Rate",
           },
           {
             content: "12 MTR",
-            label: "(TH/s)/Day"
+            label: "(TH/s)/Day",
           },
           {
             content: "4.5 USD",
-            label: "MTR Cost Parity"
-          }
-        ]
+            label: "MTR Cost Parity",
+          },
+        ],
       ],
 
       mining_reward: {
@@ -66,25 +70,25 @@ export default {
           fields: [
             {
               key: "kblock_height",
-              label: "Kblock Height (PoS)"
+              label: "Kblock Height (PoS)",
             },
             {
               key: "height",
-              label: "Height (PoW)"
+              label: "Height (PoW)",
             },
             {
               key: "amount",
-              label: "Amount"
+              label: "Amount",
             },
             {
               key: "time",
-              label: "Time"
+              label: "Time",
             },
 
             {
               key: "more",
-              label: "More"
-            }
+              label: "More",
+            },
           ],
           items: [
             {
@@ -92,20 +96,20 @@ export default {
               height: "1274",
               amount: "2,89,789 MTR",
               time: "12 sec ago",
-              more: "tx 1"
+              more: "tx 1",
             },
             {
               kblock_height: "274",
               height: "1274",
               amount: "2,89,789 MTR",
               time: "12 sec ago",
-              more: "tx 1"
-            }
-          ]
-        }
-      }
+              more: "tx 1",
+            },
+          ],
+        },
+      },
     };
-  }
+  },
 };
 </script>
 

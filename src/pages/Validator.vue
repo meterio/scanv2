@@ -2,9 +2,9 @@
   <div class="validator">
     <DataDashboard :rows="validator_data"></DataDashboard>
 
-    <ValidatorTable></ValidatorTable>
+    <ValidatorTable class="px-0"></ValidatorTable>
 
-    <DataTable :data="epoch_reward_data">
+    <DataTable :data="epoch_reward_data" class="px-0">
       <template v-slot:cell(more)="data">
         <div class="dt-row">
           <a class="link" :href="data.value">Epoch Reward List</a>
@@ -24,7 +24,7 @@ export default {
   components: {
     DataDashboard,
     ValidatorTable,
-    DataTable
+    DataTable,
   },
   data() {
     return {
@@ -32,51 +32,51 @@ export default {
         [
           {
             content: "2351",
-            label: "Validators"
+            label: "Validators",
           },
           {
             content: "2351",
-            label: "Total Staking"
-          }
+            label: "Total Staking",
+          },
         ],
         [
           {
             content: "2351",
-            label: "Height"
+            label: "Height",
           },
           {
             content: "12.4 USD",
-            label: "Price"
+            label: "Price",
           },
           {
             content: "79/90",
-            label: "Online/ Total Node"
-          }
-        ]
+            label: "Online/ Total Node",
+          },
+        ],
       ],
       epoch_reward_data: {
         fields: [
           {
             key: "kblock_height",
-            label: "Kblock Height (PoS)"
+            label: "Kblock Height (PoS)",
           },
           {
             key: "height",
-            label: "Height (PoW)"
+            label: "Height (PoW)",
           },
           {
             key: "amount",
-            label: "Amount"
+            label: "Amount",
           },
           {
             key: "time",
-            label: "Time"
+            label: "Time",
           },
 
           {
             key: "more",
-            label: "More"
-          }
+            label: "More",
+          },
         ],
         items: [
           {
@@ -84,19 +84,19 @@ export default {
             height: "1274",
             amount: "2,89,789 MTR",
             time: "12 sec ago",
-            more: "tx 1"
+            more: "tx 1",
           },
           {
             kblock_height: "274",
             height: "1274",
             amount: "2,89,789 MTR",
             time: "12 sec ago",
-            more: "tx 1"
-          }
-        ]
-      }
+            more: "tx 1",
+          },
+        ],
+      },
     };
-  }
+  },
 };
 </script>
 

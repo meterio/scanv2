@@ -17,7 +17,7 @@
     <!-- node statistic -->
     <DataDashboard v-bind:rows="node_data"></DataDashboard>
 
-    <b-container>
+    <b-container class="px-0">
       <b-row>
         <b-col cols="12" md="6">
           <RecentBlocks />
@@ -124,6 +124,8 @@ export default {
           label: "Average Daily Reward Pool",
           content: new BigNumber(mtrg.avgDailyReward).dividedBy(1e18).toFixed(),
         },
+      ],
+      [
         { label: "Block Height", content: pos.best },
         { label: "K Block Height", content: pos.kblock },
         { label: "Stacked", content: "?10%" },
@@ -137,6 +139,8 @@ export default {
           label: "Total Stacking",
           content: new BigNumber(mtrg.totalStaked).dividedBy(1e18).toFixed(),
         },
+      ],
+      [
         { label: "Height", content: pow.best },
         { label: "Price", content: mtr.price, change: mtr.priceChange },
         {

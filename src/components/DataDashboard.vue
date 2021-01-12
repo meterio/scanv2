@@ -1,5 +1,5 @@
 <template>
-  <b-container class="card">
+  <b-container class="card p-0">
     <div v-bind:key="index" v-for="(row, index) in rows">
       <b-row>
         <b-col
@@ -9,7 +9,7 @@
           ><DataCard v-bind:data="col"></DataCard
         ></b-col>
       </b-row>
-      <hr v-if="hasRowLine(rows.length, index)" />
+      <hr v-if="hasRowLine(rows.length, index)" class="m-0" />
     </div>
   </b-container>
 </template>
@@ -20,22 +20,22 @@ import DataCard from "@/components/DataCard.vue";
 export default {
   name: "DataDashboard",
   components: {
-    DataCard
+    DataCard,
   },
   props: ["rows"],
   methods: {
-    hasRowLine: function(row_size, index) {
+    hasRowLine: function (row_size, index) {
       return row_size > index + 1;
     },
 
-    hasBorderRight: function(col_size, index) {
+    hasBorderRight: function (col_size, index) {
       if (col_size > index + 1) {
         return { "border-r": true };
       }
 
       return { "border-r": false };
-    }
-  }
+    },
+  },
 };
 </script>
 

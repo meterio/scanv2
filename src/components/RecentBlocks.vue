@@ -1,6 +1,6 @@
 <template>
   <b-container class="container">
-    <b-card body-class="block-card-body" header="Recent Blocks">
+    <b-card body-class="block-card-body p-0" header="Recent Blocks">
       <b-card-text>
         <Loading v-if="loading" />
 

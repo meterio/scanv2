@@ -97,10 +97,9 @@ export default {
       let index = 1;
       clauses = tx.clauses.map((c) => {
         const amount = new BigNumber(c.value).dividedBy(1e18).toFixed();
-        const token = c.token === 0 ? "MTR" : "MTRG";
         return {
           ...c,
-          amount: `${amount} ${token}`,
+          amount: `${amount} ${c.token}`,
           index: index++,
         };
       });

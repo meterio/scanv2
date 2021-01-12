@@ -1,6 +1,6 @@
 <template>
   <b-container class="container">
-    <b-card body-class="block-card-body" header="Recent Transactions">
+    <b-card body-class="block-card-body p-0" header="Recent Transactions">
       <b-card-text>
         <Loading v-if="loading" />
 
@@ -10,7 +10,6 @@
               <div class="block-icon"></div>
 
               <div class="height">
-                <h4 class="number">{{ tx.block.number }}</h4>
                 <router-link
                   :to="{ name: 'txDetail', params: { hash: tx.hash } }"
                   >{{ address(tx.hash) }}</router-link
@@ -19,8 +18,17 @@
               </div>
             </div>
 
-            <div class="signed-view"></div>
-            <div class="detail-view"></div>
+            <div class="signed-view">
+              <p>
+                From: <a href="#">{{ address(tx.origin) }}</a>
+              </p>
+              <p>
+                To <a href="#">{{ address(tx.clauses[0].to) }}</a>
+              </p>
+            </div>
+            <div class="detail-view">
+               <span class="detail">{{ block.txCount }} tx</span>
+            </div>
           </li>
         </ul>
       </b-card-text>
