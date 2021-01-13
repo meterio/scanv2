@@ -18,7 +18,7 @@
                   <router-link
                     :to="{
                       name: 'blockDetail',
-                      params: { revision: block.number },
+                      params: { revision: block.number }
                     }"
                   >
                     {{ block.number }}</router-link
@@ -47,31 +47,50 @@
 import Loading from "@/components/Loading";
 import { fromNow } from "@/utils/time";
 import { shortAddress } from "@/utils/address";
+import { setInterval } from "timers";
 
 export default {
   name: "RecentBlocks",
   components: {
-    Loading,
+    Loading
   },
   data() {
     return {
       loading: true,
       recent_blocks: [],
+      time: null
     };
   },
   async mounted() {
-    const res = await this.$api.block.getRecentBlocks();
-    this.loading = false;
-    this.recent_blocks = res.blocks.splice(0, 5);
+    this.initData();
+    this.clearTime();
+    const me = this;
+    this.time = setInterval(function() {
+      me.initData();
+    }, 3000);
   },
   methods: {
+    async initData() {
+      try {
+        const res = await this.$api.block.getRecentBlocks();
+        this.loading = false;
+        this.recent_blocks = res.blocks.splice(0, 5);
+      } catch (e) {
+        this.loading = false;
+      }
+    },
+    clearTime() {
+      if (this.time) {
+        clearInterval(this.time);
+      }
+    },
     timeFromNow(time) {
       return fromNow(time * 1000);
     },
     address(addr) {
       return shortAddress(addr);
-    },
-  },
+    }
+  }
 };
 </script>
 
