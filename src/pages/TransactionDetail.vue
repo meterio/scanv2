@@ -16,7 +16,7 @@
               >#{{ item.value }}</router-link
             >
             <router-link
-              :to="{ name: 'accountDetail', params: { address: item.value } }"
+              :to="{ name: 'address', params: { address: item.value } }"
               v-if="item.type === 'account-link'"
               >{{ item.value }}</router-link
             >
@@ -34,7 +34,7 @@
           <div class="dt-row">
             <router-link
               class="link"
-              :to="{ name: 'accountDetail', params: { address: data.value } }"
+              :to="{ name: 'address', params: { address: data.value } }"
               >{{ data.value }}</router-link
             >
           </div>

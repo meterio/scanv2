@@ -1,4 +1,6 @@
-# explorer
+# Meter Scan v2
+
+block explorer project for meter network, inspired by [Etherscan](https://etherscan.com)
 
 ## Project setup
 ```

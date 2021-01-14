@@ -7,14 +7,14 @@
           <b-col class="border-r">
             <div class="box">
               <p class="label">MTRG(Price)</p>
-              <p class="value">12.9 USD</p>
+              <p class="value">{{ mtrPrice }}</p>
             </div>
           </b-col>
 
           <b-col>
             <div class="box">
               <p class="label">MTRG(Price)</p>
-              <p class="value">12.9 USD</p>
+              <p class="value">{{ mtrgPrice }}</p>
             </div>
           </b-col>
         </b-row>
@@ -38,14 +38,23 @@ export default {
 
   components: {
     ActiveAuctions,
-    PastAuctions
+    PastAuctions,
   },
 
   data() {
     return {
-      msg: "Welcome to Index!!!"
+      msg: "Welcome to Index!!!",
+      mtrPrice: "0 USD",
+      mtrgPrice: "0 USD",
     };
-  }
+  },
+
+  async mounted() {
+    const res = await this.$api.metric.getAll();
+    const { mtr, mtrg } = res;
+    this.mtrPrice = mtr.price + " USD";
+    this.mtrgPrice = mtrg.price + " USD";
+  },
 };
 </script>
 

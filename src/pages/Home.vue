@@ -115,37 +115,48 @@ export default {
   async mounted() {
     const res = await this.$api.metric.getAll();
     this.loading = false;
-    const { mtr, mtrg, pos, pow } = res;
+    const { mtr, mtrg, pos, pow, staking } = res;
 
     this.block_data = [
       [
-        { label: "MTRG Price", content: mtrg.price, change: mtrg.priceChange },
+        {
+          label: "MTRG Price",
+          content: "$ " + mtrg.price,
+          change: mtrg.priceChange,
+        },
         {
           label: "Average Daily Reward Pool",
-          content: new BigNumber(mtrg.avgDailyReward).dividedBy(1e18).toFixed(),
+          content: mtrg.avgDailyReward,
         },
       ],
       [
         { label: "Block Height", content: pos.best },
         { label: "K Block Height", content: pos.kblock },
-        { label: "Stacked", content: "?10%" },
-        { label: "Validators", content: pos.validators },
+        {
+          label: "Staked",
+          content: "10%", // FIXME: fake stub
+        },
+        { label: "Validators", content: staking.validators },
       ],
     ];
     this.node_data = [
       [
-        { label: "Validators", content: pos.validators },
+        { label: "Validators", content: staking.validators },
         {
-          label: "Total Stacking",
-          content: new BigNumber(mtrg.totalStaked).dividedBy(1e18).toFixed(),
+          label: "Total Staked",
+          content: staking.totalStakedStr,
         },
       ],
       [
         { label: "Height", content: pow.best },
-        { label: "Price", content: mtr.price, change: mtr.priceChange },
         {
-          label: "Online/ Toal Node",
-          content: `${pos.onlineNodes}/${pos.totalNodes}`,
+          label: "MTR Price",
+          content: "$ " + mtr.price,
+          change: mtr.priceChange,
+        },
+        {
+          label: "Online/Total Node",
+          content: `${staking.onlineNodes}/${staking.totalNodes}`,
         },
       ],
     ];

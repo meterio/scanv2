@@ -1,6 +1,6 @@
 <template>
   <div class="validator">
-    <DataDashboard :rows="validator_data"></DataDashboard>
+    <DataDashboard :rows="pos_data"></DataDashboard>
 
     <ValidatorTable class="px-0"></ValidatorTable>
 
@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      validator_data: [
+      pos_data: [
         [
           {
             content: "2351",
@@ -96,6 +96,38 @@ export default {
         ],
       },
     };
+  },
+
+  async mounted() {
+    const res = await this.$api.metric.getAll();
+    this.loading = false;
+    const { mtr, mtrg, pos, pow, staking } = res;
+    this.pos_data = [
+      [
+        {
+          content: staking.validators,
+          label: "Validators",
+        },
+        {
+          content: staking.totalStakedStr,
+          label: "Total Staked",
+        },
+      ],
+      [
+        {
+          content: pos.best,
+          label: "PoS Chain Height",
+        },
+        {
+          content: "$ " + mtr.price,
+          label: "MTR Price",
+        },
+        {
+          content: `${staking.onlineNodes}/${staking.totalNodes}`,
+          label: "Online/ Total Node",
+        },
+      ],
+    ];
   },
 };
 </script>

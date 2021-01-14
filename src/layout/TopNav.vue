@@ -45,8 +45,8 @@
           </b-nav-item>
 
           <b-nav-item-dropdown text="Blockchain" right>
-            <b-dropdown-item href="/validator">PoS</b-dropdown-item>
-            <b-dropdown-item href="/mining">PoW</b-dropdown-item>
+            <b-dropdown-item href="/pos">PoS</b-dropdown-item>
+            <b-dropdown-item href="/pow">PoW</b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Resources" right>
             <b-dropdown-item href="#">Wallet</b-dropdown-item>
@@ -68,7 +68,7 @@
 
 <script>
 export default {
-  name: "TopNav"
+  name: "TopNav",
 };
 </script>
 
