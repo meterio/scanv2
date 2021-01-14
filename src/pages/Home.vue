@@ -1,33 +1,23 @@
-<template>
-  <div class="home">
-    <!-- search banner -->
-    <div class="search-banner">
-      <div class="container">
-        <h1 class="title">Meter Blockchain Exlorer</h1>
-        <Search />
-      </div>
-    </div>
-
+<template lang="pug">
+.home
+  //- search-banner
+  .search-banner
+    .container
+      h1.title Meter Blockchain Explorer
+      search.mt25(:btnType="2", placeholder="Search Transation/Blocks/Address")
     <!-- TODO:tab nav -->
-
+  nav-tabs.mt10(:tabs="nav_tabs")
     <!-- card list -->
-    <!-- block statistic -->
-    <DataDashboard v-bind:rows="block_data"></DataDashboard>
-
-    <!-- node statistic -->
-    <DataDashboard v-bind:rows="node_data"></DataDashboard>
-
-    <b-container class="px-0">
-      <b-row>
-        <b-col cols="12" md="6">
-          <RecentBlocks />
-        </b-col>
-        <b-col cols="12" md="6">
-          <RecentTxs />
-        </b-col>
-      </b-row>
-    </b-container>
-  </div>
+    //- block statistic
+  data-dashboard(v-bind:rows="block_data")
+    //- node statistic
+  data-dashboard(v-bind:rows="node_data")
+  b-container.px-0
+    b-row
+      b-col(cols="12", md="6")
+        recent-blocks
+      b-col(cols="12", md="6")
+        recent-txs
 </template>
 
 <script>
@@ -35,6 +25,7 @@ import Search from "@/components/Search.vue";
 import DataDashboard from "@/components/DataDashboard.vue";
 import RecentBlocks from "@/components/RecentBlocks.vue";
 import RecentTxs from "@/components/RecentTxs.vue";
+import NavTabs from "@/components/NavTabs.vue";
 import { fromNow, formatTime } from "@/utils/time";
 import { shortHash, shortAddress } from "@/utils/address";
 import BigNumber from "bignumber.js";
@@ -47,10 +38,13 @@ export default {
     DataDashboard,
     RecentBlocks,
     RecentTxs,
+    NavTabs,
   },
 
   data() {
     return {
+      // top nav tabs
+      nav_tabs: ["PoS", "PoW"],
       // fake data
       msg: "Welcome to Index!!!",
       block_data: [
@@ -126,7 +120,7 @@ export default {
         },
         {
           label: "Average Daily Reward Pool",
-          content: mtrg.avgDailyReward,
+          content: new BigNumber(mtrg.avgDailyReward).dividedBy(1e18).toFixed(),
         },
       ],
       [
@@ -178,7 +172,7 @@ export default {
 <style lang="scss" scoped>
 .search-banner {
   background-image: url("~@/assets/banner_bg.png");
-  height: 210px;
+  height: 180px;
   background-size: cover;
   display: flex;
   padding-top: 50px;

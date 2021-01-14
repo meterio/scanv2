@@ -4,6 +4,7 @@ import account from "./account";
 import metric from "./metric";
 import pow from "./pow";
 import auction from "./auction"
+import validator from "./validator";
 
 export default {
   block,
@@ -12,4 +13,5 @@ export default {
   transaction,
   pow,
   auction,
+  validator
 };

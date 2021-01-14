@@ -22,7 +22,7 @@
         <b-nav-form>
           <b-input-group class="search-group">
             <b-input-group-prepend>
-              <b-dropdown text="Mainnet" variant="outline-secondary">
+              <b-dropdown text="Main net" variant="outline-secondary">
                 <b-dropdown-item href="#">Mainnet</b-dropdown-item>
                 <b-dropdown-item href="#">Testnet</b-dropdown-item>
               </b-dropdown>
@@ -31,20 +31,32 @@
               placeholder="Search by address/tx/block"
             ></b-form-input>
             <b-input-group-append>
-              <b-button variant="primary"
-                ><b-icon icon="search"></b-icon
-              ></b-button>
+              <b-button variant="primary">
+                <b-icon icon="search"></b-icon>
+              </b-button>
             </b-input-group-append>
           </b-input-group>
         </b-nav-form>
 
         <!-- Right aligned nav items -->
-        <b-navbar-nav class="ml-auto">
+        <b-navbar-nav class="m-bar ml-auto">
           <b-nav-item>
-            <router-link :to="{ name: 'home' }">Dashboard</router-link>
+            <router-link
+              :to="{ name: 'home' }"
+              :class="$route.path == '/' ? 'active' : ''"
+              >Dashboard</router-link
+            >
           </b-nav-item>
 
-          <b-nav-item-dropdown text="Blockchain" right>
+          <b-nav-item-dropdown
+            text="Blockchain"
+            right
+            :class="
+              $route.path == '/validator' || $route.path == '/mining'
+                ? 'top-dropdown active'
+                : ''
+            "
+          >
             <b-dropdown-item href="/pos">PoS</b-dropdown-item>
             <b-dropdown-item href="/pow">PoW</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -53,7 +65,11 @@
           </b-nav-item-dropdown>
 
           <b-nav-item>
-            <router-link :to="{ name: 'auction' }">Auctions</router-link>
+            <router-link
+              :to="{ name: 'auction' }"
+              :class="$route.path == '/auction' ? 'active' : ''"
+              >Auctions</router-link
+            >
           </b-nav-item>
 
           <b-dropdown text="EN" variant="outline-secondary">
@@ -69,6 +85,11 @@
 <script>
 export default {
   name: "TopNav",
+  watch: {
+    "$route.path"(newVal) {
+      console.log("newval:>>", newVal);
+    },
+  },
 };
 </script>
 
@@ -80,5 +101,18 @@ export default {
 .navbar-expand-lg .navbar-nav .nav-link {
   padding-right: 1rem;
   padding-left: 1rem;
+}
+.m-bar {
+  a {
+    color: rgba(0, 0, 0, 0.5);
+    &:hover {
+      text-decoration: none;
+      color: rgba(0, 0, 0, 0.9);
+    }
+    &.active,
+    &.active:hover {
+      color: #007bff;
+    }
+  }
 }
 </style>

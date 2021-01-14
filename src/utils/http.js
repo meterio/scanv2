@@ -6,12 +6,12 @@ import QS from "qs";
 
 // 环境的切换
 if (process.env.NODE_ENV == "development") {
-  axios.defaults.baseURL = "/api"
+  axios.defaults.baseURL = "/api";
 } else if (process.env.NODE_ENV == "production") {
-  if (process.env.VUE_APP_API_ENDPOINT){
+  if (process.env.VUE_APP_API_ENDPOINT) {
     axios.defaults.baseURL = process.env.VUE_APP_API_ENDPOINT;
-  } else{
-    axios.defaults.baseURL = "/api"
+  } else {
+    axios.defaults.baseURL = "/api";
   }
 }
 

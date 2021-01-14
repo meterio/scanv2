@@ -3,15 +3,19 @@
     <DataDashboard :rows="pos_data"></DataDashboard>
 
     <ValidatorTable class="px-0"></ValidatorTable>
-
-    <DataTable :data="epoch_reward_data" class="px-0">
+    <data-table
+      hover
+      :data="epoch_reward_data"
+      class="px-0"
+      title="Epoch Rewards"
+    >
       <template v-slot:cell(more)="data">
         <div class="dt-row">
           <a class="link" :href="data.value">Epoch Reward List</a>
         </div>
       </template>
-    </DataTable>
-  </div>
+    </data-table>
+  </b-container>
 </template>
 
 <script>
@@ -58,7 +62,7 @@ export default {
         fields: [
           {
             key: "kblock_height",
-            label: "Kblock Height (PoS)",
+            label: "Epoch",
           },
           {
             key: "height",

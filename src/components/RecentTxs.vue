@@ -54,7 +54,7 @@
 <script>
 import Loading from "@/components/Loading";
 import { fromNow } from "@/utils/time";
-import { shortAddress } from "@/utils/address";
+import { shortAddress, shortMTR } from "@/utils/address";
 
 export default {
   name: "RecentTxs",
@@ -65,19 +65,43 @@ export default {
     return {
       loading: true,
       recent_txs: [],
+      time: null,
     };
   },
-  async mounted() {
-    const res = await this.$api.transaction.getRecentTxs();
-    this.loading = false;
-    this.recent_txs = res.txs.splice(0, 5);
+  mounted() {
+    this.initData();
+    this.clearTime();
+    const me = this;
+    this.time = setInterval(function () {
+      me.initData();
+    }, 3000);
+  },
+  beforeDestroy() {
+    this.clearTime();
   },
   methods: {
+    clearTime() {
+      if (this.time) {
+        clearInterval(this.time);
+      }
+    },
+    async initData() {
+      try {
+        const res = await this.$api.transaction.getRecentTxs();
+        this.recent_txs = res.txs.splice(0, 5);
+        this.loading = false;
+      } catch (e) {
+        this.loading = false;
+      }
+    },
     timeFromNow(time) {
       return fromNow(time * 1000);
     },
     address(addr) {
       return shortAddress(addr);
+    },
+    mtr(mtr) {
+      return shortMTR(mtr);
     },
   },
 };
