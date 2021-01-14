@@ -1,13 +1,12 @@
 // single pages
 import homePage from "@/pages/Home.vue";
 import auctionPage from "@/pages/Auction.vue";
-import MiningPage from "@/pages/Mining.vue";
-import ValidatorPage from "@/pages/Validator.vue";
+import PowPage from "@/pages/Pow.vue";
+import PosPage from "@/pages/Pos.vue";
 import ValidatorDetailpage from "@/pages/ValidatorDetail.vue";
 import BlockDetailpage from "@/pages/BlockDetail.vue";
 import TransactionDetailPage from "@/pages/TransactionDetail.vue";
-import AccountDetailpage from "@/pages/AccountDetail.vue";
-import AddressDetailPage from "@/pages/AddressDetail.vue";
+import AddressPage from "@/pages/Address.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
 import { routePropResolver } from "./util";
@@ -27,16 +26,16 @@ export const routes = [
     meta: { title: `${DOMAIN_TITLE} | auction` }
   },
   {
-    path: "/mining",
-    name: "mining",
-    component: MiningPage,
+    path: "/pow",
+    name: "pow",
+    component: PowPage,
     meta: { title: `${DOMAIN_TITLE} | mining` }
   },
   {
-    path: "/validator",
-    name: "validator",
-    component: ValidatorPage,
-    meta: { title: `${DOMAIN_TITLE} | validator` }
+    path: "/pos",
+    name: "pos",
+    component: PosPage,
+    meta: { title: `${DOMAIN_TITLE} | pos` }
   },
   {
     path: "/validator-detail",
@@ -45,10 +44,10 @@ export const routes = [
     meta: { title: `${DOMAIN_TITLE} | validator detail` }
   },
   {
-    path: "/account/:address",
-    name: "accountDetail",
-    component: AccountDetailpage,
-    meta: { title: `${DOMAIN_TITLE} | account detail` }
+    path: "/address/:address",
+    name: "address",
+    component: AddressPage,
+    meta: { title: `${DOMAIN_TITLE} | address detail ` }
   },
   {
     path: "/block/:revision",

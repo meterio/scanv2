@@ -20,14 +20,29 @@
 
             <div class="signed-view">
               <p>
-                From: <a href="#">{{ address(tx.origin) }}</a>
+                From:
+                <router-link
+                  class="link"
+                  :to="{ name: 'address', params: { address: tx.origin } }"
+                  >{{ address(tx.origin) }}</router-link
+                >
               </p>
               <p>
-                To <a href="#">{{ address(tx.tos[0]) }}</a>
+                To:
+                <router-link
+                  v-if="tx.tos.length > 0"
+                  class="link"
+                  :to="{
+                    name: 'address',
+                    params: { address: tx.tos[0].address },
+                  }"
+                  >{{ address(tx.tos[0].address) }}</router-link
+                >
+                <span v-else>nobody</span>
               </p>
             </div>
             <div class="detail-view">
-              <span class="detail">{{ mtr(tx.feeStr) }}</span>
+              <span class="detail">{{ tx.totalAmountStrs[0] }}</span>
             </div>
           </li>
         </ul>
@@ -44,20 +59,20 @@ import { shortAddress, shortMTR } from "@/utils/address";
 export default {
   name: "RecentTxs",
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
       loading: true,
       recent_txs: [],
-      time: null
+      time: null,
     };
   },
   mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function() {
+    this.time = setInterval(function () {
       me.initData();
     }, 3000);
   },
@@ -87,8 +102,8 @@ export default {
     },
     mtr(mtr) {
       return shortMTR(mtr);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -179,7 +194,7 @@ export default {
     color: #5c6f8c;
     background: #ebeef6;
     border-radius: 5px;
-    width: 50px;
+    max-width: 70px;
     text-align: center;
   }
 }

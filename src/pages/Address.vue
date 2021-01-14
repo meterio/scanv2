@@ -29,7 +29,7 @@ import { fromNow, formatTime } from "@/utils/time";
 import { shortHash, shortAddress } from "@/utils/address";
 import BigNumber from "bignumber.js";
 export default {
-  name: "AccountDetail",
+  name: "Address",
   components: {},
   data() {
     return {
@@ -58,12 +58,18 @@ export default {
       },
       {
         key: "First Seen",
-        value: "  (" + fromNow(account.firstSeen.timestamp * 1000) + ")",
+        value:
+          account.firstSeen.number > 0
+            ? "  (" + fromNow(account.firstSeen.timestamp * 1000) + ")"
+            : "",
         block: account.firstSeen.number,
       },
       {
         key: "Last Updated",
-        value: "  (" + fromNow(account.lastUpdate.timestamp * 1000) + ")",
+        value:
+          account.lastUpdate.number > 0
+            ? "  (" + fromNow(account.lastUpdate.timestamp * 1000) + ")"
+            : "",
         block: account.lastUpdate.number,
       },
     ];

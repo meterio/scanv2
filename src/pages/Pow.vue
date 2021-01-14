@@ -1,7 +1,7 @@
 <template>
   <div class="mining">
     <!-- block statistic -->
-    <DataDashboard v-bind:rows="block_data"></DataDashboard>
+    <DataDashboard v-bind:rows="pow_data"></DataDashboard>
 
     <HashRateChart class="px-0"></HashRateChart>
 
@@ -23,6 +23,8 @@
 import DataDashboard from "@/components/DataDashboard.vue";
 import HashRateChart from "@/components/HashRateChart.vue";
 import DataTable from "@/components/DataTable.vue";
+import BigNumber from "bignumber.js";
+import { fromNow } from "@/utils/time";
 
 export default {
   name: "Mining",
@@ -33,7 +35,7 @@ export default {
   },
   data() {
     return {
-      block_data: [
+      pow_data: [
         [
           {
             content: "2351",
@@ -69,11 +71,11 @@ export default {
         data: {
           fields: [
             {
-              key: "kblock_height",
+              key: "pos_height",
               label: "Kblock Height (PoS)",
             },
             {
-              key: "height",
+              key: "pow_height",
               label: "Height (PoW)",
             },
             {
@@ -90,25 +92,62 @@ export default {
               label: "More",
             },
           ],
-          items: [
-            {
-              kblock_height: "274",
-              height: "1274",
-              amount: "2,89,789 MTR",
-              time: "12 sec ago",
-              more: "tx 1",
-            },
-            {
-              kblock_height: "274",
-              height: "1274",
-              amount: "2,89,789 MTR",
-              time: "12 sec ago",
-              more: "tx 1",
-            },
-          ],
+          items: [],
         },
       },
     };
+  },
+  async mounted() {
+    const res = await this.$api.metric.getAll();
+    this.loading = false;
+    const { mtr, mtrg, pos, pow, staking } = res;
+    this.pow_data = [
+      [
+        {
+          content: pow.best,
+          label: "PoW Chain Height",
+        },
+        {
+          content: "$ " + mtr.price,
+          label: "MTR Price",
+        },
+        {
+          content: new BigNumber(mtr.circulation).toFixed(0),
+          label: "MTR Circulations",
+        },
+      ],
+      [
+        {
+          content: `${new BigNumber(pow.hashrate)
+            .dividedBy(1000000)
+            .toFixed(0)} MH/s`,
+          label: "Network Hash Rate",
+        },
+        {
+          content: "12 MTR", // FIXME: fake stub
+          label: "(TH/s)/Day",
+        },
+        {
+          content: new BigNumber(pow.costParity).toFixed(2),
+          label: "MTR Cost Parity",
+        },
+      ],
+    ];
+
+    const rres = await this.$api.pow.getRewards();
+    const { rewards } = rres;
+
+    this.mining_reward.data.items = [];
+    for (const r of rewards) {
+      const item = {
+        pos_height: r.posBlock,
+        pow_height: r.powBlock,
+        amount: r.totalAmountStr,
+        time: fromNow(r.timestamp * 1000),
+        more: "",
+      };
+      this.mining_reward.data.items.push(item);
+    }
   },
 };
 </script>

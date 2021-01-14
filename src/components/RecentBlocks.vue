@@ -31,7 +31,11 @@
 
             <div class="signed-view">
               <p>Signed by</p>
-              <a href="/addressDetail">{{ address(block.signer) }}</a>
+              <router-link
+                class="link"
+                :to="{ name: 'address', params: { address: block.signer } }"
+                >{{ address(block.signer) }}</router-link
+              >
             </div>
             <div class="detail-view">
               <span class="detail">{{ block.txCount }} tx</span>

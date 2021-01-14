@@ -10,7 +10,6 @@
     <!-- card list -->
     //- block statistic
   data-dashboard(v-bind:rows="block_data")
-
     //- node statistic
   data-dashboard(v-bind:rows="node_data")
   b-container.px-0
@@ -39,7 +38,7 @@ export default {
     DataDashboard,
     RecentBlocks,
     RecentTxs,
-    NavTabs
+    NavTabs,
   },
 
   data() {
@@ -53,96 +52,107 @@ export default {
           {
             content: "$ 21.35",
             label: "MTRG Price",
-            change: "+4.5%"
+            change: "+4.5%",
           },
           {
             content: "2351 MTRG",
-            label: "Average Daily Reward Pool"
-          }
+            label: "Average Daily Reward Pool",
+          },
         ],
         [
           {
             content: "33333",
-            label: "Block Height"
+            label: "Block Height",
           },
           {
             content: "55555",
-            label: "K Block Height"
+            label: "K Block Height",
           },
           {
             content: "55%",
-            label: "Stacked"
+            label: "Stacked",
           },
           {
             content: "2343",
-            label: "Validators"
-          }
-        ]
+            label: "Validators",
+          },
+        ],
       ],
       node_data: [
         [
           {
             content: "235",
-            label: "Validators"
+            label: "Validators",
           },
           {
             content: "235 MTRG",
-            label: "Total Stacking"
-          }
+            label: "Total Stacking",
+          },
         ],
         [
           {
             content: "235",
-            label: "Height"
+            label: "Height",
           },
           {
             content: "12.4 USD",
-            label: "Price"
+            label: "Price",
           },
           {
             content: "78/90",
-            label: "Online/ Toal Node"
-          }
-        ]
-      ]
+            label: "Online/ Toal Node",
+          },
+        ],
+      ],
     };
   },
   async mounted() {
     const res = await this.$api.metric.getAll();
     this.loading = false;
-    const { mtr, mtrg, pos, pow } = res;
+    const { mtr, mtrg, pos, pow, staking } = res;
 
     this.block_data = [
       [
-        { label: "MTRG Price", content: mtrg.price, change: mtrg.priceChange },
+        {
+          label: "MTRG Price",
+          content: "$ " + mtrg.price,
+          change: mtrg.priceChange,
+        },
         {
           label: "Average Daily Reward Pool",
-          content: new BigNumber(mtrg.avgDailyReward).dividedBy(1e18).toFixed()
-        }
+          content: new BigNumber(mtrg.avgDailyReward).dividedBy(1e18).toFixed(),
+        },
       ],
       [
         { label: "Block Height", content: pos.best },
         { label: "K Block Height", content: pos.kblock },
-        { label: "Stacked", content: "?10%" },
-        { label: "Validators", content: pos.validators }
-      ]
+        {
+          label: "Staked",
+          content: "10%", // FIXME: fake stub
+        },
+        { label: "Validators", content: staking.validators },
+      ],
     ];
     this.node_data = [
       [
-        { label: "Validators", content: pos.validators },
+        { label: "Validators", content: staking.validators },
         {
-          label: "Total Stacking",
-          content: new BigNumber(mtrg.totalStaked).dividedBy(1e18).toFixed()
-        }
+          label: "Total Staked",
+          content: staking.totalStakedStr,
+        },
       ],
       [
         { label: "Height", content: pow.best },
-        { label: "Price", content: mtr.price, change: mtr.priceChange },
         {
-          label: "Online/ Toal Node",
-          content: `${pos.onlineNodes}/${pos.totalNodes}`
-        }
-      ]
+          label: "MTR Price",
+          content: "$ " + mtr.price,
+          change: mtr.priceChange,
+        },
+        {
+          label: "Online/Total Node",
+          content: `${staking.onlineNodes}/${staking.totalNodes}`,
+        },
+      ],
     ];
   },
   methods: {
@@ -154,8 +164,8 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
-    }
-  }
+    },
+  },
 };
 </script>
 

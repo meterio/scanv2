@@ -1,6 +1,6 @@
 <template>
-  <b-container class="validator">
-    <DataDashboard :rows="validator_data"></DataDashboard>
+  <div class="validator">
+    <DataDashboard :rows="pos_data"></DataDashboard>
 
     <ValidatorTable class="px-0"></ValidatorTable>
     <data-table
@@ -15,7 +15,7 @@
         </div>
       </template>
     </data-table>
-  </b-container>
+  </div>
 </template>
 
 <script>
@@ -28,60 +28,59 @@ export default {
   components: {
     DataDashboard,
     ValidatorTable,
-    DataTable
+    DataTable,
   },
   data() {
     return {
-      current_page: 1,
-      validator_data: [
+      pos_data: [
         [
           {
             content: "2351",
-            label: "Validators"
+            label: "Validators",
           },
           {
             content: "2351",
-            label: "Total Staking"
-          }
+            label: "Total Staking",
+          },
         ],
         [
           {
             content: "2351",
-            label: "Height"
+            label: "Height",
           },
           {
             content: "12.4 USD",
-            label: "Price"
+            label: "Price",
           },
           {
             content: "79/90",
-            label: "Online/ Total Node"
-          }
-        ]
+            label: "Online/ Total Node",
+          },
+        ],
       ],
       epoch_reward_data: {
         fields: [
           {
             key: "kblock_height",
-            label: "Epoch"
+            label: "Epoch",
           },
           {
             key: "height",
-            label: "Height (PoW)"
+            label: "Height (PoW)",
           },
           {
             key: "amount",
-            label: "Amount"
+            label: "Amount",
           },
           {
             key: "time",
-            label: "Time"
+            label: "Time",
           },
 
           {
             key: "more",
-            label: "More"
-          }
+            label: "More",
+          },
         ],
         items: [
           {
@@ -89,47 +88,51 @@ export default {
             height: "1274",
             amount: "2,89,789 MTR",
             time: "12 sec ago",
-            more: "tx 1"
+            more: "tx 1",
           },
           {
             kblock_height: "274",
             height: "1274",
             amount: "2,89,789 MTR",
             time: "12 sec ago",
-            more: "tx 1"
-          }
-        ]
-      }
+            more: "tx 1",
+          },
+        ],
+      },
     };
   },
-  async mounted() {
-    try {
-      const pos_data = await this.$api.metric.getPos();
-      this.validator_data[0][0]["content"] = pos_data.staking.validators;
-      this.validator_data[0][1]["content"] = pos_data.staking.totalStaked;
-      this.validator_data[1][2]["content"] =
-        pos_data.staking.onlineNodes + "/" + pos_data.staking.totalNodes;
-      // FIXME post_data height value / price value
 
-      this.loadRewards();
-    } catch (e) {
-      console.error(e);
-    }
+  async mounted() {
+    const res = await this.$api.metric.getAll();
+    this.loading = false;
+    const { mtr, mtrg, pos, pow, staking } = res;
+    this.pos_data = [
+      [
+        {
+          content: staking.validators,
+          label: "Validators",
+        },
+        {
+          content: staking.totalStakedStr,
+          label: "Total Staked",
+        },
+      ],
+      [
+        {
+          content: pos.best,
+          label: "PoS Chain Height",
+        },
+        {
+          content: "$ " + mtr.price,
+          label: "MTR Price",
+        },
+        {
+          content: `${staking.onlineNodes}/${staking.totalNodes}`,
+          label: "Online/ Total Node",
+        },
+      ],
+    ];
   },
-  methods: {
-    async loadRewards() {
-      try {
-        // TODO no detail data
-        const res = await this.$api.validator.getValidateReward(
-          this.current_page,
-          this.limit
-        );
-        console.log("rewards:>>", res);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }
 };
 </script>
 
