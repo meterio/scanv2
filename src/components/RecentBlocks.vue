@@ -31,7 +31,7 @@
 
             <div class="signed-view">
               <p>Signed by</p>
-              <a href="#">{{ address(block.signer) }}</a>
+              <a href="/addressDetail">{{ address(block.signer) }}</a>
             </div>
             <div class="detail-view">
               <span class="detail">{{ block.txCount }} tx</span>

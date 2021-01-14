@@ -7,6 +7,7 @@ import ValidatorDetailpage from "@/pages/ValidatorDetail.vue";
 import BlockDetailpage from "@/pages/BlockDetail.vue";
 import TransactionDetailPage from "@/pages/TransactionDetail.vue";
 import AccountDetailpage from "@/pages/AccountDetail.vue";
+import AddressDetailPage from "@/pages/AddressDetail.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
 import { routePropResolver } from "./util";
@@ -44,10 +45,10 @@ export const routes = [
     meta: { title: `${DOMAIN_TITLE} | validator detail` }
   },
   {
-    path:"/account/:address",
+    path: "/account/:address",
     name: "accountDetail",
     component: AccountDetailpage,
-  meta: {title:`${DOMAIN_TITLE} | account detail`}
+    meta: { title: `${DOMAIN_TITLE} | account detail` }
   },
   {
     path: "/block/:revision",
@@ -60,6 +61,12 @@ export const routes = [
     name: "txDetail",
     component: TransactionDetailPage,
     meta: { title: `${DOMAIN_TITLE} | transaction detail` }
+  },
+  {
+    path: "/addressDetail",
+    name: "addressDetail",
+    component: AddressDetailPage,
+    meta: { title: `${DOMAIN_TITLE} | Address detail` }
   },
   {
     path: "*",
