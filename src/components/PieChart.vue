@@ -1,15 +1,15 @@
 <template lang="pug">
 b-container
   b-row
-    b-col
+    b-col(style="display:flex; align-items: center; justify-content: center")
       pie-chart(:chart-data="pieCollections" :options="options", style="width: 300px")
-    b-col(style="display: flex; flex-direction: column; justify-content: center;")
+    b-col.pie-column
       div 67%
       div 5.78%
       div 23.4%
       div 15.68%
       div 5.44%
-    b-col
+    b-col.pie-column
       div 67890
       div 3590
       div 28920
@@ -45,6 +45,7 @@ export default {
           "Commision"
         ]
       },
+      // #5c6f8c
       options: {
         legend: {
           position: "right",
@@ -61,3 +62,19 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.pie-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 3%;
+  &.first {
+    padding-left: 15px;
+  }
+  div {
+    color: #5c6f8c;
+    line-height: 36px;
+  }
+}
+</style>

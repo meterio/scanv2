@@ -62,12 +62,6 @@ export const routes = [
     meta: { title: `${DOMAIN_TITLE} | transaction detail` }
   },
   {
-    path: "/addressDetail",
-    name: "addressDetail",
-    component: AddressDetailPage,
-    meta: { title: `${DOMAIN_TITLE} | Address detail` }
-  },
-  {
     path: "*",
     component: notFoundPage,
     meta: { title: `${DOMAIN_TITLE} | not found` }

@@ -20,7 +20,7 @@
           >
         </b-nav-form> -->
         <b-nav-form>
-          <b-input-group class="search-group">
+          <b-input-group class="search-group" v-if="$route.path !== '/'">
             <b-input-group-prepend>
               <b-dropdown text="Main net" variant="outline-secondary">
                 <b-dropdown-item href="#">Mainnet</b-dropdown-item>
@@ -52,7 +52,7 @@
             text="Blockchain"
             right
             :class="
-              $route.path == '/validator' || $route.path == '/mining'
+              $route.path == '/pos' || $route.path == '/pow'
                 ? 'top-dropdown active'
                 : ''
             "
@@ -88,8 +88,8 @@ export default {
   watch: {
     "$route.path"(newVal) {
       console.log("newval:>>", newVal);
-    },
-  },
+    }
+  }
 };
 </script>
 

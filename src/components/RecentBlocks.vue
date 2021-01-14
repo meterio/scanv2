@@ -118,7 +118,7 @@ export default {
 
 .block-card-body {
   position: relative;
-  min-height: 400px;
+  // min-height: 400px;
 }
 
 .height-view {

@@ -34,7 +34,7 @@
                   class="link"
                   :to="{
                     name: 'address',
-                    params: { address: tx.tos[0].address },
+                    params: { address: tx.tos[0].address }
                   }"
                   >{{ address(tx.tos[0].address) }}</router-link
                 >
@@ -59,20 +59,20 @@ import { shortAddress, shortMTR } from "@/utils/address";
 export default {
   name: "RecentTxs",
   components: {
-    Loading,
+    Loading
   },
   data() {
     return {
       loading: true,
       recent_txs: [],
-      time: null,
+      time: null
     };
   },
   mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function () {
+    this.time = setInterval(function() {
       me.initData();
     }, 3000);
   },
@@ -102,8 +102,8 @@ export default {
     },
     mtr(mtr) {
       return shortMTR(mtr);
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -127,7 +127,7 @@ export default {
 
 .block-card-body {
   position: relative;
-  min-height: 400px;
+  // min-height: 400px;
 }
 
 .height-view {
