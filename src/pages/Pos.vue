@@ -15,7 +15,7 @@
         </div>
       </template>
     </data-table>
-  </b-container>
+  </div>
 </template>
 
 <script>
