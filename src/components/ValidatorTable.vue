@@ -59,63 +59,13 @@ export default {
       tabs: ["Delegates", "Candidates", "Jailed"],
       current_page: 1,
       validator_data: {
-        fields: [
-          {
-            key: "rank",
-            label: "Rank"
-          },
-          {
-            key: "validator",
-            label: "Validator"
-          },
-          {
-            key: "voting_power",
-            label: "Voting power"
-          },
-          {
-            key: "comalative_share",
-            label: "Comalative share"
-          },
-          {
-            key: "commision",
-            label: "Commision"
-          },
-          {
-            key: "uptime",
-            label: "UpTime"
-          }
-        ],
-        items: [
-          {
-            rank: 1,
-            validator: "HashQuark",
-            voting_power: "3478 MTRG",
-            comalative_share: "3.5%",
-            commision: "100%",
-            uptime: "100%"
-          },
-          {
-            rank: 1,
-            validator: "HashQuark",
-            voting_power: "3478 MTRG",
-            comalative_share: "3.5%",
-            commision: "100%",
-            uptime: "100%"
-          },
-          {
-            rank: 1,
-            validator: "HashQuark",
-            voting_power: "3478 MTRG",
-            comalative_share: "3.5%",
-            commision: "100%",
-            uptime: "100%"
-          }
-        ]
-      }
+        fields: [],
+        items: [],
+      },
     };
   },
   components: {
-    Loading
+    Loading,
   },
   beforeMount() {
     console.log("page", this.limit);
@@ -138,13 +88,41 @@ export default {
         this.loading = false;
         console.log("res", res);
         if (this.current_tab === "Delegates") {
+          this.validator_data.fields = [
+            { key: "name", label: "Name" },
+            { key: "address", label: "Address" },
+            { key: "netAddr", label: "Net Address" },
+            { key: "votingPower", label: "Total Votes" },
+            { key: "commission%", label: "Commission Rate" },
+            { key: "upTime", label: "Up Time 48h" },
+          ];
           this.validator_data.items = res.delegates;
+        }
+        if (this.current_tab === "Candidates") {
+          this.validator_data.fields = [
+            { key: "name", label: "Name" },
+            { key: "address", label: "Address" },
+            { key: "totalVotesStr", label: "Total Votes" },
+            { key: "commission%", label: "Commission Rate" },
+            { key: "upTime", label: "Up Time 48h" },
+          ];
+          this.validator_data.items = res.candidates;
+        }
+        if (this.current_tab === "Jailed") {
+          this.validator_data.fields = [
+            { key: "name", label: "Name" },
+            { key: "address", label: "Address" },
+            { key: "totalPoints", label: "Total Points" },
+            { key: "jailedTime", label: "Jailed Time" },
+            { key: "bailAmount", label: "Bail Amount" },
+          ];
+          this.validator_data.items = res.jailed;
         }
       } catch (e) {
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
