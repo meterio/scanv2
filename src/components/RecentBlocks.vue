@@ -18,7 +18,7 @@
                   <router-link
                     :to="{
                       name: 'blockDetail',
-                      params: { revision: block.number }
+                      params: { revision: block.number },
                     }"
                   >
                     {{ block.number }}</router-link
@@ -34,7 +34,7 @@
               <router-link
                 class="link"
                 :to="{ name: 'address', params: { address: block.signer } }"
-                >{{ address(block.signer) }}</router-link
+                >{{ shortAddr(block.signer, 12) }}</router-link
               >
             </div>
             <div class="detail-view">
@@ -56,20 +56,20 @@ import { setInterval } from "timers";
 export default {
   name: "RecentBlocks",
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
       loading: true,
       recent_blocks: [],
-      time: null
+      time: null,
     };
   },
   async mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function() {
+    this.time = setInterval(function () {
       me.initData();
     }, 3000);
   },
@@ -91,10 +91,10 @@ export default {
     timeFromNow(time) {
       return fromNow(time * 1000);
     },
-    address(addr) {
-      return shortAddress(addr);
-    }
-  }
+    shortAddr(addr, num) {
+      return shortAddress(addr, num);
+    },
+  },
 };
 </script>
 
@@ -105,11 +105,12 @@ export default {
 
   ul.block-list {
     margin: 0;
+    padding: 0 20px;
 
     li.block-detail {
       margin: 10px 0;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
       height: 60px;
     }
@@ -136,12 +137,17 @@ export default {
 
   .height {
     margin-left: 20px;
+    font-size: 14px;
     display: flex;
     flex-direction: column;
     justify-content: center;
 
+    a {
+      font-size: 15px;
+    }
+
     .number {
-      font-size: 1rem;
+      font-size: 15px;
       color: #0c2954;
       margin: 0;
       padding: 0;

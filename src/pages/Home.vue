@@ -7,9 +7,8 @@
       search.mt25(:btnType="2", placeholder="Search Transation/Blocks/Address")
     <!-- card list -->
     //- block statistic
-  data-dashboard.mt35(v-bind:rows="block_data", v-if="block_data.length > 0")
+  data-dashboard.mt35(v-bind:rows="data", v-if="data.length > 0")
     //- node statistic
-  data-dashboard.mt35(v-bind:rows="node_data", v-if="node_data.length > 0")
   b-container.px-0
     b-row
       b-col(cols="12", md="6")
@@ -26,6 +25,7 @@ import RecentTxs from "@/components/RecentTxs.vue";
 import { fromNow, formatTime } from "@/utils/time";
 import { shortHash, shortAddress } from "@/utils/address";
 import BigNumber from "bignumber.js";
+import { fromWei } from "@/utils/unit";
 
 export default {
   name: "Home",
@@ -34,7 +34,7 @@ export default {
     Search,
     DataDashboard,
     RecentBlocks,
-    RecentTxs
+    RecentTxs,
   },
 
   data() {
@@ -43,8 +43,7 @@ export default {
       nav_tabs: ["PoS", "PoW"],
       // fake data
       msg: "Welcome to Index!!!",
-      block_data: [],
-      node_data: []
+      data: [],
     };
   },
   async mounted() {
@@ -52,50 +51,61 @@ export default {
     this.loading = false;
     const { mtr, mtrg, pos, pow, staking } = res;
 
-    this.block_data = [
+    this.data = [
       [
         {
           label: "MTRG Price",
           content: "$ " + mtrg.price,
-          change: mtrg.priceChange
+          change: mtrg.priceChange,
         },
         {
-          label: "Average Daily Reward Pool",
-          content: new BigNumber(mtrg.avgDailyReward.split(" ")[0])
-            .dividedBy(1e18)
-            .toFixed()
-        }
+          label: "MTR Price",
+          content: "$ " + mtr.price,
+          change: mtr.priceChange,
+        },
       ],
       [
         { label: "Block Height", content: pos.best },
-        { label: "K Block Height", content: pos.kblock },
+        { label: "Epoch", content: pos.epoch },
+        { label: "Transactions", content: pos.txsCount },
+        { label: "Avg Block Time", content: pos.avgBlockTime },
+      ],
+      [
         {
-          label: "Staked",
-          content: "10%" // FIXME: fake stub
+          label: "Online/Total Validators",
+          content: `${staking.onlineNodes}/${staking.totalNodes}`,
         },
-        { label: "Validators", content: staking.validators }
-      ]
+        {
+          label: "Staked MTRG",
+          content: fromWei(staking.totalStaked, 2) + " MTRG",
+        },
+        { label: "Inflation", content: pos.inflation },
+        {
+          label: "Average Daily Reward Pool",
+          content: mtrg.avgDailyReward,
+        },
+      ],
     ];
     this.node_data = [
       [
         { label: "Validators", content: staking.validators },
         {
           label: "Total Staked",
-          content: staking.totalStakedStr
-        }
+          content: fromWei(staking.totalStaked, 6) + " MTRG",
+        },
       ],
       [
         { label: "Height", content: pow.best },
         {
           label: "MTR Price",
           content: "$ " + mtr.price,
-          change: mtr.priceChange
+          change: mtr.priceChange,
         },
         {
           label: "Online/Total Node",
-          content: `${staking.onlineNodes}/${staking.totalNodes}`
-        }
-      ]
+          content: `${staking.onlineNodes}/${staking.totalNodes}`,
+        },
+      ],
     ];
   },
   methods: {
@@ -107,8 +117,8 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
-    }
-  }
+    },
+  },
 };
 </script>
 

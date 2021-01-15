@@ -6,38 +6,31 @@
       b-row
         b-col Address
         b-col.text-right(style="flex: 0 0 35%")
-          span.label {{account.mtrBalance}} MTR
+          span.label {{ account.mtrBalanceStr }}
       b-row
         b-col
-          | {{account.address}}
+          | {{ account.address }}
           b-icon.ml15(icon="file-earmark")
         b-col.text-right(style="flex: 0 0 35%")
-          span.label {{account.mtrgBalance}} MTRG
-    b-card.mt-2pert(no-body)
+          span.label {{ account.mtrgBalanceStr }}
+    b-card.mt-2pert.px-5
       pie-chart.px-0
-    data-table.mt-2pert.px-0(title="Buckets",:data="txs.data",:pagination="pagination")
-  //- <div class="account-detail">
-  //-   <b-container class="summary">
-  //-     <h2 class="title">Address Details</h2>
+    data-table.mt-2pert.px-0(
+      title="Buckets",
+      :data="buckets",
+      :pagination="buckets.pagination"
+    )
+      template(v-slot:cell(candidate)="data")
+        .dt-row
+          router-link.link(
+            :to="{ name: 'address', params: { address: data.item.candidate } }"
+          ) {{ data.item.candidate }}
 
-  //-     <b-card>
-  //-       <b-row class="row" :key="item.key" v-for="item in summary">
-  //-         <b-col cols="2">
-  //-           <span class="label">{{ item.key }}</span>
-  //-         </b-col>
-  //-         <b-col cols="10">
-  //-           <span class="value" v-if="item.block >= 0">
-  //-             <router-link
-  //-               :to="{ name: 'blockDetail', params: { revision: item.block } }"
-  //-               >#{{ item.block }}</router-link
-  //-             >
-  //-           </span>
-  //-           <span class="value">{{ item.value }}</span>
-  //-         </b-col>
-  //-       </b-row>
-  //-     </b-card>
-  //-   </b-container>
-  //- </div>
+    data-table.mt-2pert.px-0(
+      title="Transactions",
+      :data="txs",
+      :pagination="txs.pagination"
+    )
 </template>
 
 <script>
@@ -51,55 +44,57 @@ export default {
   name: "Address",
   components: {
     PieChart,
-    DataTable
+    DataTable,
   },
-  data () {
+  data() {
     return {
       summary: {},
       account: {},
       txs: {
-        data: {
-          fields: [
-            {
-              key: "Candidate Address",
-              label: "Candidate Address"
-            },
-            {
-              key: "vote",
-              label: "Vote"
-            },
-            {
-              key: "time",
-              label: "Time"
-            },
-            {
-              key: "bounded",
-              label: "Bounded"
-            }
-          ],
-          items: []
-        }
-      }
+        pagination: {
+          show: true,
+          align: "center",
+        },
+        fields: [
+          { key: "txhash", label: "Hash" },
+          { key: "blocknum", label: "Block" },
+          { key: "timestamp", label: "Time" },
+          { key: "from", label: "From" },
+          { key: "to", label: "To" },
+          { key: "amount", label: "Amount" },
+        ],
+        items: [],
+      },
+      buckets: {
+        pagination: {
+          show: true,
+          align: "center",
+        },
+        fields: [
+          { key: "address", label: "Candidate Address" },
+          { key: "totalVotes", label: "Votes" },
+          { key: "timestamp", label: "Time" },
+          { key: "bounded", label: "Bounded" },
+        ],
+        items: [],
+      },
     };
   },
-  async mounted () {
+  async mounted() {
     const { address } = this.$route.params;
     const res = await this.$api.account.getAccountDetail(address);
     this.loading = false;
+
     const { account } = res;
     this.summary = [
       { key: "Address", value: account.address },
       {
         key: "MTR Balance",
-        value: `${new BigNumber(account.mtrBalance)
-          .dividedBy(1e18)
-          .toFixed()} MTR`
+        value: account.mtrBalanceStr,
       },
       {
         key: "MTRG Balance",
-        value: `${new BigNumber(account.mtrgBalance)
-          .dividedBy(1e18)
-          .toFixed()} MTRG`
+        value: account.mtrgBalanceStr,
       },
       {
         key: "First Seen",
@@ -107,7 +102,7 @@ export default {
           account.firstSeen.number > 0
             ? "  (" + fromNow(account.firstSeen.timestamp * 1000) + ")"
             : "",
-        block: account.firstSeen.number
+        block: account.firstSeen.number,
       },
       {
         key: "Last Updated",
@@ -115,8 +110,8 @@ export default {
           account.lastUpdate.number > 0
             ? "  (" + fromNow(account.lastUpdate.timestamp * 1000) + ")"
             : "",
-        block: account.lastUpdate.number
-      }
+        block: account.lastUpdate.number,
+      },
     ];
     if (!!account.code) {
       this.summary.push({ key: "Code", value: account.code });
@@ -129,18 +124,42 @@ export default {
       this.summary.push({ key: "Has Master", value: "no" });
     }
     this.account = account;
+
+    const bres = await this.$api.account.getBuckets(address);
+    const { buckets } = bres;
+    for (const b of buckets) {
+      this.buckets.items.push({
+        address: b.candidate,
+        totalVotes: b.totalVotes,
+        timestamp: b.createTime,
+        bounded: !b.unbounded,
+      });
+    }
+
+    const tres = await this.$api.account.getTxs(address);
+    const { txSummaries } = tres;
+    for (const t of txSummaries) {
+      this.txs.items.push({
+        txhash: t.hash,
+        blocknum: t.block.number,
+        from: t.origin,
+        to: t.tos[0].address,
+        amount: t.totalAmountStrs[0],
+        timestamp: t.block.timestamp,
+      });
+    }
   },
   methods: {
-    timeFromNow (time) {
+    timeFromNow(time) {
       return fromNow(time * 1000);
     },
-    address (addr) {
+    address(addr) {
       return shortAddress(addr);
     },
-    shortHash (hash) {
+    shortHash(hash) {
       return shortHash(hash);
-    }
-  }
+    },
+  },
 };
 </script>
 

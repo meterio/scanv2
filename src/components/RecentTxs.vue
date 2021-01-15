@@ -12,7 +12,7 @@
               <div class="height">
                 <router-link
                   :to="{ name: 'txDetail', params: { hash: tx.hash } }"
-                  >{{ address(tx.hash) }}</router-link
+                  >{{ shortHash(tx.hash, 8) }}</router-link
                 >
                 <span class="ago">{{ timeFromNow(tx.block.timestamp) }}</span>
               </div>
@@ -24,7 +24,7 @@
                 <router-link
                   class="link"
                   :to="{ name: 'address', params: { address: tx.origin } }"
-                  >{{ address(tx.origin) }}</router-link
+                  >{{ shortAddr(tx.origin, 12) }}</router-link
                 >
               </p>
               <p>
@@ -34,9 +34,9 @@
                   class="link"
                   :to="{
                     name: 'address',
-                    params: { address: tx.tos[0].address }
+                    params: { address: tx.tos[0].address },
                   }"
-                  >{{ address(tx.tos[0].address) }}</router-link
+                  >{{ shortAddr(tx.tos[0].address, 12) }}</router-link
                 >
                 <span v-else>nobody</span>
               </p>
@@ -54,25 +54,25 @@
 <script>
 import Loading from "@/components/Loading";
 import { fromNow } from "@/utils/time";
-import { shortAddress, shortMTR } from "@/utils/address";
+import { shortHash, shortAddress } from "@/utils/address";
 
 export default {
   name: "RecentTxs",
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
       loading: true,
       recent_txs: [],
-      time: null
+      time: null,
     };
   },
   mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function() {
+    this.time = setInterval(function () {
       me.initData();
     }, 3000);
   },
@@ -97,13 +97,13 @@ export default {
     timeFromNow(time) {
       return fromNow(time * 1000);
     },
-    address(addr) {
-      return shortAddress(addr);
+    shortAddr(addr, num) {
+      return shortAddress(addr, num);
     },
-    mtr(mtr) {
-      return shortMTR(mtr);
-    }
-  }
+    shortHash(hash, num) {
+      return shortHash(hash, num);
+    },
+  },
 };
 </script>
 
@@ -114,11 +114,12 @@ export default {
 
   ul.block-list {
     margin: 0;
+    padding: 0 20px;
 
     li.block-detail {
       margin: 10px 0;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
       height: 60px;
     }
@@ -164,11 +165,12 @@ export default {
 }
 
 .signed-view {
+  margin-top: 10px;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
+  justify-content: start;
+  align-items: flex-start;
 
   p {
     font-size: 14px;
