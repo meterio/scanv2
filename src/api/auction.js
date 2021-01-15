@@ -7,6 +7,11 @@ export default {
 
   getPast(){
     return get(`auctions/past`)
+  },
+
+  getBids(auctionID){
+    return get(`auctions/${auctionID}/bids`)
   }
+
 };
 
