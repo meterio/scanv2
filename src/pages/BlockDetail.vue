@@ -117,7 +117,7 @@ export default {
         return {
           hash: tx.hash,
           type: tx.type,
-          amount: tx.amountStr,
+          amount: tx.totalAmountStrs[0],
           fee: tx.feeStr,
           result: tx.reverted ? "reverted" : "success",
         };

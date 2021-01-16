@@ -58,7 +58,7 @@ import DataTable from "@/components/DataTable.vue";
 export default {
   components: {
     DataTable,
-    StatusTag
+    StatusTag,
   },
   data() {
     return {
@@ -70,11 +70,11 @@ export default {
             { key: "index", label: "Index" },
             { key: "to", label: "To" },
             { key: "amount", label: "Amount" },
-            { key: "data", label: "Data" }
+            { key: "data", label: "Data" },
           ],
-          items: []
-        }
-      }
+          items: [],
+        },
+      },
     };
   },
   async mounted() {
@@ -86,26 +86,26 @@ export default {
       { key: "Hash", value: summary.hash },
       { key: "Type", value: summary.type },
       { key: "Origin", value: summary.origin, type: "account-link" },
-      { key: "Amount", value: summary.amountStr },
+      { key: "Amount", value: summary.totalAmountStrs[0] },
       { key: "Fee", value: summary.feeStr },
       {
         key: "Result",
         value: summary.reverted ? "reverted" : "success",
-        type: "status"
+        type: "status",
       },
       { key: "Clause Count", value: summary.clauseCount },
-      { key: "Block", value: summary.block.number, type: "block-link" }
+      { key: "Block", value: summary.block.number, type: "block-link" },
     ];
     this.tx = tx;
     let clauses = [];
     if (tx.clauseCount > 0) {
       let index = 1;
-      clauses = tx.clauses.map(c => {
+      clauses = tx.clauses.map((c) => {
         const amount = new BigNumber(c.value).dividedBy(1e18).toFixed();
         return {
           ...c,
           amount: `${amount} ${c.token}`,
-          index: index++
+          index: index++,
         };
       });
     }
@@ -120,8 +120,8 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
-    }
-  }
+    },
+  },
 };
 </script>
 
