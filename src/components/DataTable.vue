@@ -6,9 +6,16 @@
         class="data-table"
         :items="data.items"
         :fields="data.fields"
-        emptyHtml="No More Data"
+        busy.sync="loading"
         show-empty
       >
+        <template slot="empty">
+          <div v-if="loading" class="text-center">
+            <spinner />
+          </div>
+          <div v-else class="text-center">No data available.</div>
+        </template>
+
         <template
           v-for="slotName in Object.keys($scopedSlots)"
           v-slot:[slotName]="slotScope"
@@ -109,38 +116,39 @@ export default {
   name: "DataTable",
   props: {
     title: {
-      type: String
+      type: String,
     },
     data: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           title: "",
           items: [],
-          fields: []
+          fields: [],
         };
-      }
+      },
     },
     pagination: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           show: false,
-          align: "right"
+          align: "right",
         };
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      currentPage: 1
+      loading: false,
+      currentPage: 1,
     };
   },
   computed: {
-    totalRows: function() {
+    totalRows: function () {
       return 100;
       // return this.data.items.length;
-    }
+    },
   },
   methods: {
     fromNow(time) {
@@ -151,8 +159,8 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
-    }
-  }
+    },
+  },
 };
 </script>
 

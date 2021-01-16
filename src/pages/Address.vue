@@ -1,18 +1,20 @@
 <template lang="pug">
 .account-detail
-  b-container.summary
-    h2.title Address Details
+  loading(v-if="loading")
+  b-container.summary(v-else)
+    h2.title Address {{ address }}
     b-card
-      b-row
-        b-col Address
-        b-col.text-right(style="flex: 0 0 35%")
-          span.label {{ account.mtrBalanceStr }}
-      b-row
-        b-col
-          | {{ account.address }}
-          b-icon.ml15(icon="file-earmark")
-        b-col.text-right(style="flex: 0 0 35%")
-          span.label {{ account.mtrgBalanceStr }}
+      b-row.row(:key="item.key", v-for="item in summary")
+        b-col(cols="2")
+          span.label {{ item.key }}
+        b-col(cols="10")
+          span(v-if="item.block")
+            router-link.link(
+              :to="{ name: 'blockDetail', params: { revision: item.block } }"
+            ) {{ item.block }}
+            span.value {{ item.value }}
+
+          span.value(v-else) {{ item.value }}
     b-card.mt-2pert.px-5
       pie-chart.px-0
     data-table.mt-2pert.px-0(
@@ -40,16 +42,20 @@ import { shortHash, shortAddress } from "@/utils/address";
 import BigNumber from "bignumber.js";
 import PieChart from "@/components/PieChart.vue";
 import DataTable from "@/components/DataTable.vue";
+import Loading from "@/components/Loading.vue";
 export default {
   name: "Address",
   components: {
+    Loading,
     PieChart,
     DataTable,
   },
   data() {
     return {
+      address: "0x",
       summary: {},
       account: {},
+      loading: false,
       txs: {
         pagination: {
           show: true,
@@ -82,12 +88,13 @@ export default {
   },
   async mounted() {
     const { address } = this.$route.params;
+    this.address = address;
+    this.loading = true;
     const res = await this.$api.account.getAccountDetail(address);
-    this.loading = false;
 
     const { account } = res;
     this.summary = [
-      { key: "Address", value: account.address },
+      // { key: "Address", value: account.address },
       {
         key: "MTR Balance",
         value: account.mtrBalanceStr,
@@ -104,15 +111,8 @@ export default {
             : "",
         block: account.firstSeen.number,
       },
-      {
-        key: "Last Updated",
-        value:
-          account.lastUpdate.number > 0
-            ? "  (" + fromNow(account.lastUpdate.timestamp * 1000) + ")"
-            : "",
-        block: account.lastUpdate.number,
-      },
     ];
+    /*
     if (!!account.code) {
       this.summary.push({ key: "Code", value: account.code });
     } else {
@@ -123,6 +123,7 @@ export default {
     } else {
       this.summary.push({ key: "Has Master", value: "no" });
     }
+    */
     this.account = account;
 
     const bres = await this.$api.account.getBuckets(address);
@@ -143,17 +144,18 @@ export default {
         txhash: t.hash,
         blocknum: t.block.number,
         from: t.origin,
-        to: t.tos[0].address,
+        to: t.tos && t.tos.length > 0 ? t.tos[0].address : "nobody",
         amount: t.totalAmountStrs[0],
         timestamp: t.block.timestamp,
       });
     }
+    this.loading = false;
   },
   methods: {
     timeFromNow(time) {
       return fromNow(time * 1000);
     },
-    address(addr) {
+    shortAddr(addr) {
       return shortAddress(addr);
     },
     shortHash(hash) {

@@ -55,6 +55,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       block: {},
       pagination: {
         show: true,
@@ -91,8 +92,8 @@ export default {
   },
   async mounted() {
     const { revision } = this.$route.params;
+    this.loading = true;
     const res = await this.$api.block.getBlockDetail(revision);
-    this.loading = false;
     const b = res.block;
     this.block = {
       Hash: b.hash,
@@ -123,6 +124,7 @@ export default {
       });
     }
     this.txs.data.items = items;
+    this.loading = false;
   },
   methods: {
     timeFromNow(time) {
