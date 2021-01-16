@@ -1,4 +1,4 @@
-<template lang='pug'>
+<template lang="pug">
 .detail
   b-container.summary
     h2.title Epoch Rewards
@@ -12,8 +12,7 @@
 
     data-table.mt-2pert.px-0(
       title="Rewards Detail",
-      :data="rewards",
-      :pagination="rewards.pagination"
+      :data="rewards"
     )
 </template>
 
@@ -26,7 +25,7 @@ import DataTable from "@/components/DataTable.vue";
 export default {
   components: {
     DataTable,
-    StatusTag,
+    StatusTag
   },
   data() {
     return {
@@ -34,14 +33,14 @@ export default {
       rewards: {
         fields: [
           { key: "address", label: "Address" },
-          { key: "amount", label: "Amount" },
+          { key: "amount", label: "Amount" }
         ],
         items: [],
         pagination: {
           show: true,
-          align: "center",
-        },
-      },
+          align: "center"
+        }
+      }
     };
   },
   async mounted() {
@@ -51,7 +50,7 @@ export default {
     this.summary = [
       { key: "Epoch", value: epoch },
       { key: "Base Reward", value: res.baseReward },
-      { key: "Total Reward", value: res.totalReward },
+      { key: "Total Reward", value: res.totalReward }
     ];
     this.rewards.items.push(...res.rewards);
   },
@@ -64,8 +63,8 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
-    },
-  },
+    }
+  }
 };
 </script>
 

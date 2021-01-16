@@ -1,5 +1,8 @@
 <template>
   <div>
+    <b-modal v-model="modal_show" hide-footer hide-header>
+      <div class="text-center">Search No More Data</div>
+    </b-modal>
     <b-navbar toggleable="lg" type="light" variant="light" class="px-4 py-3">
       <b-navbar-brand href="/" class="mr-5">
         <b-img src="@/assets/logo.svg" height="32" />
@@ -28,10 +31,11 @@
               </b-dropdown>
             </b-input-group-prepend>
             <b-form-input
+              v-model="searchKey"
               placeholder="Search by address/tx/block"
             ></b-form-input>
             <b-input-group-append>
-              <b-button variant="primary">
+              <b-button variant="primary" @click="searchKeyWords">
                 <b-icon icon="search"></b-icon>
               </b-button>
             </b-input-group-append>
@@ -85,9 +89,39 @@
 <script>
 export default {
   name: "TopNav",
-  watch: {
-    "$route.path"(newVal) {
-      console.log("newval:>>", newVal);
+  data() {
+    return {
+      modal_show: false,
+      searchKey: ""
+    };
+  },
+  methods: {
+    async searchKeyWords() {
+      try {
+        const { type } = await this.$api.search.searchKeyWord(this.searchKey);
+        let jump_url = "";
+        if (type === "tx") {
+          url = `/tx/${this.searchKey}`;
+        } else if (type == "block") {
+          url = `/block/${this.searchKey}`;
+        } else if (type == "address") {
+          url = `/address/${this.searchKey}`;
+        } else {
+          this.modal_show = true;
+        }
+        if (
+          jump_url != this.$route.path &&
+          jump_url !== "" &&
+          !this.modal_show
+        ) {
+          this.searchKey = "";
+          this.$router.push(jump_url);
+        }
+      } catch (e) {
+        console.error(e);
+        // this.$bvModal.show('homeModal')
+        this.modal_show = true;
+      }
     }
   }
 };

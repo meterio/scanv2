@@ -34,7 +34,7 @@
                   class="link"
                   :to="{
                     name: 'address',
-                    params: { address: tx.tos[0].address },
+                    params: { address: tx.tos[0].address }
                   }"
                   >{{ shortAddr(tx.tos[0].address, 12) }}</router-link
                 >
@@ -59,20 +59,20 @@ import { shortHash, shortAddress } from "@/utils/address";
 export default {
   name: "RecentTxs",
   components: {
-    Loading,
+    Loading
   },
   data() {
     return {
       loading: true,
       recent_txs: [],
-      time: null,
+      time: null
     };
   },
   mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function () {
+    this.time = setInterval(function() {
       me.initData();
     }, 3000);
   },
@@ -102,8 +102,8 @@ export default {
     },
     shortHash(hash, num) {
       return shortHash(hash, num);
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -169,7 +169,7 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: flex-start;
 
   p {

@@ -18,7 +18,7 @@
 
       <template v-slot:cell(more)="data">
         <div class="dt-row">
-          <a class="primary" :href="getBidsUrl(data.item.tx)">View Bids</a>
+          <a class="primary" :href="getBidsUrl(data.value)">View Bids</a>
         </div>
       </template>
 
@@ -43,54 +43,37 @@ export default {
       fields: [
         {
           key: "height_range",
-          label: "Height(POS)",
+          label: "Height(POS)"
         },
         {
           key: "settlement_kblock",
-          label: "Settlement K Block",
+          label: "Settlement K Block"
         },
         {
           key: "mtr_received",
-          label: "MTR Received",
+          label: "MTR Received"
         },
         {
           key: "mtrg_on_auction",
-          label: "MTRG on Auction",
+          label: "MTRG on Auction"
         },
 
         {
           key: "final_price",
-          label: "Final Price",
+          label: "Final Price"
         },
         {
           key: "more",
-          label: "More",
-        },
+          label: "More"
+        }
       ],
-      items: [
-        {
-          height_range: "17894 - 34789",
-          settlement_kblock: "1274",
-          mtr_received: "2,89,789 MTR",
-          mtrg_on_auction: "56,9080 MTRG",
-          final_price: "3.45 USD",
-          tx: "1",
-        },
-        {
-          height_range: "17894 - 34789",
-          settlement_kblock: "1274",
-          mtr_received: "2,89,789 MTR",
-          mtrg_on_auction: "56,9080 MTRG",
-          final_price: "3.45 USD",
-          tx: "2",
-        },
-      ],
+      items: []
     };
   },
   methods: {
-    getBidsUrl: function (tx) {
-      return `#${tx}`;
-    },
+    getBidsUrl: function(tx) {
+      return `/auction/${tx}`;
+    }
   },
   async mounted() {
     const res = await this.$api.auction.getPast();
@@ -103,9 +86,9 @@ export default {
         mtr_received: a.receivedStr,
         mtrg_on_auction: a.releasedStr,
         final_price: new BigNumber(a.actualPrice).dividedBy(1e18).toFixed(),
-        tx: "2",
+        more: a.id
       });
     }
-  },
+  }
 };
 </script>

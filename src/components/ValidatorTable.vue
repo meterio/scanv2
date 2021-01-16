@@ -38,6 +38,11 @@
         :items="validator_data.items"
         :fields="validator_data.fields"
       >
+        <template v-slot:cell(name)="data">
+          <div style="word-break: break-all">
+            {{ data.value }}
+          </div>
+        </template>
         <template v-slot:cell()="data">
           <div class="dt-row">
             <span>{{ data.value }}</span>
@@ -60,12 +65,12 @@ export default {
       current_page: 1,
       validator_data: {
         fields: [],
-        items: [],
-      },
+        items: []
+      }
     };
   },
   components: {
-    Loading,
+    Loading
   },
   beforeMount() {
     console.log("page", this.limit);
@@ -94,7 +99,7 @@ export default {
             { key: "netAddr", label: "Net Address" },
             { key: "votingPower", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "upTime", label: "Up Time 48h" },
+            { key: "upTime", label: "Up Time 48h" }
           ];
           this.validator_data.items = res.delegates;
         }
@@ -104,7 +109,7 @@ export default {
             { key: "address", label: "Address" },
             { key: "totalVotesStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "upTime", label: "Up Time 48h" },
+            { key: "upTime", label: "Up Time 48h" }
           ];
           this.validator_data.items = res.candidates;
         }
@@ -114,15 +119,15 @@ export default {
             { key: "address", label: "Address" },
             { key: "totalPoints", label: "Total Points" },
             { key: "jailedTime", label: "Jailed Time" },
-            { key: "bailAmount", label: "Bail Amount" },
+            { key: "bailAmount", label: "Bail Amount" }
           ];
           this.validator_data.items = res.jailed;
         }
       } catch (e) {
         this.loading = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

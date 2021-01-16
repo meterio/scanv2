@@ -1,4 +1,4 @@
-<template lang='pug'>
+<template lang="pug">
 .detail
   b-container.summary
     h2.title Mining Rewards
@@ -12,8 +12,7 @@
 
     data-table.mt-2pert.px-0(
       title="Rewards Detail",
-      :data="rewards",
-      :pagination="rewards.pagination"
+      :data="rewards"
     )
 </template>
 
@@ -26,7 +25,7 @@ import DataTable from "@/components/DataTable.vue";
 export default {
   components: {
     DataTable,
-    StatusTag,
+    StatusTag
   },
   data() {
     return {
@@ -34,18 +33,19 @@ export default {
       rewards: {
         fields: [
           { key: "address", label: "Address" },
-          { key: "subTotalStr", label: "Amount" },
+          { key: "subTotalStr", label: "Amount" }
         ],
         items: [],
         pagination: {
           show: true,
-          align: "center",
-        },
-      },
+          align: "center"
+        }
+      }
     };
   },
   async mounted() {
     const { epoch } = this.$route.params;
+    console.log("epoch:>>", epoch);
     const res = await this.$api.pow.getRewardsByEpoch(epoch);
     this.loading = false;
     this.summary = [
@@ -53,7 +53,7 @@ export default {
       { key: "Pos Block", value: res.posBlock },
       { key: "Pow Block", value: res.powBlock },
       { key: "Time", value: fromNow(res.timestamp * 1000) },
-      { key: "Total Amount", value: res.totalAmountStr },
+      { key: "Total Amount", value: res.totalAmountStr }
     ];
     this.rewards.items.push(...res.details);
   },
@@ -66,8 +66,8 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
-    },
-  },
+    }
+  }
 };
 </script>
 

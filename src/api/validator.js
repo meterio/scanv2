@@ -11,9 +11,9 @@ export default {
     return get(validateTypeUrl[type] + `?page=${page}&limit=${limit}`);
   },
   getValidateReward(page, limit) {
-    return get(`validators/rewards?page=${page}&limt=${limit}`);
+    return get(`validators/rewards?page=${page}&limit=${limit}`);
   },
-  getRewardsByEpoch(epoch){
-    return get(`validators/rewards/${epoch}`)
+  getRewardsByEpoch(epoch) {
+    return get(`validators/rewards/${epoch}`);
   }
 };

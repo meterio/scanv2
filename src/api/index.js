@@ -3,8 +3,9 @@ import transaction from "./transaction";
 import account from "./account";
 import metric from "./metric";
 import pow from "./pow";
-import auction from "./auction"
+import auction from "./auction";
 import validator from "./validator";
+import search from "./search";
 
 export default {
   block,
@@ -13,5 +14,6 @@ export default {
   transaction,
   pow,
   auction,
-  validator
+  validator,
+  search
 };

@@ -6,6 +6,8 @@
         class="data-table"
         :items="data.items"
         :fields="data.fields"
+        emptyHtml="No More Data"
+        show-empty
       >
         <template
           v-for="slotName in Object.keys($scopedSlots)"
@@ -86,7 +88,10 @@
         </template>
       </b-table>
 
-      <div v-if="pagination.show" class="data-pagination">
+      <div
+        v-if="pagination.show && data.items.length > 0"
+        class="data-pagination"
+      >
         <b-pagination
           :align="pagination.align"
           v-model="currentPage"
@@ -104,38 +109,38 @@ export default {
   name: "DataTable",
   props: {
     title: {
-      type: String,
+      type: String
     },
     data: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           title: "",
           items: [],
-          fields: [],
+          fields: []
         };
-      },
+      }
     },
     pagination: {
-      ype: Object,
-      default: function () {
+      type: Object,
+      default: function() {
         return {
           show: false,
-          align: "right",
+          align: "right"
         };
-      },
-    },
+      }
+    }
   },
   data() {
     return {
-      currentPage: 1,
+      currentPage: 1
     };
   },
   computed: {
-    totalRows: function () {
+    totalRows: function() {
       return 100;
       // return this.data.items.length;
-    },
+    }
   },
   methods: {
     fromNow(time) {
@@ -146,8 +151,8 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -11,9 +11,17 @@
           <b-dropdown-item href="#">Testnet</b-dropdown-item>
         </b-dropdown>
       </b-input-group-prepend>
-      <b-form-input :placeholder="placeholder"></b-form-input>
+      <b-form-input
+        :placeholder="placeholder"
+        v-model="searchWord"
+      ></b-form-input>
       <b-input-group-append>
-        <b-button class="query" variant="primary" v-if="btnType == 1">
+        <b-button
+          class="query"
+          variant="primary"
+          v-if="btnType == 1"
+          @click="btnClick"
+        >
           <b-icon icon="search"></b-icon>
         </b-button>
         <b-button
@@ -22,6 +30,7 @@
           size="sm"
           block
           style="margin-left:0.2rem;width: 100px;border-top-left-radius:0.2rem; border-bottom-left-radius: 0.2rem"
+          @click="btnClick"
           >Search</b-button
         >
       </b-input-group-append>
@@ -42,7 +51,18 @@ export default {
       default: "Search by address/tx/block"
     }
   },
-  name: "Search"
+  name: "Search",
+  data() {
+    return {
+      searchWord: ""
+    };
+  },
+  methods: {
+    btnClick() {
+      console.log("searchWord", this.searchWord);
+      this.$emit("click", this.searchWord);
+    }
+  }
 };
 </script>
 

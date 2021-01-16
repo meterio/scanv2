@@ -1,4 +1,4 @@
-<template lang='pug'>
+<template lang="pug">
 .detail
   b-container.summary
     h2.title Auction Detail
@@ -13,7 +13,6 @@
     data-table.mt-2pert.px-0(
       title="Bids Detail",
       :data="bids",
-      :pagination="rewards.pagination"
     )
 </template>
 
@@ -26,7 +25,7 @@ import DataTable from "@/components/DataTable.vue";
 export default {
   components: {
     DataTable,
-    StatusTag,
+    StatusTag
   },
   data() {
     return {
@@ -36,14 +35,14 @@ export default {
           { key: "txid", label: "Tx ID" },
           { key: "address", label: "Address" },
           { key: "amount", label: "Amount" },
-          { key: "timestamp", label: "Time" },
+          { key: "timestamp", label: "Time" }
         ],
         items: [],
         pagination: {
           show: true,
-          align: "center",
-        },
-      },
+          align: "center"
+        }
+      }
     };
   },
   async mounted() {
@@ -55,10 +54,10 @@ export default {
       { key: "ID", value: summary.id },
       {
         key: "Start/End Height",
-        value: `${summary.startHeight} - ${summary.endHeight}`,
+        value: `${summary.startHeight} - ${summary.endHeight}`
       },
       { key: "Received MTR", value: summary.receivedStr },
-      { key: "Released MTRG", value: summary.releasedStr },
+      { key: "Released MTRG", value: summary.releasedStr }
     ];
     this.bids.items.push(...res.bids);
   },
@@ -71,8 +70,8 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
-    },
-  },
+    }
+  }
 };
 </script>
 

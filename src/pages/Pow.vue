@@ -12,7 +12,9 @@
     >
       <template v-slot:cell(more)="data">
         <div class="dt-row">
-          <a class="link" :href="data.value">Mining Reward List</a>
+          <a class="link" :href="'/pow/rewards/' + data.value"
+            >Mining Reward List</a
+          >
         </div>
       </template>
     </DataTable>
@@ -31,7 +33,7 @@ export default {
   components: {
     DataDashboard,
     HashRateChart,
-    DataTable,
+    DataTable
   },
   data() {
     return {
@@ -39,31 +41,31 @@ export default {
         [
           {
             content: "2351",
-            label: "Block Height",
+            label: "Block Height"
           },
           {
             content: "0.9 USD",
-            label: "Price (MTR)",
+            label: "Price (MTR)"
           },
           {
             content: "233",
-            label: "Circulations",
-          },
+            label: "Circulations"
+          }
         ],
         [
           {
             content: "1.2 PH/s",
-            label: "Network Hash Rate",
+            label: "Network Hash Rate"
           },
           {
             content: "12 MTR",
-            label: "(TH/s)/Day",
+            label: "(TH/s)/Day"
           },
           {
             content: "4.5 USD",
-            label: "MTR Cost Parity",
-          },
-        ],
+            label: "MTR Cost Parity"
+          }
+        ]
       ],
 
       mining_reward: {
@@ -72,29 +74,29 @@ export default {
           fields: [
             {
               key: "pos_height",
-              label: "Kblock Height (PoS)",
+              label: "Kblock Height (PoS)"
             },
             {
               key: "pow_height",
-              label: "Height (PoW)",
+              label: "Height (PoW)"
             },
             {
               key: "amount",
-              label: "Amount",
+              label: "Amount"
             },
             {
               key: "time",
-              label: "Time",
+              label: "Time"
             },
 
             {
               key: "more",
-              label: "More",
-            },
+              label: "More"
+            }
           ],
-          items: [],
-        },
-      },
+          items: []
+        }
+      }
     };
   },
   async mounted() {
@@ -105,33 +107,33 @@ export default {
       [
         {
           content: pow.best,
-          label: "PoW Chain Height",
+          label: "PoW Chain Height"
         },
         {
           content: "$ " + mtr.price,
-          label: "MTR Price",
+          label: "MTR Price"
         },
         {
           content: new BigNumber(mtr.circulation).toFixed(0),
-          label: "MTR Circulations",
-        },
+          label: "MTR Circulations"
+        }
       ],
       [
         {
           content: `${new BigNumber(pow.hashrate)
             .dividedBy(1000000)
             .toFixed(0)} MH/s`,
-          label: "Network Hash Rate",
+          label: "Network Hash Rate"
         },
         {
           content: "12 MTR", // FIXME: fake stub
-          label: "(TH/s)/Day",
+          label: "(TH/s)/Day"
         },
         {
           content: new BigNumber(pow.costParity).toFixed(2),
-          label: "MTR Cost Parity",
-        },
-      ],
+          label: "MTR Cost Parity"
+        }
+      ]
     ];
 
     const rres = await this.$api.pow.getRewards();
@@ -144,11 +146,11 @@ export default {
         pow_height: r.powBlock,
         amount: r.totalAmountStr,
         time: fromNow(r.timestamp * 1000),
-        more: "",
+        more: r.epoch
       };
       this.mining_reward.data.items.push(item);
     }
-  },
+  }
 };
 </script>
 
