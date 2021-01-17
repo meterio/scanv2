@@ -25,7 +25,12 @@
             <div class="form-group has-search">
               <span class="fa fa-search form-control-feedback"></span>
 
-              <input type="text" class="form-control" placeholder="Search" />
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search"
+                v-model="validate_right_search"
+              />
             </div>
           </b-col>
         </b-row>
@@ -37,10 +42,26 @@
         class="data-table"
         :items="validator_data.items"
         :fields="validator_data.fields"
+        show-empty
       >
+        <template slot="empty">
+          <div class="text-center pt15 text-grey" style="color: #5c6f8c">
+            No data available.
+          </div>
+        </template>
         <template v-slot:cell(name)="data">
-          <div style="word-break: break-all">
+          <div class="dt-row" style="word-break: break-all;">
             {{ data.value }}
+          </div>
+        </template>
+        <template v-slot:cell(address)="data">
+          <div class="dt-row">
+            <router-link
+              class="link"
+              :to="{ name: 'validatorDetail', params: { id: data.value } }"
+            >
+              {{ data.value }}
+            </router-link>
           </div>
         </template>
         <template v-slot:cell()="data">
@@ -49,6 +70,18 @@
           </div>
         </template>
       </b-table>
+      <b-row v-if="validate_table_total > page_size">
+        <b-col sm="7" md="6" offset-sm="3" offset-md="3">
+          <b-pagination
+            v-model="current_page"
+            :total-rows="validate_table_total"
+            :per-page="page_size"
+            align="fill"
+            size="sm"
+            @change="pageChange"
+          />
+        </b-col>
+      </b-row>
     </b-card>
   </b-container>
 </template>
@@ -63,6 +96,8 @@ export default {
       current_tab: "Delegates",
       tabs: ["Delegates", "Candidates", "Jailed"],
       current_page: 1,
+      validate_table_total: 0,
+      validate_right_search: "",
       validator_data: {
         fields: [],
         items: []
@@ -73,8 +108,13 @@ export default {
     Loading
   },
   beforeMount() {
-    console.log("page", this.limit);
+    console.log("page", this.page_size);
     this.loadData();
+  },
+  watch: {
+    validate_right_search(newVal) {
+      this.loadData();
+    }
   },
   methods: {
     switchTab(tab) {
@@ -83,18 +123,26 @@ export default {
       this.loading = true;
       this.loadData();
     },
+    pageChange(val) {
+      console.log("page pg", val);
+      this.current_page = val;
+      this.loading = true;
+      this.loadData();
+    },
     async loadData() {
       try {
         const res = await this.$api.validator.getValidateTypeList(
           this.current_page,
-          this.limit,
-          this.current_tab
+          this.page_size,
+          this.current_tab,
+          this.validate_right_search
         );
         this.loading = false;
         console.log("res", res);
+        this.validate_table_total = res.totalPage * this.page_size;
         if (this.current_tab === "Delegates") {
           this.validator_data.fields = [
-            { key: "name", label: "Name" },
+            { key: "name", label: "Name", tdClass: "flex" },
             { key: "address", label: "Address" },
             { key: "netAddr", label: "Net Address" },
             { key: "votingPower", label: "Total Votes" },
@@ -105,7 +153,7 @@ export default {
         }
         if (this.current_tab === "Candidates") {
           this.validator_data.fields = [
-            { key: "name", label: "Name" },
+            { key: "name", label: "Name", tdClass: "flex align-center" },
             { key: "address", label: "Address" },
             { key: "totalVotesStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },

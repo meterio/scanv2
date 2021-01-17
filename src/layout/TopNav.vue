@@ -25,9 +25,13 @@
         <b-nav-form>
           <b-input-group class="search-group" v-if="$route.path !== '/'">
             <b-input-group-prepend>
-              <b-dropdown text="Main net" variant="outline-secondary">
-                <b-dropdown-item href="#">Mainnet</b-dropdown-item>
-                <b-dropdown-item href="#">Testnet</b-dropdown-item>
+              <b-dropdown :text="searchPrefix" variant="outline-secondary">
+                <b-dropdown-item @click="configProxy('main')"
+                  >Main net</b-dropdown-item
+                >
+                <b-dropdown-item @click="configProxy('test')"
+                  >Test net</b-dropdown-item
+                >
               </b-dropdown>
             </b-input-group-prepend>
             <b-form-input
@@ -92,20 +96,44 @@ export default {
   data() {
     return {
       modal_show: false,
-      searchKey: ""
+      searchKey: "",
+      searchPrefix: ""
     };
   },
+  beforeMount() {
+    let mark = window.localStorage.getItem("proxyMark");
+    if (!mark) {
+      mark = "main";
+      window.localStorage.setItem(mark);
+      window.location.reload();
+      return;
+    }
+    this.searchPrefix = `${mark.substring(0, 1).toUpperCase()}${mark.substring(
+      1
+    )} net`;
+  },
   methods: {
+    configProxy(key) {
+      const mark = window.localStorage.getItem("proxyMark");
+      if (mark != key) {
+        window.localStorage.setItem("proxyMark", key);
+        window.location.reload();
+        this.searchPrefix = `${key
+          .substring(0, 1)
+          .toUpperCase()}${key.substring(1)} net`;
+      }
+      console.log("key", key);
+    },
     async searchKeyWords() {
       try {
         const { type } = await this.$api.search.searchKeyWord(this.searchKey);
         let jump_url = "";
         if (type === "tx") {
-          url = `/tx/${this.searchKey}`;
+          jump_url = `/tx/${this.searchKey}`;
         } else if (type == "block") {
-          url = `/block/${this.searchKey}`;
+          jump_url = `/block/${this.searchKey}`;
         } else if (type == "address") {
-          url = `/address/${this.searchKey}`;
+          jump_url = `/address/${this.searchKey}`;
         } else {
           this.modal_show = true;
         }

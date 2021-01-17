@@ -60,7 +60,7 @@ export const routes = [
     meta: { title: `${DOMAIN_TITLE} | epoch rewards` }
   },
   {
-    path: "/validatorDetail",
+    path: "/validator/:id",
     name: "validatorDetail",
     component: ValidatorDetailpage,
     meta: { title: `${DOMAIN_TITLE} | validator detail` }

@@ -1,19 +1,28 @@
 <template>
   <b-container class="table-container data-table-container">
     <b-card :title="title">
+      <slot name="header"></slot>
       <b-table
         hover
         class="data-table"
         :items="data.items"
         :fields="data.fields"
-        busy.sync="loading"
+        :busy.sync="loading"
         show-empty
       >
-        <template slot="empty">
-          <div v-if="loading" class="text-center">
-            <spinner />
+        <template #table-busy>
+          <div class="text-center">
+            <b-spinner
+              variant="primary"
+              type="grow"
+              label="Spinning"
+            ></b-spinner>
           </div>
-          <div v-else class="text-center">No data available.</div>
+        </template>
+        <template slot="empty">
+          <div class="text-center pt15 text-grey" style="color: #5c6f8c">
+            No data available.
+          </div>
         </template>
 
         <template
@@ -96,13 +105,15 @@
       </b-table>
 
       <div
-        v-if="pagination.show && data.items.length > 0"
+        v-if="pagination.show && paginateTotal > pagination.perPage"
         class="data-pagination"
       >
         <b-pagination
           :align="pagination.align"
-          v-model="currentPage"
-          :total-rows="totalRows"
+          v-model="paginateCurrentPage"
+          :total-rows="paginateTotal"
+          :per-page="pagination.perPage"
+          @change="pgChange"
         ></b-pagination>
       </div>
     </b-card>
@@ -116,41 +127,55 @@ export default {
   name: "DataTable",
   props: {
     title: {
-      type: String,
+      type: String
     },
     data: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           title: "",
           items: [],
-          fields: [],
+          fields: []
         };
-      },
+      }
     },
     pagination: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           show: false,
-          align: "right",
+          align: "right"
         };
-      },
+      }
     },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    paginateTotal: {
+      type: Number,
+      default: 0
+    },
+    paginateCurrentPage: {
+      type: Number,
+      default: 1
+    }
   },
   data() {
     return {
-      loading: false,
-      currentPage: 1,
+      currentPage: 1
     };
   },
   computed: {
-    totalRows: function () {
+    totalRows: function() {
       return 100;
       // return this.data.items.length;
-    },
+    }
   },
   methods: {
+    pgChange(val) {
+      this.$emit("tablePaginationChange", val);
+    },
     fromNow(time) {
       return fromNow(time * 1000);
     },
@@ -159,8 +184,8 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
-    },
-  },
+    }
+  }
 };
 </script>
 

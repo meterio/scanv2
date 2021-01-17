@@ -7,8 +7,11 @@ const validateTypeUrl = {
 };
 
 export default {
-  getValidateTypeList(page, limit, type) {
-    return get(validateTypeUrl[type] + `?page=${page}&limit=${limit}`);
+  getValidateTypeList(page, limit, type, searchName) {
+    return get(
+      validateTypeUrl[type] +
+        `?page=${page}&limit=${limit}&search=${searchName}`
+    );
   },
   getValidateReward(page, limit) {
     return get(`validators/rewards?page=${page}&limit=${limit}`);

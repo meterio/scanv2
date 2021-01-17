@@ -3,12 +3,16 @@
     <b-input-group class="search-group">
       <b-input-group-prepend>
         <b-dropdown
-          text="Main net"
+          :text="searchPrefix"
           class="search-select"
           variant="outline-secondary"
         >
-          <b-dropdown-item href="#">Mainnet</b-dropdown-item>
-          <b-dropdown-item href="#">Testnet</b-dropdown-item>
+          <b-dropdown-item @click="configProxy('main')"
+            >Main net</b-dropdown-item
+          >
+          <b-dropdown-item @click="configProxy('test')"
+            >Test net</b-dropdown-item
+          >
         </b-dropdown>
       </b-input-group-prepend>
       <b-form-input
@@ -54,10 +58,34 @@ export default {
   name: "Search",
   data() {
     return {
-      searchWord: ""
+      searchWord: "",
+      searchPrefix: "Main net"
     };
   },
+  beforeMount() {
+    let mark = window.localStorage.getItem("proxyMark");
+    if (!mark) {
+      mark = "main";
+      window.localStorage.setItem(mark);
+      window.location.reload();
+      return;
+    }
+    this.searchPrefix = `${mark.substring(0, 1).toUpperCase()}${mark.substring(
+      1
+    )} net`;
+  },
   methods: {
+    configProxy(key) {
+      const mark = window.localStorage.getItem("proxyMark");
+      if (mark != key) {
+        window.localStorage.setItem("proxyMark", key);
+        window.location.reload();
+        this.searchPrefix = `${key
+          .substring(0, 1)
+          .toUpperCase()}${key.substring(1)} net`;
+      }
+      console.log("key", key);
+    },
     btnClick() {
       console.log("searchWord", this.searchWord);
       this.$emit("click", this.searchWord);

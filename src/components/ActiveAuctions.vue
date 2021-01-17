@@ -1,13 +1,7 @@
 <template>
   <b-container class="table-container">
     <h3 class="title">Active Auctions (MTRG)</h3>
-    <b-table
-      borderless
-      hover
-      class="data-table"
-      :items="items"
-      :fields="fields"
-    >
+    <DataTable :data="auctionObj" class="px-0" :loading="load">
       <!-- column: height_range -->
       <template v-slot:cell(height_range)="data">
         <div class="dt-row">
@@ -15,84 +9,91 @@
           <span>{{ data.value }}</span>
         </div>
       </template>
+    </DataTable>
+    <!-- <b-table
+      borderless
+      hover
+      class="data-table"
+      :items="items"
+      :fields="fields"
+    > -->
 
-      <template v-slot:cell(expected_final_price)="data">
-        <div class="dt-row">
-          <span class="primary">{{ data.value }}</span>
-        </div>
-      </template>
-
-      <!-- default column format -->
-      <template v-slot:cell()="data">
+    <!-- default column format -->
+    <!-- <template v-slot:cell()="data">
         <div class="dt-row">
           <span>{{ data.value }}</span>
         </div>
       </template>
-    </b-table>
+    </b-table> -->
   </b-container>
 </template>
 
 <script>
 import BigNumber from "bignumber.js";
+import DataTable from "@/components/DataTable.vue";
 export default {
   name: "ActiveAuctions",
   data() {
     return {
       // Note `isActive` is left out and will not appear in the rendered table
-      fields: [
-        {
-          key: "height_range",
-          label: "Height(POS)",
-        },
-        {
-          key: "settlement_k_block",
-          label: "Settlement K Block",
-        },
-        {
-          key: "mtr_received",
-          label: "MTR Received",
-        },
-        {
-          key: "mtrg_on_auction",
-          label: "MTRG on Auction",
-        },
+      load: true,
+      auctionObj: {
+        fields: [
+          {
+            key: "height_range",
+            label: "Height(POS)"
+          },
+          {
+            key: "settlement_k_block",
+            label: "Settlement K Block"
+          },
+          {
+            key: "mtr_received",
+            label: "MTR Received"
+          },
+          {
+            key: "mtrg_on_auction",
+            label: "MTRG on Auction"
+          },
 
-        {
-          key: "expected_final_price",
-          label: "Expected Final Price",
-        },
-      ],
-      items: [
-        {
-          height_range: "17894 - 34789",
-          settlement_k_block: "1274",
-          mtr_received: "2,89,789 MTR",
-          mtrg_on_auction: "56,9080 MTRG",
-          expected_final_price: "3.45 USD",
-        },
-        {
-          height_range: "17894 - 34789",
-          settlement_k_block: "1274",
-          mtr_received: "2,89,789 MTR",
-          mtrg_on_auction: "56,9080 MTRG",
-          expected_final_price: "3.45 USD",
-        },
-      ],
+          {
+            key: "expected_final_price",
+            label: "Expected Final Price"
+          }
+        ],
+        items: []
+      }
     };
   },
-  async mounted() {
-    const res = await this.$api.auction.getPresent();
-    const { present } = res;
-    this.items = [];
-    this.items.push({
-      height_range: `${present.startHeight} - ${present.endHeight}`,
-      settlement_k_block: present.endHeight,
-      mtr_received: present.receivedStr,
-      mtrg_on_auction: present.reservedStr,
-      expected_final_price: new BigNumber(present.reservedPrice)
-        .dividedBy(1e18)
-        .toFixed(),
-    });
+  components: {
+    DataTable
   },
+  beforeMount() {
+    this.loadAuctions();
+  },
+  methods: {
+    async loadAuctions() {
+      try {
+        const { present } = await this.$api.auction.getPresent();
+        this.load = false;
+        const items = [];
+        if (present.startHeight) {
+          items.push({
+            height_range: `${present.startHeight} - ${present.endHeight}`,
+            settlement_k_block: present.endHeight,
+            mtr_received: present.receivedStr,
+            mtrg_on_auction: present.reservedStr,
+            expected_final_price: new BigNumber(present.reservedPrice)
+              .dividedBy(1e18)
+              .toFixed()
+          });
+        }
+        this.auctionObj.items = items;
+      } catch (e) {
+        this.load = false;
+        console.error(e);
+      }
+    }
+  }
 };
 </script>

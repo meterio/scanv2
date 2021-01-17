@@ -38,17 +38,18 @@ module.exports = {
         `
       }
     }
-  },
-  devServer: {
-    proxy: {
-      "/api": {
-        target: "http://api.meter.io:5000/api/", //对应自己的接口
-        changeOrigin: true,
-        ws: true,
-        pathRewrite: {
-          "^/api": ""
-        }
-      }
-    }
   }
+  // ,
+  // devServer: {
+  //   proxy: {
+  //     "/api": {
+  //       target: "http://api.meter.io:4000/api/", //对应自己的接口
+  //       changeOrigin: true,
+  //       ws: true,
+  //       pathRewrite: {
+  //         "^/api": ""
+  //       }
+  //     }
+  //   }
+  // }
 };

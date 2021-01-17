@@ -1,7 +1,7 @@
 export default {
   data() {
     return {
-      limit: 10
+      page_size: 8
     };
   }
 };

@@ -89,7 +89,7 @@ export default {
       try {
         const res = await this.$api.validator.getValidateReward(
           this.current_page,
-          this.limit
+          this.page_size
         );
         console.log(res);
       } catch (e) {
@@ -135,4 +135,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.validator {
+  margin-top: 30px;
+}
+</style>

@@ -36,7 +36,6 @@
       text-align: center;
     }
   }
-
   .dt-row {
     display: flex;
     justify-content: space-around;
@@ -53,12 +52,12 @@
       border-radius: 5px;
 
       &.icon-mint-active {
-        background-image: url("~@/assets/hammer_primary.png");
+        background-image: url('~@/assets/hammer_primary.png');
         background-color: #d9e8ff;
       }
 
       &.icon-mint-past {
-        background-image: url("~@/assets/hammer_secondary.png");
+        background-image: url('~@/assets/hammer_secondary.png');
         background-color: #ebeef6;
       }
     }

@@ -1,6 +1,7 @@
 <template>
   <b-container class="table-container">
     <h3 class="title">Past Auctions (MTRG)</h3>
+    <DataTable :data="pAuctions" class="px-0" :loading="load"></DataTable>
     <b-table
       borderless
       hover
@@ -34,60 +35,75 @@
 
 <script>
 import BigNumber from "bignumber.js";
+import DataTable from "@/components/DataTable.vue";
 
 export default {
   name: "PastAuctions",
   data() {
     return {
       // Note `isActive` is left out and will not appear in the rendered table
-      fields: [
-        {
-          key: "height_range",
-          label: "Height(POS)"
-        },
-        {
-          key: "settlement_kblock",
-          label: "Settlement K Block"
-        },
-        {
-          key: "mtr_received",
-          label: "MTR Received"
-        },
-        {
-          key: "mtrg_on_auction",
-          label: "MTRG on Auction"
-        },
+      load: true,
+      pAuctions: {
+        fields: [
+          {
+            key: "height_range",
+            label: "Height(POS)"
+          },
+          {
+            key: "settlement_kblock",
+            label: "Settlement K Block"
+          },
+          {
+            key: "mtr_received",
+            label: "MTR Received"
+          },
+          {
+            key: "mtrg_on_auction",
+            label: "MTRG on Auction"
+          },
 
-        {
-          key: "final_price",
-          label: "Final Price"
-        },
-        {
-          key: "more",
-          label: "More"
-        }
-      ],
-      items: []
+          {
+            key: "final_price",
+            label: "Final Price"
+          },
+          {
+            key: "more",
+            label: "More"
+          }
+        ],
+        items: []
+      }
     };
+  },
+  components: {
+    DataTable
+  },
+  beforeMount() {
+    this.loadPast();
   },
   methods: {
     getBidsUrl: function(tx) {
       return `/auction/${tx}`;
-    }
-  },
-  async mounted() {
-    const res = await this.$api.auction.getPast();
-    const { auctions } = res;
-    this.items = [];
-    for (const a of auctions) {
-      this.items.push({
-        height_range: `${a.startHeight} - ${a.endHeight}`,
-        settlement_kblock: a.endHeight,
-        mtr_received: a.receivedStr,
-        mtrg_on_auction: a.releasedStr,
-        final_price: new BigNumber(a.actualPrice).dividedBy(1e18).toFixed(),
-        more: a.id
-      });
+    },
+    async loadPast() {
+      try {
+        const { auctions } = await this.$api.auction.getPast();
+        const items = [];
+        for (const a of auctions) {
+          items.push({
+            height_range: `${a.startHeight} - ${a.endHeight}`,
+            settlement_kblock: a.endHeight,
+            mtr_received: a.receivedStr,
+            mtrg_on_auction: a.releasedStr,
+            final_price: new BigNumber(a.actualPrice).dividedBy(1e18).toFixed(),
+            more: a.id
+          });
+        }
+        this.load = false;
+        this.pAuctions.items = items;
+      } catch (e) {
+        this.load = false;
+      }
     }
   }
 };

@@ -5,14 +5,24 @@ import axios from "axios";
 import QS from "qs";
 
 // 环境的切换
-if (process.env.NODE_ENV == "development") {
-  axios.defaults.baseURL = "/api";
-} else if (process.env.NODE_ENV == "production") {
-  if (process.env.VUE_APP_API_ENDPOINT) {
-    axios.defaults.baseURL = process.env.VUE_APP_API_ENDPOINT;
-  } else {
-    axios.defaults.baseURL = "/api";
-  }
+// if (process.env.NODE_ENV == "development") {
+//   axios.defaults.baseURL = "/api";
+// } else if (process.env.NODE_ENV == "production") {
+//   if (process.env.VUE_APP_API_ENDPOINT) {
+//     axios.defaults.baseURL = process.env.VUE_APP_API_ENDPOINT;
+//   } else {
+//     axios.defaults.baseURL = "/api";
+//   }
+// }
+const BASE_URL_MAP = {
+  main: "http://api.meter.io:5000/api/",
+  test: "http://api.meter.io:4000/api/"
+};
+function getHttpBaseUrl() {
+  const mark = window.localStorage.getItem("proxyMark") || "main";
+  localStorage.setItem("proxyMark", mark);
+  // return BASE_URL_MAP[mark];
+  axios.defaults.baseURL = BASE_URL_MAP[mark];
 }
 
 // 请求超时时间
@@ -107,6 +117,7 @@ axios.interceptors.response.use(
  * @param {Object} params [请求时携带的参数]
  */
 export function get(url, params) {
+  getHttpBaseUrl();
   return new Promise((resolve, reject) => {
     axios
       .get(url, { params })
@@ -127,6 +138,7 @@ export function get(url, params) {
  * @param {Object} params [请求时携带的参数]
  */
 export function post(url, params) {
+  getHttpBaseUrl();
   return new Promise((resolve, reject) => {
     axios
       .post(url, QS.stringify(params))
