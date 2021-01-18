@@ -4,7 +4,11 @@
   .search-banner
     .container
       h1.title Meter Blockchain Explorer
-      search.mt25(:btnType="2", placeholder="Search Transation/Blocks/Address", @click="searchKeyWords")
+      search.mt25(
+        :btnType="2",
+        placeholder="Search Transation/Blocks/Address",
+        @click="searchKeyWords"
+      )
     <!-- card list -->
     //- block statistic
   data-dashboard.mt35(v-bind:rows="data", v-if="data.length > 0")
@@ -17,7 +21,6 @@
         recent-txs
   b-modal(v-model="modal_show", hide-footer, hide-header)
     .text-center Search No More Data
-
 </template>
 
 <script>
@@ -28,7 +31,7 @@ import RecentTxs from "@/components/RecentTxs.vue";
 import { fromNow, formatTime } from "@/utils/time";
 import { shortHash, shortAddress } from "@/utils/address";
 import BigNumber from "bignumber.js";
-import { fromWei } from "@/utils/unit";
+import { fromWei, formatNum } from "@/utils/unit";
 
 export default {
   name: "Home",
@@ -37,7 +40,7 @@ export default {
     Search,
     DataDashboard,
     RecentBlocks,
-    RecentTxs
+    RecentTxs,
   },
 
   data() {
@@ -47,7 +50,7 @@ export default {
       nav_tabs: ["PoS", "PoW"],
       // fake data
       msg: "Welcome to Index!!!",
-      data: []
+      data: [],
     };
   },
   async mounted() {
@@ -60,56 +63,60 @@ export default {
         {
           label: "MTRG Price",
           content: "$ " + mtrg.price,
-          change: mtrg.priceChange
+          change: mtrg.priceChange,
         },
         {
           label: "MTR Price",
           content: "$ " + mtr.price,
-          change: mtr.priceChange
-        }
+          change: mtr.priceChange,
+        },
+      ],
+      [
+        { label: "MTRG Circulation", content: formatNum(mtrg.circulation, 2) },
+        { label: "MTR Circulation", content: formatNum(mtr.circulation, 2) },
       ],
       [
         { label: "Block Height", content: pos.best },
         { label: "Epoch", content: pos.epoch },
         { label: "Transactions", content: pos.txsCount },
-        { label: "Avg Block Time", content: pos.avgBlockTime }
+        { label: "Avg Block Time", content: pos.avgBlockTime },
       ],
       [
         {
           label: "Online/Total Validators",
-          content: `${staking.onlineNodes}/${staking.totalNodes}`
+          content: `${staking.onlineNodes}/${staking.totalNodes}`,
         },
         {
           label: "Staked MTRG",
-          content: fromWei(staking.totalStaked, 2) + " MTRG"
+          content: fromWei(staking.totalStaked, 2) + " MTRG",
         },
         { label: "Inflation", content: pos.inflation },
         {
           label: "Average Daily Reward Pool",
-          content: mtrg.avgDailyReward
-        }
-      ]
+          content: mtrg.avgDailyReward,
+        },
+      ],
     ];
     this.node_data = [
       [
         { label: "Validators", content: staking.validators },
         {
           label: "Total Staked",
-          content: fromWei(staking.totalStaked, 6) + " MTRG"
-        }
+          content: formatNum(staking.totalStaked, 6) + " MTRG",
+        },
       ],
       [
         { label: "Height", content: pow.best },
         {
           label: "MTR Price",
           content: "$ " + mtr.price,
-          change: mtr.priceChange
+          change: mtr.priceChange,
         },
         {
           label: "Online/Total Node",
-          content: `${staking.onlineNodes}/${staking.totalNodes}`
-        }
-      ]
+          content: `${staking.onlineNodes}/${staking.totalNodes}`,
+        },
+      ],
     ];
   },
   methods: {
@@ -139,8 +146,14 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
-    }
-  }
+    },
+    fromWei(num, precision) {
+      return fromWei(num, precision);
+    },
+    formatNum(num, precision) {
+      return formatNum(num, precision);
+    },
+  },
 };
 </script>
 

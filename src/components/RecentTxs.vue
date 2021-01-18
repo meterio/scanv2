@@ -34,7 +34,7 @@
                   class="link"
                   :to="{
                     name: 'address',
-                    params: { address: tx.tos[0].address }
+                    params: { address: tx.tos[0].address },
                   }"
                   >{{ shortAddr(tx.tos[0].address, 12) }}</router-link
                 >
@@ -42,7 +42,11 @@
               </p>
             </div>
             <div class="detail-view">
-              <span class="detail">{{ tx.totalAmountStrs[0] }}</span>
+              <span class="detail">{{
+                fromWei(tx.totalAmounts[0], 2) +
+                " " +
+                tx.totalAmountStrs[0].split(" ")[1]
+              }}</span>
             </div>
           </li>
         </ul>
@@ -55,24 +59,25 @@
 import Loading from "@/components/Loading";
 import { fromNow } from "@/utils/time";
 import { shortHash, shortAddress } from "@/utils/address";
+import { fromWei } from "@/utils/unit";
 
 export default {
   name: "RecentTxs",
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
       loading: true,
       recent_txs: [],
-      time: null
+      time: null,
     };
   },
   mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function() {
+    this.time = setInterval(function () {
       me.initData();
     }, 3000);
   },
@@ -102,8 +107,11 @@ export default {
     },
     shortHash(hash, num) {
       return shortHash(hash, num);
-    }
-  }
+    },
+    fromWei(num, precision) {
+      return fromWei(num, precision);
+    },
+  },
 };
 </script>
 
