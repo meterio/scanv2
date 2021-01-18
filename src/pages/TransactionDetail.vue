@@ -1,68 +1,43 @@
 <template>
-  <div class="detail">
-    <b-container class="summary">
-      <h2 class="title">Transaction Details</h2>
+  <div class="detail-page">
+    <DataSummary :data="summary" :title="summaryTitle" />
 
-      <b-card>
-        <b-row class="row" :key="item.key" v-for="item in summary">
-          <b-col cols="2">
-            <span class="label">{{ item.key }}</span>
-          </b-col>
-          <b-col cols="10">
-            <span v-if="!item.type" class="value">{{ item.value }}</span>
-            <router-link
-              :to="{ name: 'blockDetail', params: { revision: item.value } }"
-              v-if="item.type === 'block-link'"
-              >#{{ item.value }}</router-link
-            >
-            <router-link
-              :to="{ name: 'address', params: { address: item.value } }"
-              v-if="item.type === 'account-link'"
-              >{{ item.value }}</router-link
-            >
+    <DataTable title="Clauses" :data="clauses.data">
+      <template v-slot:cell(to)="data">
+        <div class="dt-row">
+          <router-link
+            class="link"
+            :to="{ name: 'address', params: { address: data.value } }"
+            >{{ data.value }}</router-link
+          >
+        </div>
+      </template>
 
-            <span v-if="item.type === 'status'">
-              <StatusTag :status="item.value"></StatusTag>
-            </span>
-          </b-col>
-        </b-row>
-      </b-card>
-    </b-container>
-    <div>
-      <DataTable title="Clauses" :data="clauses.data">
-        <template v-slot:cell(to)="data">
-          <div class="dt-row">
-            <router-link
-              class="link"
-              :to="{ name: 'address', params: { address: data.value } }"
-              >{{ data.value }}</router-link
-            >
-          </div>
-        </template>
-        <template v-slot:cell(data)="data">
-          <div style="word-break: break-all">
-            {{ data.value }}
-          </div>
-        </template>
-      </DataTable>
-    </div>
+      <template v-slot:cell(data)="data">
+        <div style="word-break: break-all">
+          {{ data.value }}
+        </div>
+      </template>
+    </DataTable>
   </div>
 </template>
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime } from "@/utils/time";
-import { shortHash, shortAddress } from "@/utils/address";
+import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
 import BigNumber from "bignumber.js";
 import DataTable from "@/components/DataTable.vue";
+import DataSummary from "@/components/DataSummary.vue";
+
 export default {
   components: {
+    DataSummary,
     DataTable,
-    StatusTag,
   },
   data() {
     return {
-      summary: {},
+      summaryTitle: "",
+      summary: [],
       tx: {},
       clauses: {
         data: {
@@ -82,10 +57,11 @@ export default {
     const res = await this.$api.transaction.getTxDetail(hash);
     this.loading = false;
     const { tx, summary } = res;
+    this.summaryTitle = "Transaction";
     this.summary = [
       { key: "Hash", value: summary.hash },
       { key: "Type", value: summary.type },
-      { key: "Origin", value: summary.origin, type: "account-link" },
+      { key: "Origin", value: summary.origin, type: "address-link" },
       { key: "Amount", value: summary.totalAmountStrs[0] },
       { key: "Fee", value: summary.feeStr },
       {
@@ -124,24 +100,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.detail {
-  margin-top: 30px;
-}
-
-.summary {
-  .title {
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-
-  .row {
-    padding: 10px 0;
-  }
-
-  .label {
-    color: #5c6f8c;
-  }
-}
-</style>

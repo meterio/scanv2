@@ -1,19 +1,8 @@
 <template lang="pug">
-.account-detail
-  b-container.summary
-    h2.title Address {{ address }}
-    b-card
-      b-row.row(:key="item.key", v-for="item in summary")
-        b-col(cols="2")
-          span.label {{ item.key }}
-        b-col(cols="10")
-          span(v-if="item.block")
-            router-link.link(
-              :to="{ name: 'blockDetail', params: { revision: item.block } }"
-            ) {{ item.block }}
-            span.value {{ item.value }}
+.detail-page
+  data-summary(:title="'Address: ' + address", :data="summary")
 
-          span.value(v-else) {{ item.value }}
+  b-container.summary
     b-card.mt-2pert.px-5
       pie-chart.px-0
     data-table.mt-2pert.px-0(
@@ -30,42 +19,42 @@
 
     data-table.mt-2pert.px-0(
       :data="txs",
-      :loading="txs_load"
-      :pagination="txs.pagination"
-      :paginateTotal="address_total"
-      :paginateCurrentPage="address_current_page"
+      :loading="txs_load",
+      :pagination="txs.pagination",
+      :paginateTotal="address_total",
+      :paginateCurrentPage="address_current_page",
       @tablePaginationChange="pgChange"
     )
       div(slot="header")
         nav-tabs.px-0(:tabs="address_tabs", @changeTab="navTabChange")
-
 </template>
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime } from "@/utils/time";
-import { shortHash, shortAddress } from "@/utils/address";
+import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
 import BigNumber from "bignumber.js";
 import PieChart from "@/components/PieChart.vue";
 import DataTable from "@/components/DataTable.vue";
 import NavTabs from "@/components/NavTabs.vue";
+import DataSummary from "@/components/DataSummary.vue";
 export default {
   name: "Address",
   components: {
     PieChart,
     DataTable,
-    NavTabs
+    NavTabs,
+    DataSummary,
   },
   data() {
     return {
       address_tabs: [
         { name: "Transations" },
-        { name: "ERC20 Transactions", width: 170 }
+        { name: "ERC20 Transactions", width: 170 },
       ],
       address_current_page: 1,
       address_total: 0,
       address: "0x",
-      summary: {},
+      summary: [],
       account: {},
       bucket_load: true,
       txs_load: true,
@@ -73,7 +62,7 @@ export default {
         pagination: {
           show: true,
           align: "center",
-          perPage: 8
+          perPage: 8,
         },
         fields: [
           { key: "txhash", label: "Hash" },
@@ -81,25 +70,25 @@ export default {
           { key: "timestamp", label: "Time" },
           { key: "from", label: "From" },
           { key: "to", label: "To" },
-          { key: "amount", label: "Amount" }
+          { key: "amount", label: "Amount" },
         ],
-        items: []
+        items: [],
       },
       buckets: {
         pagination: {
           show: false,
           align: "center",
-          perPage: 8
+          perPage: 8,
         },
         fields: [
           { key: "address", label: "Candidate Address" },
           { key: "totalVotes", label: "Votes" },
           { key: "timestamp", label: "Time" },
-          { key: "bounded", label: "Bounded" }
+          { key: "bounded", label: "Bounded" },
         ],
-        items: []
+        items: [],
       },
-      current_tab_index: 0
+      current_tab_index: 0,
     };
   },
   beforeMount() {
@@ -136,21 +125,21 @@ export default {
           // { key: "Address", value: account.address },
           {
             key: "MTR Balance",
-            value: account.mtrBalanceStr
+            value: account.mtrBalanceStr,
           },
           {
             key: "MTRG Balance",
-            value: account.mtrgBalanceStr
+            value: account.mtrgBalanceStr,
           },
-          {
-            key: "First Seen",
-            value:
-              account.firstSeen.number > 0
-                ? "  (" + fromNow(account.firstSeen.timestamp * 1000) + ")"
-                : "",
-            block: account.firstSeen.number
-          }
         ];
+        if (account.firstSeen && account.firstSeen.number > 0) {
+          this.summary.push({
+            key: "First Seen",
+            type: "block-link-with-note",
+            value: fromNow(account.firstSeen.timestamp * 1000),
+            block: account.firstSeen.number,
+          });
+        }
         this.account = account;
       } catch (e) {
         console.log(e);
@@ -166,7 +155,7 @@ export default {
             address: b.candidate,
             totalVotes: b.totalVotes,
             timestamp: b.createTime,
-            bounded: !b.unbounded
+            bounded: !b.unbounded,
           });
         }
         this.bucket_load = false;
@@ -192,7 +181,7 @@ export default {
             from: t.origin,
             to: t.tos && t.tos.length > 0 ? t.tos[0].address : "nobody",
             amount: t.totalAmountStrs[0],
-            timestamp: t.block.timestamp
+            timestamp: t.block.timestamp,
           });
         }
         this.txs_load = false;
@@ -218,7 +207,7 @@ export default {
             from: t.from,
             to: t.to,
             amount: t.amount,
-            timestamp: t.block.timestamp
+            timestamp: t.block.timestamp,
           });
         }
         this.txs_load = false;
@@ -235,18 +224,13 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.block-detail {
-  margin-top: 30px;
-}
-
 .summary {
-  padding-top: 2%;
   .title {
     font-size: 20px;
     margin-bottom: 15px;

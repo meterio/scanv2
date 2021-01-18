@@ -28,10 +28,15 @@ import Search from "@/components/Search.vue";
 import DataDashboard from "@/components/DataDashboard.vue";
 import RecentBlocks from "@/components/RecentBlocks.vue";
 import RecentTxs from "@/components/RecentTxs.vue";
-import { fromNow, formatTime } from "@/utils/time";
-import { shortHash, shortAddress } from "@/utils/address";
+import {
+  fromNow,
+  formatTime,
+  shortHash,
+  shortAddress,
+  fromWei,
+  formatNum,
+} from "@/utils";
 import BigNumber from "bignumber.js";
-import { fromWei, formatNum } from "@/utils/unit";
 
 export default {
   name: "Home",

@@ -1,0 +1,93 @@
+<template lang="pug">
+.detail-page
+  data-table.mt-2pert.px-0(
+    title="Transactions",
+    :data="blocks",
+    :loading="loading",
+    :pagination="blocks.pagination",
+    :paginateTotal="paginateTotal",
+    :paginateCurrentPage="page",
+    @tablePaginationChange="pgChange"
+  )
+    template(v-slot:cell(number)="data")
+      .dt-row
+        router-link.link(
+          :to="{ name: 'blockDetail', params: { revision: data.item.number } }"
+        ) {{ '#' + data.item.number }}
+
+    template(v-slot:cell(signer)="data")
+      .dt-row
+        router-link.link(
+          :to="{ name: 'address', params: { address: data.item.signer } }"
+        ) {{ data.item.signer }}
+</template>
+
+<script>
+import StatusTag from "@/components/StatusTag.vue";
+import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
+import BigNumber from "bignumber.js";
+import PieChart from "@/components/PieChart.vue";
+import DataTable from "@/components/DataTable.vue";
+import NavTabs from "@/components/NavTabs.vue";
+import DataSummary from "@/components/DataSummary.vue";
+export default {
+  name: "Address",
+  components: {
+    PieChart,
+    DataTable,
+    NavTabs,
+    DataSummary,
+  },
+  data() {
+    return {
+      paginateTotal: 0,
+      loading: true,
+      page: 1,
+      limit: 20,
+      blocks: {
+        pagination: {
+          show: true,
+          align: "center",
+          perPage: 8,
+        },
+        fields: [
+          { key: "number", label: "Block" },
+          { key: "timestamp", label: "Time" },
+          { key: "txCount", label: "Txns" },
+          { key: "signer", label: "Signer" },
+        ],
+        items: [],
+      },
+    };
+  },
+  beforeMount() {
+    console.log("COUNT");
+    this.loadBlocks();
+  },
+
+  methods: {
+    pgChange(val) {
+      this.page = val;
+      this.loadBlocks();
+    },
+    async loadBlocks() {
+      this.loading = true;
+      try {
+        const { address } = this.$route.params;
+        this.blocks.items = [];
+        const { blocks, totalPage } = await this.$api.block.getRecentBlocks(
+          this.page,
+          this.limit
+        );
+        this.paginateTotal = totalPage * this.limit;
+        this.blocks.items = blocks;
+        this.loading = false;
+      } catch (e) {
+        this.loading = false;
+      }
+    },
+  },
+};
+</script>
+
+

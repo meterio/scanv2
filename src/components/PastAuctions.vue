@@ -1,14 +1,7 @@
 <template>
   <b-container class="table-container">
     <h3 class="title">Past Auctions (MTRG)</h3>
-    <DataTable :data="pAuctions" class="px-0" :loading="load"></DataTable>
-    <b-table
-      borderless
-      hover
-      class="data-table"
-      :items="items"
-      :fields="fields"
-    >
+    <DataTable :data="pAuctions" class="px-0" :loading="load">
       <!-- column: height_range -->
       <template v-slot:cell(height_range)="data">
         <div class="dt-row">
@@ -29,7 +22,7 @@
           <span>{{ data.value }}</span>
         </div>
       </template>
-    </b-table>
+    </DataTable>
   </b-container>
 </template>
 
@@ -45,50 +38,31 @@ export default {
       load: true,
       pAuctions: {
         fields: [
-          {
-            key: "height_range",
-            label: "Height(POS)"
-          },
-          {
-            key: "settlement_kblock",
-            label: "Settlement K Block"
-          },
-          {
-            key: "mtr_received",
-            label: "MTR Received"
-          },
-          {
-            key: "mtrg_on_auction",
-            label: "MTRG on Auction"
-          },
-
-          {
-            key: "final_price",
-            label: "Final Price"
-          },
-          {
-            key: "more",
-            label: "More"
-          }
+          { key: "height_range", label: "Height(POS)" },
+          { key: "settlement_kblock", label: "Settlement K Block" },
+          { key: "mtr_received", label: "MTR Received" },
+          { key: "mtrg_on_auction", label: "MTRG on Auction" },
+          { key: "final_price", label: "Final Price" },
+          { key: "more", label: "More" },
         ],
-        items: []
-      }
+        items: [],
+      },
     };
   },
   components: {
-    DataTable
+    DataTable,
   },
   beforeMount() {
     this.loadPast();
   },
   methods: {
-    getBidsUrl: function(tx) {
+    getBidsUrl: function (tx) {
       return `/auction/${tx}`;
     },
     async loadPast() {
       try {
         const { auctions } = await this.$api.auction.getPast();
-        const items = [];
+        let items = [];
         for (const a of auctions) {
           items.push({
             height_range: `${a.startHeight} - ${a.endHeight}`,
@@ -96,7 +70,7 @@ export default {
             mtr_received: a.receivedStr,
             mtrg_on_auction: a.releasedStr,
             final_price: new BigNumber(a.actualPrice).dividedBy(1e18).toFixed(),
-            more: a.id
+            more: a.id,
           });
         }
         this.load = false;
@@ -104,7 +78,7 @@ export default {
       } catch (e) {
         this.load = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>

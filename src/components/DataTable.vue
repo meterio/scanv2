@@ -121,56 +121,55 @@
 </template>
 
 <script>
-import { shortHash, shortAddress } from "@/utils/address";
-import { fromNow } from "@/utils/time";
+import { shortHash, shortAddress, fromNow } from "@/utils";
 export default {
   name: "DataTable",
   props: {
     title: {
-      type: String
+      type: String,
     },
     data: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           title: "",
           items: [],
-          fields: []
+          fields: [],
         };
-      }
+      },
     },
     pagination: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           show: false,
-          align: "right"
+          align: "right",
         };
-      }
+      },
     },
     loading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     paginateTotal: {
       type: Number,
-      default: 0
+      default: 0,
     },
     paginateCurrentPage: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
   },
   data() {
     return {
-      currentPage: 1
+      currentPage: 1,
     };
   },
   computed: {
-    totalRows: function() {
+    totalRows: function () {
       return 100;
       // return this.data.items.length;
-    }
+    },
   },
   methods: {
     pgChange(val) {
@@ -184,8 +183,8 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
-    }
-  }
+    },
+  },
 };
 </script>
 

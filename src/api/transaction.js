@@ -1,8 +1,8 @@
 import { get } from "@/utils/http";
 
 const transaction = {
-  getRecentTxs() {
-    return get("txs/recent");
+  getRecentTxs(page=1, limit=40) {
+    return get(`txs/recent/?page=${page}&limit=${limit}`);
   },
 
   getTxDetail(hash){

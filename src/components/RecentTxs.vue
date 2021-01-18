@@ -57,9 +57,7 @@
 
 <script>
 import Loading from "@/components/Loading";
-import { fromNow } from "@/utils/time";
-import { shortHash, shortAddress } from "@/utils/address";
-import { fromWei } from "@/utils/unit";
+import { shortHash, shortAddress, fromWei, fromNow } from "@/utils";
 
 export default {
   name: "RecentTxs",

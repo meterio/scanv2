@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <h2 class="title">Validator Detail</h2>
+    <h2 class="title">Validator</h2>
     <b-card class="summary">
       <b-row>
         <b-col cols="2">
@@ -122,7 +122,7 @@ export default {
   name: "ValidatorDetail",
   components: {
     PieChart,
-    DataTable
+    DataTable,
   },
   data() {
     return {
@@ -131,23 +131,23 @@ export default {
         blankColor: "#777",
         width: 100,
         height: 100,
-        class: "m1"
+        class: "m1",
       },
       delegated_chart: {
         options: {
           legend: {
-            display: false
-          }
+            display: false,
+          },
         },
         data: {
           labels: ["Self", "Others"],
           datasets: [
             {
               backgroundColor: ["#FFB84F", "#287DF9"],
-              data: [7900, 38100]
-            }
-          ]
-        }
+              data: [7900, 38100],
+            },
+          ],
+        },
       },
       delegator: {
         title: "Delegators(47)",
@@ -155,34 +155,34 @@ export default {
           fields: [
             {
               key: "delegator_address",
-              label: "Delegator Address"
+              label: "Delegator Address",
             },
             {
               key: "amount",
-              label: "Amount"
+              label: "Amount",
             },
             {
               key: "share",
-              label: "Share"
-            }
+              label: "Share",
+            },
           ],
           items: [
             {
               delegator_address: "adslkjaldjfl..aklsdfjkas12312",
               amount: "34000 MTR",
-              share: "14.5%"
+              share: "14.5%",
             },
             {
               delegator_address: "adslkjaldjfl..aklsdfjkas12312",
               amount: "34000 MTR",
-              share: "14.5%"
-            }
-          ]
+              share: "14.5%",
+            },
+          ],
         },
         pagination: {
           show: true,
-          align: "right"
-        }
+          align: "right",
+        },
       },
       power_event: {
         title: "Power Events",
@@ -190,40 +190,40 @@ export default {
           fields: [
             {
               key: "height",
-              label: "Height"
+              label: "Height",
             },
             {
               key: "txhash",
-              label: "txHash"
+              label: "txHash",
             },
             {
               key: "amount",
-              label: "Amount"
+              label: "Amount",
             },
             {
               key: "time",
-              label: "Time"
-            }
+              label: "Time",
+            },
           ],
           items: [
             {
               height: "128902",
               txhash: "alksd....12390dsasf",
               amount: "+500.00",
-              time: "4 min ago"
+              time: "4 min ago",
             },
             {
               height: "128902",
               txhash: "alksd....12390dsasf",
               amount: "+500.00",
-              time: "4 min ago"
-            }
-          ]
+              time: "4 min ago",
+            },
+          ],
         },
         pagination: {
           show: true,
-          align: "right"
-        }
+          align: "right",
+        },
       },
       proposed_block: {
         title: "Proposed Blocks",
@@ -231,43 +231,43 @@ export default {
           fields: [
             {
               key: "height",
-              label: "Height"
+              label: "Height",
             },
             {
               key: "block_hash",
-              label: "Block Hash"
+              label: "Block Hash",
             },
             {
               key: "txs",
-              label: "Txs"
+              label: "Txs",
             },
             {
               key: "time",
-              label: "Time"
-            }
+              label: "Time",
+            },
           ],
           items: [
             {
               height: "128902",
               block_hash: "alksd....12390dsasf",
               txs: "2",
-              time: "2020-04-15 18:13:15"
+              time: "2020-04-15 18:13:15",
             },
             {
               height: "128902",
               block_hash: "alksd....12390dsasf",
               txs: "2",
-              time: "2020-04-15 18:13:15"
-            }
-          ]
+              time: "2020-04-15 18:13:15",
+            },
+          ],
         },
         pagination: {
           show: true,
-          align: "center"
-        }
-      }
+          align: "center",
+        },
+      },
     };
-  }
+  },
 };
 </script>
 

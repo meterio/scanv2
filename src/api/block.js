@@ -1,8 +1,8 @@
 import { get } from "@/utils/http";
 
 const block = {
-  getRecentBlocks(page) {
-    return get("blocks/recent");
+  getRecentBlocks(page=1,limit=20) {
+    return get(`blocks/recent?page=${page}&limit=${limit}`);
   },
 
   getBlockDetail(revision){

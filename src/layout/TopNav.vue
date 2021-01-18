@@ -67,6 +67,9 @@
           >
             <b-dropdown-item href="/pos">PoS</b-dropdown-item>
             <b-dropdown-item href="/pow">PoW</b-dropdown-item>
+            <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-item href="/txs">View Txs</b-dropdown-item>
+            <b-dropdown-item href="/blocks">View Blocks</b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Resources" right>
             <b-dropdown-item href="#">Wallet</b-dropdown-item>
@@ -97,7 +100,7 @@ export default {
     return {
       modal_show: false,
       searchKey: "",
-      searchPrefix: ""
+      searchPrefix: "",
     };
   },
   beforeMount() {
@@ -150,8 +153,8 @@ export default {
         // this.$bvModal.show('homeModal')
         this.modal_show = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

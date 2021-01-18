@@ -49,8 +49,7 @@
 
 <script>
 import Loading from "@/components/Loading";
-import { fromNow } from "@/utils/time";
-import { shortAddress } from "@/utils/address";
+import { fromNow, shortAddress } from "@/utils";
 import { setInterval } from "timers";
 
 export default {

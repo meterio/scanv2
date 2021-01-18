@@ -1,48 +1,38 @@
 <template lang="pug">
-.detail
-  b-container.summary
-    h2.title Auction Detail
-
-    b-card
-      b-row.row(:key="item.key", v-for="item in summary")
-        b-col(cols="2")
-          span.label {{ item.key }}
-        b-col(cols="10")
-          span.value(v-if="!item.type") {{ item.value }}
-
-    data-table.mt-2pert.px-0(
-      title="Bids Detail",
-      :data="bids",
-    )
+.detail-page
+  data-summary(:data="summary", :title="summaryTitle")
+  data-table(title="Bids", :data="bids")
 </template>
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime } from "@/utils/time";
-import { shortHash, shortAddress } from "@/utils/address";
+import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
 import BigNumber from "bignumber.js";
 import DataTable from "@/components/DataTable.vue";
+import DataSummary from "@/components/DataSummary.vue";
 export default {
   components: {
     DataTable,
-    StatusTag
+    DataSummary,
+    StatusTag,
   },
   data() {
     return {
+      summaryTitle: "Auction",
       summary: [],
       bids: {
         fields: [
           { key: "txid", label: "Tx ID" },
           { key: "address", label: "Address" },
           { key: "amount", label: "Amount" },
-          { key: "timestamp", label: "Time" }
+          { key: "timestamp", label: "Time" },
         ],
         items: [],
         pagination: {
           show: true,
-          align: "center"
-        }
-      }
+          align: "center",
+        },
+      },
     };
   },
   async mounted() {
@@ -53,25 +43,15 @@ export default {
     this.summary = [
       { key: "ID", value: summary.id },
       {
-        key: "Start/End Height",
-        value: `${summary.startHeight} - ${summary.endHeight}`
+        key: "Height Range",
+        value: `${summary.startHeight} - ${summary.endHeight}`,
       },
       { key: "Received MTR", value: summary.receivedStr },
-      { key: "Released MTRG", value: summary.releasedStr }
+      { key: "Released MTRG", value: summary.releasedStr },
     ];
     this.bids.items.push(...res.bids);
   },
-  methods: {
-    fromNow(time) {
-      return fromNow(time * 1000);
-    },
-    shortAddr(addr) {
-      return shortAddress(addr);
-    },
-    shortHash(hash) {
-      return shortHash(hash);
-    }
-  }
+  methods: {},
 };
 </script>
 
