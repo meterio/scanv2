@@ -1,7 +1,7 @@
 <template lang="pug">
 .detail-page
   data-table.mt-2pert.px-0(
-    title="Transactions",
+    title="Blocks",
     :data="blocks",
     :loading="loading",
     :pagination="blocks.pagination",
