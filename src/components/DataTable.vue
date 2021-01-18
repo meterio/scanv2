@@ -58,6 +58,16 @@
         </template>
 
         <!-- Address column template -->
+        <template v-slot:cell(fullAddress)="data">
+          <div class="dt-row">
+            <router-link
+              class="link"
+              :to="{ name: 'address', params: { address: data.value } }"
+              >{{ data.value }}</router-link
+            >
+          </div>
+        </template>
+
         <template v-slot:cell(address)="data">
           <div class="dt-row">
             <router-link
@@ -67,6 +77,7 @@
             >
           </div>
         </template>
+
         <template v-slot:cell(from)="data">
           <div class="dt-row">
             <router-link

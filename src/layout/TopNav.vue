@@ -70,6 +70,13 @@
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item href="/txs">View Txs</b-dropdown-item>
             <b-dropdown-item href="/blocks">View Blocks</b-dropdown-item>
+            <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-item href="/accounts/mtr"
+              >Top MTR Accounts</b-dropdown-item
+            >
+            <b-dropdown-item href="/accounts/mtrg"
+              >Top MTRG Accounts</b-dropdown-item
+            >
           </b-nav-item-dropdown>
           <b-nav-item-dropdown text="Resources" right>
             <b-dropdown-item href="#">Wallet</b-dropdown-item>
