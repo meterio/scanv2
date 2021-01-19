@@ -12,6 +12,8 @@ import PosRewardsPage from "@/pages/PosRewards.vue";
 import AuctionDetailPage from "@/pages/AuctionDetail.vue";
 import BlockListPage from "@/pages/BlockList.vue";
 import TxListPage from "@/pages/TxList.vue";
+import TopMTRAccountsPage from "@/pages/TopMTRAccounts.vue";
+import TopMTRGAccountsPage from "@/pages/TopMTRGAccounts.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
 import { routePropResolver } from "./util";
@@ -79,20 +81,35 @@ export const routes = [
     component: BlockDetailpage,
     meta: { title: `${DOMAIN_TITLE} | Block` }
   },
-  {path:"/blocks",
-name:"BlockList",
-component: BlockListPage,
-meta: {title: `${DOMAIN_TITLE} | Blocks`}},
-  {path:"/txs",
-name:"TxList",
-component: TxListPage,
-meta: {title: `${DOMAIN_TITLE} | Txs`}},
- 
+  {
+    path:"/blocks",
+    name:"BlockList",
+    component: BlockListPage,
+    meta: {title: `${DOMAIN_TITLE} | Blocks`}
+  },
+  {
+    path:"/txs",
+    name:"TxList",
+    component: TxListPage,
+    meta: {title: `${DOMAIN_TITLE} | Txs`}
+  },
   {
     path: "/tx/:hash",
     name: "txDetail",
     component: TransactionDetailPage,
     meta: { title: `${DOMAIN_TITLE} | Transaction` }
+  },
+  {
+    path: "/accounts/mtr",
+    name: "top-mtr-accounts",
+    component: TopMTRAccountsPage,
+    meta: { title: `${DOMAIN_TITLE} | Top MTR Accounts` }
+  },
+  {
+    path: "/accounts/mtrg",
+    name: "top-mtrg-accounts",
+    component: TopMTRGAccountsPage,
+    meta: { title: `${DOMAIN_TITLE} | Top MTRG Accounts` }
   },
   {
     path: "*",
