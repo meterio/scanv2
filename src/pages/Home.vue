@@ -34,7 +34,7 @@ import {
   shortHash,
   shortAddress,
   fromWei,
-  formatNum,
+  formatNum
 } from "@/utils";
 import BigNumber from "bignumber.js";
 
@@ -45,7 +45,7 @@ export default {
     Search,
     DataDashboard,
     RecentBlocks,
-    RecentTxs,
+    RecentTxs
   },
 
   data() {
@@ -55,7 +55,7 @@ export default {
       nav_tabs: ["PoS", "PoW"],
       // fake data
       msg: "Welcome to Index!!!",
-      data: [],
+      data: []
     };
   },
   async mounted() {
@@ -68,60 +68,60 @@ export default {
         {
           label: "MTRG Price",
           content: "$ " + mtrg.price,
-          change: mtrg.priceChange,
+          change: mtrg.priceChange
         },
         {
           label: "MTR Price",
           content: "$ " + mtr.price,
-          change: mtr.priceChange,
-        },
+          change: mtr.priceChange
+        }
       ],
       [
         { label: "MTRG Circulation", content: formatNum(mtrg.circulation, 2) },
-        { label: "MTR Circulation", content: formatNum(mtr.circulation, 2) },
+        { label: "MTR Circulation", content: formatNum(mtr.circulation, 2) }
       ],
       [
         { label: "Block Height", content: pos.best },
         { label: "Epoch", content: pos.epoch },
         { label: "Transactions", content: pos.txsCount },
-        { label: "Avg Block Time", content: pos.avgBlockTime },
+        { label: "Avg Block Time", content: pos.avgBlockTime }
       ],
       [
         {
           label: "Online/Total Validators",
-          content: `${staking.onlineNodes}/${staking.totalNodes}`,
+          content: `${staking.onlineNodes}/${staking.totalNodes}`
         },
         {
           label: "Staked MTRG",
-          content: fromWei(staking.totalStaked, 2) + " MTRG",
+          content: fromWei(staking.totalStaked, 2) + " MTRG"
         },
         { label: "Inflation", content: pos.inflation },
         {
           label: "Average Daily Reward Pool",
-          content: mtrg.avgDailyReward,
-        },
-      ],
+          content: mtrg.avgDailyReward
+        }
+      ]
     ];
     this.node_data = [
       [
         { label: "Validators", content: staking.validators },
         {
           label: "Total Staked",
-          content: formatNum(staking.totalStaked, 6) + " MTRG",
-        },
+          content: formatNum(staking.totalStaked, 6) + " MTRG"
+        }
       ],
       [
         { label: "Height", content: pow.best },
         {
           label: "MTR Price",
           content: "$ " + mtr.price,
-          change: mtr.priceChange,
+          change: mtr.priceChange
         },
         {
           label: "Online/Total Node",
-          content: `${staking.onlineNodes}/${staking.totalNodes}`,
-        },
-      ],
+          content: `${staking.onlineNodes}/${staking.totalNodes}`
+        }
+      ]
     ];
   },
   methods: {
@@ -157,8 +157,8 @@ export default {
     },
     formatNum(num, precision) {
       return formatNum(num, precision);
-    },
-  },
+    }
+  }
 };
 </script>
 

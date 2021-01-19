@@ -94,6 +94,9 @@
         :title="proposed.title"
         :data="proposed.data"
         :pagination="proposed.pagination"
+        :paginateCurrentPage="current_page"
+        :loading="load"
+        :paginateTotal="proposed_total"
       >
         <template v-slot:cell(block_hash)="data">
           <div class="dt-row">
@@ -115,37 +118,40 @@ export default {
   name: "ValidatorDetail",
   components: {
     PieChart,
-    DataTable,
+    DataTable
   },
   data() {
     return {
+      proposed_total: 0,
+      load: true,
+      current_page: 1,
       validator: {
         name: "",
         description: "",
-        address: "0x",
+        address: "0x"
       },
       mainProps: {
         blank: true,
         blankColor: "#777",
         width: 100,
         height: 100,
-        class: "m1",
+        class: "m1"
       },
       delegated_chart: {
         options: {
           legend: {
-            display: false,
-          },
+            display: false
+          }
         },
         data: {
           labels: ["Self", "Others"],
           datasets: [
             {
               backgroundColor: ["#FFB84F", "#287DF9"],
-              data: [7900, 38100],
-            },
-          ],
-        },
+              data: [7900, 38100]
+            }
+          ]
+        }
       },
       delegators: {
         title: "Delegators",
@@ -153,11 +159,11 @@ export default {
           fields: [
             { key: "address", label: "Delegator" },
             { key: "amountStr", label: "Amount" },
-            { key: "percent", label: "Share" },
+            { key: "percent", label: "Share" }
           ],
-          items: [],
+          items: []
         },
-        pagination: { show: true, align: "right" },
+        pagination: { show: true, align: "right" }
       },
       votes: {
         title: "Votes",
@@ -166,11 +172,11 @@ export default {
             { key: "id", label: "Bucket ID" },
             { key: "address", label: "Voter" },
             { key: "valueStr", label: "Amount" },
-            { key: "timestamp", label: "Time" },
+            { key: "timestamp", label: "Time" }
           ],
-          items: [],
+          items: []
         },
-        pagination: { show: true, align: "right" },
+        pagination: { show: true, align: "right" }
       },
       proposed: {
         title: "Proposed Blocks",
@@ -179,15 +185,15 @@ export default {
             { key: "number", label: "Height" },
             { key: "blockhash", label: "Block Hash" },
             { key: "txCount", label: "Txs" },
-            { key: "timestamp", label: "Time" },
+            { key: "timestamp", label: "Time" }
           ],
-          items: [],
+          items: []
         },
         pagination: {
           show: true,
-          align: "center",
-        },
-      },
+          align: "center"
+        }
+      }
     };
   },
   beforeMount() {
@@ -221,15 +227,17 @@ export default {
           others = others.plus(v.value);
         }
       }
-      this.delegated_chart.data.datasets = [
-        {
-          backgroundColor: ["#FFB84F", "#287DF9"],
-          data: [
-            self.dividedBy(1e18).toNumber(),
-            others.dividedBy(1e18).toNumber(),
-          ],
-        },
-      ];
+      console.log(self);
+      console.log(self.dividedBy(1e18).toNumber());
+      // this.delegated_chart.data.datasets = [
+      //   {
+      //     backgroundColor: ["#FFB84F", "#287DF9"],
+      //     data: [
+      //       self.dividedBy(1e18).toNumber(),
+      //       others.dividedBy(1e18).toNumber(),
+      //     ],
+      //   },
+      // ];
     },
     async loadDelegators() {
       const { address } = this.$route.params;
@@ -238,14 +246,19 @@ export default {
       this.delegators.data.items = delegators;
     },
     async loadProposed() {
-      const { address } = this.$route.params;
-      const res = await this.$api.account.getProposed(address, 1);
-      const { proposed } = res;
-      this.proposed.data.items = proposed.map((b) => {
-        return { ...b, blockhash: b.hash };
-      });
-    },
-  },
+      try {
+        const { address } = this.$route.params;
+        const { proposed } = await this.$api.account.getProposed(address, 1, 8);
+        this.proposed.data.items = proposed.map(b => {
+          return { ...b, blockhash: b.hash };
+        });
+        this.load = false;
+      } catch (e) {
+        console.error(e);
+        this.load = false;
+      }
+    }
+  }
 };
 </script>
 

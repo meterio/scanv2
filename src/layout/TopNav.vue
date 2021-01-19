@@ -126,6 +126,9 @@ export default {
         path == "/pow" ||
         path == "/txs" ||
         path == "/blocks" ||
+        path == "/accounts/mtr" ||
+        path == "/accounts/mtrg" ||
+        path.startsWith("/address/") ||
         path.startsWith("/tx/") ||
         path.startsWith("/block/")
       ) {
@@ -198,6 +201,12 @@ export default {
     &.active:hover {
       color: #007bff;
     }
+  }
+}
+@media (max-width: 600px) {
+  .navbar-collapse.collapse > li.form-inline > form.form-inline,
+  .search-group {
+    width: 100% !important;
   }
 }
 </style>

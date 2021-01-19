@@ -16,10 +16,11 @@
           </span>
 
           <!-- block-link -->
-          <router-link
-            :to="{ name: 'blockDetail', params: { revision: item.value } }"
+          <b-link
+            href="#"
+            @click="jump2BlcokPage(item.value)"
             v-if="item.type === 'block-link'"
-            >#{{ item.value }}</router-link
+            >#{{ item.value }}</b-link
           >
 
           <!-- address-link -->
@@ -54,18 +55,18 @@ export default {
   name: "DataList",
   props: {
     title: {
-      type: String,
+      type: String
     },
     data: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
-      },
-    },
+      }
+    }
   },
   data() {
     return {
-      currentPage: 1,
+      currentPage: 1
     };
   },
   methods: {
@@ -84,7 +85,11 @@ export default {
     formatTime(time) {
       return formatTime(time * 1000);
     },
-  },
+    jump2BlcokPage(value) {
+      this.$router.push(`/block/${value}`);
+      window.location.reload();
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
