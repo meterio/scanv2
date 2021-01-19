@@ -63,7 +63,7 @@
     </b-card>
 
     <b-row>
-      <b-col class="no-padding">
+      <b-col cols="12" lg="6" class="no-padding">
         <DataTable
           :title="delegators.title"
           :data="delegators.data"
@@ -72,7 +72,7 @@
         </DataTable>
       </b-col>
 
-      <b-col class="no-padding">
+      <b-col cols="12" lg="6" class="no-padding">
         <DataTable
           :title="votes.title"
           :data="votes.data"
