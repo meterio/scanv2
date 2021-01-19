@@ -3,7 +3,7 @@
     <b-card body-class="block-card-body p-0" header="Recent Transactions">
       <b-card-text
         class="txs-card"
-        style="position:relative; height:360px; overflow-y:scroll;"
+        style="position: relative; height: 360px; overflow-y: scroll"
       >
         <Loading v-if="loading" />
 
@@ -37,7 +37,7 @@
                   class="link"
                   :to="{
                     name: 'address',
-                    params: { address: tx.tos[0].address }
+                    params: { address: tx.tos[0].address },
                   }"
                   >{{ shortAddr(tx.tos[0].address, 12) }}</router-link
                 >
@@ -47,15 +47,15 @@
             <div class="detail-view">
               <span class="detail">{{
                 fromWei(tx.totalAmounts[0], 2) +
-                  " " +
-                  tx.totalAmountStrs[0].split(" ")[1]
+                " " +
+                tx.totalAmountStrs[0].split(" ")[1]
               }}</span>
             </div>
           </li>
         </ul>
       </b-card-text>
       <b-card-footer>
-        <b-btn variant="primary" block size="sm" @click="jump('/txs')"
+        <b-btn variant="outline-primary" block size="sm" @click="jump('/txs')"
           >View all Transactions</b-btn
         >
       </b-card-footer>
@@ -70,20 +70,20 @@ import { shortHash, shortAddress, fromWei, fromNow } from "@/utils";
 export default {
   name: "RecentTxs",
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
       loading: true,
       recent_txs: [],
-      time: null
+      time: null,
     };
   },
   mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function() {
+    this.time = setInterval(function () {
       me.initData();
     }, 3000);
   },
@@ -119,8 +119,8 @@ export default {
     },
     fromWei(num, precision) {
       return fromWei(num, precision);
-    }
-  }
+    },
+  },
 };
 </script>
 

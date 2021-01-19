@@ -1,7 +1,7 @@
 <template>
   <b-container class="container">
     <b-card body-class="block-card-body p-0" header="Recent Blocks">
-      <b-card-text class="blk-card" style="height: 360px; overflow-y: auto;">
+      <b-card-text class="blk-card" style="height: 360px; overflow-y: auto">
         <Loading v-if="loading" />
 
         <ul v-if="!loading" class="block-list">
@@ -18,7 +18,7 @@
                   <router-link
                     :to="{
                       name: 'blockDetail',
-                      params: { revision: block.number }
+                      params: { revision: block.number },
                     }"
                   >
                     {{ block.number }}</router-link
@@ -44,7 +44,11 @@
         </ul>
       </b-card-text>
       <b-card-footer>
-        <b-btn variant="primary" block size="sm" @click="jump('/blocks')"
+        <b-btn
+          variant="outline-primary"
+          block
+          size="sm"
+          @click="jump('/blocks')"
           >View all Blocks</b-btn
         >
       </b-card-footer>
@@ -60,20 +64,20 @@ import { setInterval } from "timers";
 export default {
   name: "RecentBlocks",
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
       loading: true,
       recent_blocks: [],
-      time: null
+      time: null,
     };
   },
   async mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function() {
+    this.time = setInterval(function () {
       me.initData();
     }, 3000);
   },
@@ -100,8 +104,8 @@ export default {
     },
     shortAddr(addr, num) {
       return shortAddress(addr, num);
-    }
-  }
+    },
+  },
 };
 </script>
 

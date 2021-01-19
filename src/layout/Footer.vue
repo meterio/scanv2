@@ -13,9 +13,9 @@
             </div>
 
             <div class="download-wallet">
-              <p class="blue">Download Meter Wallets!</p>
+              <!-- <p class="blue">Download Meter Wallets!</p> -->
               <button class="desktop-btn">
-                <i class="fas fa-laptop"></i>Desktop Wallets
+                <i class="fa fa-laptop"></i>Download Meter Desktop Wallets
               </button>
             </div>
           </div>
@@ -60,36 +60,36 @@ export default {
       socials: [
         {
           key: "github",
-          value: "https://github.com"
+          value: "https://github.com",
         },
         {
           key: "telegram",
-          value: "https://github.com"
+          value: "https://github.com",
         },
         {
           key: "instagram",
-          value: "https://github.com"
+          value: "https://github.com",
         },
         {
           key: "twitter",
-          value: "https://github.com"
+          value: "https://github.com",
         },
         {
           key: "discord",
-          value: "https://github.com"
+          value: "https://github.com",
         },
         {
           key: "youtube",
-          value: "https://github.com"
+          value: "https://github.com",
         },
         {
           key: "wechat",
           type: "image",
-          value: "https://github.com"
-        }
-      ]
+          value: "https://github.com",
+        },
+      ],
     };
-  }
+  },
 };
 </script>
 
@@ -107,8 +107,7 @@ footer {
     padding-left: 0;
   }
 
-  .fa,
-  .fas {
+  .fa {
     padding-right: 8px;
   }
 
@@ -138,6 +137,7 @@ footer {
     }
 
     .download-wallet {
+      margin-top: 20px;
       @include media("<=desktop") {
         display: none;
       }
@@ -145,8 +145,8 @@ footer {
       .desktop-btn {
         background-color: $primary-color;
         color: white;
-        width: 184px;
-        height: 52px;
+        // width: 184px;
+        padding: 8px 15px;
         font-size: 16px;
         //font-weight: 600;
         border: none;

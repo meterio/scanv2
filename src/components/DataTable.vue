@@ -200,17 +200,26 @@ export default {
 </script>
 
 <style lang="scss">
+.data-table {
+  .dt-row {
+    margin: 0.02rem !important;
+  }
+}
 .data-table-container {
   padding-left: 0;
   padding-right: 0;
   font-size: 14px;
   tr td[role="cell"] {
-    padding: 0.25rem !important;
+    padding: 0.1rem;
   }
 
   .card-title {
     color: #0c2954 !important;
     font-size: 20px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px dotted #e5e5e5;
   }
 
   .data-table {

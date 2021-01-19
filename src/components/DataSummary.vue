@@ -54,18 +54,18 @@ export default {
   name: "DataList",
   props: {
     title: {
-      type: String
+      type: String,
     },
     data: {
       type: Array,
-      default: function() {
+      default: function () {
         return [];
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      currentPage: 1
+      currentPage: 1,
     };
   },
   methods: {
@@ -83,8 +83,8 @@ export default {
     },
     formatTime(time) {
       return formatTime(time * 1000);
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -94,7 +94,7 @@ export default {
     margin-bottom: 15px;
   }
   .row {
-    padding: 10px 0;
+    padding: 8px 0;
   }
   .label {
     color: #5c6f8c;
