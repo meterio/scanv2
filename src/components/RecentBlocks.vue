@@ -1,7 +1,7 @@
 <template>
   <b-container class="container">
     <b-card body-class="block-card-body p-0" header="Recent Blocks">
-      <b-card-text>
+      <b-card-text class="blk-card" style="height: 360px; overflow-y: auto;">
         <Loading v-if="loading" />
 
         <ul v-if="!loading" class="block-list">
@@ -18,7 +18,7 @@
                   <router-link
                     :to="{
                       name: 'blockDetail',
-                      params: { revision: block.number },
+                      params: { revision: block.number }
                     }"
                   >
                     {{ block.number }}</router-link
@@ -43,6 +43,11 @@
           </li>
         </ul>
       </b-card-text>
+      <b-card-footer>
+        <b-btn variant="primary" block size="sm" @click="jump('/blocks')"
+          >View all Blocks</b-btn
+        >
+      </b-card-footer>
     </b-card>
   </b-container>
 </template>
@@ -55,20 +60,20 @@ import { setInterval } from "timers";
 export default {
   name: "RecentBlocks",
   components: {
-    Loading,
+    Loading
   },
   data() {
     return {
       loading: true,
       recent_blocks: [],
-      time: null,
+      time: null
     };
   },
   async mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function () {
+    this.time = setInterval(function() {
       me.initData();
     }, 3000);
   },
@@ -77,7 +82,7 @@ export default {
       try {
         const res = await this.$api.block.getRecentBlocks();
         this.loading = false;
-        this.recent_blocks = res.blocks.splice(0, 5);
+        this.recent_blocks = res.blocks.splice(0, 10);
       } catch (e) {
         this.loading = false;
       }
@@ -87,13 +92,16 @@ export default {
         clearInterval(this.time);
       }
     },
+    jump(url) {
+      this.$router.push(url);
+    },
     timeFromNow(time) {
       return fromNow(time * 1000);
     },
     shortAddr(addr, num) {
       return shortAddress(addr, num);
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -114,6 +122,17 @@ export default {
       height: 60px;
     }
   }
+}
+
+.blk-card::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  // background-color: #f5f5f5;
+}
+.blk-card::-webkit-scrollbar-thumb {
+  background-color: #dedede;
+  width: 4px;
+  border-radius: 10px;
 }
 
 .block-card-body {

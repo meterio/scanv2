@@ -11,10 +11,7 @@
 
           <!-- block-link-with-note -->
           <span v-if="item.type == 'block-link-with-note'">
-            <router-link
-              :to="{ name: 'blockDetail', params: { revision: item.block } }"
-              >#{{ item.block }}</router-link
-            >
+            <a :href="'/block/' + item.block">#{{ item.block }}</a>
             <span class="value"> ({{ item.value }})</span>
           </span>
 
@@ -57,18 +54,18 @@ export default {
   name: "DataList",
   props: {
     title: {
-      type: String,
+      type: String
     },
     data: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
-      },
-    },
+      }
+    }
   },
   data() {
     return {
-      currentPage: 1,
+      currentPage: 1
     };
   },
   methods: {
@@ -86,8 +83,8 @@ export default {
     },
     formatTime(time) {
       return formatTime(time * 1000);
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

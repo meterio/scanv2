@@ -59,11 +59,7 @@
           <b-nav-item-dropdown
             text="Blockchain"
             right
-            :class="
-              $route.path == '/pos' || $route.path == '/pow'
-                ? 'top-dropdown active'
-                : ''
-            "
+            :class="blockActive ? 'top-dropdown active' : ''"
           >
             <b-dropdown-item href="/pos">PoS</b-dropdown-item>
             <b-dropdown-item href="/pow">PoW</b-dropdown-item>
@@ -100,7 +96,7 @@ export default {
     return {
       modal_show: false,
       searchKey: "",
-      searchPrefix: "",
+      searchPrefix: ""
     };
   },
   beforeMount() {
@@ -114,6 +110,23 @@ export default {
     this.searchPrefix = `${mark.substring(0, 1).toUpperCase()}${mark.substring(
       1
     )} net`;
+  },
+  computed: {
+    blockActive() {
+      const path = this.$route.path;
+      if (
+        path == "/pos" ||
+        path == "/pow" ||
+        path == "/txs" ||
+        path == "/blocks" ||
+        path.startsWith("/tx/") ||
+        path.startsWith("/block/")
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
   methods: {
     configProxy(key) {
@@ -153,8 +166,8 @@ export default {
         // this.$bvModal.show('homeModal')
         this.modal_show = true;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

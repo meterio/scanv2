@@ -1,7 +1,10 @@
 <template>
   <b-container class="container">
     <b-card body-class="block-card-body p-0" header="Recent Transactions">
-      <b-card-text>
+      <b-card-text
+        class="txs-card"
+        style="position:relative; height:360px; overflow-y:scroll;"
+      >
         <Loading v-if="loading" />
 
         <ul v-if="!loading" class="block-list">
@@ -34,7 +37,7 @@
                   class="link"
                   :to="{
                     name: 'address',
-                    params: { address: tx.tos[0].address },
+                    params: { address: tx.tos[0].address }
                   }"
                   >{{ shortAddr(tx.tos[0].address, 12) }}</router-link
                 >
@@ -44,13 +47,18 @@
             <div class="detail-view">
               <span class="detail">{{
                 fromWei(tx.totalAmounts[0], 2) +
-                " " +
-                tx.totalAmountStrs[0].split(" ")[1]
+                  " " +
+                  tx.totalAmountStrs[0].split(" ")[1]
               }}</span>
             </div>
           </li>
         </ul>
       </b-card-text>
+      <b-card-footer>
+        <b-btn variant="primary" block size="sm" @click="jump('/txs')"
+          >View all Transactions</b-btn
+        >
+      </b-card-footer>
     </b-card>
   </b-container>
 </template>
@@ -62,20 +70,20 @@ import { shortHash, shortAddress, fromWei, fromNow } from "@/utils";
 export default {
   name: "RecentTxs",
   components: {
-    Loading,
+    Loading
   },
   data() {
     return {
       loading: true,
       recent_txs: [],
-      time: null,
+      time: null
     };
   },
   mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function () {
+    this.time = setInterval(function() {
       me.initData();
     }, 3000);
   },
@@ -91,7 +99,7 @@ export default {
     async initData() {
       try {
         const res = await this.$api.transaction.getRecentTxs();
-        this.recent_txs = res.txs.splice(0, 5);
+        this.recent_txs = res.txs.splice(0, 10);
         this.loading = false;
       } catch (e) {
         this.loading = false;
@@ -103,13 +111,16 @@ export default {
     shortAddr(addr, num) {
       return shortAddress(addr, num);
     },
+    jump(url) {
+      this.$router.push(url);
+    },
     shortHash(hash, num) {
       return shortHash(hash, num);
     },
     fromWei(num, precision) {
       return fromWei(num, precision);
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -130,6 +141,17 @@ export default {
       height: 60px;
     }
   }
+}
+
+.txs-card::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  // background-color: #f5f5f5;
+}
+.txs-card::-webkit-scrollbar-thumb {
+  background-color: #dedede;
+  width: 4px;
+  border-radius: 10px;
 }
 
 .block-card-body {
