@@ -31,7 +31,7 @@ import DataDashboard from "@/components/DataDashboard.vue";
 import HashRateChart from "@/components/HashRateChart.vue";
 import DataTable from "@/components/DataTable.vue";
 import BigNumber from "bignumber.js";
-import { fromNow } from "@/utils";
+import { formatNum, fromNow, fromWei } from "@/utils";
 
 export default {
   name: "Mining",
@@ -123,16 +123,10 @@ export default {
         const { mtr, mtrg, pos, pow, staking } = res;
         this.pow_data = [
           [
+            { content: pow.best, label: "PoW Chain Height" },
+            { content: "$ " + mtr.price, label: "MTR Price" },
             {
-              content: pow.best,
-              label: "PoW Chain Height",
-            },
-            {
-              content: "$ " + mtr.price,
-              label: "MTR Price",
-            },
-            {
-              content: new BigNumber(mtr.circulation).toFixed(0),
+              content: formatNum(mtr.circulation, 2),
               label: "MTR Circulations",
             },
           ],
@@ -144,7 +138,7 @@ export default {
               label: "Network Hash Rate",
             },
             {
-              content: "12 MTR", // FIXME: fake stub
+              content: new BigNumber(pow.rewardPerDay).toFixed(2) + " MTR",
               label: "(TH/s)/Day",
             },
             {
@@ -183,6 +177,12 @@ export default {
       } catch (e) {
         this.load = false;
       }
+    },
+    fromWei(num, precision) {
+      return fromWei(num, precision);
+    },
+    formatNum(num, precision) {
+      return formatNum(num, precision);
     },
   },
 };
