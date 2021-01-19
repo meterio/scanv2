@@ -3,10 +3,10 @@
     <h2 class="title">{{ title }}</h2>
     <b-card>
       <b-row class="row" :key="item.key" v-for="item in data">
-        <b-col cols="2">
+        <b-col sm="12" md="2">
           <span class="label">{{ item.key }}:</span>
         </b-col>
-        <b-col cols="10">
+        <b-col sm="12" md="10">
           <span v-if="!item.type" class="value">{{ item.value }}</span>
 
           <!-- block-link-with-note -->
