@@ -73,7 +73,7 @@ export default {
       { key: "Block Type", value: b.blockType === 1 ? "KBlock" : "MBlock" },
       { key: "KBlock Height", value: b.lastKBlockHeight, type: "block-link" },
       { key: "QC Height", value: b.qcHeight, type: "block-link" },
-      { key: "Signer", value: b.signer, type: "address-link" },
+      { key: "Beneficiary", value: b.beneficiary, type: "address-link" },
       { key: "Gas Used", value: b.gasUsed },
       { key: "Txs Count", value: b.txCount },
       { key: "Time", value: b.timestamp, type: "timestamp" },

@@ -30,11 +30,14 @@
             </div>
 
             <div class="signed-view">
-              <p>Signed by</p>
+              <p>Mined by</p>
               <router-link
                 class="link"
-                :to="{ name: 'address', params: { address: block.signer } }"
-                >{{ shortAddr(block.signer, 12) }}</router-link
+                :to="{
+                  name: 'address',
+                  params: { address: block.beneficiary },
+                }"
+                >{{ shortAddr(block.beneficiary, 12) }}</router-link
               >
             </div>
             <div class="detail-view">

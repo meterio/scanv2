@@ -50,7 +50,7 @@
           </div>
         </template>
         <template v-slot:cell(name)="data">
-          <div class="dt-row" style="word-break: break-all;">
+          <div class="dt-row" style="word-break: break-all">
             {{ data.value }}
           </div>
         </template>
@@ -58,12 +58,18 @@
           <div class="dt-row">
             <router-link
               class="link"
-              :to="{ name: 'validatorDetail', params: { id: data.value } }"
+              :to="{ name: 'validatorDetail', params: { address: data.value } }"
             >
               {{ data.value }}
             </router-link>
           </div>
         </template>
+        <template v-slot:cell(jailedTime)="data">
+          <div class="dt-row">
+            {{ fromNow(data.value * 1000) }}
+          </div>
+        </template>
+
         <template v-slot:cell()="data">
           <div class="dt-row">
             <span>{{ data.value }}</span>
@@ -88,6 +94,8 @@
 
 <script>
 import Loading from "@/components/Loading";
+import { fromNow, formatTime } from "@/utils";
+
 export default {
   name: "ValidatorTable",
   data() {
@@ -100,12 +108,12 @@ export default {
       validate_right_search: "",
       validator_data: {
         fields: [],
-        items: []
-      }
+        items: [],
+      },
     };
   },
   components: {
-    Loading
+    Loading,
   },
   beforeMount() {
     console.log("page", this.page_size);
@@ -114,9 +122,15 @@ export default {
   watch: {
     validate_right_search(newVal) {
       this.loadData();
-    }
+    },
   },
   methods: {
+    formatTime(value) {
+      return formatTime(value);
+    },
+    fromNow(value) {
+      return fromNow(value);
+    },
     switchTab(tab) {
       this.current_tab = tab;
       this.current_page = 1;
@@ -145,9 +159,9 @@ export default {
             { key: "name", label: "Name", tdClass: "flex" },
             { key: "address", label: "Address" },
             { key: "netAddr", label: "Net Address" },
-            { key: "votingPower", label: "Total Votes" },
+            { key: "votingPowerStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "upTime", label: "Up Time 48h" }
+            { key: "upTime", label: "Up Time 48h" },
           ];
           this.validator_data.items = res.delegates;
         }
@@ -157,7 +171,7 @@ export default {
             { key: "address", label: "Address" },
             { key: "totalVotesStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "upTime", label: "Up Time 48h" }
+            { key: "upTime", label: "Up Time 48h" },
           ];
           this.validator_data.items = res.candidates;
         }
@@ -167,15 +181,15 @@ export default {
             { key: "address", label: "Address" },
             { key: "totalPoints", label: "Total Points" },
             { key: "jailedTime", label: "Jailed Time" },
-            { key: "bailAmount", label: "Bail Amount" }
+            { key: "bailAmount", label: "Bail Amount" },
           ];
           this.validator_data.items = res.jailed;
         }
       } catch (e) {
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

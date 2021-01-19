@@ -3,8 +3,8 @@
   data-summary(:title="'Address: ' + address", :data="summary")
 
   b-container.summary
-    b-card.mt-2pert.px-5
-      pie-chart.px-0
+    #b-card.mt-2pert.px-5
+      #pie-chart.px-0
     data-table.mt-2pert.px-0(
       title="Buckets",
       :data="buckets",
@@ -16,6 +16,8 @@
           router-link.link(
             :to="{ name: 'address', params: { address: data.item.candidate } }"
           ) {{ data.item.candidate }}
+      template(v-slot:cell(totalVotes)="data")
+        .dt-row {{ fromWei(data.item.totalVotes, 2) }} MTRG
 
     data-table.mt-2pert.px-0(
       :data="txs",
@@ -31,7 +33,7 @@
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
+import { fromNow, formatTime, shortHash, shortAddress, fromWei } from "@/utils";
 import BigNumber from "bignumber.js";
 import PieChart from "@/components/PieChart.vue";
 import DataTable from "@/components/DataTable.vue";
@@ -84,7 +86,7 @@ export default {
           { key: "address", label: "Candidate Address" },
           { key: "totalVotes", label: "Votes" },
           { key: "timestamp", label: "Time" },
-          { key: "bounded", label: "Bounded" },
+          { key: "status", label: "Status" },
         ],
         items: [],
       },
@@ -155,7 +157,7 @@ export default {
             address: b.candidate,
             totalVotes: b.totalVotes,
             timestamp: b.createTime,
-            bounded: !b.unbounded,
+            status: b.unbounded ? "Unbounded" : "Created",
           });
         }
         this.bucket_load = false;
@@ -224,6 +226,9 @@ export default {
     },
     shortHash(hash) {
       return shortHash(hash);
+    },
+    fromWei(num, precision) {
+      return fromWei(num, precision);
     },
   },
 };

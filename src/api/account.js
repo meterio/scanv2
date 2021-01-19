@@ -19,4 +19,7 @@ export default {
   getTopMTRG(page, limit = 8) {
     return get(`accounts/top/mtrg?page=${page}&limit=${limit}`);
   },
+  getProposed(address,page, limit=20){
+    return get(`accounts/${address}/proposed?page=${page}&limit=${limit}`);
+  }
 };

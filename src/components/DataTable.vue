@@ -108,6 +108,16 @@
           </div>
         </template>
 
+        <template v-slot:cell(blockhash)="data">
+          <div class="dt-row">
+            <router-link
+              class="link"
+              :to="{ name: 'blockDetail', params: { revision: data.value } }"
+              >{{ shortHash(data.value) }}</router-link
+            >
+          </div>
+        </template>
+
         <template v-slot:cell()="data">
           <div class="dt-row">
             <span>{{ data.value }}</span>

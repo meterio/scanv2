@@ -15,11 +15,11 @@
           :to="{ name: 'blockDetail', params: { revision: data.item.number } }"
         ) {{ '#' + data.item.number }}
 
-    template(v-slot:cell(signer)="data")
+    template(v-slot:cell(beneficiary)="data")
       .dt-row
         router-link.link(
-          :to="{ name: 'address', params: { address: data.item.signer } }"
-        ) {{ data.item.signer }}
+          :to="{ name: 'address', params: { address: data.item.beneficiary } }"
+        ) {{ data.item.beneficiary }}
 </template>
 
 <script>
@@ -54,7 +54,7 @@ export default {
           { key: "number", label: "Block" },
           { key: "timestamp", label: "Time" },
           { key: "txCount", label: "Txns" },
-          { key: "signer", label: "Signer" },
+          { key: "beneficiary", label: "Mined By" },
         ],
         items: [],
       },

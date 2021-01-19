@@ -7,20 +7,12 @@
           <b-img v-bind="mainProps" rounded alt="Rounded image"></b-img>
         </b-col>
         <b-col cols="10" class="info">
-          <h3 class="title">HashQuark</h3>
-          <a href="#">https://www.hashquark.com</a>
+          <h3 class="title">{{ validator.name }}</h3>
+          <div>{{ validator.description }}</div>
           <b-row class="address">
             <b-col>
-              <p class="label">Operator Address</p>
-              <a class="link" href="#"
-                >cosmosvaloper146kwpzhmleafmhtaxulfptyhnvwxzlvm87hwnm</a
-              >
-            </b-col>
-            <b-col>
               <p class="label">Address</p>
-              <a class="link" href="#"
-                >cosmosvaloper146kwpzhmleafmhtaxulfptyhnvwxzlvm87hwnm</a
-              >
+              {{ validator.address }}
             </b-col>
           </b-row>
         </b-col>
@@ -73,50 +65,51 @@
     <b-row>
       <b-col class="no-padding">
         <DataTable
-          :title="delegator.title"
-          :data="delegator.data"
-          :pagination="delegator.pagination"
+          :title="delegators.title"
+          :data="delegators.data"
+          :pagination="delegators.pagination"
         >
-          <template v-slot:cell(delegator_address)="data">
-            <div class="dt-row">
-              <a class="link" :href="data.value">{{ data.value }}</a>
-            </div>
-          </template>
         </DataTable>
       </b-col>
 
       <b-col class="no-padding">
         <DataTable
-          :title="power_event.title"
-          :data="power_event.data"
-          :pagination="power_event.pagination"
+          :title="votes.title"
+          :data="votes.data"
+          :pagination="votes.pagination"
         >
-          <template v-slot:cell(txhash)="data">
+          <template v-slot:cell(id)="data">
             <div class="dt-row">
-              <a class="link" :href="data.value">{{ data.value }}</a>
+              <a class="link" :href="data.value">{{
+                shortHash(data.value, 10)
+              }}</a>
             </div>
           </template>
         </DataTable>
       </b-col>
     </b-row>
 
-    <DataTable
-      :title="proposed_block.title"
-      :data="proposed_block.data"
-      :pagination="proposed_block.pagination"
-    >
-      <template v-slot:cell(block_hash)="data">
-        <div class="dt-row">
-          <a class="link" :href="data.value">{{ data.value }}</a>
-        </div>
-      </template>
-    </DataTable>
+    <b-row>
+      <DataTable
+        :title="proposed.title"
+        :data="proposed.data"
+        :pagination="proposed.pagination"
+      >
+        <template v-slot:cell(block_hash)="data">
+          <div class="dt-row">
+            <a class="link" :href="data.value">{{ data.value }}</a>
+          </div>
+        </template>
+      </DataTable>
+    </b-row>
   </b-container>
 </template>
 
 <script>
 import PieChart from "@/charts/PieChart.js";
 import DataTable from "@/components/DataTable.vue";
+import { shortHash } from "@/utils/";
+import BigNumber from "bignumber.js";
 
 export default {
   name: "ValidatorDetail",
@@ -126,6 +119,11 @@ export default {
   },
   data() {
     return {
+      validator: {
+        name: "",
+        description: "",
+        address: "0x",
+      },
       mainProps: {
         blank: true,
         blankColor: "#777",
@@ -149,117 +147,41 @@ export default {
           ],
         },
       },
-      delegator: {
-        title: "Delegators(47)",
+      delegators: {
+        title: "Delegators",
         data: {
           fields: [
-            {
-              key: "delegator_address",
-              label: "Delegator Address",
-            },
-            {
-              key: "amount",
-              label: "Amount",
-            },
-            {
-              key: "share",
-              label: "Share",
-            },
+            { key: "address", label: "Delegator" },
+            { key: "amountStr", label: "Amount" },
+            { key: "percent", label: "Share" },
           ],
-          items: [
-            {
-              delegator_address: "adslkjaldjfl..aklsdfjkas12312",
-              amount: "34000 MTR",
-              share: "14.5%",
-            },
-            {
-              delegator_address: "adslkjaldjfl..aklsdfjkas12312",
-              amount: "34000 MTR",
-              share: "14.5%",
-            },
-          ],
+          items: [],
         },
-        pagination: {
-          show: true,
-          align: "right",
-        },
+        pagination: { show: true, align: "right" },
       },
-      power_event: {
-        title: "Power Events",
+      votes: {
+        title: "Votes",
         data: {
           fields: [
-            {
-              key: "height",
-              label: "Height",
-            },
-            {
-              key: "txhash",
-              label: "txHash",
-            },
-            {
-              key: "amount",
-              label: "Amount",
-            },
-            {
-              key: "time",
-              label: "Time",
-            },
+            { key: "id", label: "Bucket ID" },
+            { key: "address", label: "Voter" },
+            { key: "valueStr", label: "Amount" },
+            { key: "timestamp", label: "Time" },
           ],
-          items: [
-            {
-              height: "128902",
-              txhash: "alksd....12390dsasf",
-              amount: "+500.00",
-              time: "4 min ago",
-            },
-            {
-              height: "128902",
-              txhash: "alksd....12390dsasf",
-              amount: "+500.00",
-              time: "4 min ago",
-            },
-          ],
+          items: [],
         },
-        pagination: {
-          show: true,
-          align: "right",
-        },
+        pagination: { show: true, align: "right" },
       },
-      proposed_block: {
+      proposed: {
         title: "Proposed Blocks",
         data: {
           fields: [
-            {
-              key: "height",
-              label: "Height",
-            },
-            {
-              key: "block_hash",
-              label: "Block Hash",
-            },
-            {
-              key: "txs",
-              label: "Txs",
-            },
-            {
-              key: "time",
-              label: "Time",
-            },
+            { key: "number", label: "Height" },
+            { key: "blockhash", label: "Block Hash" },
+            { key: "txCount", label: "Txs" },
+            { key: "timestamp", label: "Time" },
           ],
-          items: [
-            {
-              height: "128902",
-              block_hash: "alksd....12390dsasf",
-              txs: "2",
-              time: "2020-04-15 18:13:15",
-            },
-            {
-              height: "128902",
-              block_hash: "alksd....12390dsasf",
-              txs: "2",
-              time: "2020-04-15 18:13:15",
-            },
-          ],
+          items: [],
         },
         pagination: {
           show: true,
@@ -267,6 +189,62 @@ export default {
         },
       },
     };
+  },
+  beforeMount() {
+    this.loadInfo();
+    this.loadVotes();
+    this.loadDelegators();
+    this.loadProposed();
+  },
+  methods: {
+    shortHash(hash, len) {
+      return shortHash(hash, len);
+    },
+    async loadInfo() {
+      const { address } = this.$route.params;
+      const res = await this.$api.validator.getValidator(address);
+      const { validator } = res;
+      this.validator = validator;
+    },
+    async loadVotes() {
+      const { address } = this.$route.params;
+      const res = await this.$api.validator.getVotes(address);
+      const { votes } = res;
+      this.votes.data.items = votes;
+
+      let self = new BigNumber();
+      let others = new BigNumber();
+      for (const v of votes) {
+        if (v.address.toLowerCase() === address) {
+          self = self.plus(v.value);
+        } else {
+          others = others.plus(v.value);
+        }
+      }
+      this.delegated_chart.data.datasets = [
+        {
+          backgroundColor: ["#FFB84F", "#287DF9"],
+          data: [
+            self.dividedBy(1e18).toNumber(),
+            others.dividedBy(1e18).toNumber(),
+          ],
+        },
+      ];
+    },
+    async loadDelegators() {
+      const { address } = this.$route.params;
+      const res = await this.$api.validator.getDelegators(address);
+      const { delegators } = res;
+      this.delegators.data.items = delegators;
+    },
+    async loadProposed() {
+      const { address } = this.$route.params;
+      const res = await this.$api.account.getProposed(address, 1);
+      const { proposed } = res;
+      this.proposed.data.items = proposed.map((b) => {
+        return { ...b, blockhash: b.hash };
+      });
+    },
   },
 };
 </script>

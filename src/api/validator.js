@@ -18,5 +18,14 @@ export default {
   },
   getRewardsByEpoch(epoch) {
     return get(`validators/rewards/${epoch}`);
+  },
+  getValidator(address){
+    return get(`validators/${address}`);
+  },
+  getVotes(address){
+    return get(`validators/${address}/votes`);
+  },
+  getDelegators(address){
+    return get(`validators/${address}/delegators`);
   }
 };
