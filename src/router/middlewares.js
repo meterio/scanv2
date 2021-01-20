@@ -39,3 +39,25 @@ export function setPageTitleMiddleware (to, from, next) {
   if (pageTitle) window.document.title = pageTitle.meta.title
   next()
 }
+
+export function redirectNetwork(to, from,next){
+  const {network} = to.params;
+  console.log($store.state)
+  const curNetwork = $store.state.dom.network;
+  console.log("CUR NETWORK:", curNetwork);
+  const tgtNetwork =   curNetwork || from.params.network || 'main';
+
+  if (!network){
+    $store.dispatch("dom/changeNetwork", tgtNetwork);
+   next({path: `/${tgtNetwork}${to.fullPath}`})
+  }else{
+    if (network !=='main' && network!=='test'){
+
+      $store.dispatch("dom/changeNetwork", tgtNetwork);
+      next({path: `/${tgtNetwork}${to.fullPath}`})
+    }
+
+    $store.dispatch("dom/changeNetwork", network);
+    next()
+  }
+}

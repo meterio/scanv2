@@ -58,76 +58,82 @@ export default {
       data: [],
     };
   },
-  async mounted() {
-    const res = await this.$api.metric.getAll();
-    this.loading = false;
-    const { mtr, mtrg, pos, pow, staking } = res;
-
-    this.data = [
-      [
-        {
-          label: "MTRG Price",
-          content: "$ " + mtrg.price,
-          change: mtrg.priceChange,
-        },
-        {
-          label: "MTR Price",
-          content: "$ " + mtr.price,
-          change: mtr.priceChange,
-        },
-      ],
-      [
-        { label: "MTRG Circulation", content: formatNum(mtrg.circulation, 0) },
-        { label: "MTR Circulation", content: formatNum(mtr.circulation, 0) },
-      ],
-      [
-        { label: "Block Height", content: pos.best },
-        { label: "Epoch", content: pos.epoch },
-        { label: "Transactions", content: pos.txsCount },
-        { label: "Avg Block Time", content: pos.avgBlockTime + " sec" },
-      ],
-      [
-        {
-          label: "Online/Total Validators",
-          content: `${staking.onlineNodes}/${staking.totalNodes}`,
-        },
-        {
-          label: "Staked MTRG",
-          content: fromWei(staking.totalStaked, 0) + " MTRG",
-        },
-        { label: "Inflation", content: pos.inflation },
-        {
-          label: "Average Daily Reward Pool",
-          content: mtrg.avgDailyReward,
-        },
-      ],
-    ];
-    this.node_data = [
-      [
-        { label: "Validators", content: staking.validators },
-        {
-          label: "Total Staked",
-          content: formatNum(staking.totalStaked, 6) + " MTRG",
-        },
-      ],
-      [
-        { label: "Height", content: pow.best },
-        {
-          label: "MTR Price",
-          content: "$ " + mtr.price,
-          change: mtr.priceChange,
-        },
-        {
-          label: "Online/Total Node",
-          content: `${staking.onlineNodes}/${staking.totalNodes}`,
-        },
-      ],
-    ];
-  },
   methods: {
+    async init() {
+      const res = await this.$api.metric.getAll(this.$route.params.network);
+      this.loading = false;
+      const { mtr, mtrg, pos, pow, staking } = res;
+
+      this.data = [
+        [
+          {
+            label: "MTRG Price",
+            content: "$ " + mtrg.price,
+            change: mtrg.priceChange,
+          },
+          {
+            label: "MTR Price",
+            content: "$ " + mtr.price,
+            change: mtr.priceChange,
+          },
+        ],
+        [
+          {
+            label: "MTRG Circulation",
+            content: formatNum(mtrg.circulation, 0),
+          },
+          { label: "MTR Circulation", content: formatNum(mtr.circulation, 0) },
+        ],
+        [
+          { label: "Block Height", content: pos.best },
+          { label: "Epoch", content: pos.epoch },
+          { label: "Transactions", content: pos.txsCount },
+          { label: "Avg Block Time", content: pos.avgBlockTime + " sec" },
+        ],
+        [
+          {
+            label: "Online/Total Validators",
+            content: `${staking.onlineNodes}/${staking.totalNodes}`,
+          },
+          {
+            label: "Staked MTRG",
+            content: fromWei(staking.totalStaked, 0) + " MTRG",
+          },
+          { label: "Inflation", content: pos.inflation },
+          {
+            label: "Average Daily Reward Pool",
+            content: mtrg.avgDailyReward,
+          },
+        ],
+      ];
+      this.node_data = [
+        [
+          { label: "Validators", content: staking.validators },
+          {
+            label: "Total Staked",
+            content: formatNum(staking.totalStaked, 6) + " MTRG",
+          },
+        ],
+        [
+          { label: "Height", content: pow.best },
+          {
+            label: "MTR Price",
+            content: "$ " + mtr.price,
+            change: mtr.priceChange,
+          },
+          {
+            label: "Online/Total Node",
+            content: `${staking.onlineNodes}/${staking.totalNodes}`,
+          },
+        ],
+      ];
+    },
     async searchKeyWords(key) {
       try {
-        const { type } = await this.$api.search.searchKeyWord(key);
+        const { type } = await this.$api.search.searchKeyWord(
+          this.$route.params.network,
+          key
+        );
         console.log("res:>>", type);
         if (type === "tx") {
           this.$router.push("/tx/" + key);
@@ -142,21 +148,6 @@ export default {
         console.error(e);
         this.modal_show = true;
       }
-    },
-    timeFromNow(time) {
-      return fromNow(time * 1000);
-    },
-    address(addr) {
-      return shortAddress(addr);
-    },
-    shortHash(hash) {
-      return shortHash(hash);
-    },
-    fromWei(num, precision) {
-      return fromWei(num, precision);
-    },
-    formatNum(num, precision) {
-      return formatNum(num, precision);
     },
   },
 };

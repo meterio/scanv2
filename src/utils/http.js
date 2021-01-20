@@ -18,11 +18,16 @@ const BASE_URL_MAP = {
   main: "http://api.meter.io:5000/api/",
   test: "http://api.meter.io:4000/api/"
 };
+
 function getHttpBaseUrl() {
   const mark = window.localStorage.getItem("proxyMark") || "main";
   localStorage.setItem("proxyMark", mark);
   // return BASE_URL_MAP[mark];
   axios.defaults.baseURL = BASE_URL_MAP[mark];
+}
+
+export const setNetwork=(network)=>{
+  let key = network || "main";
 }
 
 // 请求超时时间
@@ -113,11 +118,18 @@ axios.interceptors.response.use(
 );
 /**
  * get方法，对应get请求
+ * @param {String} network
  * @param {String} url [请求的url地址]
  * @param {Object} params [请求时携带的参数]
  */
-export function get(url, params) {
-  getHttpBaseUrl();
+export function get(network, url, params) {
+  console.log("URL:", url)
+  console.log("NETWORK: ", network)
+  if (network !== 'main' && network !=='test'){
+    url = network;
+    network = 'main';
+  }
+  axios.defaults.baseURL = BASE_URL_MAP[network || "main"];
   return new Promise((resolve, reject) => {
     axios
       .get(url, { params })

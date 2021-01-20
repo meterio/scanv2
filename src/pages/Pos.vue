@@ -11,8 +11,12 @@
     >
       <template v-slot:cell(more)="data">
         <div class="dt-row">
-          <a class="link" :href="'/pos/rewards/' + data.value"
-            >Epoch Reward List</a
+          <router-link
+            :to="{
+              name: 'posRewards',
+              params: { network: $route.params.network, epoch: data.value },
+            }"
+            >Epoch Reward List</router-link
           >
         </div>
       </template>
@@ -65,17 +69,16 @@ export default {
     };
   },
 
-  beforeMount() {
-    this.loadPostData();
-    this.loadEpochRewards();
-  },
+  beforeMount() {},
   methods: {
-    fromWei(num, precision) {
-      return fromWei(num, precision);
+    init() {
+      this.loadPostData();
+      this.loadEpochRewards();
     },
     async loadEpochRewards() {
       try {
         const res = await this.$api.validator.getValidateReward(
+          this.$route.params.network,
           this.current_page,
           this.page_size
         );
@@ -86,7 +89,7 @@ export default {
     },
     async loadPostData() {
       try {
-        const res = await this.$api.metric.getAll();
+        const res = await this.$api.metric.getAll(this.$route.params.network);
         this.loading = false;
         const { mtr, mtrg, pos, pow, staking } = res;
         this.pos_data = [

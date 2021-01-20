@@ -1,10 +1,10 @@
 import { get } from "@/utils/http";
 
 export default {
-  getAll() {
-    return get(`metrics/all`);
+  getAll(network,) {
+    return get(network,`metrics/all`);
   },
-  getPos() {
-    return get(`metrics/pos`);
+  getPos(network,) {
+    return get(network,`metrics/pos`);
   }
 };

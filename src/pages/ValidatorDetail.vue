@@ -80,9 +80,7 @@
         >
           <template v-slot:cell(id)="data">
             <div class="dt-row">
-              <a class="link" :href="data.value">{{
-                shortHash(data.value, 10)
-              }}</a>
+              {{ shortHash(data.value, 10) }}
             </div>
           </template>
         </DataTable>
@@ -100,7 +98,16 @@
       >
         <template v-slot:cell(block_hash)="data">
           <div class="dt-row">
-            <a class="link" :href="data.value">{{ data.value }}</a>
+            <router-link
+              :to="{
+                name: 'blockDetail',
+                params: {
+                  network: $route.params.network,
+                  revision: data.value,
+                },
+              }"
+              >{{ shortHash(data.value) }}</router-link
+            >
           </div>
         </template>
       </DataTable>
@@ -111,7 +118,6 @@
 <script>
 import PieChart from "@/charts/PieChart.js";
 import DataTable from "@/components/DataTable.vue";
-import { shortHash } from "@/utils/";
 import BigNumber from "bignumber.js";
 
 export default {
@@ -196,25 +202,28 @@ export default {
       },
     };
   },
-  beforeMount() {
-    this.loadInfo();
-    this.loadVotes();
-    this.loadDelegators();
-    this.loadProposed();
-  },
   methods: {
-    shortHash(hash, len) {
-      return shortHash(hash, len);
+    async init() {
+      this.loadInfo();
+      this.loadVotes();
+      this.loadDelegators();
+      this.loadProposed();
     },
     async loadInfo() {
       const { address } = this.$route.params;
-      const res = await this.$api.validator.getValidator(address);
+      const res = await this.$api.validator.getValidator(
+        this.$route.params.network,
+        address
+      );
       const { validator } = res;
       this.validator = validator;
     },
     async loadVotes() {
       const { address } = this.$route.params;
-      const res = await this.$api.validator.getVotes(address);
+      const res = await this.$api.validator.getVotes(
+        this.$route.params.network,
+        address
+      );
       const { votes } = res;
       this.votes.data.items = votes;
 
@@ -240,14 +249,22 @@ export default {
     },
     async loadDelegators() {
       const { address } = this.$route.params;
-      const res = await this.$api.validator.getDelegators(address);
+      const res = await this.$api.validator.getDelegators(
+        this.$route.params.network,
+        address
+      );
       const { delegators } = res;
       this.delegators.data.items = delegators;
     },
     async loadProposed() {
       try {
         const { address } = this.$route.params;
-        const { proposed } = await this.$api.account.getProposed(address, 1, 8);
+        const { proposed } = await this.$api.account.getProposed(
+          this.$route.params.network,
+          address,
+          1,
+          8
+        );
         this.proposed.data.items = proposed.map((b) => {
           return { ...b, blockhash: b.hash };
         });

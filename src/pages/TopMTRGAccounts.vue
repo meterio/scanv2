@@ -12,19 +12,18 @@
     template(v-slot:cell(number)="data")
       .dt-row
         router-link.link(
-          :to="{ name: 'blockDetail', params: { revision: data.item.number } }"
+          :to="{ name: 'blockDetail', params: { network: $route.params.network, revision: data.item.number } }"
         ) {{ '#' + data.item.number }}
 
     template(v-slot:cell(signer)="data")
       .dt-row
         router-link.link(
-          :to="{ name: 'address', params: { address: data.item.signer } }"
+          :to="{ name: 'address', params: { network: $route.params.network, address: data.item.signer } }"
         ) {{ data.item.signer }}
 </template>
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
 import BigNumber from "bignumber.js";
 import PieChart from "@/components/PieChart.vue";
 import DataTable from "@/components/DataTable.vue";
@@ -60,12 +59,11 @@ export default {
       },
     };
   },
-  beforeMount() {
-    console.log("COUNT");
-    this.loadTopMTRG();
-  },
 
   methods: {
+    init() {
+      this.loadTopMTRG();
+    },
     pgChange(val) {
       this.page = val;
       console.log("page change");
@@ -76,6 +74,7 @@ export default {
       try {
         this.accounts.items = [];
         const { accounts, totalPage } = await this.$api.account.getTopMTRG(
+          this.$route.params.network,
           this.page,
           this.limit
         );

@@ -4,7 +4,7 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import AppLayout from "./layout/index.vue";
 import router from "./router";
 import store from "./store";
-
+import {fromWei, fromNow, shortHash, shortAddress, formatTime } from "@/utils"
 import api from "./api";
 
 import "./mixins";
@@ -16,6 +16,7 @@ import "./assets/fonts/bebasneue.css";
 
 // 将api挂载到vue的原型上
 Vue.prototype.$api = api;
+Vue.prototype.$network = '';
 
 // Install BootstrapVue
 Vue.use(BootstrapVue);
@@ -25,6 +26,36 @@ Vue.use(IconsPlugin);
 // Vue.use(globalEventBus);
 
 Vue.config.productionTip = false;
+
+var mixin = {
+  beforeMount(){
+    if (this.init) this.init();
+  },
+  watch: {
+    $route(to, from) {
+      if (this.init) this.init();
+    },
+  },
+  methods: {
+    fromNow(time) {
+      return fromNow(time * 1000);
+    },
+    shortAddr(addr, precision) {
+      return shortAddress(addr,precision);
+    },
+    shortHash(hash, precision) {
+      return shortHash(hash, precision);
+    },
+    formatTime(time) {
+      return formatTime(time * 1000);
+    },
+    fromWei(num, precision){
+      return fromWei(num, precision);
+    }
+  }
+}
+
+Vue.mixin(mixin);
 
 new Vue({
   name: "Root",

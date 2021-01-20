@@ -12,7 +12,16 @@
 
       <template v-slot:cell(more)="data">
         <div class="dt-row">
-          <a class="primary" :href="getBidsUrl(data.value)">View Bids</a>
+          <router-link
+            :to="{
+              name: 'auctionDetail',
+              params: {
+                network: $route.params.network,
+                auctionID: data.value,
+              },
+            }"
+            >View Bids</router-link
+          >
         </div>
       </template>
 
@@ -52,16 +61,18 @@ export default {
   components: {
     DataTable,
   },
-  beforeMount() {
-    this.loadPast();
-  },
   methods: {
+    init() {
+      this.loadPast();
+    },
     getBidsUrl: function (tx) {
       return `/auction/${tx}`;
     },
     async loadPast() {
       try {
-        const { auctions } = await this.$api.auction.getPast();
+        const { auctions } = await this.$api.auction.getPast(
+          this.$route.params.network
+        );
         let items = [];
         for (const a of auctions) {
           items.push({

@@ -17,9 +17,17 @@
     >
       <template v-slot:cell(more)="data">
         <div class="dt-row">
-          <a class="link" :href="'/pow/rewards/' + data.value"
-            >Mining Reward List</a
+          <router-link
+            :to="{
+              name: 'powRewards',
+              params: {
+                network: $route.params.network,
+                epoch: data.value,
+              },
+            }"
           >
+            Mining Reward List
+          </router-link>
         </div>
       </template>
     </DataTable>
@@ -67,14 +75,14 @@ export default {
       },
     };
   },
-  beforeMount() {
-    this.initData();
-    this.loadRewards();
-  },
   methods: {
+    init() {
+      this.initData();
+      this.loadRewards();
+    },
     async initData() {
       try {
-        const res = await this.$api.metric.getAll();
+        const res = await this.$api.metric.getAll(this.$route.params.network);
         const { mtr, mtrg, pos, pow, staking } = res;
         this.pow_data = [
           [
@@ -112,6 +120,7 @@ export default {
       try {
         this.load = true;
         const { rewards, totalPage } = await this.$api.pow.getRewards(
+          this.$route.params.network,
           this.mining_current_page,
           this.page_size
         );

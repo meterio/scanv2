@@ -1,16 +1,16 @@
 import { get } from "@/utils/http";
 
 export default {
-  getPresent(){
-    return get(`auctions/present`)
+  getPresent(network,){
+    return get(network,`auctions/present`)
   },
 
-  getPast(){
-    return get(`auctions/past`)
+  getPast(network,){
+    return get(network,`auctions/past`)
   },
 
-  getBids(auctionID){
-    return get(`auctions/${auctionID}/bids`)
+  getBids(network,auctionID){
+    return get(network,`auctions/${auctionID}/bids`)
   }
 
 };

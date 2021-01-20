@@ -12,19 +12,18 @@
     template(v-slot:cell(number)="data")
       .dt-row
         router-link.link(
-          :to="{ name: 'blockDetail', params: { revision: data.item.number } }"
+          :to="{ name: 'blockDetail', params: { network: $route.params.network, revision: data.item.number } }"
         ) {{ '#' + data.item.number }}
 
     template(v-slot:cell(beneficiary)="data")
       .dt-row
         router-link.link(
-          :to="{ name: 'address', params: { address: data.item.beneficiary } }"
+          :to="{ name: 'address', params: { network: $route.params.network, address: data.item.beneficiary } }"
         ) {{ data.item.beneficiary }}
 </template>
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
 import BigNumber from "bignumber.js";
 import PieChart from "@/components/PieChart.vue";
 import DataTable from "@/components/DataTable.vue";
@@ -60,12 +59,10 @@ export default {
       },
     };
   },
-  beforeMount() {
-    console.log("COUNT");
-    this.loadBlocks();
-  },
-
   methods: {
+    init() {
+      this.loadBlocks();
+    },
     pgChange(val) {
       this.page = val;
       this.loadBlocks();
@@ -76,6 +73,7 @@ export default {
         const { address } = this.$route.params;
         this.blocks.items = [];
         const { blocks, totalPage } = await this.$api.block.getRecentBlocks(
+          this.$route.params.network,
           this.page,
           this.limit
         );

@@ -14,7 +14,7 @@
       template(v-slot:cell(candidate)="data")
         .dt-row
           router-link.link(
-            :to="{ name: 'address', params: { address: data.item.candidate } }"
+            :to="{ name: 'address', params: { network: $route.params.network, address: data.item.candidate } }"
           ) {{ data.item.candidate }}
       template(v-slot:cell(totalVotes)="data")
         .dt-row {{ fromWei(data.item.totalVotes, 2) }} MTRG
@@ -33,7 +33,6 @@
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime, shortHash, shortAddress, fromWei } from "@/utils";
 import BigNumber from "bignumber.js";
 import PieChart from "@/components/PieChart.vue";
 import DataTable from "@/components/DataTable.vue";
@@ -93,11 +92,12 @@ export default {
       current_tab_index: 0,
     };
   },
-  beforeMount() {
-    this.loadAddress();
-    this.loadTxs();
-  },
+  beforeMount() {},
   methods: {
+    init() {
+      this.loadAddress();
+      this.loadTxs();
+    },
     navTabChange(val) {
       this.current_tab_index = val;
       this.address_current_page = 1;
@@ -120,7 +120,10 @@ export default {
         const { address } = this.$route.params;
         this.loadBuckets(address);
         this.address = address;
-        const res = await this.$api.account.getAccountDetail(address);
+        const res = await this.$api.account.getAccountDetail(
+          this.$route.params.network,
+          address
+        );
 
         const { account } = res;
         this.summary = [
@@ -150,7 +153,10 @@ export default {
     async loadBuckets(address) {
       this.bucket_load = true;
       try {
-        const bres = await this.$api.account.getBuckets(address);
+        const bres = await this.$api.account.getBuckets(
+          this.$route.params.network,
+          address
+        );
         const { buckets } = bres;
         for (const b of buckets) {
           this.buckets.items.push({
@@ -171,6 +177,7 @@ export default {
         const { address } = this.$route.params;
         this.txs.items = [];
         const { txSummaries, totalPage } = await this.$api.account.getTxs(
+          this.$route.params.network,
           address,
           this.address_current_page,
           this.page_size
@@ -197,6 +204,7 @@ export default {
       try {
         const { address } = this.$route.params;
         const { transfers, totalPage } = await this.$api.account.getTxs20(
+          this.$route.params.network,
           address,
           this.address_current_page,
           this.page_size
@@ -217,18 +225,6 @@ export default {
         console.error(e);
         this.txs_load = false;
       }
-    },
-    timeFromNow(time) {
-      return fromNow(time * 1000);
-    },
-    shortAddr(addr) {
-      return shortAddress(addr);
-    },
-    shortHash(hash) {
-      return shortHash(hash);
-    },
-    fromWei(num, precision) {
-      return fromWei(num, precision);
     },
   },
 };

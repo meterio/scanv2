@@ -6,7 +6,6 @@
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
 import BigNumber from "bignumber.js";
 import DataTable from "@/components/DataTable.vue";
 import DataSummary from "@/components/DataSummary.vue";
@@ -35,23 +34,27 @@ export default {
       },
     };
   },
-  async mounted() {
-    const { auctionID } = this.$route.params;
-    const res = await this.$api.auction.getBids(auctionID);
-    this.loading = false;
-    const { summary, bids } = res;
-    this.summary = [
-      { key: "ID", value: summary.id },
-      {
-        key: "Height Range",
-        value: `${summary.startHeight} - ${summary.endHeight}`,
-      },
-      { key: "Received MTR", value: summary.receivedStr },
-      { key: "Released MTRG", value: summary.releasedStr },
-    ];
-    this.bids.items.push(...res.bids);
+  methods: {
+    async init() {
+      const { auctionID } = this.$route.params;
+      const res = await this.$api.auction.getBids(
+        this.$route.params.network,
+        auctionID
+      );
+      this.loading = false;
+      const { summary, bids } = res;
+      this.summary = [
+        { key: "ID", value: summary.id },
+        {
+          key: "Height Range",
+          value: `${summary.startHeight} - ${summary.endHeight}`,
+        },
+        { key: "Received MTR", value: summary.receivedStr },
+        { key: "Released MTRG", value: summary.releasedStr },
+      ];
+      this.bids.items.push(...res.bids);
+    },
   },
-  methods: {},
 };
 </script>
 

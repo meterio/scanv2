@@ -58,7 +58,10 @@
           <div class="dt-row" style="word-break: break-all">
             <router-link
               class="link"
-              :to="{ name: 'validatorDetail', params: { address: data.value } }"
+              :to="{
+                name: 'validatorDetail',
+                params: { network: $route.params.network, address: data.value },
+              }"
             >
               {{ data.value }}
             </router-link>
@@ -108,23 +111,22 @@ export default {
       validate_right_search: "",
       validator_data: {
         fields: [],
-        items: []
-      }
+        items: [],
+      },
     };
   },
   components: {
-    Loading
-  },
-  beforeMount() {
-    console.log("page", this.page_size);
-    this.loadData();
+    Loading,
   },
   watch: {
     validate_right_search(newVal) {
       this.loadData();
-    }
+    },
   },
   methods: {
+    init() {
+      this.loadData();
+    },
     formatTime(value) {
       return formatTime(value);
     },
@@ -146,6 +148,7 @@ export default {
     async loadData() {
       try {
         const res = await this.$api.validator.getValidateTypeList(
+          this.$route.params.network,
           this.current_page,
           this.page_size,
           this.current_tab,
@@ -161,7 +164,7 @@ export default {
             { key: "netAddr", label: "Net Address" },
             { key: "votingPowerStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "upTime", label: "Up Time 48h" }
+            { key: "upTime", label: "Up Time 48h" },
           ];
           this.validator_data.items = res.delegates;
         }
@@ -171,7 +174,7 @@ export default {
             { key: "address", label: "Address" },
             { key: "totalVotesStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "upTime", label: "Up Time 48h" }
+            { key: "upTime", label: "Up Time 48h" },
           ];
           this.validator_data.items = res.candidates;
         }
@@ -181,15 +184,15 @@ export default {
             { key: "address", label: "Address" },
             { key: "totalPoints", label: "Total Points" },
             { key: "jailedTime", label: "Jailed Time" },
-            { key: "bailAmount", label: "Bail Amount" }
+            { key: "bailAmount", label: "Bail Amount" },
           ];
           this.validator_data.items = res.jailed;
         }
       } catch (e) {
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

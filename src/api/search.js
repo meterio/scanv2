@@ -1,6 +1,6 @@
 import { get } from "@/utils/http";
 export default {
-  searchKeyWord(words) {
+  searchKeyWord(network,words) {
     return get("search/" + words);
   }
 };

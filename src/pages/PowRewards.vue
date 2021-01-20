@@ -15,7 +15,6 @@
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
 import BigNumber from "bignumber.js";
 import DataTable from "@/components/DataTable.vue";
 export default {
@@ -39,29 +38,21 @@ export default {
       },
     };
   },
-  async mounted() {
-    const { epoch } = this.$route.params;
-    console.log("epoch:>>", epoch);
-    const res = await this.$api.pow.getRewardsByEpoch(epoch);
-    this.loading = false;
-    this.summary = [
-      { key: "Epoch", value: res.epoch },
-      { key: "Pos Block", value: res.posBlock },
-      { key: "Pow Block", value: res.powBlock },
-      { key: "Time", value: fromNow(res.timestamp * 1000) },
-      { key: "Total Amount", value: res.totalAmountStr },
-    ];
-    this.rewards.items.push(...res.details);
-  },
   methods: {
-    fromNow(time) {
-      return fromNow(time * 1000);
-    },
-    shortAddr(addr) {
-      return shortAddress(addr);
-    },
-    shortHash(hash) {
-      return shortHash(hash);
+    async init() {
+      const { epoch } = this.$route.params;
+      const res = await this.$api.pow.getRewardsByEpoch(
+        this.$route.params.networkepoch
+      );
+      this.loading = false;
+      this.summary = [
+        { key: "Epoch", value: res.epoch },
+        { key: "Pos Block", value: res.posBlock },
+        { key: "Pow Block", value: res.powBlock },
+        { key: "Time", value: fromNow(res.timestamp * 1000) },
+        { key: "Total Amount", value: res.totalAmountStr },
+      ];
+      this.rewards.items.push(...res.details);
     },
   },
 };

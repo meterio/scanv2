@@ -1,12 +1,12 @@
 import { get } from "@/utils/http";
 
 const block = {
-  getRecentBlocks(page=1,limit=20) {
-    return get(`blocks/recent?page=${page}&limit=${limit}`);
+  getRecentBlocks(network, page=1,limit=20) {
+    return get(network, `blocks/recent?page=${page}&limit=${limit}`);
   },
 
-  getBlockDetail(revision){
-    return get(`blocks/${revision}`)
+  getBlockDetail(network,revision){
+    return get(network,`blocks/${revision}`)
   }
 };
 

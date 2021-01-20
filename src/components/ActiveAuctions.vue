@@ -41,40 +41,42 @@ export default {
         fields: [
           {
             key: "height_range",
-            label: "Height(POS)"
+            label: "Height(POS)",
           },
           {
             key: "settlement_k_block",
-            label: "Settlement K Block"
+            label: "Settlement K Block",
           },
           {
             key: "mtr_received",
-            label: "MTR Received"
+            label: "MTR Received",
           },
           {
             key: "mtrg_on_auction",
-            label: "MTRG on Auction"
+            label: "MTRG on Auction",
           },
 
           {
             key: "expected_final_price",
-            label: "Expected Final Price"
-          }
+            label: "Expected Final Price",
+          },
         ],
-        items: []
-      }
+        items: [],
+      },
     };
   },
   components: {
-    DataTable
-  },
-  beforeMount() {
-    this.loadAuctions();
+    DataTable,
   },
   methods: {
+    init() {
+      this.loadAuctions();
+    },
     async loadAuctions() {
       try {
-        const { present } = await this.$api.auction.getPresent();
+        const { present } = await this.$api.auction.getPresent(
+          this.$route.params.network
+        );
         this.load = false;
         const items = [];
         if (present.startHeight) {
@@ -85,7 +87,7 @@ export default {
             mtrg_on_auction: present.reservedStr,
             expected_final_price: new BigNumber(present.reservedPrice)
               .dividedBy(1e18)
-              .toFixed()
+              .toFixed(),
           });
         }
         this.auctionObj.items = items;
@@ -93,7 +95,7 @@ export default {
         this.load = false;
         console.error(e);
       }
-    }
-  }
+    },
+  },
 };
 </script>

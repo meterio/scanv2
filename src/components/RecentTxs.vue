@@ -14,10 +14,13 @@
 
               <div class="height">
                 <router-link
-                  :to="{ name: 'txDetail', params: { hash: tx.hash } }"
+                  :to="{
+                    name: 'txDetail',
+                    params: { network: $route.params.network, hash: tx.hash },
+                  }"
                   >{{ shortHash(tx.hash, 8) }}</router-link
                 >
-                <span class="ago">{{ timeFromNow(tx.block.timestamp) }}</span>
+                <span class="ago">{{ fromNow(tx.block.timestamp) }}</span>
               </div>
             </div>
 
@@ -26,7 +29,13 @@
                 From:
                 <router-link
                   class="link"
-                  :to="{ name: 'address', params: { address: tx.origin } }"
+                  :to="{
+                    name: 'address',
+                    params: {
+                      network: $route.params.network,
+                      address: tx.origin,
+                    },
+                  }"
                   >{{ shortAddr(tx.origin, 12) }}</router-link
                 >
               </p>
@@ -37,7 +46,10 @@
                   class="link"
                   :to="{
                     name: 'address',
-                    params: { address: tx.tos[0].address },
+                    params: {
+                      network: $route.params.network,
+                      address: tx.tos[0].address,
+                    },
                   }"
                   >{{ shortAddr(tx.tos[0].address, 12) }}</router-link
                 >
@@ -65,7 +77,6 @@
 
 <script>
 import Loading from "@/components/Loading";
-import { shortHash, shortAddress, fromWei, fromNow } from "@/utils";
 
 export default {
   name: "RecentTxs",
@@ -98,27 +109,17 @@ export default {
     },
     async initData() {
       try {
-        const res = await this.$api.transaction.getRecentTxs();
+        const res = await this.$api.transaction.getRecentTxs(
+          this.$route.params.network
+        );
         this.recent_txs = res.txs.splice(0, 10);
         this.loading = false;
       } catch (e) {
         this.loading = false;
       }
     },
-    timeFromNow(time) {
-      return fromNow(time * 1000);
-    },
-    shortAddr(addr, num) {
-      return shortAddress(addr, num);
-    },
     jump(url) {
       this.$router.push(url);
-    },
-    shortHash(hash, num) {
-      return shortHash(hash, num);
-    },
-    fromWei(num, precision) {
-      return fromWei(num, precision);
     },
   },
 };

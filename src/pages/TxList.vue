@@ -13,7 +13,6 @@
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
 import BigNumber from "bignumber.js";
 import PieChart from "@/components/PieChart.vue";
 import DataTable from "@/components/DataTable.vue";
@@ -51,12 +50,11 @@ export default {
       },
     };
   },
-  beforeMount() {
-    console.log("COUNT");
-    this.loadTxs();
-  },
 
   methods: {
+    init() {
+      this.loadTxs();
+    },
     pgChange(val) {
       this.page = val;
       this.loadTxs();
@@ -67,6 +65,7 @@ export default {
         const { address } = this.$route.params;
         this.txs.items = [];
         const { txs, totalPage } = await this.$api.transaction.getRecentTxs(
+          this.$route.params.network,
           this.page,
           this.limit
         );

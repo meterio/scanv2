@@ -6,7 +6,10 @@
         <div class="dt-row">
           <router-link
             class="link"
-            :to="{ name: 'txDetail', params: { hash: data.value } }"
+            :to="{
+              name: 'txDetail',
+              params: { network: $route.params.network, hash: data.value },
+            }"
             >{{ shortHash(data.value) }}</router-link
           >
         </div>
@@ -30,7 +33,6 @@
 <script>
 import DataTable from "@/components/DataTable.vue";
 import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
 import BigNumber from "bignumber.js";
 import DataSummary from "@/components/DataSummary.vue";
 export default {
@@ -61,48 +63,42 @@ export default {
       },
     };
   },
-  async mounted() {
-    const { revision } = this.$route.params;
-    this.loading = true;
-    const res = await this.$api.block.getBlockDetail(revision);
-    const b = res.block;
-    this.summaryTitle = `Block: #${b.number}`;
-    this.summary = [
-      { key: "Hash", value: b.hash },
-      { key: "Number", value: b.number },
-      { key: "Block Type", value: b.blockType === 1 ? "KBlock" : "MBlock" },
-      { key: "KBlock Height", value: b.lastKBlockHeight, type: "block-link" },
-      { key: "QC Height", value: b.qcHeight, type: "block-link" },
-      { key: "Beneficiary", value: b.beneficiary, type: "address-link" },
-      { key: "Gas Used", value: b.gasUsed },
-      { key: "Txs Count", value: b.txCount },
-      { key: "Time", value: b.timestamp, type: "timestamp" },
-    ];
-
-    let items = [];
-    if (res.block.txSummaries) {
-      items = res.block.txSummaries.map((tx) => {
-        return {
-          hash: tx.hash,
-          type: tx.type,
-          amount: tx.totalAmountStrs[0],
-          fee: tx.feeStr,
-          result: tx.reverted ? "reverted" : "success",
-        };
-      });
-    }
-    this.txs.items = items;
-    this.loading = false;
-  },
   methods: {
-    timeFromNow(time) {
-      return fromNow(time * 1000);
-    },
-    address(addr) {
-      return shortAddress(addr);
-    },
-    shortHash(hash) {
-      return shortHash(hash);
+    async init() {
+      const { revision } = this.$route.params;
+      this.loading = true;
+      const res = await this.$api.block.getBlockDetail(
+        this.$route.params.network,
+        revision
+      );
+      const b = res.block;
+      this.summaryTitle = `Block: #${b.number}`;
+      this.summary = [
+        { key: "Hash", value: b.hash },
+        { key: "Number", value: b.number },
+        { key: "Block Type", value: b.blockType === 1 ? "KBlock" : "MBlock" },
+        { key: "KBlock Height", value: b.lastKBlockHeight, type: "block-link" },
+        { key: "QC Height", value: b.qcHeight, type: "block-link" },
+        { key: "Beneficiary", value: b.beneficiary, type: "address-link" },
+        { key: "Gas Used", value: b.gasUsed },
+        { key: "Txs Count", value: b.txCount },
+        { key: "Time", value: b.timestamp, type: "timestamp" },
+      ];
+
+      let items = [];
+      if (res.block.txSummaries) {
+        items = res.block.txSummaries.map((tx) => {
+          return {
+            hash: tx.hash,
+            type: tx.type,
+            amount: tx.totalAmountStrs[0],
+            fee: tx.feeStr,
+            result: tx.reverted ? "reverted" : "success",
+          };
+        });
+      }
+      this.txs.items = items;
+      this.loading = false;
     },
   },
 };

@@ -15,7 +15,6 @@
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
 import BigNumber from "bignumber.js";
 import DataTable from "@/components/DataTable.vue";
 export default {
@@ -39,26 +38,20 @@ export default {
       },
     };
   },
-  async mounted() {
-    const { epoch } = this.$route.params;
-    const res = await this.$api.validator.getRewardsByEpoch(epoch);
-    this.loading = false;
-    this.summary = [
-      { key: "Epoch", value: epoch },
-      { key: "Base Reward", value: res.baseReward },
-      { key: "Total Reward", value: res.totalReward },
-    ];
-    this.rewards.items.push(...res.rewards);
-  },
   methods: {
-    fromNow(time) {
-      return fromNow(time * 1000);
-    },
-    shortAddr(addr) {
-      return shortAddress(addr);
-    },
-    shortHash(hash) {
-      return shortHash(hash);
+    async init() {
+      const { epoch } = this.$route.params;
+      const res = await this.$api.validator.getRewardsByEpoch(
+        this.$route.params.network,
+        epoch
+      );
+      this.loading = false;
+      this.summary = [
+        { key: "Epoch", value: epoch },
+        { key: "Base Reward", value: res.baseReward },
+        { key: "Total Reward", value: res.totalReward },
+      ];
+      this.rewards.items.push(...res.rewards);
     },
   },
 };

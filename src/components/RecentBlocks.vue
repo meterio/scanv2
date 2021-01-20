@@ -18,14 +18,17 @@
                   <router-link
                     :to="{
                       name: 'blockDetail',
-                      params: { revision: block.number },
+                      params: {
+                        network: $route.params.network,
+                        revision: block.number,
+                      },
                     }"
                   >
                     {{ block.number }}</router-link
                   >
                 </h4>
 
-                <span class="ago">{{ timeFromNow(block.timestamp) }}</span>
+                <span class="ago">{{ fromNow(block.timestamp) }}</span>
               </div>
             </div>
 
@@ -35,7 +38,10 @@
                 class="link"
                 :to="{
                   name: 'address',
-                  params: { address: block.beneficiary },
+                  params: {
+                    network: $route.params.network,
+                    address: block.beneficiary,
+                  },
                 }"
                 >{{ shortAddr(block.beneficiary, 12) }}</router-link
               >
@@ -87,7 +93,9 @@ export default {
   methods: {
     async initData() {
       try {
-        const res = await this.$api.block.getRecentBlocks();
+        const res = await this.$api.block.getRecentBlocks(
+          this.$route.params.network
+        );
         this.loading = false;
         this.recent_blocks = res.blocks.splice(0, 10);
       } catch (e) {
@@ -101,12 +109,6 @@ export default {
     },
     jump(url) {
       this.$router.push(url);
-    },
-    timeFromNow(time) {
-      return fromNow(time * 1000);
-    },
-    shortAddr(addr, num) {
-      return shortAddress(addr, num);
     },
   },
 };

@@ -11,7 +11,16 @@
 
           <!-- block-link-with-note -->
           <span v-if="item.type == 'block-link-with-note'">
-            <a :href="'/block/' + item.block">#{{ item.block }}</a>
+            <router-link
+              :to="{
+                name: 'blockDetail',
+                params: {
+                  network: $route.params.network,
+                  revision: item.block,
+                },
+              }"
+              >{{ item.block }}</router-link
+            >
             <span class="value"> ({{ item.value }})</span>
           </span>
 
@@ -25,7 +34,10 @@
 
           <!-- address-link -->
           <router-link
-            :to="{ name: 'address', params: { address: item.value } }"
+            :to="{
+              name: 'address',
+              params: { network: $route.params.network, address: item.value },
+            }"
             v-if="item.type === 'address-link'"
             >{{ item.value }}</router-link
           >
@@ -47,7 +59,6 @@
 </template>
 
 <script>
-import { shortHash, shortAddress, fromNow, formatTime } from "@/utils";
 import StatusTag from "@/components/StatusTag.vue";
 
 export default {
@@ -55,41 +66,30 @@ export default {
   name: "DataList",
   props: {
     title: {
-      type: String
+      type: String,
     },
     data: {
       type: Array,
-      default: function() {
+      default: function () {
         return [];
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      currentPage: 1
+      currentPage: 1,
     };
   },
   methods: {
     pgChange(val) {
       this.$emit("tablePaginationChange", val);
     },
-    fromNow(time) {
-      return fromNow(time * 1000);
-    },
-    shortAddr(addr) {
-      return shortAddress(addr);
-    },
-    shortHash(hash) {
-      return shortHash(hash);
-    },
-    formatTime(time) {
-      return formatTime(time * 1000);
-    },
+
     jump2BlcokPage(value) {
       this.$router.push(`/block/${value}`);
       window.location.reload();
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

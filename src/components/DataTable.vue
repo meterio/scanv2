@@ -51,7 +51,10 @@
           <div class="dt-row">
             <router-link
               class="link"
-              :to="{ name: 'txDetail', params: { hash: data.value } }"
+              :to="{
+                name: 'txDetail',
+                params: { network: $route.params.network, hash: data.value },
+              }"
               >{{ shortHash(data.value) }}</router-link
             >
           </div>
@@ -62,7 +65,10 @@
           <div class="dt-row">
             <router-link
               class="link"
-              :to="{ name: 'address', params: { address: data.value } }"
+              :to="{
+                name: 'address',
+                params: { network: $route.params.network, address: data.value },
+              }"
               >{{ data.value }}</router-link
             >
           </div>
@@ -72,7 +78,10 @@
           <div class="dt-row">
             <router-link
               class="link"
-              :to="{ name: 'address', params: { address: data.value } }"
+              :to="{
+                name: 'address',
+                params: { network: $route.params.network, address: data.value },
+              }"
               >{{ shortAddr(data.value) }}</router-link
             >
           </div>
@@ -82,7 +91,10 @@
           <div class="dt-row">
             <router-link
               class="link"
-              :to="{ name: 'address', params: { address: data.value } }"
+              :to="{
+                name: 'address',
+                params: { network: $route.params.network, address: data.value },
+              }"
               >{{ shortAddr(data.value) }}</router-link
             >
           </div>
@@ -91,7 +103,10 @@
           <div class="dt-row">
             <router-link
               class="link"
-              :to="{ name: 'address', params: { address: data.value } }"
+              :to="{
+                name: 'address',
+                params: { network: $route.params.network, address: data.value },
+              }"
               >{{ shortAddr(data.value) }}</router-link
             >
           </div>
@@ -102,7 +117,13 @@
           <div class="dt-row">
             <router-link
               class="link"
-              :to="{ name: 'blockDetail', params: { revision: data.value } }"
+              :to="{
+                name: 'blockDetail',
+                params: {
+                  network: $route.params.network,
+                  revision: data.value,
+                },
+              }"
               >#{{ data.value }}</router-link
             >
           </div>
@@ -112,7 +133,13 @@
           <div class="dt-row">
             <router-link
               class="link"
-              :to="{ name: 'blockDetail', params: { revision: data.value } }"
+              :to="{
+                name: 'blockDetail',
+                params: {
+                  network: $route.params.network,
+                  revision: data.value,
+                },
+              }"
               >{{ shortHash(data.value) }}</router-link
             >
           </div>
@@ -142,7 +169,6 @@
 </template>
 
 <script>
-import { shortHash, shortAddress, fromNow } from "@/utils";
 export default {
   name: "DataTable",
   props: {
@@ -195,15 +221,6 @@ export default {
   methods: {
     pgChange(val) {
       this.$emit("tablePaginationChange", val);
-    },
-    fromNow(time) {
-      return fromNow(time * 1000);
-    },
-    shortAddr(addr) {
-      return shortAddress(addr);
-    },
-    shortHash(hash) {
-      return shortHash(hash);
     },
   },
 };

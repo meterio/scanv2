@@ -7,25 +7,25 @@ const validateTypeUrl = {
 };
 
 export default {
-  getValidateTypeList(page, limit, type, searchName) {
+  getValidateTypeList(network,page, limit, type, searchName) {
     return get(
-      validateTypeUrl[type] +
+      network,validateTypeUrl[type] +
         `?page=${page}&limit=${limit}&search=${searchName}`
     );
   },
-  getValidateReward(page, limit) {
-    return get(`validators/rewards?page=${page}&limit=${limit}`);
+  getValidateReward(network,page, limit) {
+    return get(network,`validators/rewards?page=${page}&limit=${limit}`);
   },
-  getRewardsByEpoch(epoch) {
-    return get(`validators/rewards/${epoch}`);
+  getRewardsByEpoch(network,epoch) {
+    return get(network,`validators/rewards/${epoch}`);
   },
-  getValidator(address){
-    return get(`validators/${address}`);
+  getValidator(network,address){
+    return get(network,`validators/${address}`);
   },
-  getVotes(address){
-    return get(`validators/${address}/votes`);
+  getVotes(network,address){
+    return get(network,`validators/${address}/votes`);
   },
-  getDelegators(address){
-    return get(`validators/${address}/delegators`);
+  getDelegators(network,address){
+    return get(network,`validators/${address}/delegators`);
   }
 };

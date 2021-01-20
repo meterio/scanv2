@@ -49,11 +49,13 @@ export default {
     };
   },
 
-  async mounted() {
-    const res = await this.$api.metric.getAll();
-    const { mtr, mtrg } = res;
-    this.mtrPrice = mtr.price + " USD";
-    this.mtrgPrice = mtrg.price + " USD";
+  methods: {
+    async init() {
+      const res = await this.$api.metric.getAll(this.$route.params.network);
+      const { mtr, mtrg } = res;
+      this.mtrPrice = mtr.price + " USD";
+      this.mtrgPrice = mtrg.price + " USD";
+    },
   },
 };
 </script>

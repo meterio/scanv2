@@ -10,12 +10,24 @@ export default {
      */
     widthExtraSmall: 320,
     widthSmall: 640,
-    widthTablet: 1024
+    widthTablet: 1024,
+    network: '',
   },
 
   mutations: {
     SET_WINDOW_WIDTH(state, value) {
       state.windowWidth = value;
+    },
+    SET_NETWORK(state,value){
+      if (value === 'main' || value === 'test'){
+      state.network = value;
+      }
+    }
+
+  },
+  actions:{
+    changeNetwork ({ commit }, network) {
+      return commit('SET_NETWORK', network);
     }
   },
 

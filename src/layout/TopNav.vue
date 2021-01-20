@@ -51,36 +51,65 @@
             right
             :class="blockActive ? 'top-dropdown active' : ''"
           >
-            <b-dropdown-item href="/pos">PoS</b-dropdown-item>
-            <b-dropdown-item href="/pow">PoW</b-dropdown-item>
+            <b-dropdown-item
+              :to="{
+                name: 'pos',
+                params: { network: $route.params.network },
+              }"
+              >PoS</b-dropdown-item
+            >
+            <b-dropdown-item
+              :to="{
+                name: 'pow',
+                params: { network: $route.params.network },
+              }"
+              >PoW</b-dropdown-item
+            >
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item href="/txs">View Txs</b-dropdown-item>
-            <b-dropdown-item href="/blocks">View Blocks</b-dropdown-item>
+            <b-dropdown-item
+              :to="{
+                name: 'txList',
+                params: { network: $route.params.network },
+              }"
+              >View Txs</b-dropdown-item
+            >
+            <b-dropdown-item
+              :to="{
+                name: 'blockList',
+                params: { network: $route.params.network },
+              }"
+              >View Blocks</b-dropdown-item
+            >
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item href="/accounts/mtr"
+            <b-dropdown-item
+              :to="{
+                name: 'topMTR',
+                params: { network: $route.params.network },
+              }"
               >Top MTR Accounts</b-dropdown-item
             >
-            <b-dropdown-item href="/accounts/mtrg"
+            <b-dropdown-item
+              :to="{
+                name: 'topMTRG',
+                params: { network: $route.params.network },
+              }"
               >Top MTRG Accounts</b-dropdown-item
             >
-          </b-nav-item-dropdown>
-          <b-nav-item-dropdown text="Resources" right>
-            <b-dropdown-item href="#">Wallet</b-dropdown-item>
           </b-nav-item-dropdown>
 
           <b-nav-item>
             <router-link
-              :to="{ name: 'auction' }"
+              :to="{ name: 'auction', network: $route.params.network }"
               :class="$route.path == '/auction' ? 'active' : ''"
               >Auctions</router-link
             >
           </b-nav-item>
 
           <b-dropdown :text="searchPrefix" variant="outline-secondary">
-            <b-dropdown-item @click="configProxy('main')"
+            <b-dropdown-item @click="changeNetwork('main')"
               >Mainnet</b-dropdown-item
             >
-            <b-dropdown-item @click="configProxy('test')"
+            <b-dropdown-item @click="changeNetwork('test')"
               >Testnet</b-dropdown-item
             >
           </b-dropdown>
@@ -91,28 +120,23 @@
 </template>
 
 <script>
+import { setNetwork } from "@/utils/http";
+
 export default {
   name: "TopNav",
   data() {
     return {
       modal_show: false,
       searchKey: "",
-      searchPrefix: "",
     };
   },
-  beforeMount() {
-    let mark = window.localStorage.getItem("proxyMark");
-    if (!mark) {
-      mark = "main";
-      window.localStorage.setItem(mark);
-      window.location.reload();
-      return;
-    }
-    this.searchPrefix = `${mark.substring(0, 1).toUpperCase()}${mark.substring(
-      1
-    )}net`;
-  },
   computed: {
+    searchPrefix() {
+      const { network } = this.$route.params;
+      return `${network.substring(0, 1).toUpperCase()}${network.substring(
+        1
+      )}net`;
+    },
     blockActive() {
       const path = this.$route.path;
       if (
@@ -133,20 +157,35 @@ export default {
     },
   },
   methods: {
-    configProxy(key) {
-      const mark = window.localStorage.getItem("proxyMark");
-      if (mark != key) {
-        window.localStorage.setItem("proxyMark", key);
-        window.location.reload();
-        this.searchPrefix = `${key
-          .substring(0, 1)
-          .toUpperCase()}${key.substring(1)} net`;
+    updateNetwork(network) {
+      this.$store.commit("dom/SET_NETWORK", network);
+    },
+
+    changeNetwork(newNetwork) {
+      // const mark = window.localStorage.getItem("proxyMark");
+      // if (mark != key) {
+      //   window.localStorage.setItem("proxyMark", key);
+      //   window.location.reload();
+      //   this.searchPrefix = `${key
+      //     .substring(0, 1)
+      //     .toUpperCase()}${key.substring(1)} net`;
+      // }
+      // console.log("key", key);
+      const { network } = this.$route.params;
+      if (network !== newNetwork) {
+        this.$router.push({
+          name: this.$route.name,
+          params: { ...this.$route.params, network: newNetwork },
+        });
+        this.updateNetwork(newNetwork);
       }
-      console.log("key", key);
     },
     async searchKeyWords() {
       try {
-        const { type } = await this.$api.search.searchKeyWord(this.searchKey);
+        const { type } = await this.$api.search.searchKeyWord(
+          this.$route.params.network,
+          this.searchKey
+        );
         let jump_url = "";
         if (type === "tx") {
           jump_url = `/tx/${this.searchKey}`;

@@ -7,7 +7,10 @@
         <div class="dt-row">
           <router-link
             class="link"
-            :to="{ name: 'address', params: { address: data.value } }"
+            :to="{
+              name: 'address',
+              params: { network: $route.params.network, address: data.value },
+            }"
             >{{ data.value }}</router-link
           >
         </div>
@@ -54,7 +57,10 @@ export default {
   },
   async mounted() {
     const { hash } = this.$route.params;
-    const res = await this.$api.transaction.getTxDetail(hash);
+    const res = await this.$api.transaction.getTxDetail(
+      this.$route.params.network,
+      hash
+    );
     this.loading = false;
     const { tx, summary } = res;
     this.summaryTitle = "Transaction";
@@ -87,16 +93,6 @@ export default {
     }
     this.clauses.data.items = clauses;
   },
-  methods: {
-    timeFromNow(time) {
-      return fromNow(time * 1000);
-    },
-    address(addr) {
-      return shortAddress(addr);
-    },
-    shortHash(hash) {
-      return shortHash(hash);
-    },
-  },
+  methods: {},
 };
 </script>
