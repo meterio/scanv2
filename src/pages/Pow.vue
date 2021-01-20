@@ -50,62 +50,17 @@ export default {
       },
       mining_current_page: 1,
       mining_total: 0,
-      pow_data: [
-        [
-          {
-            content: "2351",
-            label: "Block Height",
-          },
-          {
-            content: "0.9 USD",
-            label: "Price (MTR)",
-          },
-          {
-            content: "233",
-            label: "Circulations",
-          },
-        ],
-        [
-          {
-            content: "1.2 PH/s",
-            label: "Network Hash Rate",
-          },
-          {
-            content: "12 MTR",
-            label: "(TH/s)/Day",
-          },
-          {
-            content: "4.5 USD",
-            label: "MTR Cost Parity",
-          },
-        ],
-      ],
+      pow_data: [],
 
       mining_reward: {
         title: "Mining Rewards",
         data: {
           fields: [
-            {
-              key: "pos_height",
-              label: "Kblock Height (PoS)",
-            },
-            {
-              key: "pow_height",
-              label: "Height (PoW)",
-            },
-            {
-              key: "amount",
-              label: "Amount",
-            },
-            {
-              key: "time",
-              label: "Time",
-            },
-
-            {
-              key: "more",
-              label: "More",
-            },
+            { key: "pos_height", label: "Kblock Height (PoS)" },
+            { key: "pow_height", label: "Height (PoW)" },
+            { key: "amount", label: "Amount" },
+            { key: "time", label: "Time" },
+            { key: "more", label: "More" },
           ],
           items: [],
         },
@@ -126,7 +81,7 @@ export default {
             { content: pow.best, label: "PoW Chain Height" },
             { content: "$ " + mtr.price, label: "MTR Price" },
             {
-              content: formatNum(mtr.circulation, 2),
+              content: formatNum(mtr.circulation, 0),
               label: "MTR Circulations",
             },
           ],
@@ -138,11 +93,11 @@ export default {
               label: "Network Hash Rate",
             },
             {
-              content: new BigNumber(pow.rewardPerDay).toFixed(2) + " MTR",
-              label: "(TH/s)/Day",
+              content: new BigNumber(pow.rewardPerDay).toFixed(3) + " MTR",
+              label: "Reward (TH/s*Day)",
             },
             {
-              content: new BigNumber(pow.costParity).toFixed(2),
+              content: new BigNumber(pow.costParity).toFixed(3),
               label: "MTR Cost Parity",
             },
           ],

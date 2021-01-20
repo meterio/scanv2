@@ -77,14 +77,14 @@ export default {
         },
       ],
       [
-        { label: "MTRG Circulation", content: formatNum(mtrg.circulation, 2) },
-        { label: "MTR Circulation", content: formatNum(mtr.circulation, 2) },
+        { label: "MTRG Circulation", content: formatNum(mtrg.circulation, 0) },
+        { label: "MTR Circulation", content: formatNum(mtr.circulation, 0) },
       ],
       [
         { label: "Block Height", content: pos.best },
         { label: "Epoch", content: pos.epoch },
         { label: "Transactions", content: pos.txsCount },
-        { label: "Avg Block Time", content: pos.avgBlockTime },
+        { label: "Avg Block Time", content: pos.avgBlockTime + " sec" },
       ],
       [
         {
@@ -93,7 +93,7 @@ export default {
         },
         {
           label: "Staked MTRG",
-          content: fromWei(staking.totalStaked, 2) + " MTRG",
+          content: fromWei(staking.totalStaked, 0) + " MTRG",
         },
         { label: "Inflation", content: pos.inflation },
         {

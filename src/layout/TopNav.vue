@@ -24,16 +24,6 @@
         </b-nav-form> -->
         <b-nav-form>
           <b-input-group class="search-group" v-if="$route.path !== '/'">
-            <b-input-group-prepend>
-              <b-dropdown :text="searchPrefix" variant="outline-secondary">
-                <b-dropdown-item @click="configProxy('main')"
-                  >Main net</b-dropdown-item
-                >
-                <b-dropdown-item @click="configProxy('test')"
-                  >Test net</b-dropdown-item
-                >
-              </b-dropdown>
-            </b-input-group-prepend>
             <b-form-input
               v-model="searchKey"
               placeholder="Search by address/tx/block"
@@ -86,9 +76,13 @@
             >
           </b-nav-item>
 
-          <b-dropdown text="EN" variant="outline-secondary">
-            <b-dropdown-item href="#">EN</b-dropdown-item>
-            <b-dropdown-item href="#">ZH</b-dropdown-item>
+          <b-dropdown :text="searchPrefix" variant="outline-secondary">
+            <b-dropdown-item @click="configProxy('main')"
+              >Mainnet</b-dropdown-item
+            >
+            <b-dropdown-item @click="configProxy('test')"
+              >Testnet</b-dropdown-item
+            >
           </b-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -103,7 +97,7 @@ export default {
     return {
       modal_show: false,
       searchKey: "",
-      searchPrefix: ""
+      searchPrefix: "",
     };
   },
   beforeMount() {
@@ -116,7 +110,7 @@ export default {
     }
     this.searchPrefix = `${mark.substring(0, 1).toUpperCase()}${mark.substring(
       1
-    )} net`;
+    )}net`;
   },
   computed: {
     blockActive() {
@@ -133,7 +127,7 @@ export default {
       } else {
         return false;
       }
-    }
+    },
   },
   methods: {
     configProxy(key) {
@@ -173,12 +167,17 @@ export default {
         // this.$bvModal.show('homeModal')
         this.modal_show = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+.navbar-nav .nav-link {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
 .search-group {
   width: 500px !important;
 }

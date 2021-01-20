@@ -212,8 +212,8 @@ export default {
       const { votes } = res;
       this.votes.data.items = votes;
 
-      let self = new BigNumber();
-      let others = new BigNumber();
+      let self = new BigNumber(0);
+      let others = new BigNumber(0);
       for (const v of votes) {
         if (v.address.toLowerCase() === address) {
           self = self.plus(v.value);
@@ -221,13 +221,14 @@ export default {
           others = others.plus(v.value);
         }
       }
+      let selfNum = self.dividedBy(1e18).toNumber();
+      let othersNum = others.dividedBy(1e18).toNumber();
+      let totalNum = selfNum + othersNum;
+      console.log("self:", selfNum, "others:", othersNum, "total:", totalNum);
       this.delegated_chart.data.datasets = [
         {
           backgroundColor: ["#FFB84F", "#287DF9"],
-          data: [
-            self.dividedBy(1e18).toNumber(),
-            others.dividedBy(1e18).toNumber(),
-          ],
+          data: [selfNum, othersNum],
         },
       ];
     },

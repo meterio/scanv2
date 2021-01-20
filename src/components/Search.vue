@@ -1,20 +1,6 @@
 <template>
   <div class="search">
     <b-input-group class="search-group">
-      <b-input-group-prepend>
-        <b-dropdown
-          :text="searchPrefix"
-          class="search-select"
-          variant="outline-secondary"
-        >
-          <b-dropdown-item @click="configProxy('main')"
-            >Main net</b-dropdown-item
-          >
-          <b-dropdown-item @click="configProxy('test')"
-            >Test net</b-dropdown-item
-          >
-        </b-dropdown>
-      </b-input-group-prepend>
       <b-form-input
         :placeholder="placeholder"
         v-model="searchWord"
@@ -33,7 +19,12 @@
           variant="primary"
           size="sm"
           block
-          style="margin-left:0.2rem;width: 100px;border-top-left-radius:0.2rem; border-bottom-left-radius: 0.2rem"
+          style="
+            margin-left: 0.2rem;
+            width: 100px;
+            border-top-left-radius: 0.2rem;
+            border-bottom-left-radius: 0.2rem;
+          "
           @click="btnClick"
           >Search</b-button
         >
@@ -48,18 +39,18 @@ export default {
     btnType: {
       type: Number,
       // icon 1 button 2
-      default: 1
+      default: 1,
     },
     placeholder: {
       type: String,
-      default: "Search by address/tx/block"
-    }
+      default: "Search by address/tx/block",
+    },
   },
   name: "Search",
   data() {
     return {
       searchWord: "",
-      searchPrefix: "Main net"
+      searchPrefix: "Main net",
     };
   },
   beforeMount() {
@@ -89,8 +80,8 @@ export default {
     btnClick() {
       console.log("searchWord", this.searchWord);
       this.$emit("click", this.searchWord);
-    }
-  }
+    },
+  },
 };
 </script>
 

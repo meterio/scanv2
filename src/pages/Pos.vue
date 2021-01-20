@@ -24,13 +24,14 @@
 import DataDashboard from "@/components/DataDashboard.vue";
 import ValidatorTable from "@/components/ValidatorTable.vue";
 import DataTable from "@/components/DataTable.vue";
+import { fromWei } from "@/utils";
 
 export default {
   name: "Validator",
   components: {
     DataDashboard,
     ValidatorTable,
-    DataTable
+    DataTable,
   },
   data() {
     return {
@@ -38,27 +39,11 @@ export default {
       current_page: 1,
       epoch_reward_data: {
         fields: [
-          {
-            key: "kblock_height",
-            label: "Epoch"
-          },
-          {
-            key: "height",
-            label: "Height (PoW)"
-          },
-          {
-            key: "amount",
-            label: "Amount"
-          },
-          {
-            key: "time",
-            label: "Time"
-          },
-
-          {
-            key: "more",
-            label: "More"
-          }
+          { key: "kblock_height", label: "Epoch" },
+          { key: "height", label: "Height (PoW)" },
+          { key: "amount", label: "Amount" },
+          { key: "time", label: "Time" },
+          { key: "more", label: "More" },
         ],
         items: [
           {
@@ -66,17 +51,17 @@ export default {
             height: "1274",
             amount: "2,89,789 MTR",
             time: "12 sec ago",
-            more: "274"
+            more: "274",
           },
           {
             kblock_height: "275",
             height: "1275",
             amount: "2,89,789 MTR",
             time: "12 sec ago",
-            more: "275"
-          }
-        ]
-      }
+            more: "275",
+          },
+        ],
+      },
     };
   },
 
@@ -85,6 +70,9 @@ export default {
     this.loadEpochRewards();
   },
   methods: {
+    fromWei(num, precision) {
+      return fromWei(num, precision);
+    },
     async loadEpochRewards() {
       try {
         const res = await this.$api.validator.getValidateReward(
@@ -103,35 +91,26 @@ export default {
         const { mtr, mtrg, pos, pow, staking } = res;
         this.pos_data = [
           [
+            { content: staking.validators, label: "Validators" },
             {
-              content: staking.validators,
-              label: "Validators"
+              content: fromWei(staking.totalStaked, 0) + " MTRG",
+              label: "Total Staked",
             },
-            {
-              content: staking.totalStakedStr,
-              label: "Total Staked"
-            }
           ],
           [
-            {
-              content: pos.best,
-              label: "PoS Chain Height"
-            },
-            {
-              content: "$ " + mtr.price,
-              label: "MTR Price"
-            },
+            { content: pos.best, label: "PoS Chain Height" },
+            { content: "$ " + mtr.price, label: "MTR Price" },
             {
               content: `${staking.onlineNodes}/${staking.totalNodes}`,
-              label: "Online/ Total Node"
-            }
-          ]
+              label: "Online/ Total Node",
+            },
+          ],
         ];
       } catch (e) {
         console.error(e);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
