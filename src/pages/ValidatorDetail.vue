@@ -94,6 +94,9 @@
         :title="proposed.title"
         :data="proposed.data"
         :pagination="proposed.pagination"
+        :paginateCurrentPage="current_page"
+        :loading="load"
+        :paginateTotal="proposed_total"
       >
         <template v-slot:cell(block_hash)="data">
           <div class="dt-row">
@@ -119,6 +122,9 @@ export default {
   },
   data() {
     return {
+      proposed_total: 0,
+      load: true,
+      current_page: 1,
       validator: {
         name: "",
         description: "",
@@ -239,12 +245,17 @@ export default {
       this.delegators.data.items = delegators;
     },
     async loadProposed() {
-      const { address } = this.$route.params;
-      const res = await this.$api.account.getProposed(address, 1);
-      const { proposed } = res;
-      this.proposed.data.items = proposed.map((b) => {
-        return { ...b, blockhash: b.hash };
-      });
+      try {
+        const { address } = this.$route.params;
+        const { proposed } = await this.$api.account.getProposed(address, 1, 8);
+        this.proposed.data.items = proposed.map((b) => {
+          return { ...b, blockhash: b.hash };
+        });
+        this.load = false;
+      } catch (e) {
+        console.error(e);
+        this.load = false;
+      }
     },
   },
 };

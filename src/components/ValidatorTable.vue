@@ -55,7 +55,7 @@
           </div>
         </template>
         <template v-slot:cell(address)="data">
-          <div class="dt-row">
+          <div class="dt-row" style="word-break: break-all">
             <router-link
               class="link"
               :to="{ name: 'validatorDetail', params: { address: data.value } }"
@@ -108,12 +108,12 @@ export default {
       validate_right_search: "",
       validator_data: {
         fields: [],
-        items: [],
-      },
+        items: []
+      }
     };
   },
   components: {
-    Loading,
+    Loading
   },
   beforeMount() {
     console.log("page", this.page_size);
@@ -122,7 +122,7 @@ export default {
   watch: {
     validate_right_search(newVal) {
       this.loadData();
-    },
+    }
   },
   methods: {
     formatTime(value) {
@@ -161,7 +161,7 @@ export default {
             { key: "netAddr", label: "Net Address" },
             { key: "votingPowerStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "upTime", label: "Up Time 48h" },
+            { key: "upTime", label: "Up Time 48h" }
           ];
           this.validator_data.items = res.delegates;
         }
@@ -171,7 +171,7 @@ export default {
             { key: "address", label: "Address" },
             { key: "totalVotesStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "upTime", label: "Up Time 48h" },
+            { key: "upTime", label: "Up Time 48h" }
           ];
           this.validator_data.items = res.candidates;
         }
@@ -181,15 +181,15 @@ export default {
             { key: "address", label: "Address" },
             { key: "totalPoints", label: "Total Points" },
             { key: "jailedTime", label: "Jailed Time" },
-            { key: "bailAmount", label: "Bail Amount" },
+            { key: "bailAmount", label: "Bail Amount" }
           ];
           this.validator_data.items = res.jailed;
         }
       } catch (e) {
         this.loading = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

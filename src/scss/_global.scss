@@ -320,3 +320,10 @@ body {
 .align-center {
   align-items: center;
 }
+
+@media (max-width: 600px) {
+  .row {
+    margin-right: 0px;
+    box-sizing: border-box;
+  }
+}
