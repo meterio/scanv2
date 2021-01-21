@@ -99,10 +99,10 @@ export default {
             label: "Staked MTRG",
             content: fromWei(staking.totalStaked, 0) + " MTRG",
           },
-          { label: "Inflation", content: pos.inflation },
+          { label: "MTRG Annual Inflation", content: pos.inflation },
           {
-            label: "Average Daily Reward Pool",
-            content: mtrg.avgDailyReward,
+            label: "Address Count",
+            content: pos.addressCount,
           },
         ],
       ];

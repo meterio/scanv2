@@ -6,14 +6,14 @@
         <b-row>
           <b-col class="border-r">
             <div class="box">
-              <p class="label">MTRG(Price)</p>
+              <p class="label">MTR Price</p>
               <p class="value">{{ mtrPrice }}</p>
             </div>
           </b-col>
 
           <b-col>
             <div class="box">
-              <p class="label">MTRG(Price)</p>
+              <p class="label">MTRG Price</p>
               <p class="value">{{ mtrgPrice }}</p>
             </div>
           </b-col>

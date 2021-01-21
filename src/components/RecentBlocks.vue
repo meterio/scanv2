@@ -30,7 +30,7 @@
             </div>
 
             <div class="signed-view">
-              <p>Mined by</p>
+              <p>Proposer</p>
               <router-link
                 class="link"
                 :to="{

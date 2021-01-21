@@ -68,9 +68,11 @@
           </b-nav-item-dropdown>
 
           <b-nav-item
-            :to="{ name: 'auction', network: $route.params.network }"
-            :class="{ active: auctionActive }"
-            >Auctions</b-nav-item
+            ><router-link
+              :to="{ name: 'auction', network: $route.params.network }"
+              :class="auctionActive ? 'active' : ''"
+              >Auctions</router-link
+            ></b-nav-item
           >
 
           <b-dropdown
@@ -117,7 +119,6 @@ export default {
     },
     blockActive() {
       const path = this.$route.path;
-      const network = this.network;
       const prefixs = ["/tx", "/block", "/pos", "/pow", "/account"];
       for (const p of prefixs) {
         if (path.startsWith(p)) {
@@ -128,8 +129,10 @@ export default {
     },
     auctionActive() {
       const path = this.$route.path;
-      const network = this.network;
-      return path.startsWith(`/auction`);
+      console.log(path);
+      let x = path.startsWith(`/auction`);
+      console.log(x);
+      return x;
     },
   },
   methods: {

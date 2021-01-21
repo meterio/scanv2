@@ -108,7 +108,7 @@ export default {
               label: "Reward (TH/s*Day)",
             },
             {
-              content: new BigNumber(pow.costParity).toFixed(3),
+              content: "$ " + new BigNumber(pow.costParity).toFixed(3),
               label: "MTR Cost Parity",
             },
           ],

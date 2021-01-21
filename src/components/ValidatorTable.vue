@@ -103,6 +103,7 @@ export default {
   name: "ValidatorTable",
   data() {
     return {
+      page_size: 20,
       loading: true,
       current_tab: "Delegates",
       tabs: ["Delegates", "Candidates", "Jailed"],
@@ -155,16 +156,14 @@ export default {
           this.validate_right_search
         );
         this.loading = false;
-        console.log("res", res);
         this.validate_table_total = res.totalPage * this.page_size;
         if (this.current_tab === "Delegates") {
           this.validator_data.fields = [
             { key: "name", label: "Name", tdClass: "flex" },
             { key: "address", label: "Address" },
-            { key: "netAddr", label: "Net Address" },
             { key: "votingPowerStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "upTime", label: "Up Time 48h" },
+            { key: "totalPoints", label: "Total Points" },
           ];
           this.validator_data.items = res.delegates;
         }
@@ -174,7 +173,7 @@ export default {
             { key: "address", label: "Address" },
             { key: "totalVotesStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "upTime", label: "Up Time 48h" },
+            { key: "totalPoints", label: "Total Points" },
           ];
           this.validator_data.items = res.candidates;
         }

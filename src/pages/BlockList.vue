@@ -51,7 +51,7 @@ export default {
           { key: "number", label: "Block" },
           { key: "timestamp", label: "Time" },
           { key: "txCount", label: "Txns" },
-          { key: "beneficiary", label: "Mined By" },
+          { key: "beneficiary", label: "Proposer" },
         ],
         items: [],
       },
