@@ -22,7 +22,7 @@ export default {
   components: {
     DataTable,
     NavTabs,
-    DataSummary
+    DataSummary,
   },
   data() {
     return {
@@ -34,7 +34,7 @@ export default {
         pagination: {
           show: true,
           align: "center",
-          perPage: 8
+          perPage: 8,
         },
         fields: [
           { key: "txhash", label: "Hash" },
@@ -42,10 +42,10 @@ export default {
           { key: "timestamp", label: "Time" },
           { key: "from", label: "From" },
           { key: "to", label: "To" },
-          { key: "amount", label: "Amount" }
+          { key: "amount", label: "Amount" },
         ],
-        items: []
-      }
+        items: [],
+      },
     };
   },
 
@@ -63,7 +63,7 @@ export default {
         const { address } = this.$route.params;
         this.txs.items = [];
         const { txs, totalPage } = await this.$api.transaction.getRecentTxs(
-          this.$route.params.network,
+          this.network,
           this.page,
           this.limit
         );
@@ -75,14 +75,14 @@ export default {
             from: t.origin,
             to: t.tos && t.tos.length > 0 ? t.tos[0].address : "nobody",
             amount: t.totalAmountStrs[0],
-            timestamp: t.block.timestamp
+            timestamp: t.block.timestamp,
           });
         }
         this.txs_load = false;
       } catch (e) {
         this.txs_load = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>

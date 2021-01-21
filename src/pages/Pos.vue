@@ -14,7 +14,7 @@
           <router-link
             :to="{
               name: 'posRewards',
-              params: { network: $route.params.network, epoch: data.value },
+              params: { epoch: data.value },
             }"
             >Epoch Reward List</router-link
           >
@@ -78,7 +78,7 @@ export default {
     async loadEpochRewards() {
       try {
         const res = await this.$api.validator.getValidateReward(
-          this.$route.params.network,
+          this.network,
           this.current_page,
           this.page_size
         );
@@ -89,7 +89,7 @@ export default {
     },
     async loadPostData() {
       try {
-        const res = await this.$api.metric.getAll(this.$route.params.network);
+        const res = await this.$api.metric.getAll(this.network);
         this.loading = false;
         const { mtr, mtrg, pos, pow, staking } = res;
         this.pos_data = [

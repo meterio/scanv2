@@ -59,14 +59,14 @@
             <b-dropdown-item
               :to="{
                 name: 'pos',
-                params: { network: $route.params.network }
+                params: { network: $route.params.network },
               }"
               >PoS</b-dropdown-item
             >
             <b-dropdown-item
               :to="{
                 name: 'pow',
-                params: { network: $route.params.network }
+                params: { network: $route.params.network },
               }"
               >PoW</b-dropdown-item
             >
@@ -74,14 +74,14 @@
             <b-dropdown-item
               :to="{
                 name: 'txList',
-                params: { network: $route.params.network }
+                params: { network: $route.params.network },
               }"
               >View Txs</b-dropdown-item
             >
             <b-dropdown-item
               :to="{
                 name: 'blockList',
-                params: { network: $route.params.network }
+                params: { network: $route.params.network },
               }"
               >View Blocks</b-dropdown-item
             >
@@ -89,14 +89,14 @@
             <b-dropdown-item
               :to="{
                 name: 'topMTR',
-                params: { network: $route.params.network }
+                params: { network: $route.params.network },
               }"
               >Top MTR Accounts</b-dropdown-item
             >
             <b-dropdown-item
               :to="{
                 name: 'topMTRG',
-                params: { network: $route.params.network }
+                params: { network: $route.params.network },
               }"
               >Top MTRG Accounts</b-dropdown-item
             >
@@ -126,25 +126,26 @@
 
 <script>
 import { setNetwork } from "@/utils/http";
+import { DEPLOY_DOMAIN } from "@/config";
 
 export default {
   name: "TopNav",
   data() {
     return {
       modal_show: false,
-      searchKey: ""
+      searchKey: "",
     };
   },
   computed: {
     searchPrefix() {
-      const { network } = this.$route.params;
+      const { network } = this.$store.state.dom;
       return `${network.substring(0, 1).toUpperCase()}${network.substring(
         1
       )}net`;
     },
     blockActive() {
       const path = this.$route.path;
-      const network = this.$route.params.network;
+      const network = this.network;
       if (!(path == `/${network}/` || path.startsWith(`/${network}/auction`))) {
         return true;
       } else {
@@ -153,38 +154,36 @@ export default {
     },
     auctionActive() {
       const path = this.$route.path;
-      const network = this.$route.params.network;
+      const network = this.network;
       return path.startsWith(`/${network}/auction`);
-    }
+    },
   },
   methods: {
-    updateNetwork(network) {
-      this.$store.commit("dom/SET_NETWORK", network);
-    },
-
     changeNetwork(newNetwork) {
-      // const mark = window.localStorage.getItem("proxyMark");
-      // if (mark != key) {
-      //   window.localStorage.setItem("proxyMark", key);
-      //   window.location.reload();
-      //   this.searchPrefix = `${key
-      //     .substring(0, 1)
-      //     .toUpperCase()}${key.substring(1)} net`;
-      // }
-      // console.log("key", key);
-      const { network } = this.$route.params;
-      if (network !== newNetwork) {
-        this.$router.push({
-          name: this.$route.name,
-          params: { ...this.$route.params, network: newNetwork }
-        });
-        this.updateNetwork(newNetwork);
+      console.log(process.env.NODE_ENV);
+      console.log(this.$route);
+      const { network } = this.$store.state.dom;
+      if (process.env.NODE_ENV === "development") {
+        if (network !== newNetwork) {
+          this.$store.commit("dom/SET_NETWORK", newNetwork);
+        }
+      }
+      if (process.env.NODE_ENV === "production") {
+        if (network !== newNetwork) {
+          if (!(newNetwork in DEPLOY_DOMAIN)) {
+            console.log("Invalid network: ", newNetwork);
+            return;
+          }
+          console.log(`switch to ${domain}`);
+          const domain = DEPLOY_DOMAIN[newNetwork];
+          window.location.href = `http://${domain}` + this.$route.path;
+        }
       }
     },
     async searchKeyWords() {
       try {
         const { type } = await this.$api.search.searchKeyWord(
-          this.$route.params.network,
+          this.network,
           this.searchKey
         );
         let jump_url = "";
@@ -210,8 +209,8 @@ export default {
         // this.$bvModal.show('homeModal')
         this.modal_show = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

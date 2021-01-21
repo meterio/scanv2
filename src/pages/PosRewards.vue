@@ -42,7 +42,7 @@ export default {
     async init() {
       const { epoch } = this.$route.params;
       const res = await this.$api.validator.getRewardsByEpoch(
-        this.$route.params.network,
+        this.network,
         epoch
       );
       this.loading = false;

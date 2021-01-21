@@ -12,13 +12,13 @@
     template(v-slot:cell(number)="data")
       .dt-row
         router-link.link(
-          :to="{ name: 'blockDetail', params: { network: $route.params.network, revision: data.item.number } }"
+          :to="{ name: 'blockDetail', params: { revision: data.item.number } }"
         ) {{ '#' + data.item.number }}
 
     template(v-slot:cell(signer)="data")
       .dt-row
         router-link.link(
-          :to="{ name: 'address', params: { network: $route.params.network, address: data.item.signer } }"
+          :to="{ name: 'address', params: { address: data.item.signer } }"
         ) {{ data.item.signer }}
 </template>
 
@@ -33,7 +33,7 @@ export default {
   components: {
     DataTable,
     NavTabs,
-    DataSummary
+    DataSummary,
   },
   data() {
     return {
@@ -45,16 +45,16 @@ export default {
         pagination: {
           show: true,
           align: "center",
-          perPage: 8
+          perPage: 8,
         },
         fields: [
           { key: "mtrgRank", label: "Rank" },
           { key: "fullAddress", label: "Address" },
           { key: "name", label: "Name" },
-          { key: "mtrgBalanceStr", label: "MTRG Balance" }
+          { key: "mtrgBalanceStr", label: "MTRG Balance" },
         ],
-        items: []
-      }
+        items: [],
+      },
     };
   },
 
@@ -72,20 +72,20 @@ export default {
       try {
         this.accounts.items = [];
         const { accounts, totalPage } = await this.$api.account.getTopMTRG(
-          this.$route.params.network,
+          this.network,
           this.page,
           this.limit
         );
         console.log("accounts:", accounts, "totalPage:", totalPage);
         this.paginateTotal = totalPage * this.limit;
-        this.accounts.items = accounts.map(a => {
+        this.accounts.items = accounts.map((a) => {
           return { ...a, fullAddress: a.address };
         });
         this.loading = false;
       } catch (e) {
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>

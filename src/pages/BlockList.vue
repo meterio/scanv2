@@ -12,13 +12,13 @@
     template(v-slot:cell(number)="data")
       .dt-row
         router-link.link(
-          :to="{ name: 'blockDetail', params: { network: $route.params.network, revision: data.item.number } }"
+          :to="{ name: 'blockDetail', params: { revision: data.item.number } }"
         ) {{ '#' + data.item.number }}
 
     template(v-slot:cell(beneficiary)="data")
       .dt-row
         router-link.link(
-          :to="{ name: 'address', params: { network: $route.params.network, address: data.item.beneficiary } }"
+          :to="{ name: 'address', params: { address: data.item.beneficiary } }"
         ) {{ data.item.beneficiary }}
 </template>
 
@@ -33,7 +33,7 @@ export default {
   components: {
     DataTable,
     NavTabs,
-    DataSummary
+    DataSummary,
   },
   data() {
     return {
@@ -45,16 +45,16 @@ export default {
         pagination: {
           show: true,
           align: "center",
-          perPage: 8
+          perPage: 8,
         },
         fields: [
           { key: "number", label: "Block" },
           { key: "timestamp", label: "Time" },
           { key: "txCount", label: "Txns" },
-          { key: "beneficiary", label: "Mined By" }
+          { key: "beneficiary", label: "Mined By" },
         ],
-        items: []
-      }
+        items: [],
+      },
     };
   },
   methods: {
@@ -71,7 +71,7 @@ export default {
         const { address } = this.$route.params;
         this.blocks.items = [];
         const { blocks, totalPage } = await this.$api.block.getRecentBlocks(
-          this.$route.params.network,
+          this.network,
           this.page,
           this.limit
         );
@@ -81,7 +81,7 @@ export default {
       } catch (e) {
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>

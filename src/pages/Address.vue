@@ -14,7 +14,7 @@
       template(v-slot:cell(candidate)="data")
         .dt-row
           router-link.link(
-            :to="{ name: 'address', params: { network: $route.params.network, address: data.item.candidate } }"
+            :to="{ name: 'address', params: { address: data.item.candidate } }"
           ) {{ data.item.candidate }}
       template(v-slot:cell(totalVotes)="data")
         .dt-row {{ fromWei(data.item.totalVotes, 2) }} MTRG
@@ -42,13 +42,13 @@ export default {
   components: {
     DataTable,
     NavTabs,
-    DataSummary
+    DataSummary,
   },
   data() {
     return {
       address_tabs: [
         { name: "Transations" },
-        { name: "ERC20 Transactions", width: 170 }
+        { name: "ERC20 Transactions", width: 170 },
       ],
       address_current_page: 1,
       address_total: 0,
@@ -61,7 +61,7 @@ export default {
         pagination: {
           show: true,
           align: "center",
-          perPage: 8
+          perPage: 8,
         },
         fields: [
           { key: "txhash", label: "Hash" },
@@ -69,25 +69,25 @@ export default {
           { key: "timestamp", label: "Time" },
           { key: "from", label: "From" },
           { key: "to", label: "To" },
-          { key: "amount", label: "Amount" }
+          { key: "amount", label: "Amount" },
         ],
-        items: []
+        items: [],
       },
       buckets: {
         pagination: {
           show: false,
           align: "center",
-          perPage: 8
+          perPage: 8,
         },
         fields: [
           { key: "address", label: "Candidate Address" },
           { key: "totalVotes", label: "Votes" },
           { key: "timestamp", label: "Time" },
-          { key: "status", label: "Status" }
+          { key: "status", label: "Status" },
         ],
-        items: []
+        items: [],
       },
-      current_tab_index: 0
+      current_tab_index: 0,
     };
   },
   beforeMount() {},
@@ -119,7 +119,7 @@ export default {
         this.loadBuckets(address);
         this.address = address;
         const res = await this.$api.account.getAccountDetail(
-          this.$route.params.network,
+          this.network,
           address
         );
 
@@ -128,19 +128,19 @@ export default {
           // { key: "Address", value: account.address },
           {
             key: "MTR Balance",
-            value: account.mtrBalanceStr
+            value: account.mtrBalanceStr,
           },
           {
             key: "MTRG Balance",
-            value: account.mtrgBalanceStr
-          }
+            value: account.mtrgBalanceStr,
+          },
         ];
         if (account.firstSeen && account.firstSeen.number > 0) {
           this.summary.push({
             key: "First Seen",
             type: "block-link-with-note",
             value: fromNow(account.firstSeen.timestamp * 1000),
-            block: account.firstSeen.number
+            block: account.firstSeen.number,
           });
         }
         this.account = account;
@@ -151,17 +151,14 @@ export default {
     async loadBuckets(address) {
       this.bucket_load = true;
       try {
-        const bres = await this.$api.account.getBuckets(
-          this.$route.params.network,
-          address
-        );
+        const bres = await this.$api.account.getBuckets(this.network, address);
         const { buckets } = bres;
         for (const b of buckets) {
           this.buckets.items.push({
             address: b.candidate,
             totalVotes: b.totalVotes,
             timestamp: b.createTime,
-            status: b.unbounded ? "Unbounded" : "Created"
+            status: b.unbounded ? "Unbounded" : "Created",
           });
         }
         this.bucket_load = false;
@@ -175,7 +172,7 @@ export default {
         const { address } = this.$route.params;
         this.txs.items = [];
         const { txSummaries, totalPage } = await this.$api.account.getTxs(
-          this.$route.params.network,
+          this.network,
           address,
           this.address_current_page,
           this.page_size
@@ -188,7 +185,7 @@ export default {
             from: t.origin,
             to: t.tos && t.tos.length > 0 ? t.tos[0].address : "nobody",
             amount: t.totalAmountStrs[0],
-            timestamp: t.block.timestamp
+            timestamp: t.block.timestamp,
           });
         }
         this.txs_load = false;
@@ -202,7 +199,7 @@ export default {
       try {
         const { address } = this.$route.params;
         const { transfers, totalPage } = await this.$api.account.getTxs20(
-          this.$route.params.network,
+          this.network,
           address,
           this.address_current_page,
           this.page_size
@@ -215,7 +212,7 @@ export default {
             from: t.from,
             to: t.to,
             amount: t.amount,
-            timestamp: t.block.timestamp
+            timestamp: t.block.timestamp,
           });
         }
         this.txs_load = false;
@@ -223,8 +220,8 @@ export default {
         console.error(e);
         this.txs_load = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

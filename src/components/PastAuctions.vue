@@ -15,10 +15,7 @@
           <router-link
             :to="{
               name: 'auctionDetail',
-              params: {
-                network: $route.params.network,
-                auctionID: data.value,
-              },
+              params: { auctionID: data.value },
             }"
             >View Bids</router-link
           >
@@ -70,9 +67,7 @@ export default {
     },
     async loadPast() {
       try {
-        const { auctions } = await this.$api.auction.getPast(
-          this.$route.params.network
-        );
+        const { auctions } = await this.$api.auction.getPast(this.network);
         let items = [];
         for (const a of auctions) {
           items.push({

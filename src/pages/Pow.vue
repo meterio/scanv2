@@ -25,9 +25,9 @@
             :to="{
               name: 'powRewards',
               params: {
-                network: $route.params.network,
-                epoch: data.value
-              }
+                network: this.network,
+                epoch: data.value,
+              },
             }"
           >
             Mining Reward List
@@ -50,7 +50,7 @@ export default {
   components: {
     DataDashboard,
     HashRateChart,
-    DataTable
+    DataTable,
   },
   data() {
     return {
@@ -59,7 +59,7 @@ export default {
       mining_pagination: {
         show: true,
         align: "center",
-        perPage: 8
+        perPage: 8,
       },
       mining_current_page: 1,
       mining_total: 0,
@@ -73,11 +73,11 @@ export default {
             { key: "pow_height", label: "Height (PoW)" },
             { key: "amount", label: "Amount" },
             { key: "time", label: "Time" },
-            { key: "more", label: "More" }
+            { key: "more", label: "More" },
           ],
-          items: []
-        }
-      }
+          items: [],
+        },
+      },
     };
   },
   methods: {
@@ -88,7 +88,7 @@ export default {
     },
     async initData() {
       try {
-        const res = await this.$api.metric.getAll(this.$route.params.network);
+        const res = await this.$api.metric.getAll(this.network);
         const { mtr, mtrg, pos, pow, staking } = res;
         this.pow_data = [
           [
@@ -96,25 +96,25 @@ export default {
             { content: "$ " + mtr.price, label: "MTR Price" },
             {
               content: formatNum(mtr.circulation, 0),
-              label: "MTR Circulations"
-            }
+              label: "MTR Circulations",
+            },
           ],
           [
             {
               content: `${new BigNumber(pow.hashrate)
                 .dividedBy(1000000)
                 .toFixed(0)} MH/s`,
-              label: "Network Hash Rate"
+              label: "Network Hash Rate",
             },
             {
               content: new BigNumber(pow.rewardPerDay).toFixed(3) + " MTR",
-              label: "Reward (TH/s*Day)"
+              label: "Reward (TH/s*Day)",
             },
             {
               content: new BigNumber(pow.costParity).toFixed(3),
-              label: "MTR Cost Parity"
-            }
-          ]
+              label: "MTR Cost Parity",
+            },
+          ],
         ];
       } catch (e) {}
     },
@@ -126,7 +126,7 @@ export default {
       try {
         this.load = true;
         const { rewards, totalPage } = await this.$api.pow.getRewards(
-          this.$route.params.network,
+          this.network,
           this.mining_current_page,
           this.page_size
         );
@@ -139,7 +139,7 @@ export default {
             pow_height: r.powBlock,
             amount: r.totalAmountStr,
             time: fromNow(r.timestamp * 1000),
-            more: r.epoch
+            more: r.epoch,
           };
           this.mining_reward.data.items.push(item);
         }
@@ -151,17 +151,15 @@ export default {
     async getPowChart() {
       try {
         this.line_load = false;
-        const { hashrates } = await this.$api.metric.getChart(
-          this.$route.params.network
-        );
-        const network = this.$route.params.network;
+        const { hashrates } = await this.$api.metric.getChart(this.network);
+        const network = this.network;
         this.line_data = {
           labels: [],
-          values: []
+          values: [],
         };
         const data = hashrates[`${network.toLowerCase()}net`];
         const me = this;
-        data.map(itm => {
+        data.map((itm) => {
           const time_str = me.formatLineTime(itm[0] * 1000);
           me.line_data.labels.push(time_str);
           me.line_data.values.push(itm[1]);
@@ -185,8 +183,8 @@ export default {
     },
     formatNum(num, precision) {
       return formatNum(num, precision);
-    }
-  }
+    },
+  },
 };
 </script>
 

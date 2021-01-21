@@ -25,7 +25,7 @@ router.beforeEach((to,from,next)=>{
 // router.beforeEach(initCurrentUserStateMiddleware)
 // router.beforeEach(checkAccessMiddleware)
 router.beforeEach(setPageTitleMiddleware)
-router.beforeEach(redirectNetwork)
+// router.beforeEach(redirectNetwork)
 
 router.beforeEach((to, from, next) => {
   NProgress.start()

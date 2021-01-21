@@ -15,7 +15,6 @@
               :to="{
                 name: 'blockDetail',
                 params: {
-                  network: $route.params.network,
                   revision: item.block,
                 },
               }"
@@ -36,7 +35,7 @@
           <router-link
             :to="{
               name: 'address',
-              params: { network: $route.params.network, address: item.value },
+              params: { address: item.value },
             }"
             v-if="item.type === 'address-link'"
             >{{ item.value }}</router-link

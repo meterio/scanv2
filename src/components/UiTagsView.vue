@@ -4,7 +4,7 @@
       <router-link
         :to="{
           name: 'tag',
-          params: { network: $route.params.network, name: tag.name },
+          params: { name: tag.name },
         }"
         >{{ tag.label }}<span class="comma">,</span></router-link
       >

@@ -51,7 +51,7 @@ export default {
 
   methods: {
     async init() {
-      const res = await this.$api.metric.getAll(this.$route.params.network);
+      const res = await this.$api.metric.getAll(this.network);
       const { mtr, mtrg } = res;
       this.mtrPrice = mtr.price + " USD";
       this.mtrgPrice = mtrg.price + " USD";

@@ -16,7 +16,7 @@
                 <router-link
                   :to="{
                     name: 'txDetail',
-                    params: { network: $route.params.network, hash: tx.hash },
+                    params: { hash: tx.hash },
                   }"
                   >{{ shortHash(tx.hash, 8) }}</router-link
                 >
@@ -31,10 +31,7 @@
                   class="link"
                   :to="{
                     name: 'address',
-                    params: {
-                      network: $route.params.network,
-                      address: tx.origin,
-                    },
+                    params: { address: tx.origin },
                   }"
                   >{{ shortAddr(tx.origin, 12) }}</router-link
                 >
@@ -46,10 +43,7 @@
                   class="link"
                   :to="{
                     name: 'address',
-                    params: {
-                      network: $route.params.network,
-                      address: tx.tos[0].address,
-                    },
+                    params: { address: tx.tos[0].address },
                   }"
                   >{{ shortAddr(tx.tos[0].address, 12) }}</router-link
                 >
@@ -109,9 +103,7 @@ export default {
     },
     async initData() {
       try {
-        const res = await this.$api.transaction.getRecentTxs(
-          this.$route.params.network
-        );
+        const res = await this.$api.transaction.getRecentTxs(this.network);
         this.recent_txs = res.txs.splice(0, 10);
         this.loading = false;
       } catch (e) {

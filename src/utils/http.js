@@ -3,6 +3,7 @@
  */
 import axios from "axios";
 import QS from "qs";
+import {API_BASE} from "@/config";
 
 // 环境的切换
 // if (process.env.NODE_ENV == "development") {
@@ -14,21 +15,6 @@ import QS from "qs";
 //     axios.defaults.baseURL = "/api";
 //   }
 // }
-const BASE_URL_MAP = {
-  main: "http://api.meter.io:5000/api/",
-  test: "http://api.meter.io:4000/api/"
-};
-
-function getHttpBaseUrl() {
-  const mark = window.localStorage.getItem("proxyMark") || "main";
-  localStorage.setItem("proxyMark", mark);
-  // return BASE_URL_MAP[mark];
-  axios.defaults.baseURL = BASE_URL_MAP[mark];
-}
-
-export const setNetwork=(network)=>{
-  let key = network || "main";
-}
 
 // 请求超时时间
 axios.defaults.timeout = 10000;
@@ -123,13 +109,12 @@ axios.interceptors.response.use(
  * @param {Object} params [请求时携带的参数]
  */
 export function get(network, url, params) {
-  console.log("URL:", url)
-  console.log("NETWORK: ", network)
-  if (network !== 'main' && network !=='test'){
-    url = network;
-    network = 'main';
+  console.log(`http get | network: ${network}, url: ${url}`)
+  if (!(network in API_BASE)){
+    throw Error(`Invalid network: ${network}`);
   }
-  axios.defaults.baseURL = BASE_URL_MAP[network || "main"];
+  const base = API_BASE[network];
+  axios.defaults.baseURL = base;
   return new Promise((resolve, reject) => {
     axios
       .get(url, { params })

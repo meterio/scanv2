@@ -60,7 +60,7 @@
               class="link"
               :to="{
                 name: 'validatorDetail',
-                params: { network: $route.params.network, address: data.value },
+                params: { address: data.value },
               }"
             >
               {{ data.value }}
@@ -148,7 +148,7 @@ export default {
     async loadData() {
       try {
         const res = await this.$api.validator.getValidateTypeList(
-          this.$route.params.network,
+          this.network,
           this.current_page,
           this.page_size,
           this.current_tab,

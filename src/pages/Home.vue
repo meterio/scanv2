@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     async init() {
-      const res = await this.$api.metric.getAll(this.$route.params.network);
+      const res = await this.$api.metric.getAll(this.network);
       this.loading = false;
       const { mtr, mtrg, pos, pow, staking } = res;
 
@@ -131,7 +131,7 @@ export default {
     async searchKeyWords(key) {
       try {
         const { type } = await this.$api.search.searchKeyWord(
-          this.$route.params.network,
+          this.network,
           key
         );
         console.log("res:>>", type);

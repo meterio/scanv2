@@ -8,7 +8,7 @@
             class="link"
             :to="{
               name: 'txDetail',
-              params: { network: $route.params.network, hash: data.value },
+              params: { hash: data.value },
             }"
             >{{ shortHash(data.value) }}</router-link
           >
@@ -67,10 +67,7 @@ export default {
     async init() {
       const { revision } = this.$route.params;
       this.loading = true;
-      const res = await this.$api.block.getBlockDetail(
-        this.$route.params.network,
-        revision
-      );
+      const res = await this.$api.block.getBlockDetail(this.network, revision);
       const b = res.block;
       this.summaryTitle = `Block: #${b.number}`;
       this.summary = [

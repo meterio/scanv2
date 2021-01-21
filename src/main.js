@@ -28,11 +28,16 @@ Vue.use(IconsPlugin);
 Vue.config.productionTip = false;
 
 var mixin = {
+  computed:{
+    network(){
+      return this.$store.state.dom.network;
+    }
+  },
   beforeMount(){
     if (this.init) this.init();
   },
   watch: {
-    $route(to, from) {
+    network(to, from) {
       if (this.init) this.init();
     },
   },

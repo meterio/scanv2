@@ -9,7 +9,7 @@
             class="link"
             :to="{
               name: 'address',
-              params: { network: $route.params.network, address: data.value },
+              params: { address: data.value },
             }"
             >{{ data.value }}</router-link
           >
@@ -57,10 +57,7 @@ export default {
   },
   async mounted() {
     const { hash } = this.$route.params;
-    const res = await this.$api.transaction.getTxDetail(
-      this.$route.params.network,
-      hash
-    );
+    const res = await this.$api.transaction.getTxDetail(this.network, hash);
     this.loading = false;
     const { tx, summary } = res;
     this.summaryTitle = "Transaction";

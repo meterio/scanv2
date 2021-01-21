@@ -1,6 +1,7 @@
 /**
  * anything that relates to DOM
  */
+import {DEPLOY_DOMAIN} from "@/config";
 export default {
   namespaced: true,
   state: {
@@ -11,7 +12,7 @@ export default {
     widthExtraSmall: 320,
     widthSmall: 640,
     widthTablet: 1024,
-    network: '',
+    network: process.env.NODE_ENV === 'development' ? 'main' : (window.location.hostname === DEPLOY_DOMAIN['main'] ? 'main' : 'test'),
   },
 
   mutations: {

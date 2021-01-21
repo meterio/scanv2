@@ -74,9 +74,7 @@ export default {
     },
     async loadAuctions() {
       try {
-        const { present } = await this.$api.auction.getPresent(
-          this.$route.params.network
-        );
+        const { present } = await this.$api.auction.getPresent(this.network);
         this.load = false;
         const items = [];
         if (present.startHeight) {

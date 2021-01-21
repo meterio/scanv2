@@ -37,10 +37,7 @@ export default {
   methods: {
     async init() {
       const { auctionID } = this.$route.params;
-      const res = await this.$api.auction.getBids(
-        this.$route.params.network,
-        auctionID
-      );
+      const res = await this.$api.auction.getBids(this.network, auctionID);
       this.loading = false;
       const { summary, bids } = res;
       this.summary = [

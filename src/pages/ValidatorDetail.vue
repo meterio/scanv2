@@ -103,10 +103,7 @@
             <router-link
               :to="{
                 name: 'blockDetail',
-                params: {
-                  network: $route.params.network,
-                  revision: data.value
-                }
+                params: { revision: data.value },
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -126,7 +123,7 @@ export default {
   name: "ValidatorDetail",
   components: {
     PieChart,
-    DataTable
+    DataTable,
   },
   data() {
     return {
@@ -137,25 +134,25 @@ export default {
       validator: {
         name: "",
         description: "",
-        address: "0x"
+        address: "0x",
       },
       mainProps: {
         blank: true,
         blankColor: "#777",
         width: 100,
         height: 100,
-        class: "m1"
+        class: "m1",
       },
       delegated_chart: {
         options: {
           legend: {
-            display: false
-          }
+            display: false,
+          },
         },
         data: {
           labels: ["Self", "Others"],
-          datasets: []
-        }
+          datasets: [],
+        },
       },
       delegators: {
         title: "Delegators",
@@ -163,11 +160,11 @@ export default {
           fields: [
             { key: "address", label: "Delegator" },
             { key: "amountStr", label: "Amount" },
-            { key: "percent", label: "Share" }
+            { key: "percent", label: "Share" },
           ],
-          items: []
+          items: [],
         },
-        pagination: { show: true, align: "right" }
+        pagination: { show: true, align: "right" },
       },
       votes: {
         title: "Votes",
@@ -176,11 +173,11 @@ export default {
             { key: "id", label: "Bucket ID" },
             { key: "address", label: "Voter" },
             { key: "valueStr", label: "Amount" },
-            { key: "timestamp", label: "Time" }
+            { key: "timestamp", label: "Time" },
           ],
-          items: []
+          items: [],
         },
-        pagination: { show: true, align: "right" }
+        pagination: { show: true, align: "right" },
       },
       proposed: {
         title: "Proposed Blocks",
@@ -189,16 +186,16 @@ export default {
             { key: "number", label: "Height" },
             { key: "blockhash", label: "Block Hash" },
             { key: "txCount", label: "Txs" },
-            { key: "timestamp", label: "Time" }
+            { key: "timestamp", label: "Time" },
           ],
-          items: []
+          items: [],
         },
         pagination: {
           show: true,
           align: "center",
-          perPage: 8
-        }
-      }
+          perPage: 8,
+        },
+      },
     };
   },
   methods: {
@@ -214,19 +211,13 @@ export default {
     },
     async loadInfo() {
       const { address } = this.$route.params;
-      const res = await this.$api.validator.getValidator(
-        this.$route.params.network,
-        address
-      );
+      const res = await this.$api.validator.getValidator(this.network, address);
       const { validator } = res;
       this.validator = validator;
     },
     async loadVotes() {
       const { address } = this.$route.params;
-      const res = await this.$api.validator.getVotes(
-        this.$route.params.network,
-        address
-      );
+      const res = await this.$api.validator.getVotes(this.network, address);
       this.chart_load = false;
       const { votes } = res;
       this.votes.data.items = votes;
@@ -247,15 +238,15 @@ export default {
       this.delegated_chart.data.datasets = [
         {
           backgroundColor: ["#FFB84F", "#287DF9"],
-          data: [selfNum, othersNum]
-        }
+          data: [selfNum, othersNum],
+        },
       ];
       this.chart_load = true;
     },
     async loadDelegators() {
       const { address } = this.$route.params;
       const res = await this.$api.validator.getDelegators(
-        this.$route.params.network,
+        this.network,
         address
       );
       const { delegators } = res;
@@ -266,13 +257,13 @@ export default {
         this.load = true;
         const { address } = this.$route.params;
         const { proposed, totalPage } = await this.$api.account.getProposed(
-          this.$route.params.network,
+          this.network,
           address,
           this.current_page,
           this.page_size
         );
         this.proposed_total = totalPage * this.page_size;
-        this.proposed.data.items = proposed.map(b => {
+        this.proposed.data.items = proposed.map((b) => {
           return { ...b, blockhash: b.hash };
         });
         this.load = false;
@@ -280,8 +271,8 @@ export default {
         console.error(e);
         this.load = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
