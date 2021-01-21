@@ -24,10 +24,7 @@
           <router-link
             :to="{
               name: 'powRewards',
-              params: {
-                network: this.network,
-                epoch: data.value,
-              },
+              params: { epoch: data.value },
             }"
           >
             Mining Reward List

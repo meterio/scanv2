@@ -23,10 +23,7 @@
           >
         </b-nav-form> -->
         <b-nav-form>
-          <b-input-group
-            class="search-group"
-            v-if="$route.path !== '/' + $route.params.network + '/'"
-          >
+          <b-input-group class="search-group" v-if="homeActive">
             <b-form-input
               v-model="searchKey"
               placeholder="Search by address/tx/block"
@@ -44,10 +41,8 @@
           <b-nav-item>
             <router-link
               :to="{ name: 'home' }"
-              :class="
-                $route.path == '/' + $route.params.network + '/' ? 'active' : ''
-              "
-              >Dashboard</router-link
+              :class="!homeActive ? 'active' : ''"
+              >Home</router-link
             >
           </b-nav-item>
 
@@ -56,61 +51,34 @@
             right
             :class="blockActive ? 'top-dropdown active' : ''"
           >
-            <b-dropdown-item
-              :to="{
-                name: 'pos',
-                params: { network: $route.params.network },
-              }"
-              >PoS</b-dropdown-item
-            >
-            <b-dropdown-item
-              :to="{
-                name: 'pow',
-                params: { network: $route.params.network },
-              }"
-              >PoW</b-dropdown-item
-            >
+            <b-dropdown-item :to="{ name: 'pos' }">PoS</b-dropdown-item>
+            <b-dropdown-item :to="{ name: 'pow' }">PoW</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item
-              :to="{
-                name: 'txList',
-                params: { network: $route.params.network },
-              }"
-              >View Txs</b-dropdown-item
-            >
-            <b-dropdown-item
-              :to="{
-                name: 'blockList',
-                params: { network: $route.params.network },
-              }"
+            <b-dropdown-item :to="{ name: 'txList' }">View Txs</b-dropdown-item>
+            <b-dropdown-item :to="{ name: 'blockList' }"
               >View Blocks</b-dropdown-item
             >
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item
-              :to="{
-                name: 'topMTR',
-                params: { network: $route.params.network },
-              }"
+            <b-dropdown-item :to="{ name: 'topMTR' }"
               >Top MTR Accounts</b-dropdown-item
             >
-            <b-dropdown-item
-              :to="{
-                name: 'topMTRG',
-                params: { network: $route.params.network },
-              }"
+            <b-dropdown-item :to="{ name: 'topMTRG' }"
               >Top MTRG Accounts</b-dropdown-item
             >
           </b-nav-item-dropdown>
 
-          <b-nav-item>
-            <router-link
-              :to="{ name: 'auction', network: $route.params.network }"
-              :class="{ active: auctionActive }"
-              >Auctions</router-link
-            >
-          </b-nav-item>
+          <b-nav-item
+            :to="{ name: 'auction', network: $route.params.network }"
+            :class="{ active: auctionActive }"
+            >Auctions</b-nav-item
+          >
 
-          <b-dropdown :text="searchPrefix" variant="outline-secondary">
+          <b-dropdown
+            :text="searchPrefix"
+            size="sm"
+            variant="outline-success"
+            class="mx-2"
+          >
             <b-dropdown-item @click="changeNetwork('main')"
               >Mainnet</b-dropdown-item
             >
@@ -143,19 +111,24 @@ export default {
         1
       )}net`;
     },
+    homeActive() {
+      return this.$route.path === "" || this.$route.path === "/";
+    },
     blockActive() {
       const path = this.$route.path;
       const network = this.network;
-      if (!(path == `/${network}/` || path.startsWith(`/${network}/auction`))) {
-        return true;
-      } else {
-        return false;
+      const prefixs = ["/tx", "/block", "/pos", "/pow", "/account"];
+      for (const p of prefixs) {
+        if (path.startsWith(p)) {
+          return true;
+        }
       }
+      return false;
     },
     auctionActive() {
       const path = this.$route.path;
       const network = this.network;
-      return path.startsWith(`/${network}/auction`);
+      return path.startsWith(`/auction`);
     },
   },
   methods: {
