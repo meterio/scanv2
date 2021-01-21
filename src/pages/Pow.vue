@@ -3,7 +3,11 @@
     <!-- block statistic -->
     <DataDashboard v-bind:rows="pow_data"></DataDashboard>
 
-    <HashRateChart class="px-0" :chartData="{}"></HashRateChart>
+    <HashRateChart
+      class="px-0"
+      :dataCollection="line_data"
+      v-if="line_load"
+    ></HashRateChart>
 
     <DataTable
       :title="mining_reward.title"
@@ -22,8 +26,8 @@
               name: 'powRewards',
               params: {
                 network: $route.params.network,
-                epoch: data.value,
-              },
+                epoch: data.value
+              }
             }"
           >
             Mining Reward List
@@ -46,20 +50,21 @@ export default {
   components: {
     DataDashboard,
     HashRateChart,
-    DataTable,
+    DataTable
   },
   data() {
     return {
       load: true,
+      line_load: false,
       mining_pagination: {
         show: true,
         align: "center",
-        perPage: 8,
+        perPage: 8
       },
       mining_current_page: 1,
       mining_total: 0,
       pow_data: [],
-
+      line_data: {},
       mining_reward: {
         title: "Mining Rewards",
         data: {
@@ -68,17 +73,18 @@ export default {
             { key: "pow_height", label: "Height (PoW)" },
             { key: "amount", label: "Amount" },
             { key: "time", label: "Time" },
-            { key: "more", label: "More" },
+            { key: "more", label: "More" }
           ],
-          items: [],
-        },
-      },
+          items: []
+        }
+      }
     };
   },
   methods: {
     init() {
       this.initData();
       this.loadRewards();
+      this.getPowChart();
     },
     async initData() {
       try {
@@ -90,25 +96,25 @@ export default {
             { content: "$ " + mtr.price, label: "MTR Price" },
             {
               content: formatNum(mtr.circulation, 0),
-              label: "MTR Circulations",
-            },
+              label: "MTR Circulations"
+            }
           ],
           [
             {
               content: `${new BigNumber(pow.hashrate)
                 .dividedBy(1000000)
                 .toFixed(0)} MH/s`,
-              label: "Network Hash Rate",
+              label: "Network Hash Rate"
             },
             {
               content: new BigNumber(pow.rewardPerDay).toFixed(3) + " MTR",
-              label: "Reward (TH/s*Day)",
+              label: "Reward (TH/s*Day)"
             },
             {
               content: new BigNumber(pow.costParity).toFixed(3),
-              label: "MTR Cost Parity",
-            },
-          ],
+              label: "MTR Cost Parity"
+            }
+          ]
         ];
       } catch (e) {}
     },
@@ -133,7 +139,7 @@ export default {
             pow_height: r.powBlock,
             amount: r.totalAmountStr,
             time: fromNow(r.timestamp * 1000),
-            more: r.epoch,
+            more: r.epoch
           };
           this.mining_reward.data.items.push(item);
         }
@@ -142,13 +148,45 @@ export default {
         this.load = false;
       }
     },
+    async getPowChart() {
+      try {
+        this.line_load = false;
+        const { hashrates } = await this.$api.metric.getChart(
+          this.$route.params.network
+        );
+        const network = this.$route.params.network;
+        this.line_data = {
+          labels: [],
+          values: []
+        };
+        const data = hashrates[`${network.toLowerCase()}net`];
+        const me = this;
+        data.map(itm => {
+          const time_str = me.formatLineTime(itm[0] * 1000);
+          me.line_data.labels.push(time_str);
+          me.line_data.values.push(itm[1]);
+        });
+        console.log(this.line_data);
+        this.line_load = true;
+      } catch (e) {
+        this.line_load = false;
+        console.error(e);
+      }
+    },
+    formatLineTime(time) {
+      const b = new Date(time * 1000);
+      const m = b.getMonth() + 1;
+      return `${
+        b.getDate() < 10 ? "0" + b.getDate() : b.getDate().toString()
+      }/${m < 10 ? "0" + m : m.toString()}`;
+    },
     fromWei(num, precision) {
       return fromWei(num, precision);
     },
     formatNum(num, precision) {
       return formatNum(num, precision);
-    },
-  },
+    }
+  }
 };
 </script>
 

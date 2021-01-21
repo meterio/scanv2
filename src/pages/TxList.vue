@@ -14,17 +14,15 @@
 <script>
 import StatusTag from "@/components/StatusTag.vue";
 import BigNumber from "bignumber.js";
-import PieChart from "@/components/PieChart.vue";
 import DataTable from "@/components/DataTable.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
 export default {
   name: "Address",
   components: {
-    PieChart,
     DataTable,
     NavTabs,
-    DataSummary,
+    DataSummary
   },
   data() {
     return {
@@ -36,7 +34,7 @@ export default {
         pagination: {
           show: true,
           align: "center",
-          perPage: 8,
+          perPage: 8
         },
         fields: [
           { key: "txhash", label: "Hash" },
@@ -44,10 +42,10 @@ export default {
           { key: "timestamp", label: "Time" },
           { key: "from", label: "From" },
           { key: "to", label: "To" },
-          { key: "amount", label: "Amount" },
+          { key: "amount", label: "Amount" }
         ],
-        items: [],
-      },
+        items: []
+      }
     };
   },
 
@@ -77,16 +75,14 @@ export default {
             from: t.origin,
             to: t.tos && t.tos.length > 0 ? t.tos[0].address : "nobody",
             amount: t.totalAmountStrs[0],
-            timestamp: t.block.timestamp,
+            timestamp: t.block.timestamp
           });
         }
         this.txs_load = false;
       } catch (e) {
         this.txs_load = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
-
-

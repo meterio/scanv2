@@ -34,23 +34,21 @@
 <script>
 import StatusTag from "@/components/StatusTag.vue";
 import BigNumber from "bignumber.js";
-import PieChart from "@/components/PieChart.vue";
 import DataTable from "@/components/DataTable.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
 export default {
   name: "Address",
   components: {
-    PieChart,
     DataTable,
     NavTabs,
-    DataSummary,
+    DataSummary
   },
   data() {
     return {
       address_tabs: [
         { name: "Transations" },
-        { name: "ERC20 Transactions", width: 170 },
+        { name: "ERC20 Transactions", width: 170 }
       ],
       address_current_page: 1,
       address_total: 0,
@@ -63,7 +61,7 @@ export default {
         pagination: {
           show: true,
           align: "center",
-          perPage: 8,
+          perPage: 8
         },
         fields: [
           { key: "txhash", label: "Hash" },
@@ -71,25 +69,25 @@ export default {
           { key: "timestamp", label: "Time" },
           { key: "from", label: "From" },
           { key: "to", label: "To" },
-          { key: "amount", label: "Amount" },
+          { key: "amount", label: "Amount" }
         ],
-        items: [],
+        items: []
       },
       buckets: {
         pagination: {
           show: false,
           align: "center",
-          perPage: 8,
+          perPage: 8
         },
         fields: [
           { key: "address", label: "Candidate Address" },
           { key: "totalVotes", label: "Votes" },
           { key: "timestamp", label: "Time" },
-          { key: "status", label: "Status" },
+          { key: "status", label: "Status" }
         ],
-        items: [],
+        items: []
       },
-      current_tab_index: 0,
+      current_tab_index: 0
     };
   },
   beforeMount() {},
@@ -130,19 +128,19 @@ export default {
           // { key: "Address", value: account.address },
           {
             key: "MTR Balance",
-            value: account.mtrBalanceStr,
+            value: account.mtrBalanceStr
           },
           {
             key: "MTRG Balance",
-            value: account.mtrgBalanceStr,
-          },
+            value: account.mtrgBalanceStr
+          }
         ];
         if (account.firstSeen && account.firstSeen.number > 0) {
           this.summary.push({
             key: "First Seen",
             type: "block-link-with-note",
             value: fromNow(account.firstSeen.timestamp * 1000),
-            block: account.firstSeen.number,
+            block: account.firstSeen.number
           });
         }
         this.account = account;
@@ -163,7 +161,7 @@ export default {
             address: b.candidate,
             totalVotes: b.totalVotes,
             timestamp: b.createTime,
-            status: b.unbounded ? "Unbounded" : "Created",
+            status: b.unbounded ? "Unbounded" : "Created"
           });
         }
         this.bucket_load = false;
@@ -190,7 +188,7 @@ export default {
             from: t.origin,
             to: t.tos && t.tos.length > 0 ? t.tos[0].address : "nobody",
             amount: t.totalAmountStrs[0],
-            timestamp: t.block.timestamp,
+            timestamp: t.block.timestamp
           });
         }
         this.txs_load = false;
@@ -217,7 +215,7 @@ export default {
             from: t.from,
             to: t.to,
             amount: t.amount,
-            timestamp: t.block.timestamp,
+            timestamp: t.block.timestamp
           });
         }
         this.txs_load = false;
@@ -225,8 +223,8 @@ export default {
         console.error(e);
         this.txs_load = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

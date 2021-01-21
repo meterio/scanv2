@@ -23,7 +23,10 @@
           >
         </b-nav-form> -->
         <b-nav-form>
-          <b-input-group class="search-group" v-if="$route.path !== '/'">
+          <b-input-group
+            class="search-group"
+            v-if="$route.path !== '/' + $route.params.network + '/'"
+          >
             <b-form-input
               v-model="searchKey"
               placeholder="Search by address/tx/block"
@@ -41,7 +44,9 @@
           <b-nav-item>
             <router-link
               :to="{ name: 'home' }"
-              :class="$route.path == '/' ? 'active' : ''"
+              :class="
+                $route.path == '/' + $route.params.network + '/' ? 'active' : ''
+              "
               >Dashboard</router-link
             >
           </b-nav-item>
@@ -54,14 +59,14 @@
             <b-dropdown-item
               :to="{
                 name: 'pos',
-                params: { network: $route.params.network },
+                params: { network: $route.params.network }
               }"
               >PoS</b-dropdown-item
             >
             <b-dropdown-item
               :to="{
                 name: 'pow',
-                params: { network: $route.params.network },
+                params: { network: $route.params.network }
               }"
               >PoW</b-dropdown-item
             >
@@ -69,14 +74,14 @@
             <b-dropdown-item
               :to="{
                 name: 'txList',
-                params: { network: $route.params.network },
+                params: { network: $route.params.network }
               }"
               >View Txs</b-dropdown-item
             >
             <b-dropdown-item
               :to="{
                 name: 'blockList',
-                params: { network: $route.params.network },
+                params: { network: $route.params.network }
               }"
               >View Blocks</b-dropdown-item
             >
@@ -84,14 +89,14 @@
             <b-dropdown-item
               :to="{
                 name: 'topMTR',
-                params: { network: $route.params.network },
+                params: { network: $route.params.network }
               }"
               >Top MTR Accounts</b-dropdown-item
             >
             <b-dropdown-item
               :to="{
                 name: 'topMTRG',
-                params: { network: $route.params.network },
+                params: { network: $route.params.network }
               }"
               >Top MTRG Accounts</b-dropdown-item
             >
@@ -100,7 +105,7 @@
           <b-nav-item>
             <router-link
               :to="{ name: 'auction', network: $route.params.network }"
-              :class="$route.path == '/auction' ? 'active' : ''"
+              :class="{ active: auctionActive }"
               >Auctions</router-link
             >
           </b-nav-item>
@@ -127,7 +132,7 @@ export default {
   data() {
     return {
       modal_show: false,
-      searchKey: "",
+      searchKey: ""
     };
   },
   computed: {
@@ -139,22 +144,18 @@ export default {
     },
     blockActive() {
       const path = this.$route.path;
-      if (
-        path == "/pos" ||
-        path == "/pow" ||
-        path == "/txs" ||
-        path == "/blocks" ||
-        path == "/accounts/mtr" ||
-        path == "/accounts/mtrg" ||
-        path.startsWith("/address/") ||
-        path.startsWith("/tx/") ||
-        path.startsWith("/block/")
-      ) {
+      const network = this.$route.params.network;
+      if (!(path == `/${network}/` || path.startsWith(`/${network}/auction`))) {
         return true;
       } else {
         return false;
       }
     },
+    auctionActive() {
+      const path = this.$route.path;
+      const network = this.$route.params.network;
+      return path.startsWith(`/${network}/auction`);
+    }
   },
   methods: {
     updateNetwork(network) {
@@ -175,7 +176,7 @@ export default {
       if (network !== newNetwork) {
         this.$router.push({
           name: this.$route.name,
-          params: { ...this.$route.params, network: newNetwork },
+          params: { ...this.$route.params, network: newNetwork }
         });
         this.updateNetwork(newNetwork);
       }
@@ -209,8 +210,8 @@ export default {
         // this.$bvModal.show('homeModal')
         this.modal_show = true;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -25,17 +25,15 @@
 <script>
 import StatusTag from "@/components/StatusTag.vue";
 import BigNumber from "bignumber.js";
-import PieChart from "@/components/PieChart.vue";
 import DataTable from "@/components/DataTable.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
 export default {
   name: "Address",
   components: {
-    PieChart,
     DataTable,
     NavTabs,
-    DataSummary,
+    DataSummary
   },
   data() {
     return {
@@ -47,16 +45,16 @@ export default {
         pagination: {
           show: true,
           align: "center",
-          perPage: 8,
+          perPage: 8
         },
         fields: [
           { key: "mtrgRank", label: "Rank" },
           { key: "fullAddress", label: "Address" },
           { key: "name", label: "Name" },
-          { key: "mtrgBalanceStr", label: "MTRG Balance" },
+          { key: "mtrgBalanceStr", label: "MTRG Balance" }
         ],
-        items: [],
-      },
+        items: []
+      }
     };
   },
 
@@ -80,16 +78,14 @@ export default {
         );
         console.log("accounts:", accounts, "totalPage:", totalPage);
         this.paginateTotal = totalPage * this.limit;
-        this.accounts.items = accounts.map((a) => {
+        this.accounts.items = accounts.map(a => {
           return { ...a, fullAddress: a.address };
         });
         this.loading = false;
       } catch (e) {
         this.loading = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
-
-

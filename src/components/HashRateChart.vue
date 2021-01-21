@@ -1,7 +1,11 @@
 <template>
   <b-container class="hash-chart">
     <b-card title="Hash rate by Day" class="text-center">
-      <line-chart :chart-data="datacollection" :options="options"></line-chart>
+      <line-chart
+        :chart-data="datacollection"
+        :options="options"
+        v-if="dataCollection.labels"
+      ></line-chart>
     </b-card>
   </b-container>
 </template>
@@ -12,12 +16,18 @@ import _ from "lodash";
 
 export default {
   name: "HashRateChart",
+  props: {
+    dataCollection: {
+      type: Object,
+      required: true
+    }
+  },
   components: {
     LineChart
   },
   data() {
     return {
-      datacollection: null,
+      datacollection: {},
       options: {
         scales: {
           yAxes: [
@@ -53,7 +63,7 @@ export default {
   methods: {
     fillData() {
       this.datacollection = {
-        labels: ["15/2", "14/2", "13/2", "12/2", "11/2", "10/2"],
+        labels: this.dataCollection.labels,
         datasets: [
           {
             label: "Network Hash Rate",
@@ -61,16 +71,16 @@ export default {
             borderColor: "#287DF9",
             pointBorderColor: "#287DF9",
             pointBackgroundColor: "#287DF9",
-            data: this.getRandoms()
-          },
-          {
-            label: "MTR/(TH/s)/Day",
-            fill: false,
-            borderColor: "#FFB84F",
-            pointBorderColor: "#FFB84F",
-            pointBackgroundColor: "#FFB84F",
-            data: this.getRandoms()
+            data: this.dataCollection.values
           }
+          // {
+          //   label: "MTR/(TH/s)/Day",
+          //   fill: false,
+          //   borderColor: "#FFB84F",
+          //   pointBorderColor: "#FFB84F",
+          //   pointBackgroundColor: "#FFB84F",
+          //   data: this.getRandoms()
+          // }
         ]
       };
     },

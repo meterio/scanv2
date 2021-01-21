@@ -25,17 +25,15 @@
 <script>
 import StatusTag from "@/components/StatusTag.vue";
 import BigNumber from "bignumber.js";
-import PieChart from "@/components/PieChart.vue";
 import DataTable from "@/components/DataTable.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
 export default {
   name: "Address",
   components: {
-    PieChart,
     DataTable,
     NavTabs,
-    DataSummary,
+    DataSummary
   },
   data() {
     return {
@@ -47,16 +45,16 @@ export default {
         pagination: {
           show: true,
           align: "center",
-          perPage: 8,
+          perPage: 8
         },
         fields: [
           { key: "number", label: "Block" },
           { key: "timestamp", label: "Time" },
           { key: "txCount", label: "Txns" },
-          { key: "beneficiary", label: "Mined By" },
+          { key: "beneficiary", label: "Mined By" }
         ],
-        items: [],
-      },
+        items: []
+      }
     };
   },
   methods: {
@@ -83,9 +81,7 @@ export default {
       } catch (e) {
         this.loading = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
-
-

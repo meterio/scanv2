@@ -53,7 +53,7 @@
               class="link"
               :to="{
                 name: 'txDetail',
-                params: { network: $route.params.network, hash: data.value },
+                params: { network: $route.params.network, hash: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -67,7 +67,7 @@
               class="link"
               :to="{
                 name: 'address',
-                params: { network: $route.params.network, address: data.value },
+                params: { network: $route.params.network, address: data.value }
               }"
               >{{ data.value }}</router-link
             >
@@ -80,7 +80,7 @@
               class="link"
               :to="{
                 name: 'address',
-                params: { network: $route.params.network, address: data.value },
+                params: { network: $route.params.network, address: data.value }
               }"
               >{{ shortAddr(data.value) }}</router-link
             >
@@ -93,7 +93,7 @@
               class="link"
               :to="{
                 name: 'address',
-                params: { network: $route.params.network, address: data.value },
+                params: { network: $route.params.network, address: data.value }
               }"
               >{{ shortAddr(data.value) }}</router-link
             >
@@ -105,7 +105,7 @@
               class="link"
               :to="{
                 name: 'address',
-                params: { network: $route.params.network, address: data.value },
+                params: { network: $route.params.network, address: data.value }
               }"
               >{{ shortAddr(data.value) }}</router-link
             >
@@ -121,8 +121,8 @@
                 name: 'blockDetail',
                 params: {
                   network: $route.params.network,
-                  revision: data.value,
-                },
+                  revision: data.value
+                }
               }"
               >#{{ data.value }}</router-link
             >
@@ -137,8 +137,8 @@
                 name: 'blockDetail',
                 params: {
                   network: $route.params.network,
-                  revision: data.value,
-                },
+                  revision: data.value
+                }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -173,56 +173,50 @@ export default {
   name: "DataTable",
   props: {
     title: {
-      type: String,
+      type: String
     },
     data: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           title: "",
           items: [],
-          fields: [],
+          fields: []
         };
-      },
+      }
     },
     pagination: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           show: false,
-          align: "right",
+          align: "right"
         };
-      },
+      }
     },
     loading: {
       type: Boolean,
-      default: false,
+      default: false
     },
     paginateTotal: {
       type: Number,
-      default: 0,
+      default: 0
     },
     paginateCurrentPage: {
       type: Number,
-      default: 1,
-    },
+      default: 1
+    }
   },
   data() {
     return {
-      currentPage: 1,
+      currentPage: 1
     };
-  },
-  computed: {
-    totalRows: function () {
-      return 100;
-      // return this.data.items.length;
-    },
   },
   methods: {
     pgChange(val) {
       this.$emit("tablePaginationChange", val);
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -24,6 +24,7 @@
       <b-row>
         <b-col cols="2">
           <pie-chart
+            v-if="chart_load"
             :chart-data="delegated_chart.data"
             :options="delegated_chart.options"
           ></pie-chart>
@@ -95,6 +96,7 @@
         :paginateCurrentPage="current_page"
         :loading="load"
         :paginateTotal="proposed_total"
+        @tablePaginationChange="proposedChange"
       >
         <template v-slot:cell(block_hash)="data">
           <div class="dt-row">
@@ -103,8 +105,8 @@
                 name: 'blockDetail',
                 params: {
                   network: $route.params.network,
-                  revision: data.value,
-                },
+                  revision: data.value
+                }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -124,40 +126,36 @@ export default {
   name: "ValidatorDetail",
   components: {
     PieChart,
-    DataTable,
+    DataTable
   },
   data() {
     return {
       proposed_total: 0,
+      chart_load: false,
       load: true,
       current_page: 1,
       validator: {
         name: "",
         description: "",
-        address: "0x",
+        address: "0x"
       },
       mainProps: {
         blank: true,
         blankColor: "#777",
         width: 100,
         height: 100,
-        class: "m1",
+        class: "m1"
       },
       delegated_chart: {
         options: {
           legend: {
-            display: false,
-          },
+            display: false
+          }
         },
         data: {
           labels: ["Self", "Others"],
-          datasets: [
-            {
-              backgroundColor: ["#FFB84F", "#287DF9"],
-              data: [7900, 38100],
-            },
-          ],
-        },
+          datasets: []
+        }
       },
       delegators: {
         title: "Delegators",
@@ -165,11 +163,11 @@ export default {
           fields: [
             { key: "address", label: "Delegator" },
             { key: "amountStr", label: "Amount" },
-            { key: "percent", label: "Share" },
+            { key: "percent", label: "Share" }
           ],
-          items: [],
+          items: []
         },
-        pagination: { show: true, align: "right" },
+        pagination: { show: true, align: "right" }
       },
       votes: {
         title: "Votes",
@@ -178,11 +176,11 @@ export default {
             { key: "id", label: "Bucket ID" },
             { key: "address", label: "Voter" },
             { key: "valueStr", label: "Amount" },
-            { key: "timestamp", label: "Time" },
+            { key: "timestamp", label: "Time" }
           ],
-          items: [],
+          items: []
         },
-        pagination: { show: true, align: "right" },
+        pagination: { show: true, align: "right" }
       },
       proposed: {
         title: "Proposed Blocks",
@@ -191,15 +189,16 @@ export default {
             { key: "number", label: "Height" },
             { key: "blockhash", label: "Block Hash" },
             { key: "txCount", label: "Txs" },
-            { key: "timestamp", label: "Time" },
+            { key: "timestamp", label: "Time" }
           ],
-          items: [],
+          items: []
         },
         pagination: {
           show: true,
           align: "center",
-        },
-      },
+          perPage: 8
+        }
+      }
     };
   },
   methods: {
@@ -207,6 +206,10 @@ export default {
       this.loadInfo();
       this.loadVotes();
       this.loadDelegators();
+      this.loadProposed();
+    },
+    proposedChange(val) {
+      this.current_page = val;
       this.loadProposed();
     },
     async loadInfo() {
@@ -224,6 +227,7 @@ export default {
         this.$route.params.network,
         address
       );
+      this.chart_load = false;
       const { votes } = res;
       this.votes.data.items = votes;
 
@@ -243,9 +247,10 @@ export default {
       this.delegated_chart.data.datasets = [
         {
           backgroundColor: ["#FFB84F", "#287DF9"],
-          data: [selfNum, othersNum],
-        },
+          data: [selfNum, othersNum]
+        }
       ];
+      this.chart_load = true;
     },
     async loadDelegators() {
       const { address } = this.$route.params;
@@ -258,14 +263,16 @@ export default {
     },
     async loadProposed() {
       try {
+        this.load = true;
         const { address } = this.$route.params;
-        const { proposed } = await this.$api.account.getProposed(
+        const { proposed, totalPage } = await this.$api.account.getProposed(
           this.$route.params.network,
           address,
-          1,
-          8
+          this.current_page,
+          this.page_size
         );
-        this.proposed.data.items = proposed.map((b) => {
+        this.proposed_total = totalPage * this.page_size;
+        this.proposed.data.items = proposed.map(b => {
           return { ...b, blockhash: b.hash };
         });
         this.load = false;
@@ -273,8 +280,8 @@ export default {
         console.error(e);
         this.load = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
