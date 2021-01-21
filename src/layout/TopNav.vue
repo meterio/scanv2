@@ -23,7 +23,7 @@
           >
         </b-nav-form> -->
         <b-nav-form>
-          <b-input-group class="search-group" v-if="homeActive">
+          <b-input-group class="search-group" v-if="!homeActive">
             <b-form-input
               v-model="searchKey"
               placeholder="Search by address/tx/block"
@@ -41,7 +41,7 @@
           <b-nav-item>
             <router-link
               :to="{ name: 'home' }"
-              :class="!homeActive ? 'active' : ''"
+              :class="homeActive ? 'active' : ''"
               >Home</router-link
             >
           </b-nav-item>
@@ -112,6 +112,7 @@ export default {
       )}net`;
     },
     homeActive() {
+      console.log(this.$route.path);
       return this.$route.path === "" || this.$route.path === "/";
     },
     blockActive() {
