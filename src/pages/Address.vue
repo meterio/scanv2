@@ -68,6 +68,7 @@ export default {
           { key: "blocknum", label: "Block" },
           { key: "timestamp", label: "Time" },
           { key: "from", label: "From" },
+          { key: "direct", label: "" },
           { key: "to", label: "To" },
           { key: "amount", label: "Amount" },
         ],
@@ -139,7 +140,7 @@ export default {
           this.summary.push({
             key: "First Seen",
             type: "block-link-with-note",
-            value: fromNow(account.firstSeen.timestamp * 1000),
+            value: this.fromNow(account.firstSeen.timestamp * 1000),
             block: account.firstSeen.number,
           });
         }
@@ -183,6 +184,7 @@ export default {
             txhash: t.hash,
             blocknum: t.block.number,
             from: t.origin,
+            direct: t.origin === this.address ? "Out" : "In",
             to: t.tos && t.tos.length > 0 ? t.tos[0].address : "nobody",
             amount: t.totalAmountStrs[0],
             timestamp: t.block.timestamp,
