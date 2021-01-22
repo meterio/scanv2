@@ -72,15 +72,15 @@ export default {
             pointBorderColor: "#287DF9",
             pointBackgroundColor: "#287DF9",
             data: this.dataCollection.values
+          },
+          {
+            label: "MTR/(TH/s)/Day",
+            fill: false,
+            borderColor: "#FFB84F",
+            pointBorderColor: "#FFB84F",
+            pointBackgroundColor: "#FFB84F",
+            data: this.dataCollection.diffs
           }
-          // {
-          //   label: "MTR/(TH/s)/Day",
-          //   fill: false,
-          //   borderColor: "#FFB84F",
-          //   pointBorderColor: "#FFB84F",
-          //   pointBackgroundColor: "#FFB84F",
-          //   data: this.getRandoms()
-          // }
         ]
       };
     },

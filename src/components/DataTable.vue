@@ -9,6 +9,7 @@
         :fields="data.fields"
         :busy.sync="loading"
         show-empty
+        :style="{ minHeight: minHeight }"
       >
         <template #table-busy>
           <div class="text-center">
@@ -53,7 +54,7 @@
               class="link"
               :to="{
                 name: 'txDetail',
-                params: { hash: data.value },
+                params: { hash: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -67,7 +68,7 @@
               class="link"
               :to="{
                 name: 'address',
-                params: { address: data.value },
+                params: { address: data.value }
               }"
               >{{ data.value }}</router-link
             >
@@ -80,7 +81,7 @@
               class="link"
               :to="{
                 name: 'address',
-                params: { address: data.value },
+                params: { address: data.value }
               }"
               >{{ shortAddr(data.value) }}</router-link
             >
@@ -93,7 +94,7 @@
               class="link"
               :to="{
                 name: 'address',
-                params: { address: data.value },
+                params: { address: data.value }
               }"
               >{{ shortAddr(data.value) }}</router-link
             >
@@ -105,7 +106,7 @@
               class="link"
               :to="{
                 name: 'address',
-                params: { address: data.value },
+                params: { address: data.value }
               }"
               >{{ shortAddr(data.value) }}</router-link
             >
@@ -119,7 +120,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >#{{ data.value }}</router-link
             >
@@ -132,7 +133,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -167,50 +168,54 @@ export default {
   name: "DataTable",
   props: {
     title: {
+      type: String
+    },
+    minHeight: {
       type: String,
+      default: "auto"
     },
     data: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           title: "",
           items: [],
-          fields: [],
+          fields: []
         };
-      },
+      }
     },
     pagination: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           show: false,
-          align: "right",
+          align: "right"
         };
-      },
+      }
     },
     loading: {
       type: Boolean,
-      default: false,
+      default: false
     },
     paginateTotal: {
       type: Number,
-      default: 0,
+      default: 0
     },
     paginateCurrentPage: {
       type: Number,
-      default: 1,
-    },
+      default: 1
+    }
   },
   data() {
     return {
-      currentPage: 1,
+      currentPage: 1
     };
   },
   methods: {
     pgChange(val) {
       this.$emit("tablePaginationChange", val);
-    },
-  },
+    }
+  }
 };
 </script>
 

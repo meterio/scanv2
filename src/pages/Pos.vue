@@ -6,15 +6,20 @@
     <data-table
       hover
       :data="epoch_reward_data"
+      :loading="load"
+      :paginateTotal="total"
+      :paginateCurrentPage="current_page"
+      :pagination="epoch_pagination"
       class="px-0"
       title="Epoch Rewards"
+      @tablePaginationChange="paginationChange"
     >
       <template v-slot:cell(more)="data">
         <div class="dt-row">
           <router-link
             :to="{
               name: 'posRewards',
-              params: { epoch: data.value },
+              params: { epoch: data.value }
             }"
             >Epoch Reward List</router-link
           >
@@ -35,37 +40,29 @@ export default {
   components: {
     DataDashboard,
     ValidatorTable,
-    DataTable,
+    DataTable
   },
   data() {
     return {
+      load: true,
+      total: 0,
       pos_data: [],
       current_page: 1,
+      epoch_pagination: {
+        show: true,
+        align: "center",
+        perPage: 8
+      },
       epoch_reward_data: {
         fields: [
           { key: "kblock_height", label: "Epoch" },
           { key: "height", label: "Height (PoW)" },
           { key: "amount", label: "Amount" },
           { key: "time", label: "Time" },
-          { key: "more", label: "More" },
+          { key: "more", label: "More" }
         ],
-        items: [
-          {
-            kblock_height: "274",
-            height: "1274",
-            amount: "2,89,789 MTR",
-            time: "12 sec ago",
-            more: "274",
-          },
-          {
-            kblock_height: "275",
-            height: "1275",
-            amount: "2,89,789 MTR",
-            time: "12 sec ago",
-            more: "275",
-          },
-        ],
-      },
+        items: []
+      }
     };
   },
 
@@ -77,15 +74,26 @@ export default {
     },
     async loadEpochRewards() {
       try {
-        const res = await this.$api.validator.getValidateReward(
+        this.load = true;
+        const {
+          rewards,
+          totalPage
+        } = await this.$api.validator.getValidateReward(
           this.network,
           this.current_page,
           this.page_size
         );
-        console.log(res);
+        this.total = totalPage * this.page_size;
+        this.epoch_reward_data.items = rewards;
+        this.load = false;
       } catch (e) {
         console.error(e);
+        this.load = false;
       }
+    },
+    paginationChange(val) {
+      this.current_page = val;
+      this.loadEpochRewards();
     },
     async loadPostData() {
       try {
@@ -97,23 +105,23 @@ export default {
             { content: staking.validators, label: "Validators" },
             {
               content: fromWei(staking.totalStaked, 0) + " MTRG",
-              label: "Total Staked",
-            },
+              label: "Total Staked"
+            }
           ],
           [
             { content: pos.best, label: "PoS Chain Height" },
             { content: "$ " + mtr.price, label: "MTR Price" },
             {
               content: `${staking.onlineNodes}/${staking.totalNodes}`,
-              label: "Online/ Total Node",
-            },
-          ],
+              label: "Online/ Total Node"
+            }
+          ]
         ];
       } catch (e) {
         console.error(e);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

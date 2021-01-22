@@ -69,6 +69,10 @@
           :title="delegators.title"
           :data="delegators.data"
           :pagination="delegators.pagination"
+          :paginateTotal="delegators.total"
+          :paginateCurrentPage="delegators_current"
+          @tablePaginationChange="delegatorPaginationChange"
+          min-height="200px"
         >
         </DataTable>
       </b-col>
@@ -78,6 +82,10 @@
           :title="votes.title"
           :data="votes.data"
           :pagination="votes.pagination"
+          min-height="200px"
+          :paginateTotal="votes.total"
+          :paginateCurrentPage="votes_current"
+          @tablePaginationChange="votePaginationChange"
         >
           <template v-slot:cell(id)="data">
             <div class="dt-row">
@@ -103,7 +111,7 @@
             <router-link
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -123,10 +131,14 @@ export default {
   name: "ValidatorDetail",
   components: {
     PieChart,
-    DataTable,
+    DataTable
   },
   data() {
     return {
+      delegators_current: 1,
+      delegators_array: [],
+      votes_current: 1,
+      votes_array: [],
       proposed_total: 0,
       chart_load: false,
       load: true,
@@ -134,50 +146,52 @@ export default {
       validator: {
         name: "",
         description: "",
-        address: "0x",
+        address: "0x"
       },
       mainProps: {
         blank: true,
         blankColor: "#777",
         width: 100,
         height: 100,
-        class: "m1",
+        class: "m1"
       },
       delegated_chart: {
         options: {
           legend: {
-            display: false,
-          },
+            display: false
+          }
         },
         data: {
           labels: ["Self", "Others"],
-          datasets: [],
-        },
+          datasets: []
+        }
       },
       delegators: {
         title: "Delegators",
+        total: 0,
         data: {
           fields: [
             { key: "address", label: "Delegator" },
             { key: "amountStr", label: "Amount" },
-            { key: "percent", label: "Share" },
+            { key: "percent", label: "Share" }
           ],
-          items: [],
+          items: []
         },
-        pagination: { show: true, align: "right" },
+        pagination: { show: true, align: "right", perPage: 3 }
       },
       votes: {
         title: "Votes",
+        total: 0,
         data: {
           fields: [
             { key: "id", label: "Bucket ID" },
             { key: "address", label: "Voter" },
             { key: "valueStr", label: "Amount" },
-            { key: "timestamp", label: "Time" },
+            { key: "timestamp", label: "Time" }
           ],
-          items: [],
+          items: []
         },
-        pagination: { show: true, align: "right" },
+        pagination: { show: true, align: "right", perPage: 3 }
       },
       proposed: {
         title: "Proposed Blocks",
@@ -186,16 +200,16 @@ export default {
             { key: "number", label: "Height" },
             { key: "blockhash", label: "Block Hash" },
             { key: "txCount", label: "Txs" },
-            { key: "timestamp", label: "Time" },
+            { key: "timestamp", label: "Time" }
           ],
-          items: [],
+          items: []
         },
         pagination: {
           show: true,
           align: "center",
-          perPage: 8,
-        },
-      },
+          perPage: 8
+        }
+      }
     };
   },
   methods: {
@@ -220,8 +234,12 @@ export default {
       const res = await this.$api.validator.getVotes(this.network, address);
       this.chart_load = false;
       const { votes } = res;
-      this.votes.data.items = votes;
-
+      this.votes_array = votes;
+      this.votes.total = votes.length;
+      this.votes.data.items = this.votes_array.slice(
+        (this.votes_current - 1) * 3,
+        this.votes_current * 3
+      );
       let self = new BigNumber(0);
       let others = new BigNumber(0);
       for (const v of votes) {
@@ -238,10 +256,17 @@ export default {
       this.delegated_chart.data.datasets = [
         {
           backgroundColor: ["#FFB84F", "#287DF9"],
-          data: [selfNum, othersNum],
-        },
+          data: [selfNum, othersNum]
+        }
       ];
       this.chart_load = true;
+    },
+    votePaginationChange(val) {
+      this.votes_current = val;
+      this.votes.data.items = this.votes_array.slice(
+        (this.votes_current - 1) * 3,
+        this.votes_current * 3
+      );
     },
     async loadDelegators() {
       const { address } = this.$route.params;
@@ -250,7 +275,20 @@ export default {
         address
       );
       const { delegators } = res;
-      this.delegators.data.items = delegators;
+      this.delegators_array = delegators;
+      this.delegators.total = delegators.length;
+      this.delegators.data.items = this.delegators_array.slice(
+        (this.delegators_current - 1) * 3,
+        this.delegators_current * 3
+      );
+      // this.delegators.data.items = delegators;
+    },
+    delegatorPaginationChange(val) {
+      this.delegators_current = val;
+      this.delegators.data.items = this.delegators_array.slice(
+        (this.delegators_current - 1) * 3,
+        this.delegators_current * 3
+      );
     },
     async loadProposed() {
       try {
@@ -263,7 +301,7 @@ export default {
           this.page_size
         );
         this.proposed_total = totalPage * this.page_size;
-        this.proposed.data.items = proposed.map((b) => {
+        this.proposed.data.items = proposed.map(b => {
           return { ...b, blockhash: b.hash };
         });
         this.load = false;
@@ -271,8 +309,8 @@ export default {
         console.error(e);
         this.load = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -18,7 +18,7 @@
                   <router-link
                     :to="{
                       name: 'blockDetail',
-                      params: { revision: block.number },
+                      params: { revision: block.number }
                     }"
                   >
                     {{ block.number }}</router-link
@@ -35,7 +35,7 @@
                 class="link"
                 :to="{
                   name: 'address',
-                  params: { address: block.beneficiary },
+                  params: { address: block.beneficiary }
                 }"
                 >{{ shortAddr(block.beneficiary, 12) }}</router-link
               >
@@ -63,33 +63,41 @@
 import Loading from "@/components/Loading";
 import { fromNow, shortAddress } from "@/utils";
 import { setInterval } from "timers";
+import { mapActions } from "vuex";
 
 export default {
   name: "RecentBlocks",
   components: {
-    Loading,
+    Loading
   },
   data() {
     return {
       loading: true,
       recent_blocks: [],
-      time: null,
+      time: null
     };
   },
   async mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function () {
+    this.time = setInterval(function() {
       me.initData();
     }, 3000);
   },
   methods: {
+    ...mapActions(["configVal"]),
     async initData() {
       try {
         const res = await this.$api.block.getRecentBlocks(this.network);
         this.loading = false;
         this.recent_blocks = res.blocks.splice(0, 10);
+        if (this.recent_blocks.length > 0) {
+          this.configVal({
+            key: "home_block_height",
+            val: this.recent_blocks[0].number
+          });
+        }
       } catch (e) {
         this.loading = false;
       }
@@ -101,8 +109,8 @@ export default {
     },
     jump(url) {
       this.$router.push(url);
-    },
-  },
+    }
+  }
 };
 </script>
 
