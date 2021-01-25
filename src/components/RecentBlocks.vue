@@ -18,7 +18,7 @@
                   <router-link
                     :to="{
                       name: 'blockDetail',
-                      params: { revision: block.number }
+                      params: { revision: block.number },
                     }"
                   >
                     {{ block.number }}</router-link
@@ -33,9 +33,19 @@
               <p>Proposer</p>
               <router-link
                 class="link"
+                v-if="block.beneficiaryName"
                 :to="{
                   name: 'address',
-                  params: { address: block.beneficiary }
+                  params: { address: block.beneficiary },
+                }"
+                >{{ shortAddr(block.beneficiaryName, 12) }}</router-link
+              >
+              <router-link
+                class="link"
+                v-else
+                :to="{
+                  name: 'address',
+                  params: { address: block.beneficiary },
                 }"
                 >{{ shortAddr(block.beneficiary, 12) }}</router-link
               >
@@ -68,20 +78,20 @@ import { mapActions } from "vuex";
 export default {
   name: "RecentBlocks",
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
       loading: true,
       recent_blocks: [],
-      time: null
+      time: null,
     };
   },
   async mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function() {
+    this.time = setInterval(function () {
       me.initData();
     }, 3000);
   },
@@ -95,7 +105,7 @@ export default {
         if (this.recent_blocks.length > 0) {
           this.configVal({
             key: "home_block_height",
-            val: this.recent_blocks[0].number
+            val: this.recent_blocks[0].number,
           });
         }
       } catch (e) {
@@ -109,8 +119,8 @@ export default {
     },
     jump(url) {
       this.$router.push(url);
-    }
-  }
+    },
+  },
 };
 </script>
 

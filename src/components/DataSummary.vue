@@ -41,6 +41,24 @@
             >{{ item.value }}</router-link
           >
 
+          <!-- address-or-name-link -->
+          <router-link
+            :to="{
+              name: 'address',
+              params: { address: item.value.address },
+            }"
+            v-if="item.type === 'address-or-name-link' && !!item.value.name"
+            >{{ item.value.name }}</router-link
+          >
+          <router-link
+            :to="{
+              name: 'address',
+              params: { address: item.value.address },
+            }"
+            v-if="item.type === 'address-or-name-link' && !item.value.name"
+            >{{ item.value.address }}</router-link
+          >
+
           <!-- timestamp -->
           <span v-if="item.type === 'timestamp'">
             <span>{{ fromNow(item.value) }}</span>

@@ -134,6 +134,9 @@ export default {
             value: account.mtrgBalanceStr,
           },
         ];
+        // if (account.name) {
+        //   this.summary.push({ key: "Name", value: account.name });
+        // }
         if (account.firstSeen && account.firstSeen.number > 0) {
           this.summary.push({
             key: "First Seen",
