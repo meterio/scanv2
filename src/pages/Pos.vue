@@ -19,7 +19,7 @@
           <router-link
             :to="{
               name: 'posRewards',
-              params: { epoch: data.value }
+              params: { epoch: data.value },
             }"
             >Epoch Reward List</router-link
           >
@@ -40,7 +40,7 @@ export default {
   components: {
     DataDashboard,
     ValidatorTable,
-    DataTable
+    DataTable,
   },
   data() {
     return {
@@ -51,7 +51,7 @@ export default {
       epoch_pagination: {
         show: true,
         align: "center",
-        perPage: 8
+        perPage: 8,
       },
       epoch_reward_data: {
         fields: [
@@ -59,10 +59,10 @@ export default {
           { key: "height", label: "Height (PoW)" },
           { key: "amount", label: "Amount" },
           { key: "time", label: "Time" },
-          { key: "more", label: "More" }
+          { key: "more", label: "More" },
         ],
-        items: []
-      }
+        items: [],
+      },
     };
   },
 
@@ -77,7 +77,7 @@ export default {
         this.load = true;
         const {
           rewards,
-          totalPage
+          totalPage,
         } = await this.$api.validator.getValidateReward(
           this.network,
           this.current_page,
@@ -99,29 +99,29 @@ export default {
       try {
         const res = await this.$api.metric.getAll(this.network);
         this.loading = false;
-        const { mtr, mtrg, pos, pow, staking } = res;
+        const { mtr, pos, staking } = res;
         this.pos_data = [
           [
             { content: staking.validators, label: "Validators" },
             {
               content: fromWei(staking.totalStaked, 0) + " MTRG",
-              label: "Total Staked"
-            }
+              label: "Total Staked",
+            },
           ],
           [
             { content: pos.best, label: "PoS Chain Height" },
             { content: "$ " + mtr.price, label: "MTR Price" },
             {
               content: `${staking.onlineNodes}/${staking.totalNodes}`,
-              label: "Online/ Total Node"
-            }
-          ]
+              label: "Online/ Total Node",
+            },
+          ],
         ];
       } catch (e) {
         console.error(e);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

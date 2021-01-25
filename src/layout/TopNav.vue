@@ -95,7 +95,6 @@
 </template>
 
 <script>
-import { setNetwork } from "@/utils/http";
 import { DEPLOY_DOMAIN } from "@/config";
 
 export default {

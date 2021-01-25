@@ -22,8 +22,6 @@
 </template>
 
 <script>
-import StatusTag from "@/components/StatusTag.vue";
-import BigNumber from "bignumber.js";
 import DataTable from "@/components/DataTable.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";

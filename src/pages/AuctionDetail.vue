@@ -6,7 +6,6 @@
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import BigNumber from "bignumber.js";
 import DataTable from "@/components/DataTable.vue";
 import DataSummary from "@/components/DataSummary.vue";
 export default {
@@ -39,7 +38,7 @@ export default {
       const { auctionID } = this.$route.params;
       const res = await this.$api.auction.getBids(this.network, auctionID);
       this.loading = false;
-      const { summary, bids } = res;
+      const { summary } = res;
       this.summary = [
         { key: "ID", value: summary.id },
         {

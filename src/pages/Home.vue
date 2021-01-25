@@ -28,16 +28,8 @@ import Search from "@/components/Search.vue";
 import DataDashboard from "@/components/DataDashboard.vue";
 import RecentBlocks from "@/components/RecentBlocks.vue";
 import RecentTxs from "@/components/RecentTxs.vue";
-import {
-  fromNow,
-  formatTime,
-  shortHash,
-  shortAddress,
-  fromWei,
-  formatNum
-} from "@/utils";
+import { fromWei, formatNum } from "@/utils";
 import { mapState } from "vuex";
-import BigNumber from "bignumber.js";
 
 export default {
   name: "Home",
@@ -46,12 +38,12 @@ export default {
     Search,
     DataDashboard,
     RecentBlocks,
-    RecentTxs
+    RecentTxs,
   },
   computed: {
     ...mapState({
-      home_block_height: state => state.home_block_height
-    })
+      home_block_height: (state) => state.home_block_height,
+    }),
   },
 
   data() {
@@ -61,14 +53,14 @@ export default {
       nav_tabs: ["PoS", "PoW"],
       // fake data
       msg: "Welcome to Index!!!",
-      data: []
+      data: [],
     };
   },
   watch: {
     home_block_height(newVal) {
       console.log("xx", newVal);
       this.data[2][0]["content"] = newVal;
-    }
+    },
   },
   methods: {
     async init() {
@@ -82,63 +74,63 @@ export default {
           {
             label: "MTRG Price",
             content: "$ " + mtrg.price,
-            change: mtrg.priceChange
+            change: mtrg.priceChange,
           },
           {
             label: "MTR Price",
             content: "$ " + mtr.price,
-            change: mtr.priceChange
-          }
+            change: mtr.priceChange,
+          },
         ],
         [
           {
             label: "MTRG Circulation",
-            content: formatNum(mtrg.circulation, 0)
+            content: formatNum(mtrg.circulation, 0),
           },
-          { label: "MTR Circulation", content: formatNum(mtr.circulation, 0) }
+          { label: "MTR Circulation", content: formatNum(mtr.circulation, 0) },
         ],
         [
           { label: "Block Height", content: pos.best },
           { label: "Epoch", content: pos.epoch },
           { label: "Transactions", content: pos.txsCount },
-          { label: "Avg Block Time", content: pos.avgBlockTime + " sec" }
+          { label: "Avg Block Time", content: pos.avgBlockTime + " sec" },
         ],
         [
           {
             label: "Online/Total Validators",
-            content: `${staking.onlineNodes}/${staking.totalNodes}`
+            content: `${staking.onlineNodes}/${staking.totalNodes}`,
           },
           {
             label: "Staked MTRG",
-            content: fromWei(staking.totalStaked, 0) + " MTRG"
+            content: fromWei(staking.totalStaked, 0) + " MTRG",
           },
           { label: "MTRG Annual Inflation", content: pos.inflation },
           {
             label: "Address Count",
-            content: pos.addressCount
-          }
-        ]
+            content: pos.addressCount,
+          },
+        ],
       ];
       this.node_data = [
         [
           { label: "Validators", content: staking.validators },
           {
             label: "Total Staked",
-            content: formatNum(staking.totalStaked, 6) + " MTRG"
-          }
+            content: formatNum(staking.totalStaked, 6) + " MTRG",
+          },
         ],
         [
           { label: "Height", content: pow.best },
           {
             label: "MTR Price",
             content: "$ " + mtr.price,
-            change: mtr.priceChange
+            change: mtr.priceChange,
           },
           {
             label: "Online/Total Node",
-            content: `${staking.onlineNodes}/${staking.totalNodes}`
-          }
-        ]
+            content: `${staking.onlineNodes}/${staking.totalNodes}`,
+          },
+        ],
       ];
     },
     async searchKeyWords(key) {
@@ -161,8 +153,8 @@ export default {
         console.error(e);
         this.modal_show = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

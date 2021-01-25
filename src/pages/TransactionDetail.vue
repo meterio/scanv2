@@ -26,8 +26,6 @@
 </template>
 
 <script>
-import StatusTag from "@/components/StatusTag.vue";
-import { fromNow, formatTime, shortHash, shortAddress } from "@/utils";
 import BigNumber from "bignumber.js";
 import DataTable from "@/components/DataTable.vue";
 import DataSummary from "@/components/DataSummary.vue";

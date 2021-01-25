@@ -14,10 +14,8 @@ import BlockListPage from "@/pages/BlockList.vue";
 import TxListPage from "@/pages/TxList.vue";
 import TopMTRAccountsPage from "@/pages/TopMTRAccounts.vue";
 import TopMTRGAccountsPage from "@/pages/TopMTRGAccounts.vue";
-import HomeWrapper from "@/pages/HomeWrapper.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
-import { routePropResolver } from "./util";
 import { DOMAIN_TITLE } from "../.env";
 
 export const routes = [

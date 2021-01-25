@@ -24,7 +24,7 @@
           <router-link
             :to="{
               name: 'powRewards',
-              params: { epoch: data.value }
+              params: { epoch: data.value },
             }"
           >
             Mining Reward List
@@ -47,7 +47,7 @@ export default {
   components: {
     DataDashboard,
     HashRateChart,
-    DataTable
+    DataTable,
   },
   data() {
     return {
@@ -56,7 +56,7 @@ export default {
       mining_pagination: {
         show: true,
         align: "center",
-        perPage: 8
+        perPage: 8,
       },
       mining_current_page: 1,
       mining_total: 0,
@@ -70,11 +70,11 @@ export default {
             { key: "pow_height", label: "Height (PoW)" },
             { key: "amount", label: "Amount" },
             { key: "time", label: "Time" },
-            { key: "more", label: "More" }
+            { key: "more", label: "More" },
           ],
-          items: []
-        }
-      }
+          items: [],
+        },
+      },
     };
   },
   methods: {
@@ -86,32 +86,32 @@ export default {
     async initData() {
       try {
         const res = await this.$api.metric.getAll(this.network);
-        const { mtr, mtrg, pos, pow, staking } = res;
+        const { mtr, pow } = res;
         this.pow_data = [
           [
             { content: pow.best, label: "PoW Chain Height" },
             { content: "$ " + mtr.price, label: "MTR Price" },
             {
               content: formatNum(mtr.circulation, 0),
-              label: "MTR Circulations"
-            }
+              label: "MTR Circulations",
+            },
           ],
           [
             {
               content: `${new BigNumber(pow.hashrate)
                 .dividedBy(1000000)
                 .toFixed(0)} MH/s`,
-              label: "Network Hash Rate"
+              label: "Network Hash Rate",
             },
             {
               content: new BigNumber(pow.rewardPerDay).toFixed(3) + " MTR",
-              label: "Reward (TH/s*Day)"
+              label: "Reward (TH/s*Day)",
             },
             {
               content: "$ " + new BigNumber(pow.costParity).toFixed(3),
-              label: "MTR Cost Parity"
-            }
-          ]
+              label: "MTR Cost Parity",
+            },
+          ],
         ];
       } catch (e) {}
     },
@@ -136,7 +136,7 @@ export default {
             pow_height: r.powBlock,
             amount: r.totalAmountStr,
             time: fromNow(r.timestamp * 1000),
-            more: r.epoch
+            more: r.epoch,
           };
           this.mining_reward.data.items.push(item);
         }
@@ -155,17 +155,17 @@ export default {
         this.line_data = {
           labels: [],
           values: [],
-          diffs: []
+          diffs: [],
         };
         const data = hashrates[`${network.toLowerCase()}net`];
         const me = this;
-        data.map(itm => {
+        data.map((itm) => {
           const time_str = me.formatLineTime(itm[0]);
           me.line_data.labels.push(time_str);
           me.line_data.values.push(itm[1]);
         });
         const diff_data = diffs[`${network.toLowerCase()}net`];
-        diff_data.map(itm => {
+        diff_data.map((itm) => {
           me.line_data.diffs.push(itm[1]);
         });
         console.log(this.line_data);
@@ -188,8 +188,8 @@ export default {
     },
     formatNum(num, precision) {
       return formatNum(num, precision);
-    }
-  }
+    },
+  },
 };
 </script>
 

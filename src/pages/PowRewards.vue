@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     async init() {
-      const { epoch } = this.$route.params;
       const res = await this.$api.pow.getRewardsByEpoch(this.network);
       this.loading = false;
       this.summary = [

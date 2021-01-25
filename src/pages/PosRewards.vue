@@ -15,7 +15,6 @@
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import BigNumber from "bignumber.js";
 import DataTable from "@/components/DataTable.vue";
 export default {
   components: {
