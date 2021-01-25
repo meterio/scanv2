@@ -1,6 +1,6 @@
 export const DEPLOY_DOMAIN = {
-    'main': 'explorer.meter.io',
-    'test': 'explorer-warringstakes.meter.io'
+    'main': ['scan.meter.io', 'explorer.meter.io'],
+    'test': ['scan-warringstakes.meter.io', 'explorer-warringstakes.meter.io']
 }
 
 export const API_BASE = {

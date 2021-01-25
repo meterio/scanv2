@@ -151,7 +151,7 @@ export default {
             return;
           }
           console.log(`switch to ${domain}`);
-          const domain = DEPLOY_DOMAIN[newNetwork];
+          const domain = DEPLOY_DOMAIN[newNetwork][0];
           window.location.href = `https://${domain}` + this.$route.path;
         }
       }
