@@ -99,7 +99,7 @@ export default {
       try {
         const res = await this.$api.metric.getAll(this.network);
         this.loading = false;
-        const { mtr, pos, staking } = res;
+        const { mtr, pos, staking, committee } = res;
         this.pos_data = [
           [
             { content: staking.validators, label: "Validators" },
@@ -112,8 +112,10 @@ export default {
             { content: pos.best, label: "PoS Chain Height" },
             { content: "$ " + mtr.price, label: "MTR Price" },
             {
-              content: `${staking.onlineNodes}/${staking.totalNodes}`,
-              label: "Online/ Total Node",
+              content: `${committee.healthy} / ${
+                committee.invalid + committee.down
+              } / ${committee.size}`,
+              label: "Healthy / Invalid / Total Node",
             },
           ],
         ];

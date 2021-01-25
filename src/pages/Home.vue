@@ -58,8 +58,9 @@ export default {
   },
   watch: {
     home_block_height(newVal) {
-      console.log("xx", newVal);
-      this.data[2][0]["content"] = newVal;
+      if (this.data && this.data[2] && this.data[2][0]) {
+        this.data[2][0]["content"] = newVal;
+      }
     },
   },
   methods: {
@@ -67,7 +68,7 @@ export default {
       console.log("hello:>>", this.hello);
       const res = await this.$api.metric.getAll(this.network);
       this.loading = false;
-      const { mtr, mtrg, pos, pow, staking } = res;
+      const { mtr, mtrg, pos, pow, staking, committee } = res;
 
       this.data = [
         [
@@ -97,8 +98,8 @@ export default {
         ],
         [
           {
-            label: "Online/Total Validators",
-            content: `${staking.onlineNodes}/${staking.totalNodes}`,
+            label: "Healthy / Total Nodes",
+            content: `${committee.healthy} / ${committee.size}`,
           },
           {
             label: "Staked MTRG",
@@ -111,6 +112,7 @@ export default {
           },
         ],
       ];
+      /*
       this.node_data = [
         [
           { label: "Validators", content: staking.validators },
@@ -132,6 +134,7 @@ export default {
           },
         ],
       ];
+      */
     },
     async searchKeyWords(key) {
       try {
