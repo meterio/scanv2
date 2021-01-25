@@ -9,17 +9,16 @@
     :paginateCurrentPage="page",
     @tablePaginationChange="pgChange"
   )
-    template(v-slot:cell(number)="data")
+    template(v-slot:cell(addrAndName)="data")
       .dt-row
         router-link.link(
-          :to="{ name: 'blockDetail', params: { revision: data.item.number } }"
-        ) {{ '#' + data.item.number }}
-
-    template(v-slot:cell(signer)="data")
-      .dt-row
+          v-if="!!data.item.name",
+          :to="{ name: 'address', params: { address: data.item.addrAndName.address } }"
+        ) {{ data.item.addrAndName.name }}
         router-link.link(
-          :to="{ name: 'address', params: { address: data.item.signer } }"
-        ) {{ data.item.signer }}
+          v-else,
+          :to="{ name: 'address', params: { address: data.item.addrAndName.address } }"
+        ) {{ data.item.addrAndName.address }}
 </template>
 
 <script>
@@ -49,8 +48,7 @@ export default {
         },
         fields: [
           { key: "mtrRank", label: "Rank" },
-          { key: "fullAddress", label: "Address" },
-          { key: "name", label: "Name" },
+          { key: "addrAndName", label: "Address" },
           { key: "mtrBalanceStr", label: "MTR Balance" },
         ],
         items: [],
@@ -79,7 +77,7 @@ export default {
         console.log("accounts:", accounts, "totalPage:", totalPage);
         this.paginateTotal = totalPage * this.limit;
         this.accounts.items = accounts.map((a) => {
-          return { ...a, fullAddress: a.address };
+          return { ...a, addrAndName: { address: a.address, name: a.name } };
         });
         this.loading = false;
       } catch (e) {

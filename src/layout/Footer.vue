@@ -24,14 +24,26 @@
           <div class="footer-social">
             <div class="sitemap">
               <ul class="footer-menu">
-                <li>Dashboard</li>
-                <li>Blockchain</li>
-                <li>Auctions</li>
+                <li>
+                  <router-link :to="{ name: 'home' }">Home</router-link>
+                </li>
+                <li>
+                  <router-link :to="{ name: 'pos' }">PoS chain</router-link>
+                </li>
+                <li>
+                  <router-link :to="{ name: 'pow' }">PoW chain</router-link>
+                </li>
               </ul>
               <ul class="footer-menu">
-                <li>Wallets</li>
-                <li>Mining</li>
-                <li>Documentation</li>
+                <li>
+                  <router-link :to="{ name: 'auction' }">Auction</router-link>
+                </li>
+                <li>
+                  <router-link :to="{ name: 'txs' }">Txs</router-link>
+                </li>
+                <li>
+                  <router-link :to="{ name: 'blocks' }">Blocks</router-link>
+                </li>
               </ul>
             </div>
             <ul class="social-icons">
@@ -60,27 +72,27 @@ export default {
       socials: [
         {
           key: "github",
-          value: "https://github.com",
+          value: "https://github.com/meterio",
         },
         {
           key: "telegram",
-          value: "https://github.com",
+          value: "https://t.me/Meter_IO",
         },
         {
           key: "instagram",
-          value: "https://github.com",
+          value: "https://www.instagram.com/meter.io/",
         },
         {
           key: "twitter",
-          value: "https://github.com",
+          value: "https://twitter.com/Meter_IO",
         },
         {
           key: "discord",
-          value: "https://github.com",
+          value: "https://discord.gg/XZgZsCn",
         },
         {
           key: "youtube",
-          value: "https://github.com",
+          value: "https://www.youtube.com/channel/UCgQVD2Ab-i3IKUhjs6-Z76w",
         },
         {
           key: "wechat",
