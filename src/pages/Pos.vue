@@ -14,17 +14,6 @@
       title="Epoch Rewards"
       @tablePaginationChange="paginationChange"
     >
-      <template v-slot:cell(more)="data">
-        <div class="dt-row">
-          <router-link
-            :to="{
-              name: 'posRewards',
-              params: { epoch: data.item.epoch },
-            }"
-            >Epoch Reward List</router-link
-          >
-        </div>
-      </template>
     </data-table>
   </div>
 </template>
@@ -59,7 +48,7 @@ export default {
           { key: "height", label: "Height (PoW)" },
           { key: "amount", label: "Amount" },
           { key: "timestamp", label: "Time" },
-          { key: "more", label: "More" },
+          { key: "posReward", label: "More" },
         ],
         items: [],
       },
@@ -85,7 +74,11 @@ export default {
         );
         this.total = totalPage * this.page_size;
         this.epoch_reward_data.items = rewards.map((r) => {
-          return { ...r, amount: fromWei(r.totalReward) + " MTR" };
+          return {
+            ...r,
+            amount: fromWei(r.totalReward) + " MTR",
+            posReward: r.epoch,
+          };
         });
         this.load = false;
       } catch (e) {

@@ -5,8 +5,8 @@ export default {
     return get(network,`auctions/present`)
   },
 
-  getPast(network,){
-    return get(network,`auctions/past`)
+  getPast(network,page,limit){
+    return get(network,`auctions/past?page=${page}&limit=${limit}`)
   },
 
   getBids(network,auctionID){

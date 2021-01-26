@@ -133,6 +133,7 @@
           </div>
         </template>
 
+        <!-- Block hash column template -->
         <template v-slot:cell(blockhash)="data">
           <div class="dt-row">
             <router-link
@@ -142,6 +143,37 @@
                 params: { revision: data.value },
               }"
               >{{ shortHash(data.value) }}</router-link
+            >
+          </div>
+        </template>
+
+        <!-- Auction column template-->
+        <template v-slot:cell(auctionid)="data">
+          <div class="dt-row">
+            <router-link
+              :to="{ name: 'auctionDetail', params: { auctionID: data.value } }"
+              >Bids</router-link
+            >
+          </div>
+        </template>
+
+        <!-- Mining Reward -->
+        <template v-slot:cell(powReward)="data">
+          <div class="dt-row">
+            <router-link
+              :to="{ name: 'powRewards', params: { epoch: data.value } }"
+            >
+              Rewards
+            </router-link>
+          </div>
+        </template>
+
+        <!-- Pos Reward template -->
+        <template v-slot:cell(posReward)="data">
+          <div class="dt-row">
+            <router-link
+              :to="{ name: 'posRewards', params: { epoch: data.value } }"
+              >Rewards</router-link
             >
           </div>
         </template>

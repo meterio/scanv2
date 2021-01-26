@@ -19,18 +19,6 @@
       :paginateCurrentPage="mining_current_page"
       @tablePaginationChange="pgChange"
     >
-      <template v-slot:cell(more)="data">
-        <div class="dt-row">
-          <router-link
-            :to="{
-              name: 'powRewards',
-              params: { epoch: data.value },
-            }"
-          >
-            Mining Reward List
-          </router-link>
-        </div>
-      </template>
     </DataTable>
   </div>
 </template>
@@ -70,7 +58,7 @@ export default {
             { key: "pow_height", label: "Height (PoW)" },
             { key: "amount", label: "Amount" },
             { key: "time", label: "Time" },
-            { key: "more", label: "More" },
+            { key: "powReward", label: "More" },
           ],
           items: [],
         },
@@ -136,7 +124,7 @@ export default {
             pow_height: r.powBlock,
             amount: r.totalAmountStr,
             time: fromNow(r.timestamp * 1000),
-            more: r.epoch,
+            powReward: r.epoch,
           };
           this.mining_reward.data.items.push(item);
         }

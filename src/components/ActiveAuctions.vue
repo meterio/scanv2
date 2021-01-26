@@ -97,3 +97,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+tr[role="row"] {
+  padding: 20px !important;
+}
+</style>

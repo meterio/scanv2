@@ -54,10 +54,15 @@
       &.icon-mint-active {
         background-image: url('~@/assets/hammer_primary.png');
         background-color: #d9e8ff;
+        height:36px;
+        width:36px;
+ 
       }
 
       &.icon-mint-past {
         background-image: url('~@/assets/hammer_secondary.png');
+        height:36px;
+        width:36px;
         background-color: #ebeef6;
       }
     }
