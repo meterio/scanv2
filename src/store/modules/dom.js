@@ -12,7 +12,7 @@ export default {
     widthExtraSmall: 320,
     widthSmall: 640,
     widthTablet: 1024,
-    network: process.env.NODE_ENV === 'development' ? 'main' : (window.location.hostname in DEPLOY_DOMAIN['main'] ? 'main' : 'test'),
+    network: process.env.NODE_ENV === 'development' ? 'main' : ((DEPLOY_DOMAIN['main'].includes(window.location.hostname)) ? 'main' : 'test'),
   },
 
   mutations: {
