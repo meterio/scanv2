@@ -191,6 +191,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.navbar {
+  border-bottom: 1px solid #dfdfdf;
+}
+
 .navbar-nav .nav-link {
   padding-left: 0px !important;
   padding-right: 0px !important;
