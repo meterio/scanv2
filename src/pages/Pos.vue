@@ -19,7 +19,7 @@
           <router-link
             :to="{
               name: 'posRewards',
-              params: { epoch: data.value },
+              params: { epoch: data.item.epoch },
             }"
             >Epoch Reward List</router-link
           >
@@ -55,10 +55,10 @@ export default {
       },
       epoch_reward_data: {
         fields: [
-          { key: "kblock_height", label: "Epoch" },
+          { key: "epoch", label: "Epoch" },
           { key: "height", label: "Height (PoW)" },
           { key: "amount", label: "Amount" },
-          { key: "time", label: "Time" },
+          { key: "timestamp", label: "Time" },
           { key: "more", label: "More" },
         ],
         items: [],
@@ -84,7 +84,9 @@ export default {
           this.page_size
         );
         this.total = totalPage * this.page_size;
-        this.epoch_reward_data.items = rewards;
+        this.epoch_reward_data.items = rewards.map((r) => {
+          return { ...r, amount: fromWei(r.totalReward) + " MTR" };
+        });
         this.load = false;
       } catch (e) {
         console.error(e);

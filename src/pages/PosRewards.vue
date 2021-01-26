@@ -1,24 +1,19 @@
 <template lang="pug">
 .detail
+  data-summary(title="Epoch Rewards", :data="summary")
   b-container.summary
-    h2.title Epoch Rewards
-
-    b-card
-      b-row.row(:key="item.key", v-for="item in summary")
-        b-col(cols="2")
-          span.label {{ item.key }}
-        b-col(cols="10")
-          span.value(v-if="!item.type") {{ item.value }}
-
     data-table.mt-2pert.px-0(title="Rewards Detail", :data="rewards")
 </template>
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
+import DataSummary from "@/components/DataSummary.vue";
 import DataTable from "@/components/DataTable.vue";
+import { fromWei, fromNow, formatTime } from "@/utils";
 export default {
   components: {
     DataTable,
+    DataSummary,
     StatusTag,
   },
   data() {
@@ -26,7 +21,7 @@ export default {
       summary: [],
       rewards: {
         fields: [
-          { key: "address", label: "Address" },
+          { key: "fullAddress", label: "Address" },
           { key: "amount", label: "Amount" },
         ],
         items: [],
@@ -47,10 +42,16 @@ export default {
       this.loading = false;
       this.summary = [
         { key: "Epoch", value: epoch },
-        { key: "Base Reward", value: res.baseReward },
-        { key: "Total Reward", value: res.totalReward },
+        { key: "Height", value: res.height },
+        { key: "Base Reward", value: fromWei(res.baseReward) + " MTR" },
+        { key: "Total Reward", value: fromWei(res.totalReward) + " MTR" },
+        { key: "Time", value: res.timestamp, type: "timestamp" },
       ];
-      this.rewards.items.push(...res.rewards);
+      this.rewards.items.push(
+        ...res.rewards.map((r) => {
+          return { fullAddress: r.address, amount: fromWei(r.amount) + " MTR" };
+        })
+      );
     },
   },
 };

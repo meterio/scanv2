@@ -62,7 +62,7 @@
           <!-- timestamp -->
           <span v-if="item.type === 'timestamp'">
             <span>{{ fromNow(item.value) }}</span>
-            <span>({{ formatTime(item.value) }})</span>
+            <span class="px-2">({{ formatTime(item.value) }})</span>
           </span>
 
           <!-- status -->

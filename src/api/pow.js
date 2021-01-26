@@ -8,6 +8,7 @@ export default {
   getRewardsByEpoch(network, epoch) {
     return get(network, `pow/rewards/${epoch}`);
   },
+
   getPowChart(network) {
     return get(network, `pow/chart`);
   }

@@ -1,6 +1,6 @@
 <template>
   <b-container class="hash-chart">
-    <b-card title="Hash rate by Day" class="text-center">
+    <b-card title="Daily Hashrate and Reward" class="text-center">
       <line-chart
         :chart-data="datacollection"
         :options="options"
@@ -19,11 +19,11 @@ export default {
   props: {
     dataCollection: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
-    LineChart
+    LineChart,
   },
   data() {
     return {
@@ -32,29 +32,36 @@ export default {
         scales: {
           yAxes: [
             {
+              id: "LEFT",
               gridLines: {
-                display: true
-              }
-            }
+                display: true,
+              },
+              position: "left",
+            },
+            {
+              id: "RIGHT",
+              gridLines: { display: false },
+              position: "right",
+            },
           ],
           xAxes: [
             {
               gridLines: {
-                display: false
-              }
-            }
-          ]
+                display: false,
+              },
+            },
+          ],
         },
         legend: {
           display: true,
           position: "bottom",
           labels: {
-            usePointStyle: true
-          }
+            usePointStyle: true,
+          },
         },
         responsive: true,
-        maintainAspectRatio: false
-      }
+        maintainAspectRatio: false,
+      },
     };
   },
   mounted() {
@@ -66,22 +73,24 @@ export default {
         labels: this.dataCollection.labels,
         datasets: [
           {
-            label: "Network Hash Rate",
+            label: "Network Hashrate",
             fill: false,
             borderColor: "#287DF9",
             pointBorderColor: "#287DF9",
             pointBackgroundColor: "#287DF9",
-            data: this.dataCollection.values
+            data: this.dataCollection.values,
+            yAxisID: "LEFT",
           },
           {
-            label: "MTR/(TH/s)/Day",
+            label: "Mining Reward (TH/s)",
             fill: false,
             borderColor: "#FFB84F",
             pointBorderColor: "#FFB84F",
             pointBackgroundColor: "#FFB84F",
-            data: this.dataCollection.diffs
-          }
-        ]
+            data: this.dataCollection.diffs,
+            yAxisID: "RIGHT",
+          },
+        ],
       };
     },
     getRandomInt(max = 30) {
@@ -89,8 +98,8 @@ export default {
     },
     getRandoms(size = 6) {
       return _.range(size).map(() => this.getRandomInt());
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,33 +1,26 @@
 <template lang="pug">
 .detail
+  data-summary(title="Mining Rewards", :data="summary")
   b-container.summary
-    h2.title Mining Rewards
-
-    b-card
-      b-row.row(:key="item.key", v-for="item in summary")
-        b-col(cols="2")
-          span.label {{ item.key }}
-        b-col(cols="10")
-          span.value(v-if="!item.type") {{ item.value }}
-
     data-table.mt-2pert.px-0(title="Rewards Detail", :data="rewards")
 </template>
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import BigNumber from "bignumber.js";
 import DataTable from "@/components/DataTable.vue";
+import DataSummary from "@/components/DataSummary.vue";
 export default {
   components: {
     DataTable,
     StatusTag,
+    DataSummary,
   },
   data() {
     return {
       summary: [],
       rewards: {
         fields: [
-          { key: "address", label: "Address" },
+          { key: "fullAddress", label: "Address" },
           { key: "subTotalStr", label: "Amount" },
         ],
         items: [],
@@ -40,16 +33,22 @@ export default {
   },
   methods: {
     async init() {
-      const res = await this.$api.pow.getRewardsByEpoch(this.network);
+      this.loading = true;
+      const { epoch } = this.$route.params;
+      const res = await this.$api.pow.getRewardsByEpoch(this.network, epoch);
       this.loading = false;
       this.summary = [
         { key: "Epoch", value: res.epoch },
         { key: "Pos Block", value: res.posBlock },
         { key: "Pow Block", value: res.powBlock },
-        { key: "Time", value: fromNow(res.timestamp * 1000) },
+        { key: "Time", value: res.timestamp, type: "timestamp" },
         { key: "Total Amount", value: res.totalAmountStr },
       ];
-      this.rewards.items.push(...res.details);
+      this.rewards.items.push(
+        ...res.details.map((d) => {
+          return { fullAddress: d.address, ...d };
+        })
+      );
     },
   },
 };

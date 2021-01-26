@@ -39,10 +39,10 @@
                   <router-link :to="{ name: 'auction' }">Auction</router-link>
                 </li>
                 <li>
-                  <router-link :to="{ name: 'txs' }">Txs</router-link>
+                  <router-link :to="{ name: 'txList' }">Txs</router-link>
                 </li>
                 <li>
-                  <router-link :to="{ name: 'blocks' }">Blocks</router-link>
+                  <router-link :to="{ name: 'blockList' }">Blocks</router-link>
                 </li>
               </ul>
             </div>
