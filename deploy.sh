@@ -1,13 +1,17 @@
 #!/bin/bash
 
-# deploy testnet scanv2
+# build
 NODE_ENV=production yarn build
+
+# copy dist to testnet S3
 aws s3 cp ./dist/ s3://scanv2-test/ --recursive --acl public-read
+
+# copy dist to mainnet S3
+aws s3 cp ./dist/ s3://scanv2-main/ --recursive --acl public-read
+
+# invalidate testnet cloudfront cache
 aws cloudfront create-invalidation --distribution-id E2BSH8388R89SO --paths "/*"
 
-# deploy mainnet scanv2
-# copy the build for mainnet result to s3
-aws s3 cp ./dist/ s3://scanv2-main/ --recursive --acl public-read
-# invalidate cloudfront cache to refelct the currect deployment
+# invalidate mainnet cloudfront cache
 aws cloudfront create-invalidation --distribution-id E21GDG24NQ5ZBW --paths "/*"
 
