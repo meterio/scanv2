@@ -111,7 +111,7 @@ axios.interceptors.response.use(
 export function get(network, url, params) {
   console.log(`http get | network: ${network}, url: ${url}`)
   if (!(network in API_BASE)){
-    throw Error(`Invalid network: ${network}`);
+    throw Error(`Invalid network: ${network} for ${url}`);
   }
   const base = API_BASE[network];
   axios.defaults.baseURL = base;

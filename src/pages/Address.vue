@@ -5,11 +5,11 @@
   b-container.summary
     #b-card.mt-2pert.px-5
       #pie-chart.px-0
-    data-table.mt-2pert.px-0(
+    data-table-v2.mt-2pert.px-0(
       title="Buckets",
-      :data="buckets",
-      :loading="bucket_load",
-      :pagination="buckets.pagination"
+      :fields="buckets.fields",
+      :pagination="buckets.pagination",
+      :loadItems="loadBuckets"
     )
       template(v-slot:cell(candidate)="data")
         .dt-row
@@ -33,12 +33,14 @@
 
 <script>
 import DataTable from "@/components/DataTable.vue";
+import DataTableV2 from "@/components/DataTableV2.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
 export default {
   name: "Address",
   components: {
     DataTable,
+    DataTableV2,
     NavTabs,
     DataSummary,
   },
@@ -53,7 +55,6 @@ export default {
       address: "0x",
       summary: [],
       account: {},
-      bucket_load: true,
       txs_load: true,
       txs: {
         pagination: {
@@ -74,9 +75,9 @@ export default {
       },
       buckets: {
         pagination: {
-          show: false,
+          show: true,
           align: "center",
-          perPage: 8,
+          perPage: 4,
         },
         fields: [
           { key: "address", label: "Candidate Address" },
@@ -84,7 +85,6 @@ export default {
           { key: "timestamp", label: "Time" },
           { key: "status", label: "Status" },
         ],
-        items: [],
       },
       current_tab_index: 0,
     };
@@ -115,7 +115,6 @@ export default {
     async loadAddress() {
       try {
         const { address } = this.$route.params;
-        this.loadBuckets(address);
         this.address = address;
         const res = await this.$api.account.getAccountDetail(
           this.network,
@@ -150,23 +149,27 @@ export default {
         console.log(e);
       }
     },
-    async loadBuckets(address) {
-      this.bucket_load = true;
-      try {
-        const bres = await this.$api.account.getBuckets(this.network, address);
-        const { buckets } = bres;
-        for (const b of buckets) {
-          this.buckets.items.push({
-            address: b.candidate,
-            totalVotes: b.totalVotes,
-            timestamp: b.createTime,
-            status: b.unbounded ? "Unbounded" : "Created",
-          });
-        }
-        this.bucket_load = false;
-      } catch (e) {
-        this.bucket_load = false;
-      }
+    async loadBuckets(network, page, limit) {
+      const { address } = this.$route.params;
+      console.log("ADDRESS: ", address);
+      console.log(network);
+      const res = await this.$api.account.getBuckets(
+        network,
+        address,
+        page,
+        limit
+      );
+      const { totalPage, buckets } = res;
+      const totalRows = totalPage * limit;
+      const items = buckets.map((b) => {
+        return {
+          address: b.candidate,
+          totalVotes: b.totalVotes,
+          timestamp: b.createTime,
+          status: b.unbounded ? "Unbounded" : "Created",
+        };
+      });
+      return { items, totalRows };
     },
     async loadTxs() {
       this.txs_load = true;

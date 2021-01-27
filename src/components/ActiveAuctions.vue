@@ -10,21 +10,6 @@
         </div>
       </template>
     </DataTable>
-    <!-- <b-table
-      borderless
-      hover
-      class="data-table"
-      :items="items"
-      :fields="fields"
-    > -->
-
-    <!-- default column format -->
-    <!-- <template v-slot:cell()="data">
-        <div class="dt-row">
-          <span>{{ data.value }}</span>
-        </div>
-      </template>
-    </b-table> -->
   </b-container>
 </template>
 

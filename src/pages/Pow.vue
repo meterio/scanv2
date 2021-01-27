@@ -9,24 +9,21 @@
       v-if="line_load"
     ></HashRateChart>
 
-    <DataTable
+    <DataTableV2
       :title="mining_reward.title"
-      :data="mining_reward.data"
+      :fields="mining_reward.fields"
+      :pagination="mining_reward.pagination"
       class="px-0"
-      :pagination="mining_pagination"
-      :loading="load"
-      :paginateTotal="mining_total"
-      :paginateCurrentPage="mining_current_page"
-      @tablePaginationChange="pgChange"
+      :loadItems="loadRewards"
     >
-    </DataTable>
+    </DataTableV2>
   </div>
 </template>
 
 <script>
 import DataDashboard from "@/components/DataDashboard.vue";
 import HashRateChart from "@/components/HashRateChart.vue";
-import DataTable from "@/components/DataTable.vue";
+import DataTableV2 from "@/components/DataTableV2.vue";
 import BigNumber from "bignumber.js";
 import { formatNum, fromNow, fromWei } from "@/utils";
 
@@ -35,40 +32,33 @@ export default {
   components: {
     DataDashboard,
     HashRateChart,
-    DataTable,
+    DataTableV2,
   },
   data() {
     return {
-      load: true,
       line_load: false,
-      mining_pagination: {
-        show: true,
-        align: "center",
-        perPage: 8,
-      },
-      mining_current_page: 1,
-      mining_total: 0,
       pow_data: [],
       line_data: {},
       mining_reward: {
         title: "Mining Rewards",
-        data: {
-          fields: [
-            { key: "pos_height", label: "Kblock Height (PoS)" },
-            { key: "pow_height", label: "Height (PoW)" },
-            { key: "amount", label: "Amount" },
-            { key: "time", label: "Time" },
-            { key: "powReward", label: "More" },
-          ],
-          items: [],
+        pagination: {
+          show: true,
+          align: "center",
+          perPage: 8,
         },
+        fields: [
+          { key: "pos_height", label: "Kblock Height (PoS)" },
+          { key: "pow_height", label: "Height (PoW)" },
+          { key: "amount", label: "Amount" },
+          { key: "time", label: "Time" },
+          { key: "powReward", label: "More" },
+        ],
       },
     };
   },
   methods: {
     init() {
       this.initData();
-      this.loadRewards();
       this.getPowChart();
     },
     async initData() {
@@ -103,36 +93,27 @@ export default {
         ];
       } catch (e) {}
     },
-    pgChange(val) {
-      this.mining_current_page = val;
-      this.loadRewards();
-    },
-    async loadRewards() {
-      try {
-        this.load = true;
-        const { rewards, totalPage } = await this.$api.pow.getRewards(
-          this.network,
-          this.mining_current_page,
-          this.page_size
-        );
 
-        this.mining_total = totalPage;
-        this.mining_reward.data.items = [];
-        for (const r of rewards) {
-          const item = {
-            pos_height: r.posBlock,
-            pow_height: r.powBlock,
-            amount: r.totalAmountStr,
-            time: fromNow(r.timestamp * 1000),
-            powReward: r.epoch,
-          };
-          this.mining_reward.data.items.push(item);
-        }
-        this.load = false;
-      } catch (e) {
-        this.load = false;
-      }
+    async loadRewards(network, page, limit) {
+      const { rewards, totalPage } = await this.$api.pow.getRewards(
+        network,
+        page,
+        limit
+      );
+
+      const totalRows = totalPage * limit;
+      const items = rewards.map((r) => {
+        return {
+          pos_height: r.posBlock,
+          pow_height: r.powBlock,
+          amount: r.totalAmountStr,
+          time: fromNow(r.timestamp * 1000),
+          powReward: r.epoch,
+        };
+      });
+      return { items, totalRows };
     },
+
     async getPowChart() {
       try {
         this.line_load = false;

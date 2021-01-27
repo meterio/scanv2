@@ -1,13 +1,10 @@
 <template lang="pug">
 .detail-page
-  data-table.mt-2pert.px-0(
+  data-table-v2.mt-2pert.px-0(
     title="Blocks",
-    :data="blocks",
-    :loading="loading",
+    :fields="blocks.fields",
     :pagination="blocks.pagination",
-    :paginateTotal="paginateTotal",
-    :paginateCurrentPage="page",
-    @tablePaginationChange="pgChange"
+    :loadItems="loadBlocks"
   )
     template(v-slot:cell(number)="data")
       .dt-row
@@ -23,62 +20,36 @@
 </template>
 
 <script>
-import DataTable from "@/components/DataTable.vue";
-import NavTabs from "@/components/NavTabs.vue";
-import DataSummary from "@/components/DataSummary.vue";
+import DataTableV2 from "@/components/DataTableV2.vue";
 export default {
-  name: "Address",
+  name: "BlockList",
   components: {
-    DataTable,
-    NavTabs,
-    DataSummary,
+    DataTableV2,
   },
   data() {
     return {
-      paginateTotal: 0,
-      loading: true,
-      page: 1,
-      limit: 20,
       blocks: {
-        pagination: {
-          show: true,
-          align: "center",
-          perPage: 8,
-        },
+        pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "number", label: "Block" },
           { key: "timestamp", label: "Time" },
           { key: "txCount", label: "Txns" },
           { key: "beneficiary", label: "Proposer" },
         ],
-        items: [],
       },
     };
   },
   methods: {
-    init() {
-      this.loadBlocks();
-    },
-    pgChange(val) {
-      this.page = val;
-      this.loadBlocks();
-    },
-    async loadBlocks() {
+    async loadBlocks(network, page, limit) {
       this.loading = true;
-      try {
-        const { address } = this.$route.params;
-        this.blocks.items = [];
-        const { blocks, totalPage } = await this.$api.block.getRecentBlocks(
-          this.network,
-          this.page,
-          this.limit
-        );
-        this.paginateTotal = totalPage * this.limit;
-        this.blocks.items = blocks;
-        this.loading = false;
-      } catch (e) {
-        this.loading = false;
-      }
+      const { blocks, totalPage } = await this.$api.block.getRecentBlocks(
+        network,
+        page,
+        limit
+      );
+      const totalRows = totalPage * limit;
+      const items = blocks;
+      return { items, totalRows };
     },
   },
 };

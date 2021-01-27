@@ -59,20 +59,22 @@ export default {
     this.loading = false;
     const { tx, summary } = res;
     this.summaryTitle = "Transaction";
-    this.summary = [
-      { key: "Hash", value: summary.hash },
-      { key: "Type", value: summary.type },
-      { key: "Origin", value: summary.origin, type: "address-link" },
-      { key: "Amount", value: summary.totalAmountStrs[0] },
-      { key: "Fee", value: summary.feeStr },
-      {
-        key: "Result",
-        value: summary.reverted ? "reverted" : "success",
-        type: "status",
-      },
-      { key: "Clause Count", value: summary.clauseCount },
-      { key: "Block", value: summary.block.number, type: "block-link" },
-    ];
+    if (!!summary) {
+      this.summary = [
+        { key: "Hash", value: summary.hash },
+        { key: "Type", value: summary.type },
+        { key: "Origin", value: summary.origin, type: "address-link" },
+        { key: "Amount", value: summary.totalAmountStrs[0] },
+        { key: "Fee", value: summary.feeStr },
+        {
+          key: "Result",
+          value: summary.reverted ? "reverted" : "success",
+          type: "status",
+        },
+        { key: "Clause Count", value: summary.clauseCount },
+        { key: "Block", value: summary.block.number, type: "block-link" },
+      ];
+    }
     this.tx = tx;
     let clauses = [];
     if (tx.clauseCount > 0) {

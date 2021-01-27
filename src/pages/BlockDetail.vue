@@ -1,7 +1,12 @@
 <template>
   <div class="detail-page">
     <DataSummary :data="summary" :title="summaryTitle" />
-    <DataTable title="Transactions" :data="txs" :pagination="pagination">
+    <DataTableV2
+      title="Transactions"
+      :fields="txs.fields"
+      :items="txs.items"
+      :pagination="txs.pagination"
+    >
       <template v-slot:cell(hash)="data">
         <div class="dt-row">
           <router-link
@@ -26,19 +31,18 @@
           <StatusTag :status="data.value"></StatusTag>
         </div>
       </template>
-    </DataTable>
+    </DataTableV2>
   </div>
 </template>
 
 <script>
-import DataTable from "@/components/DataTable.vue";
+import DataTableV2 from "@/components/DataTableV2.vue";
 import StatusTag from "@/components/StatusTag.vue";
-import BigNumber from "bignumber.js";
 import DataSummary from "@/components/DataSummary.vue";
 export default {
   name: "BlockDetail",
   components: {
-    DataTable,
+    DataTableV2,
     StatusTag,
     DataSummary,
   },
@@ -47,11 +51,8 @@ export default {
       loading: false,
       summaryTitle: "",
       summary: [],
-      pagination: {
-        show: true,
-        align: "center",
-      },
       txs: {
+        pagination: { show: true, align: "center", perPage: 10 },
         fields: [
           { key: "hash", label: "Hash" },
           { key: "type", label: "Type" },
@@ -70,22 +71,28 @@ export default {
       const res = await this.$api.block.getBlockDetail(this.network, revision);
       const b = res.block;
       this.summaryTitle = `Block: #${b.number}`;
-      this.summary = [
-        { key: "Hash", value: b.hash },
-        { key: "Number", value: b.number },
-        { key: "Block Type", value: b.blockType === 1 ? "KBlock" : "MBlock" },
-        { key: "KBlock Height", value: b.lastKBlockHeight, type: "block-link" },
-        { key: "QC Height", value: b.qcHeight, type: "block-link" },
-        {
-          key: "Beneficiary",
-          value: { address: b.beneficiary, name: b.beneficiaryName },
-          type: "address-or-name-link",
-        },
-        { key: "Gas Used", value: b.gasUsed },
-        { key: "Txs Count", value: b.txCount },
-        { key: "Time", value: b.timestamp, type: "timestamp" },
-      ];
-
+      if (!!b) {
+        this.summary = [
+          { key: "Hash", value: b.hash },
+          { key: "Number", value: b.number },
+          { key: "Block Type", value: b.blockType === 1 ? "KBlock" : "MBlock" },
+          {
+            key: "KBlock Height",
+            value: b.lastKBlockHeight,
+            type: "block-link",
+          },
+          { key: "QC Height", value: b.qcHeight, type: "block-link" },
+          {
+            key: "Beneficiary",
+            value: { address: b.beneficiary, name: b.beneficiaryName },
+            type: "address-or-name-link",
+          },
+          { key: "Gas Used", value: b.gasUsed },
+          { key: "Txs Count", value: b.txCount },
+          { key: "Time", value: b.timestamp, type: "timestamp" },
+        ];
+      }
+      console.log("BLOCK:", b);
       let items = [];
       if (res.block.txSummaries) {
         items = res.block.txSummaries.map((tx) => {

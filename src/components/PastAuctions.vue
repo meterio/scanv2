@@ -1,14 +1,11 @@
 <template>
   <b-container class="table-container">
     <h3 class="title">Past Auctions (MTRG)</h3>
-    <DataTable
-      :data="pAuctions"
+    <DataTableV2
+      :fields="auctions.fields"
       class="px-0"
-      :loading="load"
-      :pagination="pagination"
-      :paginateTotal="paginateTotal"
-      :paginateCurrentPage="page"
-      @tablePaginationChange="pgChange"
+      :pagination="auctions.pagination"
+      :loadItems="loadPast"
     >
       <!-- column: height_range -->
       <template v-slot:cell(height_range)="data">
@@ -17,30 +14,24 @@
           <span>{{ data.value }}</span>
         </div>
       </template>
-    </DataTable>
+    </DataTableV2>
   </b-container>
 </template>
 
 <script>
 import BigNumber from "bignumber.js";
-import DataTable from "@/components/DataTable.vue";
-import UiToastListVue from "./UiToastList.vue";
+import DataTableV2 from "@/components/DataTableV2.vue";
 
 export default {
   name: "PastAuctions",
   data() {
     return {
-      // Note `isActive` is left out and will not appear in the rendered table
-      page: 1,
-      limit: 8,
-      paginateTotal: 10,
-      load: true,
-      pagination: {
-        show: true,
-        align: "center",
-        perPage: 8,
-      },
-      pAuctions: {
+      auctions: {
+        pagination: {
+          show: true,
+          align: "center",
+          perPage: 8,
+        },
         fields: [
           { key: "height_range", label: "Height(POS)" },
           { key: "settlement_kblock", label: "Settlement K Block" },
@@ -49,50 +40,33 @@ export default {
           { key: "final_price", label: "Final Price" },
           { key: "auctionid", label: "More" },
         ],
-        items: [],
       },
     };
   },
   components: {
-    DataTable,
+    DataTableV2,
   },
   methods: {
-    init() {
-      this.loadPast();
-    },
-    pgChange(val) {
-      this.page = val;
-      this.init();
-    },
-    getBidsUrl: function (tx) {
-      return `/auction/${tx}`;
-    },
-    async loadPast() {
-      try {
-        const { totalPage, auctions } = await this.$api.auction.getPast(
-          this.network,
-          this.page,
-          this.limit
-        );
-        this.paginateTotal = totalPage * this.limit;
-        console.log(this.paginateTotal);
+    async loadPast(network, page, limit) {
+      console.log("LOAD PAST");
+      const { totalPage, auctions } = await this.$api.auction.getPast(
+        network,
+        page,
+        limit
+      );
+      const totalRows = totalPage * limit;
 
-        let items = [];
-        for (const a of auctions) {
-          items.push({
-            height_range: `${a.startHeight} - ${a.endHeight}`,
-            settlement_kblock: a.endHeight,
-            mtr_received: a.receivedStr,
-            mtrg_on_auction: a.releasedStr,
-            final_price: new BigNumber(a.actualPrice).dividedBy(1e18).toFixed(),
-            auctionid: a.id,
-          });
-        }
-        this.load = false;
-        this.pAuctions.items = items;
-      } catch (e) {
-        this.load = false;
-      }
+      const items = auctions.map((a) => {
+        return {
+          height_range: `${a.startHeight} - ${a.endHeight}`,
+          settlement_kblock: a.endHeight,
+          mtr_received: a.receivedStr,
+          mtrg_on_auction: a.releasedStr,
+          final_price: new BigNumber(a.actualPrice).dividedBy(1e18).toFixed(),
+          auctionid: a.id,
+        };
+      });
+      return { items, totalRows };
     },
   },
 };

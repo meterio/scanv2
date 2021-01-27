@@ -3,18 +3,14 @@
     <DataDashboard :rows="pos_data"></DataDashboard>
 
     <ValidatorTable class="px-0"></ValidatorTable>
-    <data-table
-      hover
-      :data="epoch_reward_data"
-      :loading="load"
-      :paginateTotal="total"
-      :paginateCurrentPage="current_page"
-      :pagination="epoch_pagination"
-      class="px-0"
+    <DataTableV2
       title="Epoch Rewards"
-      @tablePaginationChange="paginationChange"
+      :fields="epoch_reward.fields"
+      :pagination="epoch_reward.pagination"
+      :loadItems="loadEpochRewards"
+      class="px-0"
     >
-    </data-table>
+    </DataTableV2>
   </div>
 </template>
 
@@ -22,6 +18,7 @@
 import DataDashboard from "@/components/DataDashboard.vue";
 import ValidatorTable from "@/components/ValidatorTable.vue";
 import DataTable from "@/components/DataTable.vue";
+import DataTableV2 from "@/components/DataTableV2.vue";
 import { fromWei } from "@/utils";
 
 export default {
@@ -29,7 +26,7 @@ export default {
   components: {
     DataDashboard,
     ValidatorTable,
-    DataTable,
+    DataTableV2,
   },
   data() {
     return {
@@ -37,12 +34,13 @@ export default {
       total: 0,
       pos_data: [],
       current_page: 1,
-      epoch_pagination: {
-        show: true,
-        align: "center",
-        perPage: 8,
-      },
-      epoch_reward_data: {
+      epoch_reward: {
+        pagination: {
+          show: true,
+          align: "center",
+          perPage: 8,
+        },
+
         fields: [
           { key: "epoch", label: "Epoch" },
           { key: "height", label: "Height (PoW)" },
@@ -50,7 +48,6 @@ export default {
           { key: "timestamp", label: "Time" },
           { key: "posReward", label: "More" },
         ],
-        items: [],
       },
     };
   },
@@ -59,32 +56,22 @@ export default {
   methods: {
     init() {
       this.loadPostData();
-      this.loadEpochRewards();
     },
-    async loadEpochRewards() {
-      try {
-        this.load = true;
-        const {
-          rewards,
-          totalPage,
-        } = await this.$api.validator.getValidateReward(
-          this.network,
-          this.current_page,
-          this.page_size
-        );
-        this.total = totalPage * this.page_size;
-        this.epoch_reward_data.items = rewards.map((r) => {
-          return {
-            ...r,
-            amount: fromWei(r.totalReward) + " MTR",
-            posReward: r.epoch,
-          };
-        });
-        this.load = false;
-      } catch (e) {
-        console.error(e);
-        this.load = false;
-      }
+    async loadEpochRewards(network, page, limit) {
+      this.load = true;
+      const {
+        rewards,
+        totalPage,
+      } = await this.$api.validator.getValidateReward(network, page, limit);
+      const totalRows = totalPage * limit;
+      const items = rewards.map((r) => {
+        return {
+          ...r,
+          amount: fromWei(r.totalReward) + " MTR",
+          posReward: r.epoch,
+        };
+      });
+      return { items, totalRows };
     },
     paginationChange(val) {
       this.current_page = val;

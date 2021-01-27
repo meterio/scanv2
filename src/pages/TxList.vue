@@ -1,39 +1,25 @@
 <template lang="pug">
 .detail-page
-  data-table.mt-2pert.px-0(
+  data-table-v2.mt-2pert.px-0(
     title="Transactions",
-    :data="txs",
-    :loading="txs_load",
+    :fields="txs.fields",
     :pagination="txs.pagination",
-    :paginateTotal="paginateTotal",
-    :paginateCurrentPage="page",
-    @tablePaginationChange="pgChange"
+    :loadItems="loadTxs"
   )
 </template>
 
 <script>
-import DataTable from "@/components/DataTable.vue";
-import NavTabs from "@/components/NavTabs.vue";
-import DataSummary from "@/components/DataSummary.vue";
+import DataTableV2 from "@/components/DataTableV2.vue";
+
 export default {
-  name: "Address",
+  name: "TxList",
   components: {
-    DataTable,
-    NavTabs,
-    DataSummary,
+    DataTableV2,
   },
   data() {
     return {
-      paginateTotal: 0,
-      txs_load: true,
-      page: 1,
-      limit: 20,
       txs: {
-        pagination: {
-          show: true,
-          align: "center",
-          perPage: 8,
-        },
+        pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "txhash", label: "Hash" },
           { key: "blocknum", label: "Block" },
@@ -42,44 +28,30 @@ export default {
           { key: "to", label: "To" },
           { key: "amount", label: "Amount" },
         ],
-        items: [],
       },
     };
   },
 
   methods: {
-    init() {
-      this.loadTxs();
-    },
-    pgChange(val) {
-      this.page = val;
-      this.loadTxs();
-    },
-    async loadTxs() {
+    async loadTxs(network, page, limit) {
       this.txs_load = true;
-      try {
-        const { address } = this.$route.params;
-        this.txs.items = [];
-        const { txs, totalPage } = await this.$api.transaction.getRecentTxs(
-          this.network,
-          this.page,
-          this.limit
-        );
-        this.paginateTotal = totalPage * this.limit;
-        for (const t of txs) {
-          this.txs.items.push({
-            txhash: t.hash,
-            blocknum: t.block.number,
-            from: t.origin,
-            to: t.tos && t.tos.length > 0 ? t.tos[0].address : "nobody",
-            amount: t.totalAmountStrs[0],
-            timestamp: t.block.timestamp,
-          });
-        }
-        this.txs_load = false;
-      } catch (e) {
-        this.txs_load = false;
-      }
+      const { txs, totalPage } = await this.$api.transaction.getRecentTxs(
+        network,
+        page,
+        limit
+      );
+      const totalRows = totalPage * this.limit;
+      const items = txs.map((t) => {
+        return {
+          txhash: t.hash,
+          blocknum: t.block.number,
+          from: t.origin,
+          to: t.tos && t.tos.length > 0 ? t.tos[0].address : "nobody",
+          amount: t.totalAmountStrs[0],
+          timestamp: t.block.timestamp,
+        };
+      });
+      return { items, totalRows };
     },
   },
 };

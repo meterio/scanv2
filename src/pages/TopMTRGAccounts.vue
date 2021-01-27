@@ -1,13 +1,10 @@
 <template lang="pug">
 .detail-page
-  data-table.mt-2pert.px-0(
+  data-table-v2.mt-2pert.px-0(
     title="Top MTRG Accounts",
-    :data="accounts",
-    :loading="loading",
+    :fields="accounts.fields",
     :pagination="accounts.pagination",
-    :paginateTotal="paginateTotal",
-    :paginateCurrentPage="page",
-    @tablePaginationChange="pgChange"
+    :loadItems="loadTopMTRG"
   )
     template(v-slot:cell(addrAndName)="data")
       .dt-row
@@ -22,65 +19,38 @@
 </template>
 
 <script>
-import DataTable from "@/components/DataTable.vue";
-import NavTabs from "@/components/NavTabs.vue";
-import DataSummary from "@/components/DataSummary.vue";
+import DataTableV2 from "@/components/DataTableV2.vue";
+
 export default {
-  name: "Address",
+  name: "TopMTRGAccounts",
   components: {
-    DataTable,
-    NavTabs,
-    DataSummary,
+    DataTableV2,
   },
   data() {
     return {
-      paginateTotal: 0,
-      loading: true,
-      page: 1,
-      limit: 20,
       accounts: {
-        pagination: {
-          show: true,
-          align: "center",
-          perPage: 8,
-        },
+        pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "mtrgRank", label: "Rank" },
           { key: "addrAndName", label: "Address" },
           { key: "mtrgBalanceStr", label: "MTRG Balance" },
         ],
-        items: [],
       },
     };
   },
 
   methods: {
-    init() {
-      this.loadTopMTRG();
-    },
-    pgChange(val) {
-      this.page = val;
-      console.log("page change");
-      this.loadTopMTRG();
-    },
-    async loadTopMTRG() {
-      this.loading = true;
-      try {
-        this.accounts.items = [];
-        const { accounts, totalPage } = await this.$api.account.getTopMTRG(
-          this.network,
-          this.page,
-          this.limit
-        );
-        console.log("accounts:", accounts, "totalPage:", totalPage);
-        this.paginateTotal = totalPage * this.limit;
-        this.accounts.items = accounts.map((a) => {
-          return { ...a, addrAndName: { address: a.address, name: a.name } };
-        });
-        this.loading = false;
-      } catch (e) {
-        this.loading = false;
-      }
+    async loadTopMTRG(network, page, limit) {
+      const { accounts, totalPage } = await this.$api.account.getTopMTRG(
+        network,
+        page,
+        limit
+      );
+      const totalRows = totalPage * limit;
+      const items = accounts.map((a) => {
+        return { ...a, addrAndName: { address: a.address, name: a.name } };
+      });
+      return { items, totalRows };
     },
   },
 };
