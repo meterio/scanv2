@@ -10,17 +10,17 @@ export default {
   nanme: "StatusTag",
   props: ["status"],
   methods: {
-    resultIcon: function(result) {
+    resultIcon: function (result) {
       if (result === "success") {
         return "check";
       }
 
-      if (result === "failed") {
+      if (result === "reverted") {
         return "x";
       }
       return null;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -44,7 +44,7 @@ export default {
     background-color: rgba(32, 172, 105, 0.12);
   }
 
-  &.badge-failed {
+  &.badge-reverted {
     color: rgba(244, 133, 133, 01);
     background-color: rgba(244, 133, 133, 0.12);
   }

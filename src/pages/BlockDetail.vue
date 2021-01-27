@@ -52,7 +52,7 @@ export default {
       summaryTitle: "",
       summary: [],
       txs: {
-        pagination: { show: true, align: "center", perPage: 10 },
+        pagination: { show: true, align: "center", perPage: 3 },
         fields: [
           { key: "hash", label: "Hash" },
           { key: "type", label: "Type" },

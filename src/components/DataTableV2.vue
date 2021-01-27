@@ -187,7 +187,7 @@
       </b-table>
 
       <div
-        v-if="pagination.show && totalRows > pagination.perPage"
+        v-if="pagination.show && totalRows >= pagination.perPage"
         class="data-pagination"
       >
         <b-pagination
@@ -268,16 +268,19 @@ export default {
     async init() {
       this.loading = true;
       try {
-        if (
-          !!this.passedItems &&
-          this.passedItems.length >= this.currentPage * this.pagination.perPage
-        ) {
-          this.itemsLocal = this.passedItems.slice(
-            (this.currentPage - 1) * this.pagination.perPage,
+        if (!!this.passedItems && this.passedItems.length > 0) {
+          const start = (this.currentPage - 1) * this.pagination.perPage;
+          let end = 0;
+          if (
+            this.passedItems.length >=
             this.currentPage * this.pagination.perPage
-          );
+          ) {
+            end = this.currentPage * this.pagination.perPage;
+          } else {
+            end = this.passedItems.length;
+          }
+          this.itemsLocal = this.passedItems.slice(start, end);
           this.totalRows = this.passedItems.length;
-          console.log("total rows:", this.totalRows, "items:", this.itemsLocal);
         }
         if (!this.loadItems) {
           this.loading = false;

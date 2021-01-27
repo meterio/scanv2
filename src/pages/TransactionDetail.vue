@@ -57,6 +57,7 @@ export default {
     const { hash } = this.$route.params;
     const res = await this.$api.transaction.getTxDetail(this.network, hash);
     this.loading = false;
+    console.log(res);
     const { tx, summary } = res;
     this.summaryTitle = "Transaction";
     if (!!summary) {
