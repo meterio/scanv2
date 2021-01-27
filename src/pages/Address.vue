@@ -137,10 +137,11 @@ export default {
         //   this.summary.push({ key: "Name", value: account.name });
         // }
         if (account.firstSeen && account.firstSeen.number > 0) {
+          console.log(account.firstSeen);
           this.summary.push({
             key: "First Seen",
             type: "block-link-with-note",
-            value: this.fromNow(account.firstSeen.timestamp * 1000),
+            value: this.fromNow(account.firstSeen.timestamp),
             block: account.firstSeen.number,
           });
         }
