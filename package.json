@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-report":"vue-cli-service build --report",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -14,12 +15,7 @@
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.14.0",
     "chart.js": "^2.9.3",
-    "core-js": "^3.6.4",
-    "fingerprintjs2": "^2.1.0",
-    "lodash": "^4.17.15",
     "moment": "^2.27.0",
-    "nprogress": "^0.2.0",
-    "ua-parser-js": "^0.7.21",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.0",
     "vue-json-pretty": "^1.7.1",

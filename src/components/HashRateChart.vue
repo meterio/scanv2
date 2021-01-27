@@ -12,7 +12,6 @@
 
 <script>
 import LineChart from "@/charts/LineChart.js";
-import _ from "lodash";
 
 export default {
   name: "HashRateChart",
@@ -92,12 +91,6 @@ export default {
           },
         ],
       };
-    },
-    getRandomInt(max = 30) {
-      return Math.floor(Math.random() * max);
-    },
-    getRandoms(size = 6) {
-      return _.range(size).map(() => this.getRandomInt());
     },
   },
 };

@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import { BootstrapVue } from "bootstrap-vue";
 
 import AppLayout from "./layout/index.vue";
 import router from "./router";
@@ -21,7 +21,7 @@ Vue.prototype.$network = '';
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin);
+// Vue.use(IconsPlugin);
 
 // Vue.use(globalEventBus);
 

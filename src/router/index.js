@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import NProgress from 'nprogress'
+// import NProgress from 'nprogress'
 
 import { initCurrentUserStateMiddleware, checkAccessMiddleware, setPageTitleMiddleware, redirectNetwork } from './middlewares'
 import { routes } from './routes'
@@ -27,13 +27,13 @@ router.beforeEach((to,from,next)=>{
 router.beforeEach(setPageTitleMiddleware)
 // router.beforeEach(redirectNetwork)
 
-router.beforeEach((to, from, next) => {
-  NProgress.start()
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//   NProgress.start()
+//   next()
+// })
 
-router.afterEach(transition => {
-  NProgress.done()
-})
+// router.afterEach(transition => {
+//   NProgress.done()
+// })
 
 export default router
