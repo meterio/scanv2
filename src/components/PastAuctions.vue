@@ -48,7 +48,6 @@ export default {
   },
   methods: {
     async loadPast(network, page, limit) {
-      console.log("LOAD PAST");
       const { totalPage, auctions } = await this.$api.auction.getPast(
         network,
         page,

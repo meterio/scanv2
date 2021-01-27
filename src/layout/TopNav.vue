@@ -113,7 +113,6 @@ export default {
       )}net`;
     },
     homeActive() {
-      console.log(this.$route.path);
       return this.$route.path === "" || this.$route.path === "/";
     },
     blockActive() {
@@ -128,16 +127,12 @@ export default {
     },
     auctionActive() {
       const path = this.$route.path;
-      console.log(path);
       let x = path.startsWith(`/auction`);
-      console.log(x);
       return x;
     },
   },
   methods: {
     changeNetwork(newNetwork) {
-      console.log(process.env.NODE_ENV);
-      console.log(this.$route);
       const { network } = this.$store.state.dom;
       if (process.env.NODE_ENV === "development") {
         if (network !== newNetwork) {

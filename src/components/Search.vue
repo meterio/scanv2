@@ -75,7 +75,6 @@ export default {
           .substring(0, 1)
           .toUpperCase()}${key.substring(1)} net`;
       }
-      console.log("key", key);
     },
     btnClick() {
       console.log("searchWord", this.searchWord);

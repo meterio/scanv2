@@ -81,6 +81,22 @@
           </div>
         </template>
 
+        <!-- addrAndName column template -->
+        <template v-slot:cell(addrAndName)="data">
+          <div class="dt-row">
+            <router-link
+              v-if="data.value.name"
+              :to="{ name: 'address', params: { address: data.value.address } }"
+              >{{ data.value.name }}</router-link
+            >
+            <router-link
+              v-else
+              :to="{ name: 'address', params: { address: data.value.address } }"
+              >{{ data.value.address }}</router-link
+            >
+          </div>
+        </template>
+
         <template v-slot:cell(address)="data">
           <div class="dt-row">
             <router-link

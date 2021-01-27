@@ -11,7 +11,6 @@ export default {
     return get(network,`accounts/${address}/erc20txs?page=${page}&limit=${limit}`);
   },
   getBuckets(network,address, page, limit = 8) {
-    console.log("NETWORK: ", network, "ADDRESS:", address)
     return get(network,`accounts/${address}/buckets?page=${page}&limit=${limit}`);
   },
   getTopMTR(network,page, limit = 8) {
