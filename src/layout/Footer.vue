@@ -94,11 +94,11 @@ export default {
           key: "youtube",
           value: "https://www.youtube.com/channel/UCgQVD2Ab-i3IKUhjs6-Z76w",
         },
-        {
-          key: "wechat",
-          type: "image",
-          value: "https://github.com",
-        },
+        // {
+        //   key: "wechat",
+        //   type: "image",
+        //   value: "https://github.com",
+        // },
       ],
     };
   },
@@ -107,6 +107,7 @@ export default {
 
 <style lang="scss" scoped>
 footer {
+  border-top: 1px solid #dfdfdf;
   flex-shrink: 0;
   width: 100%;
   background-color: $back-white;
@@ -141,7 +142,7 @@ footer {
       }
 
       .copyright {
-        font-size: 12px;
+        font-size: 13px;
         p {
           margin: 0;
         }
@@ -183,6 +184,11 @@ footer {
           margin-left: 60px;
         }
         a {
+          font-size: 14px;
+          color: #5c6f8c;
+        }
+        a:hover {
+          font-weight: 600;
           color: #5c6f8c;
         }
 
@@ -205,8 +211,10 @@ footer {
         justify-content: center;
       }
 
-      li {
+      li + li {
         padding-left: 20px;
+      }
+      li {
         text-align: right;
         font-size: 23px;
 
@@ -243,6 +251,11 @@ footer {
 
           &.icon-telegram {
             background-image: url("~@/assets/socials/telegram.svg");
+          }
+          &:hover,
+          &:focus {
+            filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(200deg)
+              brightness(104%) contrast(97%);
           }
         }
       }
