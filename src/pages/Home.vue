@@ -9,7 +9,6 @@
         placeholder="Search Transation/Blocks/Address",
         @click="searchKeyWords"
       )
-    <!-- card list -->
     //- block statistic
   data-dashboard.mt35(v-bind:rows="data", v-if="data.length > 0")
     //- node statistic

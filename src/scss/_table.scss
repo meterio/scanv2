@@ -33,17 +33,23 @@
     th {
       color: #5c6f8c;
       font-size: 14px;
-      text-align: center;
+      text-align: left;
     }
   }
   .dt-row {
-    display: flex;
-    justify-content: space-around;
+    display: inline-block;
+    justify-content: start;
     align-items: center;
+    text-align: left;
     height: 50px;
     margin: 0.5rem;
+    padding:10px;
     color: #0c2954;
+    word-break:normal;
 
+    &.breakable{
+      word-break: break-all;
+    }
     .icon {
       background-repeat: no-repeat;
       background-position: center;
@@ -92,5 +98,15 @@
         background-color: #e9f2ff;
       }
     }
+  }
+}
+
+@media (max-width: 991.98px) {
+  .table.b-table.b-table-stacked-lg > tbody > tr > [data-label]::before {
+    width: 30% !important;
+    padding: 10px !important;
+  }
+  .table.b-table.b-table-stacked-lg > tbody > tr > [data-label] > div {
+    width: calc(100% - 30%) !important;
   }
 }

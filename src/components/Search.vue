@@ -26,7 +26,9 @@
             border-bottom-left-radius: 0.2rem;
           "
           @click="btnClick"
-          >Search</b-button
+        >
+          <b-icon icon="search" class="mr-1"></b-icon>
+          Search</b-button
         >
       </b-input-group-append>
     </b-input-group>
@@ -53,29 +55,8 @@ export default {
       searchPrefix: "Main net",
     };
   },
-  beforeMount() {
-    let mark = window.localStorage.getItem("proxyMark");
-    if (!mark) {
-      mark = "main";
-      window.localStorage.setItem(mark);
-      window.location.reload();
-      return;
-    }
-    this.searchPrefix = `${mark.substring(0, 1).toUpperCase()}${mark.substring(
-      1
-    )} net`;
-  },
+  beforeMount() {},
   methods: {
-    configProxy(key) {
-      const mark = window.localStorage.getItem("proxyMark");
-      if (mark != key) {
-        window.localStorage.setItem("proxyMark", key);
-        window.location.reload();
-        this.searchPrefix = `${key
-          .substring(0, 1)
-          .toUpperCase()}${key.substring(1)} net`;
-      }
-    },
     btnClick() {
       console.log("searchWord", this.searchWord);
       this.$emit("click", this.searchWord);

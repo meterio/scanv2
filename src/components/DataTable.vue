@@ -10,6 +10,7 @@
         :busy.sync="loading"
         show-empty
         :style="{ minHeight: minHeight }"
+        stacked="lg"
       >
         <template #table-busy>
           <div class="text-center">

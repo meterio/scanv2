@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { BootstrapVue } from "bootstrap-vue";
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 
 import AppLayout from "./layout/index.vue";
 import router from "./router";
@@ -12,7 +12,8 @@ import "./mixins";
 // import globalEventBus from "./plugins/globalEventBus";
 
 import "./scss/style.scss";
-import "./assets/fonts/bebasneue.css";
+// import "./assets/fonts/bebasneue.css";
+import "./assets/fonts/nunito/nunito.css";
 
 // 将api挂载到vue的原型上
 Vue.prototype.$api = api;
@@ -21,7 +22,7 @@ Vue.prototype.$network = '';
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
-// Vue.use(IconsPlugin);
+Vue.use(IconsPlugin);
 
 // Vue.use(globalEventBus);
 

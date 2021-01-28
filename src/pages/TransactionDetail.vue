@@ -18,7 +18,7 @@
 
       <template v-slot:cell(data)="row">
         <!-- <div style="word-break: break-all"> -->
-        <div style="word-break: break-all">
+        <div class="dt-row breakable">
           {{ row.value }}
         </div>
 
@@ -30,9 +30,11 @@
           class="mr-2 float-right"
         >
           <span v-if="!row.detailsShowing">
-            <i class="fa fa-chevron-down"></i> Show Decoded
+            <b-icon icon="chevron-double-down"></b-icon> Show Decoded
           </span>
-          <span v-else> <i class="fa fa-chevron-up"></i> Hid Decoded </span>
+          <span v-else>
+            <b-icon icon="chevron-double-up"></b-icon> Hide Decoded
+          </span>
         </b-button>
       </template>
 

@@ -23,7 +23,9 @@
 
           <b-col>
             <div class="form-group has-search">
-              <span class="fa fa-search form-control-feedback"></span>
+              <span class="form-control-feedback">
+                <b-icon icon="search"></b-icon>
+              </span>
 
               <input
                 type="text"
