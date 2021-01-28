@@ -27,6 +27,7 @@
             <b-form-input
               v-model="searchKey"
               placeholder="Search by address/tx/block"
+              @keydown="keydown"
             ></b-form-input>
             <b-input-group-append>
               <b-button variant="primary" @click="searchKeyWords">
@@ -107,10 +108,9 @@ export default {
   },
   computed: {
     searchPrefix() {
-      const { network } = this.$store.state.dom;
-      return `${network.substring(0, 1).toUpperCase()}${network.substring(
-        1
-      )}net`;
+      return `${this.network
+        .substring(0, 1)
+        .toUpperCase()}${this.network.substring(1)}net`;
     },
     homeActive() {
       return this.$route.path === "" || this.$route.path === "/";
@@ -132,6 +132,15 @@ export default {
     },
   },
   methods: {
+    keydown(evt) {
+      if (evt) {
+        if (evt.which === 13) {
+          // enter key
+          evt.preventDefault();
+          this.searchKeyWords();
+        }
+      }
+    },
     changeNetwork(newNetwork) {
       const { network } = this.$store.state.dom;
       if (process.env.NODE_ENV === "development") {
@@ -153,6 +162,8 @@ export default {
     },
     async searchKeyWords() {
       try {
+        const key = this.searchKey.replace(/\r?\n|\r/g, "");
+        this.searchKey = key;
         const { type } = await this.$api.search.searchKeyWord(
           this.network,
           this.searchKey

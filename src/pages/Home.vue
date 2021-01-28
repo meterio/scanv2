@@ -137,9 +137,11 @@ export default {
     },
     async searchKeyWords(key) {
       try {
+        const str = key.replace(/\r?\n|\r/g, "");
+        console.log("STR: ", str);
         const { type } = await this.$api.search.searchKeyWord(
           this.network,
-          key
+          str
         );
         console.log("res:>>", type);
         if (type === "tx") {

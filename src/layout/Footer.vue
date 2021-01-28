@@ -150,9 +150,6 @@ footer {
 
     .download-wallet {
       margin-top: 20px;
-      @include media("<=desktop") {
-        display: none;
-      }
 
       .desktop-btn {
         background-color: $primary-color;
@@ -184,6 +181,9 @@ footer {
       .footer-menu {
         @include media(">desktop") {
           margin-left: 60px;
+        }
+        a {
+          color: #5c6f8c;
         }
 
         li {

@@ -4,6 +4,7 @@
       <b-form-input
         :placeholder="placeholder"
         v-model="searchWord"
+        @keydown="keydown"
       ></b-form-input>
       <b-input-group-append>
         <b-button
@@ -52,14 +53,21 @@ export default {
   data() {
     return {
       searchWord: "",
-      searchPrefix: "Main net",
     };
   },
   beforeMount() {},
   methods: {
     btnClick() {
-      console.log("searchWord", this.searchWord);
-      this.$emit("click", this.searchWord);
+      const key = this.searchWord.replace(/\r?\n|\r/g, "");
+      this.$emit("click", key);
+    },
+    keydown(evt) {
+      if (evt) {
+        if (evt.which === 13) {
+          // enter key
+          this.btnClick();
+        }
+      }
     },
   },
 };
