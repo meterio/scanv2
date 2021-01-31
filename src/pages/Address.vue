@@ -36,6 +36,7 @@ import DataTable from "@/components/DataTable.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
+import { fromWei } from "@/utils";
 export default {
   name: "Address",
   components: {
@@ -216,9 +217,10 @@ export default {
           this.txs.items.push({
             txhash: t.txHash,
             blocknum: t.block.number,
-            from: t.from,
-            to: t.to,
-            amount: t.amount,
+            from: t.from === this.address ? t.from : t.tokenAddress,
+            to: t.to === this.address ? t.to : t.tokenAddress,
+            direct: t.from === this.address ? "Out" : "In",
+            amount: fromWei(t.amount),
             timestamp: t.block.timestamp,
           });
         }
