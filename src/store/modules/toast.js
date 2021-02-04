@@ -4,28 +4,28 @@
 export default {
   namespaced: true,
   state: {
-    toastsList: []
+    toastsList: [],
   },
 
   mutations: {
-    NEW (state, payload) {
+    NEW(state, payload) {
       const toast = {
         id: new Date().getTime(),
-        message: typeof payload === 'string' ? payload : payload.message,
-        type: payload.type || 'default',
-        duration: payload.duration || 5000
+        message: typeof payload === "string" ? payload : payload.message,
+        type: payload.type || "default",
+        duration: payload.duration || 5000,
+      };
+      if (payload.type === "error") {
+        toast.duration = 0;
+        console.error(payload.message);
       }
-      if (payload.type === 'error') {
-        toast.duration = 0
-        console.error(payload.message)
-      }
-      state.toastsList.push({ ...toast })
+      state.toastsList.push({ ...toast });
     },
-    REMOVE (state, payload) {
-      state.toastsList = state.toastsList.filter(({ id }) => id !== payload.id)
+    REMOVE(state, payload) {
+      state.toastsList = state.toastsList.filter(({ id }) => id !== payload.id);
     },
-    CLEAR_LIST (state) {
-      state.toastsList = []
-    }
-  }
-}
+    CLEAR_LIST(state) {
+      state.toastsList = [];
+    },
+  },
+};

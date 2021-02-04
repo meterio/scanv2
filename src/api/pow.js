@@ -11,5 +11,5 @@ export default {
 
   getPowChart(network) {
     return get(network, `pow/chart`);
-  }
+  },
 };

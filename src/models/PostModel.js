@@ -1,7 +1,7 @@
-import BaseModel from './BaseModel'
+import BaseModel from "./BaseModel";
 
 export default class PostModel extends BaseModel {
-  get schema () {
+  get schema() {
     return {
       id: undefined,
       userId: undefined,
@@ -12,19 +12,19 @@ export default class PostModel extends BaseModel {
       isDraft: undefined,
 
       createdAt: undefined,
-      updatedAt: undefined
-    }
+      updatedAt: undefined,
+    };
   }
 
-  prepareCreate () {
-    this.baseClear()
+  prepareCreate() {
+    this.baseClear();
 
-    return this
+    return this;
   }
 
-  prepareUpdate () {
-    this.baseClear()
+  prepareUpdate() {
+    this.baseClear();
 
-    return this
+    return this;
   }
 }

@@ -1,7 +1,7 @@
 export default {
   data() {
     return {
-      page_size: 8
+      page_size: 8,
     };
-  }
+  },
 };

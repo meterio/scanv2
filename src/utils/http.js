@@ -3,7 +3,7 @@
  */
 import axios from "axios";
 import QS from "qs";
-import {API_BASE} from "@/config";
+import { API_BASE } from "@/config";
 
 // 环境的切换
 // if (process.env.NODE_ENV == "development") {
@@ -39,7 +39,7 @@ axios.defaults.headers.post["Content-Type"] =
 
 // 响应拦截器
 axios.interceptors.response.use(
-  response => {
+  (response) => {
     if (response.status === 200) {
       return Promise.resolve(response);
     } else {
@@ -47,7 +47,7 @@ axios.interceptors.response.use(
     }
   },
   // 服务器状态码不是200的情况
-  error => {
+  (error) => {
     // if (error.response.status) {
     //   switch (error.response.status) {
     //     // 401: 未登录
@@ -109,8 +109,8 @@ axios.interceptors.response.use(
  * @param {Object} params [请求时携带的参数]
  */
 export function get(network, url, params) {
-  console.log(`http get | network: ${network}, url: ${url}`)
-  if (!(network in API_BASE)){
+  console.log(`http get | network: ${network}, url: ${url}`);
+  if (!(network in API_BASE)) {
     throw Error(`Invalid network: ${network} for ${url}`);
   }
   const base = API_BASE[network];
@@ -118,13 +118,13 @@ export function get(network, url, params) {
   return new Promise((resolve, reject) => {
     axios
       .get(url, { params })
-      .then(res => {
+      .then((res) => {
         // get data success
         if (res.data) {
           resolve(res.data);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err.data);
       });
   });
@@ -139,13 +139,13 @@ export function post(url, params) {
   return new Promise((resolve, reject) => {
     axios
       .post(url, QS.stringify(params))
-      .then(res => {
+      .then((res) => {
         // get data success
         if (res.data.code === 0) {
           resolve(res.data.data);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err.data);
       });
   });

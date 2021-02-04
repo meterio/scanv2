@@ -58,6 +58,7 @@ export default {
           { key: "type", label: "Type" },
           { key: "amount", label: "Amount" },
           { key: "fee", label: "Fee" },
+          { key: "clauseCount", label: "nClause" },
           { key: "result", label: "Result" },
         ],
         items: [],
@@ -76,6 +77,7 @@ export default {
           { key: "Hash", value: b.hash },
           { key: "Number", value: b.number },
           { key: "Block Type", value: b.blockType === 1 ? "KBlock" : "MBlock" },
+          { key: "Epoch", value: b.epoch },
           {
             key: "KBlock Height",
             value: b.lastKBlockHeight,
@@ -92,7 +94,6 @@ export default {
           { key: "Time", value: b.timestamp, type: "timestamp" },
         ];
       }
-      console.log("BLOCK:", b);
       let items = [];
       if (res.block.txSummaries) {
         items = res.block.txSummaries.map((tx) => {
@@ -102,14 +103,14 @@ export default {
             amount: tx.totalAmountStrs[0],
             fee: tx.feeStr,
             result: tx.reverted ? "reverted" : "success",
+            clauseCount: tx.clauseCount,
           };
         });
       }
+      console.log(items);
       this.txs.items = items;
       this.loading = false;
     },
   },
 };
 </script>
-
-

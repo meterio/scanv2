@@ -21,7 +21,7 @@ export default {
   name: "AppLayout",
   components: {
     TopNav,
-    Footer
-  }
+    Footer,
+  },
 };
 </script>

@@ -30,18 +30,18 @@ export default {
   props: {
     loading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isEmpty: {
       type: Boolean,
-      default: false
+      default: false,
     },
     error: {
       type: [String, Boolean],
-      default: false
-    }
+      default: false,
+    },
   },
-  components: { SpinnerWave }
+  components: { SpinnerWave },
 };
 </script>
 

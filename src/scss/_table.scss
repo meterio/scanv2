@@ -43,11 +43,11 @@
     text-align: left;
     height: 50px;
     margin: 0.5rem;
-    padding:10px;
+    padding: 10px;
     color: #0c2954;
-    word-break:normal;
+    word-break: normal;
 
-    &.breakable{
+    &.breakable {
       word-break: break-all;
     }
     .icon {
@@ -58,17 +58,16 @@
       border-radius: 5px;
 
       &.icon-mint-active {
-        background-image: url('~@/assets/hammer_primary.png');
+        background-image: url("~@/assets/hammer_primary.png");
         background-color: #d9e8ff;
-        height:36px;
-        width:36px;
- 
+        height: 36px;
+        width: 36px;
       }
 
       &.icon-mint-past {
-        background-image: url('~@/assets/hammer_secondary.png');
-        height:36px;
-        width:36px;
+        background-image: url("~@/assets/hammer_secondary.png");
+        height: 36px;
+        width: 36px;
         background-color: #ebeef6;
       }
     }

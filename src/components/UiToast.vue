@@ -1,48 +1,45 @@
 <template>
-  <div
-    class="ui-toast component"
-    :class="classList"
-    @click="remove">
+  <div class="ui-toast component" :class="classList" @click="remove">
     {{ item.message }}
   </div>
 </template>
 
 <script>
 export default {
-  name: 'UiToast',
+  name: "UiToast",
   props: {
     item: {
-      type: Object
-    }
+      type: Object,
+    },
   },
 
   methods: {
-    remove () {
-      this.$emit('remove', this.item.id)
-    }
+    remove() {
+      this.$emit("remove", this.item.id);
+    },
   },
 
   computed: {
-    classList () {
+    classList() {
       return {
-        default: this.item.type === 'default',
-        success: this.item.type === 'success',
-        info: this.item.type === 'info',
-        warning: this.item.type === 'warning',
-        error: this.item.type === 'error'
-      }
-    }
+        default: this.item.type === "default",
+        success: this.item.type === "success",
+        info: this.item.type === "info",
+        warning: this.item.type === "warning",
+        error: this.item.type === "error",
+      };
+    },
   },
 
-  mounted () {
+  mounted() {
     if (this.item.duration) {
       const timer = setTimeout(() => {
-        clearTimeout(timer)
-        this.remove()
-      }, this.item.duration)
+        clearTimeout(timer);
+        this.remove();
+      }, this.item.duration);
     }
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss">

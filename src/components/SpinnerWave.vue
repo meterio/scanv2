@@ -12,21 +12,21 @@
 
 <script>
 export default {
-  name: 'SpinnerWave',
+  name: "SpinnerWave",
   props: {
     color: {
       type: String,
-      default: '#bebebe'
-    }
+      default: "#bebebe",
+    },
   },
   computed: {
-    loadingColor () {
+    loadingColor() {
       return {
-        'background-color': this.color
-      }
-    }
-  }
-}
+        "background-color": this.color,
+      };
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -62,7 +62,10 @@ $spinkit-size: 40px !default;
   }
   @for $i from 1 through $rectCount {
     .sk-rect#{$i} {
-      animation-delay: - $animationDuration + $delayRange / ($rectCount - 1) * ($i - 1);
+      animation-delay: -$animationDuration +
+        $delayRange /
+        ($rectCount - 1) *
+        ($i - 1);
     }
   }
 }
@@ -71,10 +74,10 @@ $spinkit-size: 40px !default;
   0%,
   40%,
   100% {
-    transform: scaleY(0.4)
+    transform: scaleY(0.4);
   }
   20% {
-    transform: scaleY(1.0)
+    transform: scaleY(1);
   }
 }
 </style>

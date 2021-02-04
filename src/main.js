@@ -4,7 +4,7 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import AppLayout from "./layout/index.vue";
 import router from "./router";
 import store from "./store";
-import {fromWei, fromNow, shortHash, shortAddress, formatTime } from "@/utils"
+import { fromWei, fromNow, shortHash, shortAddress, formatTime } from "@/utils";
 import api from "./api";
 
 import "./mixins";
@@ -17,7 +17,7 @@ import "./assets/fonts/nunito/nunito.css";
 
 // 将api挂载到vue的原型上
 Vue.prototype.$api = api;
-Vue.prototype.$network = '';
+Vue.prototype.$network = "";
 
 // Install BootstrapVue
 Vue.use(BootstrapVue);
@@ -29,16 +29,16 @@ Vue.use(IconsPlugin);
 Vue.config.productionTip = false;
 
 var mixin = {
-  computed:{
-    network(){
+  computed: {
+    network() {
       return this.$store.state.dom.network;
-    }
+    },
   },
-  beforeMount(){
+  beforeMount() {
     if (this.init) this.init();
   },
   watch: {
-    $route(to,from){
+    $route(to, from) {
       if (this.init) this.init();
     },
     network(to, from) {
@@ -50,7 +50,7 @@ var mixin = {
       return fromNow(time * 1000);
     },
     shortAddr(addr, precision) {
-      return shortAddress(addr,precision);
+      return shortAddress(addr, precision);
     },
     shortHash(hash, precision) {
       return shortHash(hash, precision);
@@ -58,11 +58,11 @@ var mixin = {
     formatTime(time) {
       return formatTime(time * 1000);
     },
-    fromWei(num, precision){
+    fromWei(num, precision) {
       return fromWei(num, precision);
-    }
-  }
-}
+    },
+  },
+};
 
 Vue.mixin(mixin);
 
@@ -81,5 +81,5 @@ new Vue({
       store.commit("dom/SET_WINDOW_WIDTH", window.innerWidth)
     );
   },
-  render: h => h(AppLayout)
+  render: (h) => h(AppLayout),
 }).$mount("#app");

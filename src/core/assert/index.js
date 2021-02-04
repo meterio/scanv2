@@ -51,7 +51,7 @@ export class Assert {
         type,
         message ||
           `Assert.typeOf accept one of [${validTypes.map(
-            t => t.name
+            (t) => t.name
           )}] types. Use another method to validate "${type}"`
       );
     }
@@ -71,13 +71,13 @@ export class Assert {
     { required = false, notEmpty = false, message = "", of = [] } = {}
   ) {
     if (!Array.isArray(of)) Assert.fail(of, "of option expect an Array type");
-    if (!of.every(i => validTypes.includes(i))) {
+    if (!of.every((i) => validTypes.includes(i))) {
       Assert.fail(
         value,
         of,
         message ||
           `Assert.array 'of' option accept only one of [${validTypes.map(
-            t => t.name
+            (t) => t.name
           )}] types`
       );
     }
@@ -89,9 +89,9 @@ export class Assert {
       value &&
       value.length &&
       of.length &&
-      !value.every(i => of.includes(i.constructor))
+      !value.every((i) => of.includes(i.constructor))
     )
-      Assert.fail(value, `Array of some [${of.map(t => t.name)}] types`);
+      Assert.fail(value, `Array of some [${of.map((t) => t.name)}] types`);
   }
 
   static object(

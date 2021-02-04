@@ -90,9 +90,9 @@ body {
   //background-color: black;
   grid-template-columns: 50% 50%;
   grid-template-areas:
-    'upper-grid upper-grid'
-    'down-grid down-grid'
-    'left-grid right-grid';
+    "upper-grid upper-grid"
+    "down-grid down-grid"
+    "left-grid right-grid";
 }
 
 .upper-grid {
@@ -107,9 +107,9 @@ body {
   background-color: $back-white;
   grid-template-columns: 24.5% 0.5% 24.5% 1% 24.5% 0.5% 24.5%;
   grid-template-areas:
-    'upper-grid-class1 upper-grid-class1 upper-grid-class1 divider1 upper-grid-class2 upper-grid-class2 upper-grid-class2'
-    'horizontal-divider horizontal-divider horizontal-divider horizontal-divider horizontal-divider horizontal-divider horizontal-divider'
-    'upper-grid-class3 divider3 upper-grid-class4 divider2 upper-grid-class5 divider4 upper-grid-class6';
+    "upper-grid-class1 upper-grid-class1 upper-grid-class1 divider1 upper-grid-class2 upper-grid-class2 upper-grid-class2"
+    "horizontal-divider horizontal-divider horizontal-divider horizontal-divider horizontal-divider horizontal-divider horizontal-divider"
+    "upper-grid-class3 divider3 upper-grid-class4 divider2 upper-grid-class5 divider4 upper-grid-class6";
 }
 
 .down-grid {
@@ -125,9 +125,9 @@ body {
   background-color: $back-white;
   grid-template-columns: 24.5% 24.5% 2% 24.5% 24.5%;
   grid-template-areas:
-    'down-grid-class1 down-grid-class1 down-divider1  down-grid-class2 down-grid-class2'
-    'down-horizontal-divider down-horizontal-divider down-horizontal-divider down-horizontal-divider down-horizontal-divider'
-    'down-grid-class3 down-divider2 down-grid-class4 down-divider3 down-grid-class5';
+    "down-grid-class1 down-grid-class1 down-divider1  down-grid-class2 down-grid-class2"
+    "down-horizontal-divider down-horizontal-divider down-horizontal-divider down-horizontal-divider down-horizontal-divider"
+    "down-grid-class3 down-divider2 down-grid-class4 down-divider3 down-grid-class5";
 }
 
 .left-grid {

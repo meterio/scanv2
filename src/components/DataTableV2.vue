@@ -262,6 +262,7 @@ export default {
   },
   watch: {
     passedItems(to, from) {
+      console.log("item changed");
       this.init();
     },
   },
@@ -282,6 +283,10 @@ export default {
           }
           this.itemsLocal = this.passedItems.slice(start, end);
           this.totalRows = this.passedItems.length;
+        } else {
+          this.currentPage = 1;
+          this.itemsLocal = [];
+          this.totalRows = 0;
         }
         if (!this.loadItems) {
           this.loading = false;

@@ -13,7 +13,7 @@ export class Http {
   constructor(status) {
     this.isAuth = status && status.auth ? status.auth : false;
     this.instance = axios.create({
-      baseURL: API_URL
+      baseURL: API_URL,
     });
 
     return this.init();
@@ -22,7 +22,7 @@ export class Http {
   init() {
     if (this.isAuth) {
       this.instance.interceptors.request.use(
-        request => {
+        (request) => {
           request.headers.authorization = AuthService.getBearer();
           // if access token expired and refreshToken is exist >> go to API and get new access token
           if (
@@ -30,17 +30,17 @@ export class Http {
             AuthService.hasRefreshToken()
           ) {
             return AuthService.debounceRefreshTokens()
-              .then(response => {
+              .then((response) => {
                 AuthService.setBearer(response.data.accessToken);
                 request.headers.authorization = AuthService.getBearer();
                 return request;
               })
-              .catch(error => Promise.reject(error));
+              .catch((error) => Promise.reject(error));
           } else {
             return request;
           }
         },
-        error => {
+        (error) => {
           return Promise.reject(error);
         }
       );

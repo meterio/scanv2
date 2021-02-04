@@ -9,5 +9,5 @@ export default {
   },
   getChart(network) {
     return get(network, `metrics/chart`);
-  }
+  },
 };

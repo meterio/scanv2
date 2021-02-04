@@ -1,7 +1,7 @@
 export default function directive(el, binding) {
   if (binding.value !== binding.oldValue) {
     // change debounce only if interval has changed
-    el.oninput = directive.debounce(evt => {
+    el.oninput = directive.debounce((evt) => {
       el.dispatchEvent(new Event("debounce-change"));
     }, parseInt(binding.value) || 500);
   }

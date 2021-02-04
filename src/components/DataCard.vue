@@ -11,7 +11,7 @@
 <script>
 export default {
   name: "DataCard",
-  props: ["data"]
+  props: ["data"],
 };
 </script>
 

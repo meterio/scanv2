@@ -34,7 +34,7 @@ export default {
     return {
       email: "user@user.com",
       password: "123456",
-      error: ""
+      error: "",
     };
   },
 
@@ -43,7 +43,7 @@ export default {
       try {
         await AuthService.makeLogin({
           email: this.email,
-          password: this.password
+          password: this.password,
         });
         this.error = "";
         await this.$store.dispatch("user/getCurrent");
@@ -51,15 +51,15 @@ export default {
       } catch (error) {
         this.$store.commit("toast/NEW", {
           type: "error",
-          message: error.message
+          message: error.message,
         });
         this.error =
           error.status === 404
             ? "User with same email not found"
             : error.message;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

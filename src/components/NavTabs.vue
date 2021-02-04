@@ -8,17 +8,17 @@ export default {
   props: {
     tabs: {
       type: Array,
-      required: true
+      required: true,
     },
     value: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
       localTabs: [],
-      localTabIndex: 0
+      localTabIndex: 0,
     };
   },
   beforeMount() {
@@ -29,8 +29,8 @@ export default {
     clickTab(tabIndex) {
       this.localTabIndex = tabIndex;
       this.$emit("changeTab", tabIndex);
-    }
-  }
+    },
+  },
 };
 </script>
 

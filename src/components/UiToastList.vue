@@ -10,38 +10,38 @@
 </template>
 
 <script>
-import UiToast from './UiToast'
+import UiToast from "./UiToast";
 export default {
-  name: 'UiToastList',
+  name: "UiToastList",
 
   components: {
-    UiToast
+    UiToast,
   },
 
   watch: {
     $route: {
-      handler: 'clearToastList',
-      deep: 'true'
-    }
+      handler: "clearToastList",
+      deep: "true",
+    },
   },
 
   computed: {
-    toastsList () {
-      return this.$store.state.toast.toastsList
-    }
+    toastsList() {
+      return this.$store.state.toast.toastsList;
+    },
   },
 
   methods: {
-    onRemove (id) {
-      this.$store.commit('toast/REMOVE', { id })
+    onRemove(id) {
+      this.$store.commit("toast/REMOVE", { id });
     },
-    clearToastList () {
+    clearToastList() {
       if (this.toastsList.length) {
-        this.$store.commit('toast/CLEAR_LIST')
+        this.$store.commit("toast/CLEAR_LIST");
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -55,7 +55,7 @@ export default {
 
 .slide-leave-active,
 .slide-enter-active {
-  transition: .3s;
+  transition: 0.3s;
 }
 .slide-enter {
   transform: translate(0, 100%);
@@ -63,5 +63,4 @@ export default {
 .slide-leave-to {
   transform: translate(-200%, 0);
 }
-
 </style>

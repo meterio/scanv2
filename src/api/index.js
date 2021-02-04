@@ -15,5 +15,5 @@ export default {
   pow,
   auction,
   validator,
-  search
+  search,
 };

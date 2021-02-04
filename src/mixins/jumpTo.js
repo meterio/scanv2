@@ -3,16 +3,16 @@
  */
 export default {
   methods: {
-    $jumpTo (selector) {
-      const el = document.querySelectorAll(selector)[0]
+    $jumpTo(selector) {
+      const el = document.querySelectorAll(selector)[0];
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth' })
+        el.scrollIntoView({ behavior: "smooth" });
       } else {
-        throw new Error('Element not supplied.')
+        throw new Error("Element not supplied.");
       }
-    }
-  }
-}
+    },
+  },
+};
 
 // Usage example >>
 // someSubmitHandler () {

@@ -31,7 +31,7 @@
 $breakpoints: (
   "phone": 320px,
   "tablet": 768px,
-  "desktop": 1024px
+  "desktop": 1024px,
 ) !default;
 
 ///
@@ -54,7 +54,7 @@ $media-expressions: (
   "retina2x":
     "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx)",
   "retina3x":
-    "(-webkit-min-device-pixel-ratio: 3), (min-resolution: 350dpi), (min-resolution: 3dppx)"
+    "(-webkit-min-device-pixel-ratio: 3), (min-resolution: 350dpi), (min-resolution: 3dppx)",
 ) !default;
 
 ///
@@ -82,7 +82,7 @@ $unit-intervals: (
   "px": 1,
   "em": 0.01,
   "rem": 0.1,
-  "": 0
+  "": 0,
 ) !default;
 
 ///
@@ -424,7 +424,7 @@ $im-no-media-expressions: ("screen", "portrait", "landscape") !default;
     "6": 6,
     "7": 7,
     "8": 8,
-    "9": 9
+    "9": 9,
   );
 
   // Remove +/- sign if present at first character
@@ -476,7 +476,7 @@ $im-no-media-expressions: ("screen", "portrait", "landscape") !default;
     "vw": 1vw,
     "vh": 1vh,
     "vmin": 1vmin,
-    "vmax": 1vmax
+    "vmax": 1vmax,
   );
 
   @if not index(map-keys($units), $unit) {
@@ -580,7 +580,7 @@ $im-no-media-expressions: ("screen", "portrait", "landscape") !default;
   } @else if ($im-media-support and length($conditions) > 0) {
     @media #{unquote(parse-expression(nth($conditions, 1)))} {
       // Recursive call
-      @include media(slice($conditions, 2) ...) {
+      @include media(slice($conditions, 2)...) {
         @content;
       }
     }

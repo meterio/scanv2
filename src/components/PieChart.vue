@@ -33,17 +33,17 @@ export default {
               "#80d2e4",
               "#a6b5cc",
               "#b871ff",
-              "#ffb84f"
-            ]
-          }
+              "#ffb84f",
+            ],
+          },
         ],
         labels: [
           "Total Avaliable",
           "Delegated",
           "Unbounded",
           "Reward",
-          "Commision"
-        ]
+          "Commision",
+        ],
       },
       // #5c6f8c
       options: {
@@ -51,15 +51,15 @@ export default {
           position: "right",
           labels: {
             padding: 25,
-            usePointStyle: true
-          }
-        }
-      }
+            usePointStyle: true,
+          },
+        },
+      },
     };
   },
   components: {
-    PieChart
-  }
+    PieChart,
+  },
 };
 </script>
 

@@ -39,13 +39,13 @@ export default {
   name: "Header",
   components: {
     UiToastList,
-    UiHeaderDropdownMenu
+    UiHeaderDropdownMenu,
   },
   methods: {
     async logout() {
       await AuthService.makeLogout();
-    }
-  }
+    },
+  },
 };
 </script>
 

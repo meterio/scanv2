@@ -21,22 +21,22 @@ import DataCard from "@/components/DataCard.vue";
 export default {
   name: "DataDashboard",
   components: {
-    DataCard
+    DataCard,
   },
   props: ["rows"],
   methods: {
-    hasRowLine: function(row_size, index) {
+    hasRowLine: function (row_size, index) {
       return row_size > index + 1;
     },
 
-    hasBorderRight: function(col_size, index) {
+    hasBorderRight: function (col_size, index) {
       if (col_size > index + 1) {
         return { "border-r": true };
       }
 
       return { "border-r": false };
-    }
-  }
+    },
+  },
 };
 </script>
 
