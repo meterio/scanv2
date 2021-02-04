@@ -3,7 +3,7 @@
     <h3 class="title">Active Auctions (MTRG)</h3>
     <DataTable :data="auctionObj" class="px-0" :loading="load">
       <!-- column: height_range -->
-      <template v-slot:cell(height_range)="data">
+      <template v-slot:cell(prefix)="data">
         <div class="dt-row">
           <div class="icon icon-mint-active"></div>
           <span>{{ data.value }}</span>
@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import BigNumber from "bignumber.js";
 import DataTable from "@/components/DataTable.vue";
+import { fromWei } from "@/utils";
 export default {
   name: "ActiveAuctions",
   data() {
@@ -24,27 +24,12 @@ export default {
       load: true,
       auctionObj: {
         fields: [
-          {
-            key: "height_range",
-            label: "Height(POS)",
-          },
-          {
-            key: "settlement_k_block",
-            label: "Settlement K Block",
-          },
-          {
-            key: "mtr_received",
-            label: "MTR Received",
-          },
-          {
-            key: "mtrg_on_auction",
-            label: "MTRG on Auction",
-          },
-
-          {
-            key: "expected_final_price",
-            label: "Expected Final Price",
-          },
+          { key: "prefix", label: "" },
+          { key: "epoch_range", label: "Epoch Range" },
+          { key: "end_height", label: "Settle KBlock" },
+          { key: "mtr_received", label: "MTR Received" },
+          { key: "mtrg_on_auction", label: "MTRG on Auction" },
+          { key: "expected_final_price", label: "Expected Final Price" },
         ],
         items: [],
       },
@@ -64,13 +49,12 @@ export default {
         const items = [];
         if (present.startHeight) {
           items.push({
-            height_range: `${present.startHeight} - ${present.endHeight}`,
-            settlement_k_block: present.endHeight,
-            mtr_received: present.receivedStr,
-            mtrg_on_auction: present.reservedStr,
-            expected_final_price: new BigNumber(present.reservedPrice)
-              .dividedBy(1e18)
-              .toFixed(),
+            prefix: "",
+            epoch_range: `${present.startEpoch} - ${present.endEpoch}`,
+            end_height: present.endHeight,
+            mtr_received: fromWei(present.received, 6) + " MTR",
+            mtrg_on_auction: fromWei(present.reserved, 6) + " MTRG",
+            expected_final_price: fromWei(present.reservedPrice),
           });
         }
         this.auctionObj.items = items;

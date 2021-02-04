@@ -8,9 +8,9 @@
       :loadItems="loadPast"
     >
       <!-- column: height_range -->
-      <template v-slot:cell(height_range)="data">
+      <template v-slot:cell(prefix)="data">
         <div class="dt-row">
-          <div class="icon icon-mint-past"></div>
+          <div class="icon icon-mint-past" style="display: inline-block"></div>
           <span>{{ data.value }}</span>
         </div>
       </template>
@@ -21,6 +21,7 @@
 <script>
 import BigNumber from "bignumber.js";
 import DataTableV2 from "@/components/DataTableV2.vue";
+import { fromWei } from "@/utils";
 
 export default {
   name: "PastAuctions",
@@ -33,10 +34,11 @@ export default {
           perPage: 8,
         },
         fields: [
-          { key: "height_range", label: "Height(POS)" },
-          { key: "settlement_kblock", label: "Settlement K Block" },
-          { key: "mtr_received", label: "MTR Received" },
-          { key: "mtrg_on_auction", label: "MTRG on Auction" },
+          { key: "prefix", label: "" },
+          { key: "epoch_range", label: "Epoch Range" },
+          { key: "end_height", label: "Settle KBlock" },
+          { key: "mtr_received", label: "Received MTR" },
+          { key: "sold_mtrg", label: "Sold MTRG" },
           { key: "final_price", label: "Final Price" },
           { key: "auctionid", label: "More" },
         ],
@@ -57,11 +59,13 @@ export default {
 
       const items = auctions.map((a) => {
         return {
-          height_range: `${a.startHeight} - ${a.endHeight}`,
-          settlement_kblock: a.endHeight,
-          mtr_received: a.receivedStr,
-          mtrg_on_auction: a.releasedStr,
-          final_price: new BigNumber(a.actualPrice).dividedBy(1e18).toFixed(),
+          prefix: "",
+          epoch_range: `${a.startEpoch} - ${a.endEpoch}`,
+          end_height: a.endHeight,
+          mtr_received: fromWei(a.received, 6) + " MTR",
+          sold_mtrg:
+            fromWei(new BigNumber(a.released).minus(a.leftover), 6) + " MTRG",
+          final_price: fromWei(a.actualPrice, 4),
           auctionid: a.id,
         };
       });
