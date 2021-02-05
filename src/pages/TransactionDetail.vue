@@ -2,7 +2,11 @@
   <div class="detail-page">
     <DataSummary :data="summary" :title="summaryTitle" />
 
-    <DataTable title="Clauses" :data="clauses.data">
+    <DataTableV2
+      title="Clauses"
+      :fields="clauses.fields"
+      :items="clauses.items"
+    >
       <template v-slot:cell(to)="data">
         <div class="dt-row">
           <router-link
@@ -17,11 +21,11 @@
       </template>
 
       <template v-slot:cell(data)="row">
-        <!-- <div style="word-break: break-all"> -->
         <div class="dt-row breakable">
           {{ row.value }}
         </div>
 
+        <div v-if="row.row_hovered"></div>
         <b-button
           v-if="row.item.decoded"
           size="sm"
@@ -39,19 +43,19 @@
       </template>
 
       <template #row-details="row">
-        <b-card title="Decoded">
+        <b-card>
           <!-- <div style="word-break: break-all"> -->
           <VueJsonPretty :data="row.item.decoded" />
           <!-- </div> -->
         </b-card>
       </template>
-    </DataTable>
+    </DataTableV2>
   </div>
 </template>
 
 <script>
 import BigNumber from "bignumber.js";
-import DataTable from "@/components/DataTable.vue";
+import DataTableV2 from "@/components/DataTableV2.vue";
 import DataSummary from "@/components/DataSummary.vue";
 import * as dev from "@meterio/devkit";
 import VueJsonPretty from "vue-json-pretty";
@@ -62,7 +66,7 @@ import "vue-json-pretty/lib/styles.css";
 export default {
   components: {
     DataSummary,
-    DataTable,
+    DataTableV2,
     VueJsonPretty,
   },
   data() {
@@ -71,16 +75,14 @@ export default {
       summary: [],
       tx: {},
       clauses: {
-        data: {
-          fields: [
-            { key: "index", label: "Index" },
-            { key: "addrAndName", label: "To" },
-            { key: "amount", label: "Amount" },
-            { key: "data", label: "Data" },
-            { key: "show_details", label: "" },
-          ],
-          items: [],
-        },
+        fields: [
+          { key: "index", label: "Index" },
+          { key: "addrAndName", label: "To" },
+          { key: "amount", label: "Amount" },
+          { key: "data", label: "Data" },
+          { key: "show_details", label: "" },
+        ],
+        items: [],
       },
     };
   },
@@ -172,7 +174,7 @@ export default {
         };
       });
     }
-    this.clauses.data.items = clauses;
+    this.clauses.items = clauses;
   },
   methods: {},
 };

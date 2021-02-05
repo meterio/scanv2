@@ -13,12 +13,9 @@
         stacked="lg"
       >
         <template #table-busy>
-          <div class="text-center">
-            <b-spinner
-              variant="primary"
-              type="grow"
-              label="Spinning"
-            ></b-spinner>
+          <div class="text-center text-primary my-2">
+            <b-spinner class="align-middle mr-2"></b-spinner>
+            <strong>Loading...</strong>
           </div>
         </template>
         <template slot="empty">
@@ -116,6 +113,21 @@
                 params: { address: data.value },
               }"
               >{{ shortAddr(data.value) }}</router-link
+            >
+          </div>
+        </template>
+
+        <template v-slot:cell(addrAndName)="data">
+          <div class="dt-row">
+            <router-link
+              v-if="data.value.name"
+              :to="{ name: 'address', params: { address: data.value.address } }"
+              >{{ data.value.name }}</router-link
+            >
+            <router-link
+              v-else
+              :to="{ name: 'address', params: { address: data.value.address } }"
+              >{{ data.value.address }}</router-link
             >
           </div>
         </template>
@@ -246,7 +258,7 @@ export default {
       itemsLocal: [],
       totalRows: 0,
       currentPage: 1,
-      loading: false,
+      loading: true,
     };
   },
   async beforeMount() {
@@ -268,9 +280,10 @@ export default {
   },
   methods: {
     async init() {
-      this.loading = true;
       try {
+        // passed in items
         if (!!this.passedItems && this.passedItems.length > 0) {
+          this.loading = true;
           const start = (this.currentPage - 1) * this.pagination.perPage;
           let end = 0;
           if (
@@ -283,30 +296,31 @@ export default {
           }
           this.itemsLocal = this.passedItems.slice(start, end);
           this.totalRows = this.passedItems.length;
+          this.loading = false;
+          return;
         } else {
           this.currentPage = 1;
           this.itemsLocal = [];
           this.totalRows = 0;
         }
-        if (!this.loadItems) {
+
+        if (this.loadItems) {
+          this.loading = true;
+          const res = await this.loadItems(
+            this.network,
+            this.currentPage,
+            this.pagination.perPage
+          );
+          const { items, totalRows } = res;
+          this.itemsLocal = items;
+          this.totalRows = totalRows;
           this.loading = false;
-          return;
         }
-        const res = await this.loadItems(
-          this.network,
-          this.currentPage,
-          this.pagination.perPage
-        );
-        const { items, totalRows } = res;
-        this.itemsLocal = items;
-        this.totalRows = totalRows;
       } catch (e) {
         console.log(e);
         this.itemsLocal = [];
         this.totalRows = 0;
       }
-
-      this.loading = false;
     },
     async pageChange(val) {
       if (val === this.currentPage) {

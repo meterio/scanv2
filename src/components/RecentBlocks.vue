@@ -1,7 +1,7 @@
 <template>
   <b-container class="container">
     <b-card body-class="block-card-body p-0" header="Recent Blocks">
-      <b-card-text class="blk-card" style="height: 360px; overflow-y: auto">
+      <b-card-text class="blk-card">
         <Loading v-if="loading" />
 
         <ul v-if="!loading" class="block-list">
@@ -131,18 +131,26 @@ export default {
 
   ul.block-list {
     margin: 0;
-    padding: 0 20px;
+    padding: 0;
 
     li.block-detail {
-      margin: 10px 0;
+      margin: 3px 0;
+      padding: 8px 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       height: 60px;
+      border-bottom: 1px solid #efefef;
     }
   }
 }
 
+.blk-card {
+  position: relative;
+  height: 377px;
+  overflow-y: auto;
+  margin-bottom: 0;
+}
 .blk-card::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -167,8 +175,8 @@ export default {
     background-color: #ebeef6;
     background-repeat: no-repeat;
     background-position: center;
-    width: 50px;
-    height: 50px;
+    width: 42px;
+    height: 42px;
     border-radius: 5px;
   }
 

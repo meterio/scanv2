@@ -85,7 +85,7 @@ export default {
           },
           { key: "QC Height", value: b.qcHeight, type: "block-link" },
           {
-            key: "Beneficiary",
+            key: "Proposer",
             value: { address: b.beneficiary, name: b.beneficiaryName },
             type: "address-or-name-link",
           },

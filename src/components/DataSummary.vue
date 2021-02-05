@@ -2,7 +2,14 @@
   <b-container class="summary">
     <h2 class="title">{{ title }}</h2>
     <b-card>
-      <b-row class="row" :key="item.key" v-for="item in data">
+      <div class="loading" v-if="loading">
+        <div class="text-center text-primary my-2">
+          <b-spinner class="align-middle mr-2"></b-spinner>
+          <strong>Loading...</strong>
+        </div>
+      </div>
+
+      <b-row class="row" :key="item.key" v-for="item in data" v-else>
         <b-col sm="12" md="2">
           <span class="label">{{ item.key }}:</span>
         </b-col>
@@ -97,6 +104,11 @@ export default {
       currentPage: 1,
     };
   },
+  computed: {
+    loading() {
+      return !(this.data instanceof Array && this.data.length > 0);
+    },
+  },
   methods: {
     pgChange(val) {
       this.$emit("tablePaginationChange", val);
@@ -120,6 +132,12 @@ export default {
   }
   .label {
     color: #5c6f8c;
+  }
+
+  .loading {
+    opacity: 0.55;
+    font-size: 14px;
+    font-weight: bold;
   }
 }
 </style>
