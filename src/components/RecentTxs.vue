@@ -140,17 +140,20 @@ export default {
   height: 377px;
   overflow-y: auto;
   margin-bottom: 0;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 
 .txs-card::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  display: none;
+  // width: 4px;
+  // height: 4px;
   // background-color: #f5f5f5;
 }
 .txs-card::-webkit-scrollbar-thumb {
-  background-color: #dedede;
-  width: 4px;
-  border-radius: 10px;
+  // background-color: #dedede;
+  // width: 4px;
+  // border-radius: 10px;
 }
 
 .block-card-body {
