@@ -34,13 +34,12 @@ export default {
 
   methods: {
     async loadTxs(network, page, limit) {
-      this.txs_load = true;
       const { txs, totalPage } = await this.$api.transaction.getRecentTxs(
         network,
         page,
         limit
       );
-      const totalRows = totalPage * this.limit;
+      const totalRows = totalPage * limit;
       const items = txs.map((t) => {
         return {
           txhash: t.hash,
