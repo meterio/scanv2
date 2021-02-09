@@ -214,13 +214,14 @@ export default {
         );
         this.address_total = totalPage * this.page_size;
         for (const t of transfers) {
+          console.log(fromWei(t.amount));
           this.txs.items.push({
             txhash: t.txHash,
             blocknum: t.block.number,
             from: t.from === this.address ? t.from : t.tokenAddress,
             to: t.to === this.address ? t.to : t.tokenAddress,
             direct: t.from === this.address ? "Out" : "In",
-            amount: fromWei(t.amount),
+            amount: fromWei(t.amount) + (t.symbol ? ` ${t.symbol}` : " "),
             timestamp: t.block.timestamp,
           });
         }
