@@ -298,10 +298,6 @@ export default {
           this.totalRows = this.passedItems.length;
           this.loading = false;
           return;
-        } else {
-          this.currentPage = 1;
-          this.itemsLocal = [];
-          this.totalRows = 0;
         }
 
         if (this.loadItems) {
@@ -315,6 +311,10 @@ export default {
           this.itemsLocal = items;
           this.totalRows = totalRows;
           this.loading = false;
+        } else {
+          this.currentPage = 1;
+          this.itemsLocal = [];
+          this.totalRows = 0;
         }
       } catch (e) {
         console.log(e);
