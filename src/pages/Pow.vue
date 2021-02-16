@@ -40,7 +40,7 @@ export default {
       pow_data: [],
       line_data: {},
       mining_reward: {
-        title: "Mining Rewards",
+        title: "PoW Mining Rewards",
         pagination: {
           show: true,
           align: "center",
@@ -48,7 +48,7 @@ export default {
         },
         fields: [
           { key: "pos_height", label: "Kblock Height (PoS)" },
-          { key: "pow_height", label: "Height (PoW)" },
+          { key: "pow_range", label: "PoW Height Range" },
           { key: "amount", label: "Amount" },
           { key: "time", label: "Time" },
           { key: "powReward", label: "More" },
@@ -105,7 +105,7 @@ export default {
       const items = rewards.map((r) => {
         return {
           pos_height: r.posBlock,
-          pow_height: r.powBlock,
+          pow_range: `${r.powStart} - ${r.powEnd}`,
           amount: r.totalAmountStr,
           time: fromNow(r.timestamp * 1000),
           powReward: r.epoch,

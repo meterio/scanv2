@@ -4,7 +4,7 @@
 
     <ValidatorTable class="px-0"></ValidatorTable>
     <DataTableV2
-      title="Epoch Rewards"
+      title="PoS Epoch Rewards"
       :fields="epoch_reward.fields"
       :pagination="epoch_reward.pagination"
       :loadItems="loadEpochRewards"

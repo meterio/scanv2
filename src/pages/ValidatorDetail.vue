@@ -29,34 +29,38 @@
             :options="delegated_chart.options"
           ></pie-chart>
         </b-col>
-        <b-col cols="10">
-          <label>Total</label>
-          <p>45890 <span>MTRG</span></p>
+        <b-col cols="10" class="pt-3">
+          <label
+            >Total Votes: {{ delegated_chart_legend.total }}
+            <span>MTRG</span></label
+          >
 
           <b-row>
-            <b-col cols="4" class="box border-r">
-              <div class="top">
-                <div class="legend">
-                  <span class="dot self"></span>
-                  <span>Self</span>
-                </div>
-
-                <span class="percent">25%</span>
+            <b-col cols="6" class="d-flex justify-content-start">
+              <div class="legend mr-5">
+                <span class="dot self"></span>
+                <span>Self</span>
               </div>
-
-              <span class="value"> 7900 MTRG</span>
+              <span class="percent">{{
+                delegated_chart_legend.selfRatio
+              }}</span>
+              <span class="value ml-5">
+                {{ delegated_chart_legend.self }} MTRG</span
+              >
             </b-col>
-            <b-col cols="4" class="box">
-              <div class="top">
-                <div class="legend">
-                  <span class="dot others"></span>
-                  <span>Others</span>
-                </div>
-
-                <span class="percent">25%</span>
+          </b-row>
+          <b-row>
+            <b-col cols="6" class="d-flex justify-content-start">
+              <div class="legend mr-5">
+                <span class="dot others"></span>
+                <span>Others</span>
               </div>
-
-              <span class="value"> 7900 MTRG</span>
+              <span class="percent">{{
+                delegated_chart_legend.othersRatio
+              }}</span>
+              <span class="value ml-5">
+                {{ delegated_chart_legend.others }} MTRG</span
+              >
             </b-col>
           </b-row>
         </b-col>
@@ -64,7 +68,7 @@
     </b-card>
 
     <b-row>
-      <b-col cols="12" lg="6" class="no-padding">
+      <b-col cols="12" xl="6" class="no-padding">
         <DataTable
           :title="delegators.title"
           :data="delegators.data"
@@ -77,7 +81,7 @@
         </DataTable>
       </b-col>
 
-      <b-col cols="12" lg="6" class="no-padding">
+      <b-col cols="12" xl="6" class="no-padding">
         <DataTable
           :title="votes.title"
           :data="votes.data"
@@ -153,6 +157,13 @@ export default {
         height: 100,
         class: "m1",
       },
+      delegated_chart_legend: {
+        total: "",
+        self: "",
+        selfRatio: "0%",
+        others: "",
+        othersRatio: "0%",
+      },
       delegated_chart: {
         options: {
           legend: {
@@ -182,7 +193,7 @@ export default {
         total: 0,
         data: {
           fields: [
-            { key: "id", label: "Bucket ID" },
+            { key: "bucketid", label: "Bucket ID" },
             { key: "address", label: "Voter" },
             { key: "valueStr", label: "Amount" },
             { key: "timestamp", label: "Time" },
@@ -224,7 +235,7 @@ export default {
       const res = await this.$api.validator.getVotes(this.network, address);
       this.chart_load = false;
       const { votes } = res;
-      this.votes_array = votes;
+      this.votes_array = votes.map((v) => ({ ...v, bucketid: v.id }));
       this.votes.total = votes.length;
       this.votes.data.items = this.votes_array.slice(
         (this.votes_current - 1) * 3,
@@ -249,6 +260,23 @@ export default {
           data: [selfNum, othersNum],
         },
       ];
+      if (totalNum > 0) {
+        this.delegated_chart_legend = {
+          total: totalNum,
+          selfRatio: Math.floor((selfNum * 10000) / totalNum) / 100 + "%",
+          self: selfNum,
+          others: othersNum,
+          othersRatio: Math.floor((others * 10000) / totalNum) / 100 + "%",
+        };
+      } else {
+        this.delegated_chart_legend = {
+          total: 0,
+          selfRatio: "0%",
+          self: 0,
+          others: 0,
+          othersRatio: "0%",
+        };
+      }
       this.chart_load = true;
     },
     votePaginationChange(val) {

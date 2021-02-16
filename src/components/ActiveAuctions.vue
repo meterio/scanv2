@@ -27,8 +27,8 @@ export default {
           { key: "prefix", label: "" },
           { key: "epoch_range", label: "Epoch Range" },
           { key: "end_height", label: "Settle KBlock" },
-          { key: "mtr_received", label: "MTR Received" },
           { key: "mtrg_on_auction", label: "MTRG on Auction" },
+          { key: "mtr_received", label: "MTR Received" },
           { key: "expected_final_price", label: "Expected Final Price" },
         ],
         items: [],
@@ -53,7 +53,7 @@ export default {
             epoch_range: `${present.startEpoch} - ${present.endEpoch}`,
             end_height: present.endHeight,
             mtr_received: fromWei(present.received, 6) + " MTR",
-            mtrg_on_auction: fromWei(present.reserved, 6) + " MTRG",
+            mtrg_on_auction: fromWei(present.released, 4) + " MTRG",
             expected_final_price: fromWei(present.reservedPrice),
           });
         }

@@ -6,6 +6,7 @@ import pow from "./pow";
 import auction from "./auction";
 import validator from "./validator";
 import search from "./search";
+import bucket from "./bucket";
 
 export default {
   block,
@@ -16,4 +17,5 @@ export default {
   auction,
   validator,
   search,
+  bucket
 };

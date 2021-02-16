@@ -81,6 +81,7 @@ export default {
           perPage: 4,
         },
         fields: [
+          { key: "bucketid", label: "ID" },
           { key: "address", label: "Candidate Address" },
           { key: "totalVotes", label: "Votes" },
           { key: "timestamp", label: "Time" },
@@ -165,6 +166,7 @@ export default {
       const totalRows = totalPage * limit;
       const items = buckets.map((b) => {
         return {
+          bucketid: b.id,
           address: b.candidate,
           totalVotes: b.totalVotes,
           timestamp: b.createTime,

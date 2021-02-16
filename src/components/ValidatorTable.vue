@@ -165,7 +165,7 @@ export default {
             { key: "address", label: "Address" },
             { key: "votingPowerStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "totalPoints", label: "Total Points" },
+            { key: "totalPoints", label: "Penalty Points" },
           ];
           this.validator_data.items = res.delegates;
         }
@@ -175,7 +175,7 @@ export default {
             { key: "address", label: "Address" },
             { key: "totalVotesStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "totalPoints", label: "Total Points" },
+            { key: "totalPoints", label: "Panalty Points" },
           ];
           this.validator_data.items = res.candidates;
         }
@@ -183,7 +183,7 @@ export default {
           this.validator_data.fields = [
             { key: "name", label: "Name" },
             { key: "address", label: "Address" },
-            { key: "totalPoints", label: "Total Points" },
+            { key: "totalPoints", label: "Penalty Points" },
             { key: "jailedTime", label: "Jailed Time" },
             { key: "bailAmount", label: "Bail Amount" },
           ];

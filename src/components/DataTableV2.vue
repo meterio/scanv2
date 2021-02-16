@@ -65,6 +65,20 @@
           </div>
         </template>
 
+        <!-- Bucketid column template -->
+        <template v-slot:cell(bucketid)="data">
+          <div class="dt-row">
+            <router-link
+              class="link"
+              :to="{
+                name: 'bucket',
+                params: { id: data.value },
+              }"
+              >{{ shortHash(data.value) }}</router-link
+            >
+          </div>
+        </template>
+
         <!-- Address column template -->
         <template v-slot:cell(fullAddress)="data">
           <div class="dt-row">
