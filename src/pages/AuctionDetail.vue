@@ -8,6 +8,9 @@
 import StatusTag from "@/components/StatusTag.vue";
 import DataTable from "@/components/DataTable.vue";
 import DataSummary from "@/components/DataSummary.vue";
+import { fromWei } from "@/utils";
+import BigNumber from "bignumber.js";
+
 export default {
   components: {
     DataTable,
@@ -16,12 +19,13 @@ export default {
   },
   data() {
     return {
-      summaryTitle: "Auction",
+      summaryTitle: "Auction Detail",
       summary: [],
       bids: {
         fields: [
-          { key: "txid", label: "Tx ID" },
+          { key: "txid", label: "Auction Tx ID" },
           { key: "address", label: "Address" },
+          { key: "type", label: "Type" },
           { key: "amount", label: "Amount" },
           { key: "timestamp", label: "Time" },
         ],
@@ -39,14 +43,26 @@ export default {
       const res = await this.$api.auction.getBids(this.network, auctionID);
       this.loading = false;
       const { summary } = res;
+      console.log(summary);
       this.summary = [
         { key: "ID", value: summary.id },
+        {
+          key: "Epoch Range",
+          value: `${summary.startEpoch} - ${summary.endEpoch}`,
+        },
         {
           key: "Height Range",
           value: `${summary.startHeight} - ${summary.endHeight}`,
         },
-        { key: "Received MTR", value: summary.receivedStr },
-        { key: "Released MTRG", value: summary.releasedStr },
+        { key: "MTR Received", value: summary.receivedStr },
+        {
+          key: "MTRG on Auction",
+          value:
+            fromWei(new BigNumber(summary.released).minus(summary.leftover)) +
+            " MTRG",
+        },
+        { key: "Bids Count", value: summary.bidCount },
+        { key: "Actual Price", value: fromWei(summary.actualPrice) },
       ];
       this.bids.items.push(...res.bids);
     },
