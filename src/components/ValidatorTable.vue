@@ -175,7 +175,7 @@ export default {
             { key: "address", label: "Address" },
             { key: "totalVotesStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "totalPoints", label: "Panalty Points" },
+            { key: "totalPoints", label: "Penalty Points" },
           ];
           this.validator_data.items = res.candidates;
         }
