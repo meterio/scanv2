@@ -289,31 +289,37 @@ export default {
   watch: {
     passedItems(to, from) {
       console.log("item changed");
-      this.init();
+      this.initWithPassed();
     },
   },
   methods: {
+    async initWithPassed() {
+      // passed in items
+      if (!!this.passedItems && this.passedItems.length > 0) {
+        this.loading = true;
+        const start = (this.currentPage - 1) * this.pagination.perPage;
+        let end = 0;
+        if (
+          this.passedItems.length >=
+          this.currentPage * this.pagination.perPage
+        ) {
+          end = this.currentPage * this.pagination.perPage;
+        } else {
+          end = this.passedItems.length;
+        }
+        this.itemsLocal = this.passedItems.slice(start, end);
+        this.totalRows = this.passedItems.length;
+        this.loading = false;
+        return;
+      } else {
+        this.currentPage = 1;
+        this.itemsLocal = [];
+        this.totalRows = 0;
+        this.loading = false;
+      }
+    },
     async init() {
       try {
-        // passed in items
-        if (!!this.passedItems && this.passedItems.length > 0) {
-          this.loading = true;
-          const start = (this.currentPage - 1) * this.pagination.perPage;
-          let end = 0;
-          if (
-            this.passedItems.length >=
-            this.currentPage * this.pagination.perPage
-          ) {
-            end = this.currentPage * this.pagination.perPage;
-          } else {
-            end = this.passedItems.length;
-          }
-          this.itemsLocal = this.passedItems.slice(start, end);
-          this.totalRows = this.passedItems.length;
-          this.loading = false;
-          return;
-        }
-
         if (this.loadItems) {
           this.loading = true;
           const res = await this.loadItems(
@@ -325,10 +331,7 @@ export default {
           this.itemsLocal = items;
           this.totalRows = totalRows;
           this.loading = false;
-        } else {
-          this.currentPage = 1;
-          this.itemsLocal = [];
-          this.totalRows = 0;
+          return;
         }
       } catch (e) {
         console.log(e);
