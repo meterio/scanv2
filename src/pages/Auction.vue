@@ -6,15 +6,22 @@
         <b-row>
           <b-col class="border-r">
             <div class="box">
-              <p class="label">MTR Price</p>
+              <p class="label">MTR Market Price</p>
               <p class="value">{{ mtrPrice }}</p>
             </div>
           </b-col>
 
           <b-col>
             <div class="box">
-              <p class="label">MTRG Price</p>
+              <p class="label">MTRG Market Price</p>
               <p class="value">{{ mtrgPrice }}</p>
+            </div>
+          </b-col>
+
+          <b-col>
+            <div class="box">
+              <p class="label">MTRG Price</p>
+              <p class="value">{{ mtrgPriceInMtr }}</p>
             </div>
           </b-col>
         </b-row>
@@ -46,6 +53,7 @@ export default {
       msg: "Welcome to Index!!!",
       mtrPrice: "0 USD",
       mtrgPrice: "0 USD",
+      mtrgPriceInMtr: "0.5 MTR",
     };
   },
 
@@ -53,8 +61,10 @@ export default {
     async init() {
       const res = await this.$api.metric.getAll(this.network);
       const { mtr, mtrg } = res;
-      this.mtrPrice = mtr.price + " USD";
-      this.mtrgPrice = mtrg.price + " USD";
+      this.mtrPrice = "$ " + mtr.price;
+      this.mtrgPrice = "$ " + mtrg.price;
+      this.mtrgPriceInMtr =
+        Math.floor((100 * mtr.price) / mtrg.price) / 100 + " MTR";
     },
   },
 };

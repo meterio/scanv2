@@ -288,7 +288,7 @@ export default {
   },
   watch: {
     passedItems(to, from) {
-      console.log("item changed");
+      // console.log("item changed");
       this.initWithPassed();
     },
   },

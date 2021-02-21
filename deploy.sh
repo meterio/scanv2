@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # build
-NODE_ENV=production yarn build
+NODE_ENV=production npm run build
 
 # copy dist to testnet S3
 aws s3 cp ./dist/ s3://scanv2-test/ --recursive --acl public-read
