@@ -62,7 +62,24 @@ import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
 
 // import "vue-json-pretty/lib/style.css";
-
+export const StakingModuleAddress =
+  "0x" +
+  Buffer.from("staking-module-address")
+    .toString("hex")
+    .padStart(40, "0")
+    .slice(-40);
+export const AuctionModuleAddress =
+  "0x" +
+  Buffer.from("auction-account-address")
+    .toString("hex")
+    .padStart(40, "0")
+    .slice(-40);
+export const AccountLockModuleAddress =
+  "0x" +
+  Buffer.from("account-lock-address")
+    .toString("hex")
+    .padStart(40, "0")
+    .slice(-40);
 export default {
   components: {
     DataSummary,
@@ -119,9 +136,17 @@ export default {
         let decoded = undefined;
 
         try {
-          // try decode account-lock data
-          if (c.to === "0x6163636f756e742d6c6f636b2d61646472657373") {
+          if (c.to === AccountLockModuleAddress) {
             addrAndName.name = "account-lock";
+          }
+          if (c.to === AuctionModuleAddress) {
+            addrAndName.name = "auction";
+          }
+          if (c.to === StakingModuleAddress) {
+            addrAndName.name = "staking";
+          }
+          // try decode account-lock data
+          if (c.data.startsWith("0xffffffffdeadbeef")) {
             const scriptData = dev.ScriptEngine.decodeScriptData(
               Buffer.from(c.data.replace("0xffffffff", ""), "hex")
             );
@@ -132,29 +157,16 @@ export default {
                 scriptData.payload
               );
               decoded = dev.ScriptEngine.jsonFromAccountLockBody(body);
-            }
-          }
-          // try decode auction data
-          if (c.to === "0x74696f6e2d6163636f756e742d61646472657373") {
-            addrAndName.name = "auction";
-            const scriptData = dev.ScriptEngine.decodeScriptData(
-              Buffer.from(c.data.replace("0xffffffff", ""), "hex")
-            );
-            if (scriptData.header.modId === dev.ScriptEngine.ModuleID.Auction) {
+            } else if (
+              scriptData.header.modId === dev.ScriptEngine.ModuleID.Auction
+            ) {
               const body = dev.ScriptEngine.decodeAuctionBody(
                 scriptData.payload
               );
               decoded = dev.ScriptEngine.jsonFromAuctionBody(body);
-            }
-          }
-
-          // try decode staking data
-          if (c.to === "0x616b696e672d6d6f64756c652d61646472657373") {
-            addrAndName.name = "staking";
-            const scriptData = dev.ScriptEngine.decodeScriptData(
-              Buffer.from(c.data.replace("0xffffffff", ""), "hex")
-            );
-            if (scriptData.header.modId === dev.ScriptEngine.ModuleID.Staking) {
+            } else if (
+              scriptData.header.modId === dev.ScriptEngine.ModuleID.Staking
+            ) {
               const body = dev.ScriptEngine.decodeStakingBody(
                 scriptData.payload
               );
