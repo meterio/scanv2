@@ -98,7 +98,12 @@ export default {
         [
           {
             label: "Healthy / Total Nodes",
-            content: `${committee.healthy} / ${committee.size}`,
+            content: `${
+              staking.candidates -
+              committee.invalid -
+              committee.jailed -
+              committee.down
+            } / ${staking.candidates}`,
           },
           {
             label: "Staked MTRG",
