@@ -5,6 +5,8 @@
       <b-table
         hover
         class="data-table"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
         :items="itemsLocal"
         :fields="fields"
         :busy.sync="loading"
@@ -235,6 +237,8 @@ export default {
   components: { DirectTag },
   name: "DataTable",
   props: {
+    sortBy: { type: String },
+    sortDesc: { type: Boolean },
     title: {
       type: String,
     },

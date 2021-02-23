@@ -84,7 +84,10 @@ export default {
         const { mtr, pos, staking, committee } = res;
         this.pos_data = [
           [
-            { content: staking.validators, label: "Validators" },
+            {
+              content: staking.candidates > 100 ? 100 : staking.candidates,
+              label: "Validators",
+            },
             {
               content: fromWei(staking.totalStaked, 0) + " MTRG",
               label: "Total Staked",
@@ -97,7 +100,7 @@ export default {
               content: `${committee.healthy} / ${
                 committee.invalid + committee.down
               } / ${committee.size}`,
-              label: "Healthy / Invalid / Total Node",
+              label: "Healthy / Invalid / Total Nodes in Committee",
             },
           ],
         ];
