@@ -85,7 +85,7 @@ export default {
         this.pos_data = [
           [
             {
-              content: staking.candidates > 100 ? 100 : staking.candidates,
+              content: staking.candidates,
               label: "Validators",
             },
             {
@@ -97,10 +97,10 @@ export default {
             { content: pos.best, label: "PoS Chain Height" },
             { content: "$ " + mtr.price, label: "MTR Price" },
             {
-              content: `${committee.healthy} / ${
+              content: `${committee.healthy} Healthy / ${
                 committee.invalid + committee.down
-              } / ${committee.size}`,
-              label: "Healthy / Invalid / Total Nodes in Committee",
+              } Invalid`,
+              label: "Active Committee",
             },
           ],
         ];

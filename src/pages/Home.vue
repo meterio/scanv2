@@ -98,12 +98,7 @@ export default {
         [
           {
             label: "Healthy / Total Nodes",
-            content: `${
-              staking.candidates -
-              committee.invalid -
-              committee.jailed -
-              committee.down
-            } / ${staking.candidates}`,
+            content: `${staking.healthyNodes} / ${staking.candidates}`,
           },
           {
             label: "Staked MTRG",
@@ -116,29 +111,6 @@ export default {
           },
         ],
       ];
-      /*
-      this.node_data = [
-        [
-          { label: "Validators", content: staking.validators },
-          {
-            label: "Total Staked",
-            content: formatNum(staking.totalStaked, 6) + " MTRG",
-          },
-        ],
-        [
-          { label: "Height", content: pow.best },
-          {
-            label: "MTR Price",
-            content: "$ " + mtr.price,
-            change: mtr.priceChange,
-          },
-          {
-            label: "Online/Total Node",
-            content: `${staking.onlineNodes}/${staking.totalNodes}`,
-          },
-        ],
-      ];
-      */
     },
     async searchKeyWords(key) {
       try {

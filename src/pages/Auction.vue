@@ -51,9 +51,9 @@ export default {
   data() {
     return {
       msg: "Welcome to Index!!!",
-      mtrPrice: "0 USD",
-      mtrgPrice: "0 USD",
-      mtrgPriceInMtr: "0.5 MTR",
+      mtrPrice: "$ -.--",
+      mtrgPrice: "$ -.--",
+      mtrgPriceInMtr: "- MTR",
     };
   },
 
