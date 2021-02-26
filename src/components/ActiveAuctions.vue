@@ -1,7 +1,7 @@
 <template>
   <b-container class="table-container">
     <h3 class="title">Active Auctions (MTRG)</h3>
-    <DataTable :data="auctionObj" class="px-0" :loading="load">
+    <DataTableV2 :fields="auction.fields" :items="auction.items" class="px-0">
       <!-- column: height_range -->
       <template v-slot:cell(prefix)="data">
         <div class="dt-row">
@@ -9,20 +9,20 @@
           <span>{{ data.value }}</span>
         </div>
       </template>
-    </DataTable>
+    </DataTableV2>
   </b-container>
 </template>
 
 <script>
-import DataTable from "@/components/DataTable.vue";
-import { fromWei } from "@/utils";
+import DataTableV2 from "@/components/DataTableV2.vue";
+import { fromWei, formatNum } from "@/utils";
+import BigNumber from "bignumber.js";
 export default {
   name: "ActiveAuctions",
   data() {
     return {
       // Note `isActive` is left out and will not appear in the rendered table
-      load: true,
-      auctionObj: {
+      auction: {
         fields: [
           { key: "prefix", label: "" },
           { key: "epoch_range", label: "Epoch Range" },
@@ -30,13 +30,14 @@ export default {
           { key: "mtrg_on_auction", label: "MTRG on Auction" },
           { key: "mtr_received", label: "Received MTR" },
           { key: "expected_final_price", label: "Expected Price" },
+          { key: "auctionDetail", label: "Bids" },
         ],
         items: [],
       },
     };
   },
   components: {
-    DataTable,
+    DataTableV2,
   },
   methods: {
     init() {
@@ -48,16 +49,30 @@ export default {
         this.load = false;
         const items = [];
         if (present.startHeight) {
+          let actualPrice = new BigNumber(present.received).dividedBy(
+            present.released
+          );
+
+          const reservedPrice = new BigNumber(present.reservedPrice).dividedBy(
+            1e18
+          );
+          if (actualPrice.isLessThan(reservedPrice)) {
+            actualPrice = reservedPrice;
+          }
           items.push({
             prefix: "",
             epoch_range: `${present.startEpoch} - ${present.endEpoch}`,
             end_height: present.endHeight,
             mtr_received: fromWei(present.received, 6) + " MTR",
-            mtrg_on_auction: fromWei(present.released, 4) + " MTRG",
-            expected_final_price: fromWei(present.reservedPrice),
+            mtrg_on_auction: fromWei(present.released, 6) + " MTRG",
+            expected_final_price: formatNum(actualPrice, 4),
+            auctionDetail: {
+              id: present.id,
+              bidCount: present.bidCount,
+            },
           });
         }
-        this.auctionObj.items = items;
+        this.auction.items = items;
       } catch (e) {
         this.load = false;
         console.error(e);

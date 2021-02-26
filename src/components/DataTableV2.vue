@@ -186,6 +186,20 @@
           </div>
         </template>
 
+        <template v-slot:cell(auctionDetail)="data">
+          <div class="dt-row">
+            <router-link
+              v-if="data.value.bidCount && data.value.bidCount > 0"
+              :to="{
+                name: 'auctionDetail',
+                params: { auctionID: data.value.id },
+              }"
+              >{{ data.value.bidCount }}</router-link
+            >
+            <span v-else>{{ data.value.bidCount || 0 }}</span>
+          </div>
+        </template>
+
         <!-- Mining Reward -->
         <template v-slot:cell(powReward)="data">
           <div class="dt-row">

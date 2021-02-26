@@ -43,7 +43,7 @@ export default {
 
         fields: [
           { key: "epoch", label: "Epoch" },
-          { key: "height", label: "Height (PoW)" },
+          { key: "height", label: "Height (PoS)" },
           { key: "amount", label: "Amount" },
           { key: "timestamp", label: "Time" },
           { key: "posReward", label: "More" },

@@ -8,7 +8,7 @@
 import StatusTag from "@/components/StatusTag.vue";
 import DataTable from "@/components/DataTable.vue";
 import DataSummary from "@/components/DataSummary.vue";
-import { fromWei } from "@/utils";
+import { fromWei, formatNum, shortHash } from "@/utils";
 import BigNumber from "bignumber.js";
 
 export default {
@@ -24,10 +24,9 @@ export default {
       bids: {
         fields: [
           { key: "txid", label: "Auction Tx ID" },
-          { key: "address", label: "Address" },
+          { key: "fullAddress", label: "Address" },
           { key: "type", label: "Type" },
           { key: "amount", label: "Amount" },
-          { key: "timestamp", label: "Time" },
         ],
         items: [],
         pagination: {
@@ -43,7 +42,13 @@ export default {
       const res = await this.$api.auction.getBids(this.network, auctionID);
       this.loading = false;
       const { summary } = res;
-      console.log(summary);
+      let actualPrice = new BigNumber(summary.received).dividedBy(
+        summary.released
+      );
+      let reservedPrice = new BigNumber(summary.reservedPrice).dividedBy(1e18);
+      if (actualPrice.isLessThan(reservedPrice)) {
+        actualPrice = reservedPrice;
+      }
       this.summary = [
         { key: "ID", value: summary.id },
         {
@@ -62,9 +67,17 @@ export default {
             " MTRG",
         },
         { key: "Bids Count", value: summary.bidCount },
-        { key: "Actual Price", value: fromWei(summary.actualPrice) },
+        { key: "Actual Price", value: formatNum(actualPrice, 4) },
       ];
-      this.bids.items.push(...res.bids);
+      this.bids.items.push(
+        ...res.bids.map((b) => ({
+          ...b,
+          txid: shortHash(b.txid, 12),
+          amount: fromWei(b.amount) + " MTR",
+          fullAddress: b.address,
+        }))
+      );
+      console.log(res.bids);
     },
   },
 };

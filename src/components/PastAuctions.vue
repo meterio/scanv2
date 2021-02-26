@@ -41,7 +41,7 @@ export default {
           { key: "mtr_received", label: "Received MTR" },
           { key: "sold_mtrg", label: "Sold MTRG" },
           { key: "final_price", label: "Final Price" },
-          { key: "auctionid", label: "More" },
+          { key: "auctionDetail", label: "Bids" },
         ],
       },
     };
@@ -68,7 +68,10 @@ export default {
           sold_mtrg:
             fromWei(new BigNumber(a.released).minus(a.leftover), 6) + " MTRG",
           final_price: fromWei(a.actualPrice, 4),
-          auctionid: a.id,
+          auctionDetail: {
+            id: a.id,
+            bidCount: a.bidCount,
+          },
         };
       });
       return { items, totalRows };
