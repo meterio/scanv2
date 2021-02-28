@@ -48,7 +48,7 @@ export default {
   data() {
     return {
       address_tabs: [
-        { name: "Transations" },
+        { name: "Transactions" },
         { name: "ERC20 Transactions", width: 170 },
       ],
       address_current_page: 1,
