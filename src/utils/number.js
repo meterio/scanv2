@@ -22,17 +22,25 @@ export const formatNum = (
   return commaSeparated(num);
 };
 
-export const numFilter = (val) => {
+export const numFilter = val => {
   return formatNum(val, 2);
 };
 
-export const fromWei = (val /* number|string|BigNumber */, precision = -1) => {
+export const fromWei = (
+  val /* number|string|BigNumber */,
+  precision = -1,
+  symbol = ""
+) => {
   let p = undefined;
   if (precision >= 0) {
     p = precision;
   }
   const num = new BigNumber(val).dividedBy(UNIT_WEI).toFixed(p);
-  return commaSeparated(num);
+  const numStr = commaSeparated(num);
+  if (symbol !== "") {
+    return numStr + " " + symbol;
+  }
+  return numStr;
 };
 
 export const toWei = (val /* string | number | BigNumber*/) => {

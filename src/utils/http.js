@@ -39,7 +39,7 @@ axios.defaults.headers.post["Content-Type"] =
 
 // 响应拦截器
 axios.interceptors.response.use(
-  (response) => {
+  response => {
     if (response.status === 200) {
       return Promise.resolve(response);
     } else {
@@ -47,7 +47,7 @@ axios.interceptors.response.use(
     }
   },
   // 服务器状态码不是200的情况
-  (error) => {
+  error => {
     // if (error.response.status) {
     //   switch (error.response.status) {
     //     // 401: 未登录
@@ -116,15 +116,18 @@ export function get(network, url, params) {
   const base = API_BASE[network];
   axios.defaults.baseURL = base;
   return new Promise((resolve, reject) => {
+    console.log(base, url, params);
     axios
       .get(url, { params })
-      .then((res) => {
+      .then(res => {
         // get data success
+        console.log(res);
         if (res.data) {
           resolve(res.data);
         }
       })
-      .catch((err) => {
+      .catch(err => {
+        console.log(err);
         reject(err.data);
       });
   });
@@ -139,13 +142,13 @@ export function post(url, params) {
   return new Promise((resolve, reject) => {
     axios
       .post(url, QS.stringify(params))
-      .then((res) => {
+      .then(res => {
         // get data success
         if (res.data.code === 0) {
           resolve(res.data.data);
         }
       })
-      .catch((err) => {
+      .catch(err => {
         reject(err.data);
       });
   });

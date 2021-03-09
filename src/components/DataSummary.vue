@@ -10,10 +10,10 @@
       </div>
 
       <b-row class="row" :key="item.key" v-for="item in data" v-else>
-        <b-col sm="12" md="2">
+        <b-col sm="12" :md="labelCols">
           <span class="label">{{ item.key }}:</span>
         </b-col>
-        <b-col sm="12" md="10">
+        <b-col sm="12" :md="contentCols">
           <span v-if="!item.type" class="value">{{ item.value }}</span>
 
           <!-- block-link-with-note -->
@@ -98,6 +98,10 @@ export default {
         return [];
       },
     },
+    wide: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -107,6 +111,12 @@ export default {
   computed: {
     loading() {
       return !(this.data instanceof Array && this.data.length > 0);
+    },
+    labelCols() {
+      return this.wide ? 3 : 2;
+    },
+    contentCols() {
+      return this.wide ? 9 : 10;
     },
   },
   methods: {

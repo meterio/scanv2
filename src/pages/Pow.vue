@@ -137,7 +137,6 @@ export default {
         diff_data.map((itm) => {
           me.line_data.diffs.push(itm[1]);
         });
-        console.log(this.line_data);
         this.line_load = true;
       } catch (e) {
         this.line_load = false;
@@ -146,7 +145,6 @@ export default {
     },
     formatLineTime(time) {
       const b = new Date(time * 1000);
-      console.log("b", b);
       const m = b.getMonth() + 1;
       return `${
         b.getDate() < 10 ? "0" + b.getDate() : b.getDate().toString()

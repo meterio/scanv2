@@ -154,7 +154,6 @@ export default {
     },
     async loadBuckets(network, page, limit) {
       const { address } = this.$route.params;
-      console.log("ADDRESS: ", address);
       console.log(network);
       const res = await this.$api.account.getBuckets(
         network,
@@ -188,13 +187,14 @@ export default {
         );
         this.address_total = totalPage * this.page_size;
         for (const t of txSummaries) {
+          const amount = fromWei(t.totalClauseAmount, -1, t.token);
           this.txs.items.push({
             txhash: t.hash,
             blocknum: t.block.number,
             from: t.origin,
             direct: t.origin === this.address ? "Out" : "In",
             to: t.tos && t.tos.length > 0 ? t.tos[0].address : "nobody",
-            amount: t.totalAmountStrs[0],
+            amount,
             timestamp: t.block.timestamp,
           });
         }
@@ -216,7 +216,6 @@ export default {
         );
         this.address_total = totalPage * this.page_size;
         for (const t of transfers) {
-          console.log(fromWei(t.amount));
           this.txs.items.push({
             txhash: t.txHash,
             blocknum: t.block.number,

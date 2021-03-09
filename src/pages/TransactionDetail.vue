@@ -60,6 +60,7 @@ import DataSummary from "@/components/DataSummary.vue";
 import * as dev from "@meterio/devkit";
 import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
+import { fromWei } from "@/utils";
 
 // import "vue-json-pretty/lib/style.css";
 export const StakingModuleAddress =
@@ -107,16 +108,17 @@ export default {
     const { hash } = this.$route.params;
     const res = await this.$api.transaction.getTxDetail(this.network, hash);
     this.loading = false;
-    console.log(res);
     const { tx, summary } = res;
     this.summaryTitle = "Transaction";
     if (!!summary) {
+      const totalAmount = fromWei(summary.totalClauseAmount, -1, summary.token);
+      const fee = fromWei(summary.paid, 6) + " MTR";
       this.summary = [
         { key: "Hash", value: summary.hash },
         { key: "Type", value: summary.type },
         { key: "Origin", value: summary.origin, type: "address-link" },
-        { key: "Amount", value: summary.totalAmountStrs[0] },
-        { key: "Fee", value: summary.feeStr },
+        { key: "Amount", value: totalAmount },
+        { key: "Fee", value: fee },
         {
           key: "Result",
           value: summary.reverted ? "reverted" : "success",

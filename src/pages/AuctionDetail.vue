@@ -1,19 +1,24 @@
 <template lang="pug">
 .detail-page
-  data-summary(:data="summary", :title="summaryTitle")
-  data-table(title="Bids", :data="bids")
+  data-summary(:data="summary", :title="summaryTitle", :wide="true")
+  data-table-v2(
+    title="Bids",
+    :loadItems="loadBids",
+    :fields="bids.fields",
+    :pagination="bids.pagination"
+  )
 </template>
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
-import DataTable from "@/components/DataTable.vue";
+import DataTableV2 from "@/components/DataTableV2.vue";
 import DataSummary from "@/components/DataSummary.vue";
 import { fromWei, formatNum, shortHash } from "@/utils";
 import BigNumber from "bignumber.js";
 
 export default {
   components: {
-    DataTable,
+    DataTableV2,
     DataSummary,
     StatusTag,
   },
@@ -23,61 +28,69 @@ export default {
       summary: [],
       bids: {
         fields: [
-          { key: "txid", label: "Auction Tx ID" },
           { key: "fullAddress", label: "Address" },
           { key: "type", label: "Type" },
+          { key: "blockNum", label: "Block" },
           { key: "amount", label: "Amount" },
+          { key: "lotAmount", label: "Lot Amount" },
         ],
         items: [],
         pagination: {
           show: true,
           align: "center",
+          perPage: 15,
         },
       },
     };
   },
   methods: {
+    async loadBids(network, page, limit) {
+      const { auctionID } = this.$route.params;
+      const { bids, totalPage } = await this.$api.auction.getBids(
+        auctionID,
+        network,
+        page,
+        limit
+      );
+      const totalRows = totalPage * limit;
+      const items = bids.map((b) => ({
+        ...b,
+        fullAddress: b.address,
+        txid: b.id,
+        amount: fromWei(new BigNumber(b.amount), 6, "MTR"),
+        lotAmount: b.lotAmount ? fromWei(b.lotAmount, 6, "MTRG") : "-",
+      }));
+      return { items, totalRows };
+    },
     async init() {
       const { auctionID } = this.$route.params;
-      const res = await this.$api.auction.getBids(this.network, auctionID);
-      this.loading = false;
+      const res = await this.$api.auction.getAuction(this.network, auctionID);
       const { summary } = res;
-      let actualPrice = new BigNumber(summary.received).dividedBy(
-        summary.released
-      );
-      let reservedPrice = new BigNumber(summary.reservedPrice).dividedBy(1e18);
-      if (actualPrice.isLessThan(reservedPrice)) {
-        actualPrice = reservedPrice;
-      }
+      console.log(summary);
       this.summary = [
         { key: "ID", value: summary.id },
         {
-          key: "Epoch Range",
-          value: `${summary.startEpoch} - ${summary.endEpoch}`,
+          key: "Auction Start Height",
+          value: summary.auctionStartHeight,
+          type: "block-link",
         },
-        {
-          key: "Height Range",
-          value: `${summary.startHeight} - ${summary.endHeight}`,
-        },
-        { key: "MTR Received", value: summary.receivedStr },
+        { key: "Auction End Height", value: summary.auctionEndHeight },
         {
           key: "MTRG on Auction",
           value:
             fromWei(new BigNumber(summary.released).minus(summary.leftover)) +
             " MTRG",
         },
+        {
+          key: "MTRG on Auction Generated Heights",
+          value: `${summary.startHeight} - ${summary.endHeight}`,
+        },
+        { key: "Userbid Total", value: fromWei(summary.userbidTotal) + " MTR" },
+        { key: "Autobid Total", value: fromWei(summary.autobidTotal) + " MTR" },
+        { key: "Total Received", value: fromWei(summary.received) + " MTR" },
         { key: "Bids Count", value: summary.bidCount },
-        { key: "Actual Price", value: formatNum(actualPrice, 4) },
+        { key: "Actual Price", value: fromWei(summary.actualPrice, 4) },
       ];
-      this.bids.items.push(
-        ...res.bids.map((b) => ({
-          ...b,
-          txid: shortHash(b.txid, 12),
-          amount: fromWei(b.amount) + " MTR",
-          fullAddress: b.address,
-        }))
-      );
-      console.log(res.bids);
     },
   },
 };

@@ -35,8 +35,8 @@ export default {
         },
         fields: [
           { key: "prefix", label: "" },
-          { key: "epoch_range", label: "Epoch Range" },
-          { key: "end_height", label: "Settle KBlock" },
+          { key: "auction_start_height", label: "Start KBlock" },
+          { key: "auction_end_height", label: "End KBlock" },
           { key: "mtrg_on_auction", label: "MTRG on Auction" },
           { key: "mtr_received", label: "Received MTR" },
           { key: "sold_mtrg", label: "Sold MTRG" },
@@ -62,7 +62,8 @@ export default {
         return {
           prefix: "",
           epoch_range: `${a.startEpoch} - ${a.endEpoch}`,
-          end_height: a.endHeight,
+          auction_start_height: a.auctionStartHeight,
+          auction_end_height: a.auctionEndHeight,
           mtr_received: fromWei(a.received, 6) + " MTR",
           mtrg_on_auction: fromWei(a.released, 4) + " MTRG",
           sold_mtrg:

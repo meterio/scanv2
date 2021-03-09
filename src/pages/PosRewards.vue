@@ -23,6 +23,7 @@ export default {
         fields: [
           { key: "fullAddress", label: "Address" },
           { key: "amount", label: "Amount" },
+          { key: "type", label: "Type" },
         ],
         items: [],
         pagination: {
@@ -39,17 +40,29 @@ export default {
         this.network,
         epoch
       );
+      const { summary, rewards } = res;
       this.loading = false;
       this.summary = [
         { key: "Epoch", value: epoch },
-        { key: "Height", value: res.height },
-        { key: "Base Reward", value: fromWei(res.baseReward) + " MTR" },
-        { key: "Total Reward", value: fromWei(res.totalReward) + " MTR" },
-        { key: "Time", value: res.timestamp, type: "timestamp" },
+        { key: "Height", value: summary.blockNum, type: "block-link" },
+        { key: "Autobid Count", value: summary.autobidCount },
+        { key: "Autobid Total", value: fromWei(summary.autobidTotal) + " MTR" },
+        { key: "Transfer Count", value: summary.transferCount },
+        {
+          key: "Transfer Total",
+          value: fromWei(summary.transferTotal) + " MTR",
+        },
+        { key: "Reward Count", value: rewards ? rewards.length : 0 },
+        { key: "Total Reward", value: fromWei(summary.totalReward) + " MTR" },
+        { key: "Time", value: summary.timestamp, type: "timestamp" },
       ];
       this.rewards.items.push(
-        ...res.rewards.map((r) => {
-          return { fullAddress: r.address, amount: fromWei(r.amount) + " MTR" };
+        ...rewards.map((r) => {
+          return {
+            fullAddress: r.addr,
+            amount: fromWei(r.amount) + " MTR",
+            type: r.type,
+          };
         })
       );
     },

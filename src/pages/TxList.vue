@@ -10,6 +10,7 @@
 
 <script>
 import DataTableV2 from "@/components/DataTableV2.vue";
+import { fromWei } from "@/utils";
 
 export default {
   name: "TxList",
@@ -40,14 +41,15 @@ export default {
         limit
       );
       const totalRows = totalPage * limit;
-      const items = txs.map((t) => {
+      const items = txs.map((tx) => {
+        const totalAmount = fromWei(tx.totalClauseAmount, -1, tx.token);
         return {
-          txhash: t.hash,
-          blocknum: t.block.number,
-          from: t.origin,
-          to: t.tos && t.tos.length > 0 ? t.tos[0].address : "nobody",
-          amount: t.totalAmountStrs[0],
-          timestamp: t.block.timestamp,
+          txhash: tx.hash,
+          blocknum: tx.block.number,
+          from: tx.origin,
+          to: tx.tos && t.tos.length > 0 ? t.tos[0].address : "",
+          amount: totalAmount,
+          timestamp: tx.block.timestamp,
         };
       });
       return { items, totalRows };

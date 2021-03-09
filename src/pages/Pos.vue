@@ -17,7 +17,6 @@
 <script>
 import DataDashboard from "@/components/DataDashboard.vue";
 import ValidatorTable from "@/components/ValidatorTable.vue";
-import DataTable from "@/components/DataTable.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import { fromWei } from "@/utils";
 
@@ -43,9 +42,11 @@ export default {
 
         fields: [
           { key: "epoch", label: "Epoch" },
-          { key: "height", label: "Height (PoS)" },
-          { key: "amount", label: "Amount" },
+          { key: "blockNum", label: "Block" },
+          { key: "amount", label: "Total Rewards" },
           { key: "timestamp", label: "Time" },
+          { key: "autobidCount", label: "nAutobid" },
+          { key: "transferCount", label: "nTransfer" },
           { key: "posReward", label: "More" },
         ],
       },
@@ -59,15 +60,17 @@ export default {
     },
     async loadEpochRewards(network, page, limit) {
       this.load = true;
-      const {
-        rewards,
-        totalPage,
-      } = await this.$api.validator.getValidateReward(network, page, limit);
+      const res = await this.$api.validator.getValidateReward(
+        network,
+        page,
+        limit
+      );
+      const { rewards, totalPage } = res;
       const totalRows = totalPage * limit;
       const items = rewards.map((r) => {
         return {
           ...r,
-          amount: fromWei(r.totalReward) + " MTR",
+          amount: fromWei(r.totalReward, 6, "MTR"),
           posReward: r.epoch,
         };
       });
@@ -81,7 +84,7 @@ export default {
       try {
         const res = await this.$api.metric.getAll(this.network);
         this.loading = false;
-        const { mtr, pos, staking, committee } = res;
+        const { mtrg, pos, staking, committee } = res;
         this.pos_data = [
           [
             {
@@ -95,7 +98,7 @@ export default {
           ],
           [
             { content: pos.best, label: "PoS Chain Height" },
-            { content: "$ " + mtr.price, label: "MTR Price" },
+            { content: "$ " + mtrg.price, label: "MTRG Price" },
             {
               content: `${committee.healthy} Healthy / ${
                 committee.invalid + committee.down

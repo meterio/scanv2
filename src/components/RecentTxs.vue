@@ -5,7 +5,7 @@
         <Loading v-if="loading" />
 
         <ul v-if="!loading" class="block-list">
-          <li class="block-detail" :key="tx.txID" v-for="tx in recent_txs">
+          <li class="block-detail" :key="tx.hash" v-for="tx in recent_txs">
             <div class="height-view">
               <div class="block-icon"></div>
 
@@ -36,23 +36,19 @@
               <p>
                 To:
                 <router-link
-                  v-if="tx.tos.length > 0"
+                  v-if="tx.groupedTransfers.majorTo"
                   class="link"
                   :to="{
                     name: 'address',
-                    params: { address: tx.tos[0].address },
+                    params: { address: tx.majorTo },
                   }"
-                  >{{ shortAddr(tx.tos[0].address, 12) }}</router-link
+                  >{{ shortAddr(tx.majorTo, 12) }}</router-link
                 >
                 <span v-else>nobody</span>
               </p>
             </div>
             <div class="detail-view">
-              <span class="detail">{{
-                fromWei(tx.totalAmounts[0], 2) +
-                " " +
-                tx.totalAmountStrs[0].split(" ")[1]
-              }}</span>
+              <span class="detail">{{ tx.totalAmount }}</span>
             </div>
           </li>
         </ul>
@@ -68,7 +64,7 @@
 
 <script>
 import Loading from "@/components/Loading";
-
+import { fromWei } from "@/utils";
 export default {
   name: "RecentTxs",
   components: {
@@ -101,7 +97,11 @@ export default {
     async initData() {
       try {
         const res = await this.$api.transaction.getRecentTxs(this.network);
-        this.recent_txs = res.txs.splice(0, 10);
+        this.recent_txs = res.txs.splice(0, 10).map((tx) => {
+          const totalAmount = fromWei(tx.totalClauseAmount, 4, tx.token);
+
+          return { ...tx, totalAmount };
+        });
         this.loading = false;
       } catch (e) {
         this.loading = false;

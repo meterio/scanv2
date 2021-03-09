@@ -121,7 +121,7 @@
           </div>
         </template>
         <template v-slot:cell(to)="data">
-          <div class="dt-row">
+          <div class="dt-row" v-if="data.value">
             <router-link
               class="link"
               :to="{
@@ -131,6 +131,7 @@
               >{{ shortAddr(data.value) }}</router-link
             >
           </div>
+          <div v-else>-</div>
         </template>
 
         <template v-slot:cell(addrAndName)="data">
@@ -230,7 +231,7 @@
       </b-table>
 
       <div
-        v-if="pagination.show && totalRows >= pagination.perPage"
+        v-if="pagination.show && totalRows > pagination.perPage"
         class="data-pagination"
       >
         <b-pagination
