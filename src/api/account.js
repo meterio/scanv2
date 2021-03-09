@@ -19,6 +19,10 @@ export default {
       `accounts/${address}/buckets?page=${page}&limit=${limit}`
     );
   },
+  getBids(network, address, page, limit = 8) {
+    return get(network, `accounts/${address}/bids?page=${page}&limit=${limit}`);
+  },
+
   getTopMTR(network, page, limit = 8) {
     return get(network, `accounts/top/mtr?page=${page}&limit=${limit}`);
   },
@@ -30,5 +34,5 @@ export default {
       network,
       `accounts/${address}/proposed?page=${page}&limit=${limit}`
     );
-  },
+  }
 };

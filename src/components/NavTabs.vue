@@ -1,7 +1,11 @@
 <template lang="pug">
 b-container
   .s-nav-tabbar
-    .nav-item(v-for="(tab, index) in localTabs", :class="localTabIndex == index ? 'active': ''", @click="clickTab(index)", :style="{'flex': tab.width ? `0 0 ${tab.width}px`: '0 0 100px'}") {{tab.name}}
+    .nav-item(
+      v-for="(tab, index) in localTabs",
+      :class="localTabIndex == index ? 'active' : ''",
+      @click="clickTab(index)"
+    ) {{ tab.name }}
 </template>
 <script>
 export default {
@@ -42,9 +46,7 @@ export default {
   .nav-item {
     font-size: 16px;
     font-weight: bold;
-    flex: 0 0 100px;
-    height: 48px;
-    display: flex;
+    padding: 9px 12px;
     align-items: center;
     justify-content: center;
     &.active,

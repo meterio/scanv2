@@ -5,34 +5,22 @@
   b-container.summary
     #b-card.mt-2pert.px-5
       #pie-chart.px-0
-    data-table-v2.mt-2pert.px-0(
-      title="Buckets",
-      :fields="buckets.fields",
-      :pagination="buckets.pagination",
-      :loadItems="loadBuckets"
-    )
-      template(v-slot:cell(candidate)="data")
-        .dt-row
-          router-link.link(
-            :to="{ name: 'address', params: { address: data.item.candidate } }"
-          ) {{ data.item.candidate }}
-      template(v-slot:cell(totalVotes)="data")
-        .dt-row {{ fromWei(data.item.totalVotes, 2) }} MTRG
 
-    data-table.mt-2pert.px-0(
-      :data="txs",
-      :loading="txs_load",
-      :pagination="txs.pagination",
-      :paginateTotal="address_total",
-      :paginateCurrentPage="address_current_page",
-      @tablePaginationChange="pgChange"
+    data-table-v2.mt-2pert.px-0(
+      :loadItems="loadItems",
+      :fields="fields",
+      :pagination="pagination",
+      :key="loadTarget"
     )
       div(slot="header")
-        nav-tabs.px-0(:tabs="address_tabs", @changeTab="navTabChange")
+        nav-tabs.px-0(
+          :tabs="address_tabs",
+          :value="tabValue",
+          @changeTab="navTabChange"
+        )
 </template>
 
 <script>
-import DataTable from "@/components/DataTable.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
@@ -40,28 +28,107 @@ import { fromWei } from "@/utils";
 export default {
   name: "Address",
   components: {
-    DataTable,
     DataTableV2,
     NavTabs,
     DataSummary,
+  },
+  computed: {
+    fields() {
+      switch (this.loadTarget) {
+        case "txs":
+          return this.txs.fields;
+        case "erc20Txs":
+          return this.txs.fields;
+        case "bids":
+          return this.bids.fields;
+        case "proposedBlocks":
+          return this.proposedBlocks.fields;
+        case "buckets":
+          return this.buckets.fields;
+      }
+      return this.txs.fields;
+    },
+    pagination() {
+      switch (this.loadTarget) {
+        case "txs":
+          return this.txs.pagination;
+        case "erc20Txs":
+          return this.txs.pagination;
+        case "bids":
+          this.bids.pagination;
+        case "proposedBlocks":
+          return this.proposedBlocks.pagination;
+        case "buckets":
+          return this.buckets.pagination;
+      }
+      return this.txs.pagination;
+    },
+    loadItems() {
+      switch (this.loadTarget) {
+        case "txs":
+          return this.loadTxs;
+        case "erc20Txs":
+          return this.loadTxs20;
+        case "bids":
+          return this.loadBids;
+        case "proposedBlocks":
+          return this.loadProposed;
+        case "buckets":
+          return this.loadBuckets;
+      }
+      return this.loadTxs;
+    },
   },
   data() {
     return {
       address_tabs: [
         { name: "Transactions" },
-        { name: "ERC20 Transactions", width: 170 },
+        { name: "ERC20 Transactions" },
+        { name: "Auction Bids" },
+        { name: "Proposed Blocks" },
+        { name: "Buckets" },
       ],
-      address_current_page: 1,
-      address_total: 0,
+      tabValue: 0,
       address: "0x",
       summary: [],
       account: {},
-      txs_load: true,
+      loadTarget: "txs",
+
+      proposedBlocks: {
+        pagination: {
+          show: true,
+          align: "center",
+          perPage: 20,
+        },
+        fields: [
+          { key: "blockNum", label: "Height" },
+          { key: "blockhash", label: "Block Hash" },
+          { key: "txCount", label: "Txs" },
+          { key: "actualRewardStr", label: "Reward" },
+          { key: "timestamp", label: "Time" },
+        ],
+      },
+      bids: {
+        pagination: {
+          show: true,
+          align: "center",
+          perPage: 20,
+        },
+        fields: [
+          { key: "blockNum", label: "Block" },
+          { key: "txHash", label: "Tx" },
+          { key: "type", label: "Type" },
+          { key: "amountStr", label: "Amount" },
+          { key: "hammerPriceStr", label: "Hammer Price" },
+          { key: "lotAmountStr", label: "Lot Amount" },
+          { key: "timestamp", label: "Time" },
+        ],
+      },
       txs: {
         pagination: {
           show: true,
           align: "center",
-          perPage: 8,
+          perPage: 20,
         },
         fields: [
           { key: "txhash", label: "Hash" },
@@ -78,41 +145,46 @@ export default {
         pagination: {
           show: true,
           align: "center",
-          perPage: 4,
+          perPage: 20,
         },
         fields: [
           { key: "bucketid", label: "ID" },
           { key: "address", label: "Candidate Address" },
-          { key: "totalVotes", label: "Votes" },
+          { key: "totalVotesStr", label: "Votes" },
           { key: "timestamp", label: "Time" },
           { key: "status", label: "Status" },
         ],
       },
-      current_tab_index: 0,
     };
   },
   beforeMount() {},
   methods: {
     init() {
       this.loadAddress();
-      this.loadTxs();
     },
     navTabChange(val) {
       this.current_tab_index = val;
-      this.address_current_page = 1;
-      if (val == 0) {
-        this.loadTxs();
-      } else {
-        this.loadTxs20();
+      this.tabValue = val;
+      switch (val) {
+        case 0:
+          this.loadTarget = "txs";
+          break;
+        case 1:
+          this.loadTarget = "erc20Txs";
+          break;
+        case 2:
+          this.loadTarget = "bids";
+          break;
+        case 3:
+          this.loadTarget = "proposedBlocks";
+          break;
+        case 4:
+          this.loadTarget = "buckets";
+          break;
+        default:
+          this.loadTarget = "txs";
       }
-    },
-    pgChange(val) {
-      this.address_current_page = val;
-      if (this.current_tab_index == 0) {
-        this.loadTxs();
-      } else {
-        this.loadTxs20();
-      }
+      console.log("loadtarget:", this.loadTarget);
     },
     async loadAddress() {
       try {
@@ -139,7 +211,6 @@ export default {
         //   this.summary.push({ key: "Name", value: account.name });
         // }
         if (account.firstSeen && account.firstSeen.number > 0) {
-          console.log(account.firstSeen);
           this.summary.push({
             key: "First Seen",
             type: "block-link-with-note",
@@ -154,7 +225,6 @@ export default {
     },
     async loadBuckets(network, page, limit) {
       const { address } = this.$route.params;
-      console.log(network);
       const res = await this.$api.account.getBuckets(
         network,
         address,
@@ -167,70 +237,99 @@ export default {
         return {
           bucketid: b.id,
           address: b.candidate,
-          totalVotes: b.totalVotes,
+          totalVotesStr: fromWei(b.totalVotes, 6, "MTRG"),
           timestamp: b.createTime,
           status: b.unbounded ? "Unbounded" : "Created",
         };
       });
       return { items, totalRows };
     },
-    async loadTxs() {
-      this.txs_load = true;
-      try {
-        const { address } = this.$route.params;
-        this.txs.items = [];
-        const { txSummaries, totalPage } = await this.$api.account.getTxs(
-          this.network,
-          address,
-          this.address_current_page,
-          this.page_size
-        );
-        this.address_total = totalPage * this.page_size;
-        for (const t of txSummaries) {
-          const amount = fromWei(t.totalClauseAmount, -1, t.token);
-          this.txs.items.push({
-            txhash: t.hash,
-            blocknum: t.block.number,
-            from: t.origin,
-            direct: t.origin === this.address ? "Out" : "In",
-            to: t.tos && t.tos.length > 0 ? t.tos[0].address : "nobody",
-            amount,
-            timestamp: t.block.timestamp,
-          });
-        }
-        this.txs_load = false;
-      } catch (e) {
-        this.txs_load = false;
-      }
+    async loadTxs(network, page, limit) {
+      const { address } = this.$route.params;
+      console.log("load txs");
+      const res = await this.$api.account.getTxs(network, address, page, limit);
+      const { txSummaries, totalPage } = res;
+      const totalRows = totalPage * limit;
+      const items = txSummaries.map((t) => {
+        const amount = fromWei(t.totalClauseAmount, -1, t.token);
+        return {
+          txhash: t.hash,
+          blocknum: t.block.number,
+          from: t.origin,
+          direct: t.origin === this.address ? "Out" : "In",
+          to: t.majorTo || "nobody",
+          amount,
+          timestamp: t.block.timestamp,
+        };
+      });
+      return { items, totalRows };
     },
-    async loadTxs20() {
-      this.txs_load = true;
-      this.txs.items = [];
-      try {
-        const { address } = this.$route.params;
-        const { transfers, totalPage } = await this.$api.account.getTxs20(
-          this.network,
-          address,
-          this.address_current_page,
-          this.page_size
-        );
-        this.address_total = totalPage * this.page_size;
-        for (const t of transfers) {
-          this.txs.items.push({
-            txhash: t.txHash,
-            blocknum: t.block.number,
-            from: t.from === this.address ? t.from : t.tokenAddress,
-            to: t.to === this.address ? t.to : t.tokenAddress,
-            direct: t.from === this.address ? "Out" : "In",
-            amount: fromWei(t.amount) + (t.symbol ? ` ${t.symbol}` : " "),
-            timestamp: t.block.timestamp,
-          });
-        }
-        this.txs_load = false;
-      } catch (e) {
-        console.error(e);
-        this.txs_load = false;
-      }
+    async loadTxs20(network, page, limit) {
+      const { address } = this.$route.params;
+      console.log("txs erc20");
+
+      const res = await this.$api.account.getTxs20(
+        network,
+        address,
+        page,
+        limit
+      );
+      const { transfers, totalPage } = res;
+      const totalRows = totalPage * limit;
+      const items = transfers.map((t) => ({
+        txhash: t.txHash,
+        blocknum: t.block.number,
+        from: t.from === this.address ? t.from : t.tokenAddress,
+        to: t.to === this.address ? t.to : t.tokenAddress,
+        direct: t.from === this.address ? "Out" : "In",
+        amount: fromWei(t.amount) + (t.symbol ? ` ${t.symbol}` : " "),
+        timestamp: t.block.timestamp,
+      }));
+      return { items, totalRows };
+    },
+    async loadProposed(network, page, limit) {
+      this.load = true;
+      const { address } = this.$route.params;
+      const { proposed, totalPage } = await this.$api.account.getProposed(
+        network,
+        address,
+        page,
+        limit
+      );
+      const totalRows = totalPage * limit;
+
+      const items = proposed.map((b) => {
+        return {
+          ...b,
+          blockNum: b.number,
+          blockhash: b.hash,
+          actualRewardStr: fromWei(b.actualReward, -1, "MTR"),
+        };
+      });
+      return { items, totalRows };
+    },
+    async loadBids(network, page, limit) {
+      this.load = true;
+      const { address } = this.$route.params;
+      const { bids, totalPage } = await this.$api.account.getBids(
+        network,
+        address,
+        page,
+        limit
+      );
+      const totalRows = totalPage * limit;
+
+      const items = bids.map((b) => {
+        console.log(b);
+        return {
+          ...b,
+          amountStr: fromWei(b.amount, 6, "MTR"),
+          hammerPriceStr: b.pending ? "-" : fromWei(b.hammerPrice, 4, "MTR"),
+          lotAmountStr:
+            b.pending || !b.lotAmount ? "-" : fromWei(b.lotAmount, 6, "MTRG"),
+        };
+      });
+      return { items, totalRows };
     },
   },
 };
