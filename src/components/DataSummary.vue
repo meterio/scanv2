@@ -33,7 +33,7 @@
           <!-- block-link -->
           <b-link
             href="#"
-            @click="jump2BlcokPage(item.value)"
+            :to="{ name: 'blockDetail', params: { revision: item.value } }"
             v-if="item.type === 'block-link'"
             >#{{ item.value }}</b-link
           >
@@ -68,8 +68,16 @@
 
           <!-- timestamp -->
           <span v-if="item.type === 'timestamp'">
-            <span>{{ fromNow(item.value) }}</span>
-            <span class="px-2">({{ formatTime(item.value) }})</span>
+            <span v-if="item.value">
+              <span>{{ fromNow(item.value) }}</span>
+              <span class="px-2">({{ formatTime(item.value) }})</span>
+            </span>
+            <span v-else>-</span>
+          </span>
+
+          <!-- duration -->
+          <span v-if="item.type === 'duration'">
+            <span>{{ formatDuration(item.value) }}</span>
           </span>
 
           <!-- status -->
@@ -117,16 +125,6 @@ export default {
     },
     contentCols() {
       return this.wide ? 9 : 10;
-    },
-  },
-  methods: {
-    pgChange(val) {
-      this.$emit("tablePaginationChange", val);
-    },
-
-    jump2BlcokPage(value) {
-      this.$router.push(`/block/${value}`);
-      window.location.reload();
     },
   },
 };

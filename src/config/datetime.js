@@ -1,5 +1,5 @@
 export default {
-  FORMAT_DATE: "MM/DD/YYYY",
+  FORMAT_DATE: "YYYY/MM/DD",
   FORMAT_TIME: "hh:mm:ss",
-  FORMAT_DATETIME: "MM/DD/YYYY hh:mm:ss",
+  FORMAT_DATETIME: "YYYY/MM/DD hh:mm:ss"
 };

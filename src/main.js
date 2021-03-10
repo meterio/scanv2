@@ -4,7 +4,14 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import AppLayout from "./layout/index.vue";
 import router from "./router";
 import store from "./store";
-import { fromWei, fromNow, shortHash, shortAddress, formatTime } from "@/utils";
+import {
+  fromWei,
+  fromNow,
+  shortHash,
+  shortAddress,
+  formatTime,
+  formatDuration
+} from "@/utils";
 import api from "./api";
 
 import "./mixins";
@@ -32,7 +39,7 @@ var mixin = {
   computed: {
     network() {
       return this.$store.state.dom.network;
-    },
+    }
   },
   beforeMount() {
     if (this.init) this.init();
@@ -43,7 +50,7 @@ var mixin = {
     },
     network(to, from) {
       if (this.init) this.init();
-    },
+    }
   },
   methods: {
     fromNow(time) {
@@ -61,7 +68,10 @@ var mixin = {
     fromWei(num, precision) {
       return fromWei(num, precision);
     },
-  },
+    formatDuration(duration) {
+      return formatDuration(duration);
+    }
+  }
 };
 
 Vue.mixin(mixin);
@@ -81,5 +91,5 @@ new Vue({
       store.commit("dom/SET_WINDOW_WIDTH", window.innerWidth)
     );
   },
-  render: (h) => h(AppLayout),
+  render: h => h(AppLayout)
 }).$mount("#app");

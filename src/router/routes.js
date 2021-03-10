@@ -12,6 +12,8 @@ import PosRewardsPage from "@/pages/PosRewards.vue";
 import AuctionDetailPage from "@/pages/AuctionDetail.vue";
 import BlockListPage from "@/pages/BlockList.vue";
 import TxListPage from "@/pages/TxList.vue";
+import EpochListPage from "@/pages/EpochList.vue";
+import EpochDetailPage from "@/pages/EpochDetail.vue";
 import TopMTRAccountsPage from "@/pages/TopMTRAccounts.vue";
 import TopMTRGAccountsPage from "@/pages/TopMTRGAccounts.vue";
 import BucketPage from "@/pages/Bucket.vue";
@@ -86,6 +88,18 @@ export const routes = [
     name: "blockList",
     component: BlockListPage,
     meta: { title: `${DOMAIN_TITLE} | Blocks` }
+  },
+  {
+    path: "/epochs",
+    name: "epochList",
+    component: EpochListPage,
+    meta: { title: `${DOMAIN_TITLE} | Epochs` }
+  },
+  {
+    path: "/epochs/:epoch",
+    name: "epochDetail",
+    component: EpochDetailPage,
+    meta: { title: `${DOMAIN_TITLE} | Epoch` }
   },
   {
     path: "/txs",

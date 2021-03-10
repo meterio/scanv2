@@ -47,7 +47,7 @@ export default {
           perPage: 8,
         },
         fields: [
-          { key: "pos_height", label: "Kblock Height (PoS)" },
+          { key: "blockNum", label: "Kblock (PoS)" },
           { key: "pow_range", label: "PoW Height Range" },
           { key: "amount", label: "Amount" },
           { key: "time", label: "Time" },
@@ -104,7 +104,7 @@ export default {
       const totalRows = totalPage * limit;
       const items = rewards.map((r) => {
         return {
-          pos_height: r.posBlock,
+          blockNum: r.posBlock,
           pow_range: `${r.powStart} - ${r.powEnd}`,
           amount: r.totalAmountStr,
           time: fromNow(r.timestamp * 1000),

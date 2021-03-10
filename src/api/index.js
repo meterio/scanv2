@@ -7,6 +7,7 @@ import auction from "./auction";
 import validator from "./validator";
 import search from "./search";
 import bucket from "./bucket";
+import epoch from "./epoch";
 
 export default {
   block,
@@ -17,5 +18,6 @@ export default {
   auction,
   validator,
   search,
-  bucket
+  bucket,
+  epoch
 };

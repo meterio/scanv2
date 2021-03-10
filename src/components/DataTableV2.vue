@@ -33,18 +33,48 @@
           <slot :name="slotName" v-bind="slotScope"></slot>
         </template>
 
+        <!-- Epoch column template -->
+        <template v-slot:cell(epoch)="data">
+          <div class="dt-row">
+            <router-link
+              class="link"
+              :to="{
+                name: 'epochDetail',
+                params: { epoch: data.value },
+              }"
+              >{{ data.value }}</router-link
+            >
+          </div>
+        </template>
+
+        <!-- Duration column template-->
+        <template v-slot:cell(duration)="data">
+          <div class="dt-row">
+            <span class="time">{{ formatDuration(data.value) }}</span>
+          </div>
+        </template>
+
         <!-- Time column template -->
         <template v-slot:cell(time)="data">
           <div class="dt-row">
             <span class="time">{{ data.value }}</span>
           </div>
         </template>
-
-        <!-- Time column template -->
         <template v-slot:cell(timestamp)="data">
           <div class="dt-row">
             <span class="time">{{ fromNow(data.value) }}</span>
           </div>
+        </template>
+        <template v-slot:cell(startTime)="data">
+          <div class="dt-row">
+            <span class="time">{{ fromNow(data.value) }}</span>
+          </div>
+        </template>
+        <template v-slot:cell(endTime)="data">
+          <div class="dt-row" v-if="data.value">
+            <span class="time">{{ fromNow(data.value) }}</span>
+          </div>
+          <div class="dt-row" v-else>-</div>
         </template>
 
         <template v-slot:cell(direct)="data">
@@ -81,7 +111,7 @@
           </div>
         </template>
 
-        <!-- Address column template -->
+        <!-- fullAddress column template -->
         <template v-slot:cell(fullAddress)="data">
           <div class="dt-row">
             <router-link
@@ -95,6 +125,7 @@
           </div>
         </template>
 
+        <!-- Address column template -->
         <template v-slot:cell(address)="data">
           <div class="dt-row">
             <router-link
@@ -107,7 +138,6 @@
             >
           </div>
         </template>
-
         <template v-slot:cell(from)="data">
           <div class="dt-row">
             <router-link
@@ -131,9 +161,10 @@
               >{{ shortAddr(data.value) }}</router-link
             >
           </div>
-          <div v-else>-</div>
+          <div v-else class="dt-row">-</div>
         </template>
 
+        <!-- Address And Name column template -->
         <template v-slot:cell(addrAndName)="data">
           <div class="dt-row">
             <router-link
@@ -151,6 +182,31 @@
 
         <!-- Block column template-->
         <template v-slot:cell(blocknum)="data">
+          <div class="dt-row">
+            <router-link
+              class="link"
+              :to="{
+                name: 'blockDetail',
+                params: { revision: data.value },
+              }"
+              >#{{ data.value }}</router-link
+            >
+          </div>
+        </template>
+        <template v-slot:cell(endKBlock)="data">
+          <div class="dt-row" v-if="data.value >= 0">
+            <router-link
+              class="link"
+              :to="{
+                name: 'blockDetail',
+                params: { revision: data.value },
+              }"
+              >#{{ data.value }}</router-link
+            >
+          </div>
+          <div class="dt-row" v-else>-</div>
+        </template>
+        <template v-slot:cell(startKBlock)="data">
           <div class="dt-row">
             <router-link
               class="link"

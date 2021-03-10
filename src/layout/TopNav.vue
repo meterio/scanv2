@@ -59,6 +59,9 @@
             <b-dropdown-item :to="{ name: 'blockList' }"
               >View Blocks</b-dropdown-item
             >
+            <b-dropdown-item :to="{ name: 'epochList' }"
+              >View Epochs</b-dropdown-item
+            >
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item :to="{ name: 'topMTR' }"
               >Top MTR Accounts</b-dropdown-item
@@ -117,7 +120,15 @@ export default {
     },
     blockActive() {
       const path = this.$route.path;
-      const prefixs = ["/tx", "/block", "/pos", "/pow", "/account"];
+      const prefixs = [
+        "/tx",
+        "/block",
+        "/pos",
+        "/pow",
+        "/account",
+        "/address",
+        "/epoch",
+      ];
       for (const p of prefixs) {
         if (path.startsWith(p)) {
           return true;

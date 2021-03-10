@@ -91,6 +91,7 @@ export default {
             type: "address-or-name-link",
           },
           { key: "Gas Used", value: b.gasUsed },
+          { key: "Reward", value: fromWei(b.actualReward, -1, "MTR") },
           { key: "Txs Count", value: b.txCount },
           { key: "Time", value: b.timestamp, type: "timestamp" },
         ];

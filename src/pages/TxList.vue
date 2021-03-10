@@ -47,7 +47,7 @@ export default {
           txhash: tx.hash,
           blocknum: tx.block.number,
           from: tx.origin,
-          to: tx.tos && t.tos.length > 0 ? t.tos[0].address : "",
+          to: tx.majorTo,
           amount: totalAmount,
           timestamp: tx.block.timestamp,
         };
