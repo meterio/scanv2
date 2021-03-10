@@ -7,6 +7,9 @@ const epoch = {
 
   getEpoch(network, epoch) {
     return get(network, `epochs/${epoch}`);
+  },
+  getMembers(network, epoch, page, limit) {
+    return get(network, `epochs/${epoch}/members?page=${page}&limit=${limit}`);
   }
 };
 

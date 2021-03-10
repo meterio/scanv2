@@ -95,11 +95,7 @@ export default {
       loadTarget: "txs",
 
       proposedBlocks: {
-        pagination: {
-          show: true,
-          align: "center",
-          perPage: 20,
-        },
+        pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "blockNum", label: "Height" },
           { key: "blockhash", label: "Block Hash" },

@@ -5,42 +5,9 @@
     <DataTableV2
       title="Committee Members"
       :fields="members.fields"
-      :items="members.items"
+      :pagination="members.pagination"
+      :loadItems="loadMembers"
     >
-      <template v-slot:cell(to)="data">
-        <div class="dt-row">
-          <router-link
-            class="link"
-            :to="{
-              name: 'address',
-              params: { address: data.value },
-            }"
-            >{{ data.value }}</router-link
-          >
-        </div>
-      </template>
-
-      <template v-slot:cell(data)="row">
-        <div class="dt-row breakable">
-          {{ row.value }}
-        </div>
-
-        <div v-if="row.row_hovered"></div>
-        <b-button
-          v-if="row.item.decoded"
-          size="sm"
-          variant="outline-secondary"
-          @click="row.toggleDetails"
-          class="mr-2 float-right"
-        >
-          <span v-if="!row.detailsShowing">
-            <b-icon icon="chevron-double-down"></b-icon> Show Decoded
-          </span>
-          <span v-else>
-            <b-icon icon="chevron-double-up"></b-icon> Hide Decoded
-          </span>
-        </b-button>
-      </template>
     </DataTableV2>
   </div>
 </template>
@@ -63,10 +30,12 @@ export default {
       members: {
         fields: [
           { key: "index", label: "Index" },
+          { key: "name", label: "Name" },
+          { key: "fullAddress", label: "Address" },
           { key: "netAddr", label: "IP Address" },
           { key: "shortPubKey", label: "Public Key" },
         ],
-        items: [],
+        pagination: { show: true, align: "center", perPage: 20 },
       },
     };
   },
@@ -74,10 +43,9 @@ export default {
     const { epoch } = this.$route.params;
     const res = await this.$api.epoch.getEpoch(this.network, epoch);
     this.loading = false;
-    const { summary, members, powBlocks } = res;
+    const { summary, powBlocks } = res;
     this.summaryTitle = "Epoch Detail";
     console.log(summary);
-    console.log(members);
 
     if (!!summary) {
       this.summary = [
@@ -95,10 +63,21 @@ export default {
         { key: "Pow Blocks Count", value: powBlocks ? powBlocks.length : 0 },
       ];
     }
-    this.members.items = members.map((m) => ({
-      ...m,
-      shortPubKey: shortHash(m.pubKey),
-    }));
+  },
+  methods: {
+    async loadMembers(network, page, limit) {
+      const { epoch } = this.$route.params;
+      const res = await this.$api.epoch.getMembers(network, epoch, page, limit);
+      const { members, totalRows } = res;
+      const items = members.map((m) => {
+        return {
+          ...m,
+          shortPubKey: shortHash(m.pubKey),
+          fullAddress: m.address,
+        };
+      });
+      return { items, totalRows };
+    },
   },
 };
 </script>
