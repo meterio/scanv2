@@ -35,12 +35,11 @@ export default {
 
   methods: {
     async loadTxs(network, page, limit) {
-      const { txs, totalPage } = await this.$api.transaction.getRecentTxs(
+      const { txs, totalRows } = await this.$api.transaction.getRecentTxs(
         network,
         page,
         limit
       );
-      const totalRows = totalPage * limit;
       const items = txs.map((tx) => {
         const totalAmount = fromWei(tx.totalClauseAmount, -1, tx.token);
         return {

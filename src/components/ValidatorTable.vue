@@ -162,7 +162,7 @@ export default {
           this.validate_right_search
         );
         this.loading = false;
-        this.validate_table_total = res.totalPage * this.page_size;
+        this.validate_table_total = res.totalRows;
         if (this.current_tab === "Delegates") {
           this.validator_data.fields = [
             { key: "name", label: "Name", tdClass: "flex" },

@@ -61,7 +61,7 @@
               class="link"
               :to="{
                 name: 'txDetail',
-                params: { hash: data.value },
+                params: { hash: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -75,7 +75,7 @@
               class="link"
               :to="{
                 name: 'bucket',
-                params: { id: data.value },
+                params: { id: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -85,14 +85,7 @@
         <!-- Address column template -->
         <template v-slot:cell(fullAddress)="data">
           <div class="dt-row">
-            <router-link
-              class="link"
-              :to="{
-                name: 'address',
-                params: { address: data.value },
-              }"
-              >{{ data.value }}</router-link
-            >
+            <address-link :address="data.value" />
           </div>
         </template>
 
@@ -114,39 +107,18 @@
 
         <template v-slot:cell(address)="data">
           <div class="dt-row">
-            <router-link
-              class="link"
-              :to="{
-                name: 'address',
-                params: { address: data.value },
-              }"
-              >{{ shortAddr(data.value) }}</router-link
-            >
+            <address-link :address="data.value" :short="true" />
           </div>
         </template>
 
         <template v-slot:cell(from)="data">
           <div class="dt-row">
-            <router-link
-              class="link"
-              :to="{
-                name: 'address',
-                params: { address: data.value },
-              }"
-              >{{ shortAddr(data.value) }}</router-link
-            >
+            <address-link :address="data.value" :short="true" />
           </div>
         </template>
         <template v-slot:cell(to)="data">
           <div class="dt-row">
-            <router-link
-              class="link"
-              :to="{
-                name: 'address',
-                params: { address: data.value },
-              }"
-              >{{ shortAddr(data.value) }}</router-link
-            >
+            <address-link :address="data.value" :short="true" />
           </div>
         </template>
 
@@ -157,7 +129,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >#{{ data.value }}</router-link
             >
@@ -171,7 +143,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -234,59 +206,60 @@
 
 <script>
 import DirectTag from "./DirectTag.vue";
+import AddressLink from "./AddressLink.vue";
 export default {
-  components: { DirectTag },
+  components: { DirectTag, AddressLink },
   name: "DataTable",
   props: {
     title: {
-      type: String,
+      type: String
     },
     minHeight: {
       type: String,
-      default: "auto",
+      default: "auto"
     },
     data: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           title: "",
           items: [],
-          fields: [],
+          fields: []
         };
-      },
+      }
     },
     pagination: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           show: false,
-          align: "right",
+          align: "right"
         };
-      },
+      }
     },
     loading: {
       type: Boolean,
-      default: false,
+      default: false
     },
     paginateTotal: {
       type: Number,
-      default: 0,
+      default: 0
     },
     paginateCurrentPage: {
       type: Number,
-      default: 1,
-    },
+      default: 1
+    }
   },
   data() {
     return {
-      currentPage: 1,
+      currentPage: 1
     };
   },
   methods: {
     pgChange(val) {
       this.$emit("tablePaginationChange", val);
-    },
-  },
+    }
+  }
 };
 </script>
 

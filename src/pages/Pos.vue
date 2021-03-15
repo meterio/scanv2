@@ -65,8 +65,7 @@ export default {
         page,
         limit
       );
-      const { rewards, totalPage } = res;
-      const totalRows = totalPage * limit;
+      const { rewards, totalRows } = res;
       const items = rewards.map((r) => {
         return {
           ...r,

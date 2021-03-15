@@ -80,7 +80,16 @@ new Vue({
   name: "Root",
   router,
   store,
-  mounted() {
+  async mounted() {
+    try {
+      const res = await this.$api.known.getAddresses(this.network);
+      const { addresses } = res;
+      store.commit("dom/SET_KNOWN_ADDRESSES", addresses);
+      console.log("Knowns: ", addresses);
+    } catch (e) {
+      console.log("ignore issue for getting known addresses");
+    }
+
     store.commit("dom/SET_WINDOW_WIDTH", window.innerWidth);
     window.addEventListener("resize", () =>
       store.commit("dom/SET_WINDOW_WIDTH", window.innerWidth)

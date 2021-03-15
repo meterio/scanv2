@@ -40,7 +40,7 @@
               class="link"
               :to="{
                 name: 'epochDetail',
-                params: { epoch: data.value },
+                params: { epoch: data.value }
               }"
               >{{ data.value }}</router-link
             >
@@ -90,7 +90,7 @@
               class="link"
               :to="{
                 name: 'txDetail',
-                params: { hash: data.value },
+                params: { hash: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -104,7 +104,7 @@
               class="link"
               :to="{
                 name: 'bucket',
-                params: { id: data.value },
+                params: { id: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -114,52 +114,24 @@
         <!-- fullAddress column template -->
         <template v-slot:cell(fullAddress)="data">
           <div class="dt-row">
-            <router-link
-              class="link"
-              :to="{
-                name: 'address',
-                params: { address: data.value },
-              }"
-              >{{ data.value }}</router-link
-            >
+            <address-link :address="data.value" />
           </div>
         </template>
 
         <!-- Address column template -->
         <template v-slot:cell(address)="data">
           <div class="dt-row">
-            <router-link
-              class="link"
-              :to="{
-                name: 'address',
-                params: { address: data.value },
-              }"
-              >{{ shortAddr(data.value) }}</router-link
-            >
+            <address-link :address="data.value" :short="true" />
           </div>
         </template>
         <template v-slot:cell(from)="data">
           <div class="dt-row">
-            <router-link
-              class="link"
-              :to="{
-                name: 'address',
-                params: { address: data.value },
-              }"
-              >{{ shortAddr(data.value) }}</router-link
-            >
+            <address-link :address="data.value" :short="true" />
           </div>
         </template>
         <template v-slot:cell(to)="data">
           <div class="dt-row" v-if="data.value">
-            <router-link
-              class="link"
-              :to="{
-                name: 'address',
-                params: { address: data.value },
-              }"
-              >{{ shortAddr(data.value) }}</router-link
-            >
+            <address-link :address="data.value" :short="true" />
           </div>
           <div v-else class="dt-row">-</div>
         </template>
@@ -187,7 +159,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >#{{ data.value }}</router-link
             >
@@ -199,7 +171,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >#{{ data.value }}</router-link
             >
@@ -212,7 +184,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >#{{ data.value }}</router-link
             >
@@ -226,7 +198,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -249,7 +221,7 @@
               v-if="data.value.bidCount && data.value.bidCount > 0"
               :to="{
                 name: 'auctionDetail',
-                params: { auctionID: data.value.id },
+                params: { auctionID: data.value.id }
               }"
               >{{ data.value.bidCount }}</router-link
             >
@@ -304,50 +276,51 @@
 
 <script>
 import DirectTag from "./DirectTag.vue";
+import AddressLink from "./AddressLink.vue";
 export default {
-  components: { DirectTag },
+  components: { DirectTag, AddressLink },
   name: "DataTable",
   props: {
     sortBy: { type: String },
     sortDesc: { type: Boolean },
     title: {
-      type: String,
+      type: String
     },
     minHeight: {
       type: String,
-      default: "auto",
+      default: "auto"
     },
     items: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
-      },
+      }
     },
     fields: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
-      },
+      }
     },
     pagination: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           show: false,
-          align: "right",
+          align: "right"
         };
-      },
+      }
     },
     loadItems: {
-      type: Function,
-    },
+      type: Function
+    }
   },
   data() {
     return {
       itemsLocal: [],
       totalRows: 0,
       currentPage: 1,
-      loading: true,
+      loading: true
     };
   },
   async beforeMount() {
@@ -356,16 +329,16 @@ export default {
   computed: {
     passedItems() {
       if (this.items) {
-        return this.items.map((i) => i);
+        return this.items.map(i => i);
       }
       return undefined;
-    },
+    }
   },
   watch: {
     passedItems(to, from) {
       // console.log("item changed");
       this.initWithPassed();
-    },
+    }
   },
   methods: {
     async initWithPassed() {
@@ -421,8 +394,8 @@ export default {
       this.currentPage = val;
       this.$emit("tablePaginationChange", val);
       this.init();
-    },
-  },
+    }
+  }
 };
 </script>
 

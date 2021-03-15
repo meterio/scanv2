@@ -64,7 +64,7 @@ export default {
       this.mtrPrice = "$ " + mtr.price;
       this.mtrgPrice = "$ " + mtrg.price;
       this.mtrgPriceInMtr =
-        Math.floor((100 * mtr.price) / mtrg.price) / 100 + " MTR";
+        Math.floor((100 * mtrg.price) / mtr.price) / 100 + " MTR";
     },
   },
 };

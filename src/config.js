@@ -5,5 +5,5 @@ export const DEPLOY_DOMAIN = {
 
 export const API_BASE = {
   main: "https://api.meter.io:5000/api/",
-  test: "http://35.72.34.2:3000/api/"
+  test: "https://api.meter.io:4000/api/"
 };

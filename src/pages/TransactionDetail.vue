@@ -2,11 +2,15 @@
   <div class="detail-page">
     <DataSummary :data="summary" :title="summaryTitle" />
 
-    <DataTableV2
-      title="Clauses"
-      :fields="clauses.fields"
-      :items="clauses.items"
-    >
+    <DataTableV2 :fields="fields" :items="items">
+      <template slot="header">
+        <NavTabs
+          class="px-0"
+          :tabs="tabs"
+          :value="tabValue"
+          @changeTab="navTabChange"
+        ></NavTabs>
+      </template>
       <template v-slot:cell(to)="data">
         <div class="dt-row">
           <router-link
@@ -56,6 +60,7 @@
 <script>
 import BigNumber from "bignumber.js";
 import DataTableV2 from "@/components/DataTableV2.vue";
+import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
 import * as dev from "@meterio/devkit";
 import VueJsonPretty from "vue-json-pretty";
@@ -83,22 +88,41 @@ export const AccountLockModuleAddress =
     .slice(-40);
 export default {
   components: {
+    NavTabs,
     DataSummary,
     DataTableV2,
     VueJsonPretty,
   },
   data() {
     return {
-      summaryTitle: "",
+      tabs: [{ name: "Clauses" }, { name: "Transfers" }, { name: "Events" }],
+      tabValue: 0,
+      summaryTitle: "Transaction",
       summary: [],
       tx: {},
       clauses: {
         fields: [
           { key: "index", label: "Index" },
-          { key: "addrAndName", label: "To" },
+          { key: "to", label: "To" },
           { key: "amount", label: "Amount" },
           { key: "data", label: "Data" },
           { key: "show_details", label: "" },
+        ],
+        items: [],
+      },
+      transfers: {
+        fields: [
+          { key: "from", label: "Sender" },
+          { key: "to", label: "Recipient" },
+          { key: "amountStr", label: "Amount" },
+        ],
+        items: [],
+      },
+      events: {
+        fields: [
+          { key: "address", label: "Contract Address" },
+          { key: "topics", label: "Topics" },
+          { key: "data", label: "Data" },
         ],
         items: [],
       },
@@ -109,7 +133,6 @@ export default {
     const res = await this.$api.transaction.getTxDetail(this.network, hash);
     this.loading = false;
     const { tx, summary } = res;
-    this.summaryTitle = "Transaction";
     if (!!summary) {
       const totalAmount = fromWei(summary.totalClauseAmount, -1, summary.token);
       const fee = fromWei(summary.paid, 6) + " MTR";
@@ -134,54 +157,10 @@ export default {
       let index = 1;
       clauses = tx.clauses.map((c) => {
         const amount = new BigNumber(c.value).dividedBy(1e18).toFixed();
-        let addrAndName = { address: c.to, name: "" };
         let decoded = undefined;
-
-        try {
-          if (c.to === AccountLockModuleAddress) {
-            addrAndName.name = "account-lock";
-          }
-          if (c.to === AuctionModuleAddress) {
-            addrAndName.name = "auction";
-          }
-          if (c.to === StakingModuleAddress) {
-            addrAndName.name = "staking";
-          }
-          // try decode account-lock data
-          if (c.data.startsWith("0xffffffffdeadbeef")) {
-            const scriptData = dev.ScriptEngine.decodeScriptData(
-              Buffer.from(c.data.replace("0xffffffff", ""), "hex")
-            );
-            if (
-              scriptData.header.modId === dev.ScriptEngine.ModuleID.AccountLock
-            ) {
-              const body = dev.ScriptEngine.decodeAccountLockBody(
-                scriptData.payload
-              );
-              decoded = dev.ScriptEngine.jsonFromAccountLockBody(body);
-            } else if (
-              scriptData.header.modId === dev.ScriptEngine.ModuleID.Auction
-            ) {
-              const body = dev.ScriptEngine.decodeAuctionBody(
-                scriptData.payload
-              );
-              decoded = dev.ScriptEngine.jsonFromAuctionBody(body);
-            } else if (
-              scriptData.header.modId === dev.ScriptEngine.ModuleID.Staking
-            ) {
-              const body = dev.ScriptEngine.decodeStakingBody(
-                scriptData.payload
-              );
-              decoded = dev.ScriptEngine.jsonFromStakingBody(body);
-            }
-          }
-        } catch (e) {
-          console.log(e);
-        }
 
         return {
           ...c,
-          addrAndName,
           amount: `${amount} ${c.token}`,
           index: index++,
           decoded,
@@ -189,8 +168,48 @@ export default {
       });
     }
     this.clauses.items = clauses;
+    this.transfers.items = tx.transfers.map((tr) => {
+      return {
+        from: tr.sender,
+        to: tr.recipient,
+        amountStr: fromWei(
+          new BigNumber(tr.amount),
+          -1,
+          tr.token == 0 ? "MTR" : "MTRG"
+        ),
+      };
+    });
+    this.events.items = tx.events;
   },
-  methods: {},
+  computed: {
+    items() {
+      switch (this.tabValue) {
+        case 0:
+          return this.clauses.items;
+        case 1:
+          return this.transfers.items;
+        case 2:
+          return this.events.items;
+      }
+      return this.clauses.items;
+    },
+    fields() {
+      switch (this.tabValue) {
+        case 0:
+          return this.clauses.fields;
+        case 1:
+          return this.transfers.fields;
+        case 2:
+          return this.events.fields;
+      }
+      return this.clauses.fields;
+    },
+  },
+  methods: {
+    navTabChange(val) {
+      this.tabValue = val;
+    },
+  },
 };
 </script>
 

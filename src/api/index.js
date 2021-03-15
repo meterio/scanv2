@@ -8,6 +8,7 @@ import validator from "./validator";
 import search from "./search";
 import bucket from "./bucket";
 import epoch from "./epoch";
+import known from "./known";
 
 export default {
   block,
@@ -19,5 +20,6 @@ export default {
   validator,
   search,
   bucket,
-  epoch
+  epoch,
+  known
 };

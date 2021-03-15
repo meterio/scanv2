@@ -40,12 +40,11 @@ export default {
 
   methods: {
     async loadTopMTR(network, page, limit) {
-      const { accounts, totalPage } = await this.$api.account.getTopMTR(
+      const { accounts, totalRows } = await this.$api.account.getTopMTR(
         network,
         page,
         limit
       );
-      const totalRows = totalPage * limit;
       const items = accounts.map((a) => {
         return { ...a, addrAndName: { address: a.address, name: a.name } };
       });

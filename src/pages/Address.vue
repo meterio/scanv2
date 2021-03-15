@@ -35,6 +35,8 @@ export default {
   computed: {
     fields() {
       switch (this.loadTarget) {
+        case "transfers":
+          return this.transfers.fields;
         case "txs":
           return this.txs.fields;
         case "erc20Txs":
@@ -50,6 +52,8 @@ export default {
     },
     pagination() {
       switch (this.loadTarget) {
+        case "transfers":
+          return this.transfers.pagination;
         case "txs":
           return this.txs.pagination;
         case "erc20Txs":
@@ -65,6 +69,8 @@ export default {
     },
     loadItems() {
       switch (this.loadTarget) {
+        case "transfers":
+          return this.loadTransfers;
         case "txs":
           return this.loadTxs;
         case "erc20Txs":
@@ -82,6 +88,7 @@ export default {
   data() {
     return {
       address_tabs: [
+        { name: "Transfers" },
         { name: "Transactions" },
         { name: "ERC20 Transactions" },
         { name: "Auction Bids" },
@@ -92,8 +99,20 @@ export default {
       address: "0x",
       summary: [],
       account: {},
-      loadTarget: "txs",
+      loadTarget: "transfers",
 
+      transfers: {
+        pagination: { show: true, align: "center", perPage: 20 },
+        fields: [
+          { key: "from", label: "From" },
+          { key: "direct", label: "" },
+          { key: "to", label: "To" },
+          { key: "amount", label: "Amount" },
+          { key: "txHash", label: "Transaction" },
+          { key: "blockNum", label: "Block" },
+          { key: "timestamp", label: "Time" },
+        ],
+      },
       proposedBlocks: {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
@@ -138,11 +157,7 @@ export default {
         items: [],
       },
       buckets: {
-        pagination: {
-          show: true,
-          align: "center",
-          perPage: 20,
-        },
+        pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "bucketid", label: "ID" },
           { key: "address", label: "Candidate Address" },
@@ -163,22 +178,25 @@ export default {
       this.tabValue = val;
       switch (val) {
         case 0:
-          this.loadTarget = "txs";
+          this.loadTarget = "transfers";
           break;
         case 1:
-          this.loadTarget = "erc20Txs";
+          this.loadTarget = "txs";
           break;
         case 2:
-          this.loadTarget = "bids";
+          this.loadTarget = "erc20Txs";
           break;
         case 3:
-          this.loadTarget = "proposedBlocks";
+          this.loadTarget = "bids";
           break;
         case 4:
+          this.loadTarget = "proposedBlocks";
+          break;
+        case 5:
           this.loadTarget = "buckets";
           break;
         default:
-          this.loadTarget = "txs";
+          this.loadTarget = "transfers";
       }
       console.log("loadtarget:", this.loadTarget);
     },
@@ -214,6 +232,14 @@ export default {
             block: account.firstSeen.number,
           });
         }
+        if (account.lastUpdate && account.lastUpdate.number > 0) {
+          this.summary.push({
+            key: "Last Updated",
+            type: "block-link-with-note",
+            value: this.fromNow(account.lastUpdate.timestamp),
+            block: account.lastUpdate.number,
+          });
+        }
         this.account = account;
       } catch (e) {
         console.log(e);
@@ -227,8 +253,7 @@ export default {
         page,
         limit
       );
-      const { totalPage, buckets } = res;
-      const totalRows = totalPage * limit;
+      const { buckets, totalRows } = res;
       const items = buckets.map((b) => {
         return {
           bucketid: b.id,
@@ -240,12 +265,35 @@ export default {
       });
       return { items, totalRows };
     },
+    async loadTransfers(network, page, limit) {
+      const { address } = this.$route.params;
+      console.log("load transfers");
+      const res = await this.$api.account.getTransfers(
+        network,
+        address,
+        page,
+        limit
+      );
+      const { transfers, totalRows } = res;
+      const items = transfers.map((t) => {
+        const amount = fromWei(t.amount, -1, t.token);
+        return {
+          from: t.from,
+          direct: t.to === this.address ? "In" : "Out",
+          to: t.to,
+          amount,
+          txHash: t.txHash,
+          blockNum: t.block.number,
+          timestamp: t.block.timestamp,
+        };
+      });
+      return { items, totalRows };
+    },
     async loadTxs(network, page, limit) {
       const { address } = this.$route.params;
       console.log("load txs");
       const res = await this.$api.account.getTxs(network, address, page, limit);
-      const { txSummaries, totalPage } = res;
-      const totalRows = totalPage * limit;
+      const { txSummaries, totalRows } = res;
       const items = txSummaries.map((t) => {
         const amount = fromWei(t.totalClauseAmount, -1, t.token);
         return {
@@ -270,8 +318,7 @@ export default {
         page,
         limit
       );
-      const { transfers, totalPage } = res;
-      const totalRows = totalPage * limit;
+      const { transfers, totalRows } = res;
       const items = transfers.map((t) => ({
         txhash: t.txHash,
         blocknum: t.block.number,
@@ -286,13 +333,12 @@ export default {
     async loadProposed(network, page, limit) {
       this.load = true;
       const { address } = this.$route.params;
-      const { proposed, totalPage } = await this.$api.account.getProposed(
+      const { proposed, totalRows } = await this.$api.account.getProposed(
         network,
         address,
         page,
         limit
       );
-      const totalRows = totalPage * limit;
 
       const items = proposed.map((b) => {
         return {
@@ -307,13 +353,12 @@ export default {
     async loadBids(network, page, limit) {
       this.load = true;
       const { address } = this.$route.params;
-      const { bids, totalPage } = await this.$api.account.getBids(
+      const { bids, totalRows } = await this.$api.account.getBids(
         network,
         address,
         page,
         limit
       );
-      const totalRows = totalPage * limit;
 
       const items = bids.map((b) => {
         console.log(b);

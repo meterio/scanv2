@@ -42,12 +42,11 @@ export default {
   methods: {
     async loadBlocks(network, page, limit) {
       this.loading = true;
-      const { blocks, totalPage } = await this.$api.block.getRecentBlocks(
+      const { blocks, totalRows } = await this.$api.block.getRecentBlocks(
         network,
         page,
         limit
       );
-      const totalRows = totalPage * limit;
       const items = blocks;
       return { items, totalRows };
     },

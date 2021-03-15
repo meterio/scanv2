@@ -9,7 +9,7 @@
 import StatusTag from "@/components/StatusTag.vue";
 import DataSummary from "@/components/DataSummary.vue";
 import DataTable from "@/components/DataTable.vue";
-import { fromWei, fromNow, formatTime } from "@/utils";
+import { fromWei } from "@/utils";
 export default {
   components: {
     DataTable,

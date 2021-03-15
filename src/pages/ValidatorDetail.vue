@@ -311,13 +311,12 @@ export default {
     async loadProposed(network, page, limit) {
       this.load = true;
       const { address } = this.$route.params;
-      const { proposed, totalPage } = await this.$api.account.getProposed(
+      const { proposed, totalRows } = await this.$api.account.getProposed(
         network,
         address,
         page,
         limit
       );
-      const totalRows = totalPage * limit;
 
       const items = proposed.map((b) => {
         return { ...b, blockhash: b.hash };

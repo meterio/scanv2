@@ -4,6 +4,12 @@ export default {
   getAccountDetail(network, address) {
     return get(network, `accounts/${address}`);
   },
+  getTransfers(network, address, page, limit = 8) {
+    return get(
+      network,
+      `accounts/${address}/transfers?page=${page}&limit=${limit}`
+    );
+  },
   getTxs(network, address, page, limit = 8) {
     return get(network, `accounts/${address}/txs?page=${page}&limit=${limit}`);
   },

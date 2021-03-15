@@ -17,11 +17,18 @@ import EpochDetailPage from "@/pages/EpochDetail.vue";
 import TopMTRAccountsPage from "@/pages/TopMTRAccounts.vue";
 import TopMTRGAccountsPage from "@/pages/TopMTRGAccounts.vue";
 import BucketPage from "@/pages/Bucket.vue";
+import AddressLinkPage from "@/pages/AddressLinkPage.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
 import { DOMAIN_TITLE } from "../.env";
 
 export const routes = [
+  {
+    path: "/al/:address",
+    name: "address-link",
+    component: AddressLinkPage,
+    meta: { title: `${DOMAIN_TITLE} | Explorer` }
+  },
   {
     path: "/",
     name: "home",

@@ -95,13 +95,12 @@ export default {
     },
 
     async loadRewards(network, page, limit) {
-      const { rewards, totalPage } = await this.$api.pow.getRewards(
+      const { rewards, totalRows } = await this.$api.pow.getRewards(
         network,
         page,
         limit
       );
 
-      const totalRows = totalPage * limit;
       const items = rewards.map((r) => {
         return {
           blockNum: r.posBlock,

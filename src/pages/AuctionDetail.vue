@@ -46,13 +46,12 @@ export default {
   methods: {
     async loadBids(network, page, limit) {
       const { auctionID } = this.$route.params;
-      const { bids, totalPage } = await this.$api.auction.getBids(
+      const { bids, totalRows } = await this.$api.auction.getBids(
         auctionID,
         network,
         page,
         limit
       );
-      const totalRows = totalPage * limit;
       const items = bids.map((b) => ({
         ...b,
         fullAddress: b.address,

@@ -17,3 +17,7 @@ export const shortHash = (hash, num) => {
   }
   return hash.slice(0, 18) + "...";
 };
+
+export const randomHex = () => {
+  return ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0");
+};

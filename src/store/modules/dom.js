@@ -12,12 +12,13 @@ export default {
     widthExtraSmall: 320,
     widthSmall: 640,
     widthTablet: 1024,
+    knownAddresses: {},
     network:
       process.env.NODE_ENV === "development"
-        ? "main"
+        ? "test"
         : DEPLOY_DOMAIN["main"].includes(window.location.hostname)
         ? "main"
-        : "test",
+        : "test"
   },
 
   mutations: {
@@ -29,17 +30,20 @@ export default {
         state.network = value;
       }
     },
+    SET_KNOWN_ADDRESSES(state, valMap) {
+      state.knownAddresses = valMap;
+    }
   },
   actions: {
     changeNetwork({ commit }, network) {
       return commit("SET_NETWORK", network);
-    },
+    }
   },
 
   getters: {
-    isExtraSmall: (state) => state.windowWidth <= state.widthExtraSmall,
-    isSmall: (state) => state.windowWidth <= state.widthSmall,
-    isTablet: (state) => state.windowWidth <= state.widthTablet,
-    isDesktop: (state) => state.windowWidth > state.widthTablet,
-  },
+    isExtraSmall: state => state.windowWidth <= state.widthExtraSmall,
+    isSmall: state => state.windowWidth <= state.widthSmall,
+    isTablet: state => state.windowWidth <= state.widthTablet,
+    isDesktop: state => state.windowWidth > state.widthTablet
+  }
 };

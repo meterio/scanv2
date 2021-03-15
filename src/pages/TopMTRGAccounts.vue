@@ -41,12 +41,11 @@ export default {
 
   methods: {
     async loadTopMTRG(network, page, limit) {
-      const { accounts, totalPage } = await this.$api.account.getTopMTRG(
+      const { accounts, totalRows } = await this.$api.account.getTopMTRG(
         network,
         page,
         limit
       );
-      const totalRows = totalPage * limit;
       const items = accounts.map((a) => {
         return { ...a, addrAndName: { address: a.address, name: a.name } };
       });

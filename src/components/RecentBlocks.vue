@@ -61,7 +61,7 @@
           variant="outline-primary"
           block
           size="sm"
-          @click="jump('/blocks')"
+          :to="{ name: 'blockList' }"
           >View all Blocks</b-btn
         >
       </b-card-footer>
@@ -88,6 +88,7 @@ export default {
     };
   },
   async mounted() {
+    console.log("MOUNTED");
     this.initData();
     this.clearTime();
     const me = this;
@@ -95,10 +96,15 @@ export default {
       me.initData();
     }, 3000);
   },
+  async beforeDestroy() {
+    console.log("BEFORE DESTROY");
+    this.clearTime();
+  },
   methods: {
     ...mapActions(["configVal"]),
     async initData() {
       try {
+        console.log("init data for block");
         const res = await this.$api.block.getRecentBlocks(this.network);
         this.loading = false;
         this.recent_blocks = res.blocks.splice(0, 10);
@@ -116,9 +122,6 @@ export default {
       if (this.time) {
         clearInterval(this.time);
       }
-    },
-    jump(url) {
-      this.$router.push(url);
     },
   },
 };

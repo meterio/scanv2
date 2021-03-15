@@ -51,12 +51,11 @@ export default {
   },
   methods: {
     async loadPast(network, page, limit) {
-      const { totalPage, auctions } = await this.$api.auction.getPast(
+      const { auctions, totalRows } = await this.$api.auction.getPast(
         network,
         page,
         limit
       );
-      const totalRows = totalPage * limit;
 
       const items = auctions.map((a) => {
         return {

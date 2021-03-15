@@ -36,7 +36,7 @@
               <p>
                 To:
                 <router-link
-                  v-if="tx.groupedTransfers.majorTo"
+                  v-if="tx.majorTo"
                   class="link"
                   :to="{
                     name: 'address',
@@ -54,7 +54,7 @@
         </ul>
       </b-card-text>
       <b-card-footer>
-        <b-btn variant="outline-primary" block size="sm" @click="jump('/txs')"
+        <b-btn variant="outline-primary" block size="sm" :to="{ path: 'txs' }"
           >View all Transactions</b-btn
         >
       </b-card-footer>
