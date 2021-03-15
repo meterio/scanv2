@@ -106,7 +106,6 @@ export default {
           { key: "to", label: "To" },
           { key: "amount", label: "Amount" },
           { key: "data", label: "Data" },
-          { key: "show_details", label: "" },
         ],
         items: [],
       },
@@ -158,12 +157,40 @@ export default {
       clauses = tx.clauses.map((c) => {
         const amount = new BigNumber(c.value).dividedBy(1e18).toFixed();
         let decoded = undefined;
+        let hint = "";
+
+        try {
+          const se = dev.ScriptEngine;
+          // try decode account-lock data
+          if (se.IsScriptEngineData(c.data)) {
+            const scriptData = se.decodeScriptData(
+              Buffer.from(c.data.replace("0xffffffff", ""), "hex")
+            );
+            if (scriptData.header.modId === se.ModuleID.AccountLock) {
+              const body = se.decodeAccountLockBody(scriptData.payload);
+              decoded = se.jsonFromAccountLockBody(body);
+              hint = se.explainAccountLockOpCode(body.opCode);
+            } else if (scriptData.header.modId === se.ModuleID.Auction) {
+              const body = se.decodeAuctionBody(scriptData.payload);
+              decoded = se.jsonFromAuctionBody(body);
+              hint = se.explainAuctionOpCode(body.opCode, body.option);
+            } else if (scriptData.header.modId === se.ModuleID.Staking) {
+              const body = se.decodeStakingBody(scriptData.payload);
+              decoded = se.jsonFromStakingBody(body);
+              hint = se.explainStakingOpCode(body.opCode);
+            }
+          }
+        } catch (e) {
+          console.log(e);
+        }
 
         return {
           ...c,
+          data: hint ? `${c.data} (${hint})` : c.data,
           amount: `${amount} ${c.token}`,
           index: index++,
           decoded,
+          hint,
         };
       });
     }
