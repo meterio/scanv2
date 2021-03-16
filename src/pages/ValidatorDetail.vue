@@ -1,12 +1,10 @@
 <template>
   <b-container>
-    <h2 class="title">Validator</h2>
+    <h2 class="title">Validator Detail</h2>
     <b-card class="summary">
       <b-row>
-        <b-col cols="2">
-          <b-img v-bind="mainProps" rounded alt="Rounded image"></b-img>
-        </b-col>
-        <b-col cols="10" class="info">
+        <b-col cols="6" class="info">
+          <p class="label mb-0">Name</p>
           <h3 class="title">{{ validator.name }}</h3>
           <div>{{ validator.description }}</div>
           <b-row class="address">
@@ -16,51 +14,47 @@
             </b-col>
           </b-row>
         </b-col>
-      </b-row>
-    </b-card>
-
-    <!-- delegated chart -->
-    <b-card class="delegated">
-      <b-row>
-        <b-col cols="2">
-          <pie-chart
-            v-if="chart_load"
-            :chart-data="delegated_chart.data"
-            :options="delegated_chart.options"
-          ></pie-chart>
-        </b-col>
-        <b-col cols="10" class="pt-3">
-          <label
-            >Total Votes: {{ delegated_chart_legend.total }}
-            <span>MTRG</span></label
-          >
-
+        <b-col cols="6">
           <b-row>
-            <b-col cols="6" class="d-flex justify-content-start">
-              <div class="legend mr-5">
-                <span class="dot self"></span>
-                <span>Self</span>
-              </div>
-              <span class="percent">{{
-                delegated_chart_legend.selfRatio
-              }}</span>
-              <span class="value ml-5">
-                {{ delegated_chart_legend.self }} MTRG</span
-              >
+            <b-col cols="4">
+              <pie-chart
+                v-if="chart_load"
+                :chart-data="delegated_chart.data"
+                :options="delegated_chart.options"
+              ></pie-chart>
             </b-col>
-          </b-row>
-          <b-row>
-            <b-col cols="6" class="d-flex justify-content-start">
-              <div class="legend mr-5">
-                <span class="dot others"></span>
-                <span>Others</span>
-              </div>
-              <span class="percent">{{
-                delegated_chart_legend.othersRatio
-              }}</span>
-              <span class="value ml-5">
-                {{ delegated_chart_legend.others }} MTRG</span
+            <b-col cols="8" class="pt-3">
+              <label
+                >Total Votes: {{ delegated_chart_legend.total }}
+                <span>MTRG</span></label
               >
+
+              <b-row>
+                <b-col cols="12" class="d-flex justify-content-between">
+                  <span>Self: </span>
+                  <span class="percent">
+                    <amount-tag
+                      :amount="delegated_chart_legend.self"
+                      token="MTRG"
+                      :precision="precision"
+                    />
+                    ({{ delegated_chart_legend.selfRatio }})</span
+                  >
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col cols="12" class="d-flex justify-content-between">
+                  <span>Others</span>
+                  <span class="percent">
+                    <amount-tag
+                      :amount="delegated_chart_legend.others"
+                      token="MTRG"
+                      :precision="precision"
+                    />
+                    ({{ delegated_chart_legend.othersRatio }})</span
+                  >
+                </b-col>
+              </b-row>
             </b-col>
           </b-row>
         </b-col>
@@ -128,6 +122,7 @@ import PieChart from "@/charts/PieChart.js";
 import DataTable from "@/components/DataTable.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import BigNumber from "bignumber.js";
+import AmountTag from "@/components/AmountTag.vue";
 
 export default {
   name: "ValidatorDetail",
@@ -135,9 +130,11 @@ export default {
     PieChart,
     DataTable,
     DataTableV2,
+    AmountTag,
   },
   data() {
     return {
+      precision: 2,
       delegators_current: 1,
       delegators_array: [],
       votes_current: 1,
@@ -159,9 +156,9 @@ export default {
       },
       delegated_chart_legend: {
         total: "",
-        self: "",
+        self: "0",
         selfRatio: "0%",
-        others: "",
+        others: "0",
         othersRatio: "0%",
       },
       delegated_chart: {
@@ -181,12 +178,12 @@ export default {
         data: {
           fields: [
             { key: "address", label: "Delegator" },
-            { key: "amountStr", label: "Amount" },
+            { key: "amount", label: "Amount" },
             { key: "percent", label: "Share" },
           ],
           items: [],
         },
-        pagination: { show: true, align: "right", perPage: 3 },
+        pagination: { show: true, align: "center", perPage: 3 },
       },
       votes: {
         title: "Votes",
@@ -195,12 +192,12 @@ export default {
           fields: [
             { key: "bucketid", label: "Bucket ID" },
             { key: "address", label: "Voter" },
-            { key: "valueStr", label: "Amount" },
+            { key: "value", label: "Amount" },
             { key: "timestamp", label: "Time" },
           ],
           items: [],
         },
-        pagination: { show: true, align: "right", perPage: 3 },
+        pagination: { show: true, align: "center", perPage: 3 },
       },
       proposed: {
         title: "Proposed Blocks",
@@ -208,6 +205,7 @@ export default {
           { key: "number", label: "Height" },
           { key: "blockhash", label: "Block Hash" },
           { key: "txCount", label: "Txs" },
+          { key: "reward", label: "Reward" },
           { key: "timestamp", label: "Time" },
         ],
         pagination: { show: true, align: "center", perPage: 8 },
@@ -235,7 +233,11 @@ export default {
       const res = await this.$api.validator.getVotes(this.network, address);
       this.chart_load = false;
       const { votes } = res;
-      this.votes_array = votes.map((v) => ({ ...v, bucketid: v.id }));
+      this.votes_array = votes.map((v) => ({
+        ...v,
+        bucketid: v.id,
+        value: { type: "amount", amount: v.value, precision: 4, token: "MTRG" },
+      }));
       this.votes.total = votes.length;
       this.votes.data.items = this.votes_array.slice(
         (this.votes_current - 1) * 3,
@@ -264,9 +266,9 @@ export default {
         this.delegated_chart_legend = {
           total: totalNum,
           selfRatio: Math.floor((selfNum * 10000) / totalNum) / 100 + "%",
-          self: selfNum,
-          others: othersNum,
-          othersRatio: Math.floor((others * 10000) / totalNum) / 100 + "%",
+          self: self.toFixed(),
+          others: others.toFixed(),
+          othersRatio: Math.floor((othersNum * 10000) / totalNum) / 100 + "%",
         };
       } else {
         this.delegated_chart_legend = {
@@ -293,7 +295,15 @@ export default {
         address
       );
       const { delegators } = res;
-      this.delegators_array = delegators;
+      this.delegators_array = delegators.map((d) => ({
+        ...d,
+        amount: {
+          type: "amount",
+          amount: d.amount,
+          token: "MTRG",
+          precision: 4,
+        },
+      }));
       this.delegators.total = delegators.length;
       this.delegators.data.items = this.delegators_array.slice(
         (this.delegators_current - 1) * 3,
@@ -319,7 +329,16 @@ export default {
       );
 
       const items = proposed.map((b) => {
-        return { ...b, blockhash: b.hash };
+        return {
+          ...b,
+          blockhash: b.hash,
+          reward: {
+            type: "amount",
+            amount: b.actualReward,
+            token: "MTR",
+            precision: 8,
+          },
+        };
       });
       return { items, totalRows };
     },

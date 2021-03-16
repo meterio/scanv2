@@ -1,6 +1,12 @@
 .table-container {
   margin-top: 30px;
 
+  .bold {
+    color: #5c6f8c;
+    font-size: 16px;
+    font-weight: bold;;
+  }
+
   .title {
     color: #5c6f8c;
     font-size: 16px;
@@ -85,7 +91,7 @@
     }
 
     .badge {
-      padding: 0.4rem 0.8rem !important;
+      // padding: 0.4rem 0.8rem !important;
       font-size: 90% !important;
 
       svg {

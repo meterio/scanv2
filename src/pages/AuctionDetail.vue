@@ -13,7 +13,6 @@
 import StatusTag from "@/components/StatusTag.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import DataSummary from "@/components/DataSummary.vue";
-import { fromWei, formatNum, shortHash } from "@/utils";
 import BigNumber from "bignumber.js";
 
 export default {
@@ -56,8 +55,20 @@ export default {
         ...b,
         fullAddress: b.address,
         txid: b.id,
-        amount: fromWei(new BigNumber(b.amount), 6, "MTR"),
-        lotAmount: b.lotAmount ? fromWei(b.lotAmount, 6, "MTRG") : "-",
+        amount: {
+          type: "amount",
+          amount: new BigNumber(b.amount).toFixed(),
+          token: "MTR",
+          precision: 6,
+        },
+        lotAmount: b.lotAmount
+          ? {
+              type: "amount",
+              amount: new BigNumber(b.lotAmount).toFixed(),
+              token: "MTRG",
+              precision: 6,
+            }
+          : "-",
       }));
       return { items, totalRows };
     },
@@ -76,19 +87,46 @@ export default {
         { key: "Auction End Height", value: summary.auctionEndHeight },
         {
           key: "MTRG on Auction",
-          value:
-            fromWei(new BigNumber(summary.released).minus(summary.leftover)) +
-            " MTRG",
+          type: "amount",
+          value: new BigNumber(summary.released)
+            .minus(summary.leftover)
+            .toFixed(),
+          token: "MTRG",
+          precision: -1,
         },
         {
           key: "MTRG on Auction Generated Heights",
           value: `${summary.startHeight} - ${summary.endHeight}`,
         },
-        { key: "Userbid Total", value: fromWei(summary.userbidTotal) + " MTR" },
-        { key: "Autobid Total", value: fromWei(summary.autobidTotal) + " MTR" },
-        { key: "Total Received", value: fromWei(summary.received) + " MTR" },
+        {
+          key: "Userbid Total",
+          type: "amount",
+          value: summary.userbidTotal,
+          token: "MTR",
+          precision: -1,
+        },
+        {
+          key: "Autobid Total",
+          type: "amount",
+          value: summary.autobidTotal,
+          token: "MTR",
+          precision: -1,
+        },
+        {
+          key: "Total Received",
+          type: "amount",
+          value: summary.received,
+          token: "MTR",
+          precision: -1,
+        },
         { key: "Bids Count", value: summary.bidCount },
-        { key: "Actual Price", value: fromWei(summary.actualPrice, 4) },
+        {
+          key: "Actual Price",
+          type: "amount",
+          value: summary.actualPrice,
+          token: "MTR",
+          precision: 4,
+        },
       ];
     },
   },

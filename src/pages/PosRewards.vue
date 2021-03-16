@@ -2,17 +2,20 @@
 .detail
   data-summary(title="Epoch Rewards", :data="summary")
   b-container.summary
-    data-table.mt-2pert.px-0(title="Rewards Detail", :data="rewards")
+    data-table-v2.mt-2pert.px-0(
+      title="Rewards Detail",
+      :fields="rewards.fields",
+      :items="rewards.items"
+    )
 </template>
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
 import DataSummary from "@/components/DataSummary.vue";
-import DataTable from "@/components/DataTable.vue";
-import { fromWei } from "@/utils";
+import DataTableV2 from "@/components/DataTableV2.vue";
 export default {
   components: {
-    DataTable,
+    DataTableV2,
     DataSummary,
     StatusTag,
   },
@@ -46,21 +49,41 @@ export default {
         { key: "Epoch", value: epoch },
         { key: "Height", value: summary.blockNum, type: "block-link" },
         { key: "Autobid Count", value: summary.autobidCount },
-        { key: "Autobid Total", value: fromWei(summary.autobidTotal) + " MTR" },
+        {
+          key: "Autobid Total",
+          type: "amount",
+          value: summary.autobidTotal,
+          token: "MTR",
+          precision: -1,
+        },
         { key: "Transfer Count", value: summary.transferCount },
         {
           key: "Transfer Total",
-          value: fromWei(summary.transferTotal) + " MTR",
+          type: "amount",
+          value: summary.transferTotal,
+          token: " MTR",
+          precision: -1,
         },
         { key: "Reward Count", value: rewards ? rewards.length : 0 },
-        { key: "Total Reward", value: fromWei(summary.totalReward) + " MTR" },
+        {
+          key: "Total Reward",
+          type: "amount",
+          value: summary.totalReward,
+          token: "MTR",
+          precision: -1,
+        },
         { key: "Time", value: summary.timestamp, type: "timestamp" },
       ];
       this.rewards.items.push(
         ...rewards.map((r) => {
           return {
             fullAddress: r.addr,
-            amount: fromWei(r.amount) + " MTR",
+            amount: {
+              type: "amount",
+              amount: r.amount,
+              token: "MTR",
+              precision: -1,
+            },
             type: r.type,
           };
         })

@@ -69,7 +69,12 @@ export default {
       const items = rewards.map((r) => {
         return {
           ...r,
-          amount: fromWei(r.totalReward, 6, "MTR"),
+          amount: {
+            type: "amount",
+            amount: r.totalReward,
+            precision: 6,
+            token: "MTR",
+          },
           posReward: r.epoch,
         };
       });

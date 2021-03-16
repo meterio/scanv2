@@ -65,7 +65,6 @@ import DataSummary from "@/components/DataSummary.vue";
 import * as dev from "@meterio/devkit";
 import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
-import { fromWei } from "@/utils";
 
 // import "vue-json-pretty/lib/style.css";
 export const StakingModuleAddress =
@@ -133,14 +132,17 @@ export default {
     this.loading = false;
     const { tx, summary } = res;
     if (!!summary) {
-      const totalAmount = fromWei(summary.totalClauseAmount, -1, summary.token);
-      const fee = fromWei(summary.paid, 6) + " MTR";
       this.summary = [
         { key: "Hash", value: summary.hash },
         { key: "Type", value: summary.type },
         { key: "Origin", value: summary.origin, type: "address-link" },
-        { key: "Amount", value: totalAmount },
-        { key: "Fee", value: fee },
+        {
+          key: "Amount",
+          value: summary.totalClauseAmount,
+          type: "amount",
+          token: summary.token,
+        },
+        { key: "Fee", value: summary.paid, type: "amount", token: "MTR" },
         {
           key: "Result",
           value: summary.reverted ? "reverted" : "success",
@@ -155,7 +157,6 @@ export default {
     if (tx.clauseCount > 0) {
       let index = 1;
       clauses = tx.clauses.map((c) => {
-        const amount = new BigNumber(c.value).dividedBy(1e18).toFixed();
         let decoded = undefined;
         let hint = "";
 
@@ -187,7 +188,12 @@ export default {
         return {
           ...c,
           data: hint ? `${c.data} (${hint})` : c.data,
-          amount: `${amount} ${c.token}`,
+          amount: {
+            type: "amount",
+            amount: new BigNumber(c.value),
+            token: c.token,
+            precision: 6,
+          },
           index: index++,
           decoded,
           hint,
@@ -199,11 +205,12 @@ export default {
       return {
         from: tr.sender,
         to: tr.recipient,
-        amountStr: fromWei(
-          new BigNumber(tr.amount),
-          -1,
-          tr.token == 0 ? "MTR" : "MTRG"
-        ),
+        amountStr: {
+          type: "amount",
+          amount: new BigNumber(tr.amount).toFixed(),
+          token: tr.token == 0 ? "MTR" : "MTRG",
+          precision: 8,
+        },
       };
     });
     this.events.items = tx.events;

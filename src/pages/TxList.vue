@@ -10,7 +10,6 @@
 
 <script>
 import DataTableV2 from "@/components/DataTableV2.vue";
-import { fromWei } from "@/utils";
 
 export default {
   name: "TxList",
@@ -41,13 +40,17 @@ export default {
         limit
       );
       const items = txs.map((tx) => {
-        const totalAmount = fromWei(tx.totalClauseAmount, -1, tx.token);
         return {
           txhash: tx.hash,
           blocknum: tx.block.number,
           from: tx.origin,
           to: tx.majorTo,
-          amount: totalAmount,
+          amount: {
+            type: "amount",
+            amount: tx.totalClauseAmount,
+            precision: 6,
+            token: tx.token,
+          },
           timestamp: tx.block.timestamp,
         };
       });

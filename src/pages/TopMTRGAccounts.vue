@@ -6,16 +6,6 @@
     :pagination="accounts.pagination",
     :loadItems="loadTopMTRG"
   )
-    template(v-slot:cell(addrAndName)="data")
-      .dt-row
-        router-link.link(
-          v-if="!!data.item.name",
-          :to="{ name: 'address', params: { address: data.item.addrAndName.address } }"
-        ) {{ data.item.addrAndName.name }}
-        router-link.link(
-          v-else,
-          :to="{ name: 'address', params: { address: data.item.addrAndName.address } }"
-        ) {{ data.item.addrAndName.address }}
 </template>
 
 <script>
@@ -32,7 +22,7 @@ export default {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "mtrgRank", label: "Rank" },
-          { key: "addrAndName", label: "Address" },
+          { key: "fullAddress", label: "Address" },
           { key: "mtrgBalanceStr", label: "MTRG Balance" },
         ],
       },
@@ -47,7 +37,7 @@ export default {
         limit
       );
       const items = accounts.map((a) => {
-        return { ...a, addrAndName: { address: a.address, name: a.name } };
+        return { ...a, fullAddress: a.address };
       });
       return { items, totalRows };
     },

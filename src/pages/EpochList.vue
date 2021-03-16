@@ -10,7 +10,7 @@
 
 <script>
 import DataTableV2 from "@/components/DataTableV2.vue";
-import { fromWei, formatDuration } from "@/utils";
+import { formatDuration } from "@/utils";
 
 export default {
   name: "EpochList",

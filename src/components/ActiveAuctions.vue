@@ -1,6 +1,6 @@
 <template>
   <b-container class="table-container">
-    <h3 class="title">Active Auctions (MTRG)</h3>
+    <h3 class="bold">Active Auctions (MTRG)</h3>
     <DataTableV2 :fields="auction.fields" :items="auction.items" class="px-0">
       <!-- column: height_range -->
       <template v-slot:cell(prefix)="data">
@@ -15,7 +15,7 @@
 
 <script>
 import DataTableV2 from "@/components/DataTableV2.vue";
-import { fromWei, formatNum } from "@/utils";
+import { formatNum } from "@/utils";
 import BigNumber from "bignumber.js";
 export default {
   name: "ActiveAuctions",
@@ -24,9 +24,8 @@ export default {
       // Note `isActive` is left out and will not appear in the rendered table
       auction: {
         fields: [
-          { key: "prefix", label: "" },
+          { key: "end_height", label: "Start KBlock" },
           { key: "epoch_range", label: "Epoch Range" },
-          { key: "end_height", label: "Settle KBlock" },
           { key: "mtrg_on_auction", label: "MTRG on Auction" },
           { key: "mtr_received", label: "Received MTR" },
           { key: "expected_final_price", label: "Expected Price" },
@@ -62,9 +61,19 @@ export default {
           items.push({
             prefix: "",
             epoch_range: `${present.startEpoch} - ${present.endEpoch}`,
-            end_height: present.endHeight,
-            mtr_received: fromWei(present.received, 6) + " MTR",
-            mtrg_on_auction: fromWei(present.released, 6) + " MTRG",
+            end_height: { type: "block", block: present.endHeight },
+            mtr_received: {
+              type: "amount",
+              amount: present.received,
+              token: "MTR",
+              precision: 6,
+            },
+            mtrg_on_auction: {
+              type: "amount",
+              amount: present.released,
+              token: "MTRG",
+              precision: 6,
+            },
             expected_final_price: formatNum(actualPrice, 4),
             auctionDetail: {
               id: present.id,

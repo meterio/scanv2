@@ -67,6 +67,14 @@
           <span v-if="item.type === 'duration'">
             <span>{{ formatDuration(item.value) }}</span>
           </span>
+          <!-- status -->
+          <span v-if="item.type === 'amount'">
+            <AmountTag
+              :amount="item.value"
+              :token="item.token"
+              :precision="item.precision"
+            ></AmountTag>
+          </span>
 
           <!-- status -->
           <span v-if="item.type === 'status'">
@@ -80,10 +88,11 @@
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
+import AmountTag from "@/components/AmountTag.vue";
 import AddressLink from "@/components/AddressLink.vue";
 
 export default {
-  components: { StatusTag, AddressLink },
+  components: { StatusTag, AddressLink, AmountTag },
   name: "DataList",
   props: {
     title: {

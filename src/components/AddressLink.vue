@@ -46,7 +46,7 @@ export default {
         return knowns[this.address.toLowerCase()];
       }
       if (this.short) {
-        return this.shortAddr(this.address.toLowerCase());
+        return this.shortAddr(this.address.toLowerCase(), 12);
       }
       return this.address.toLowerCase();
     },

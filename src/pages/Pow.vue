@@ -25,7 +25,7 @@ import DataDashboard from "@/components/DataDashboard.vue";
 import HashRateChart from "@/components/HashRateChart.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import BigNumber from "bignumber.js";
-import { formatNum, fromNow, fromWei } from "@/utils";
+import { formatNum, fromNow } from "@/utils";
 
 export default {
   name: "Mining",
@@ -105,7 +105,12 @@ export default {
         return {
           blockNum: r.posBlock,
           pow_range: `${r.powStart} - ${r.powEnd}`,
-          amount: r.totalAmountStr,
+          amount: {
+            type: "amount",
+            amount: r.totalAmount,
+            token: "MTR",
+            precision: -1,
+          },
           time: fromNow(r.timestamp * 1000),
           powReward: r.epoch,
         };
@@ -148,12 +153,6 @@ export default {
       return `${
         b.getDate() < 10 ? "0" + b.getDate() : b.getDate().toString()
       }/${m < 10 ? "0" + m : m.toString()}`;
-    },
-    fromWei(num, precision) {
-      return fromWei(num, precision);
-    },
-    formatNum(num, precision) {
-      return formatNum(num, precision);
     },
   },
 };

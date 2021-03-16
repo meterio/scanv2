@@ -1,12 +1,15 @@
 <template lang="pug">
-address-link(:address="address")
+div
+  address-link(:address="address")
+  amount-tag(amount="010239882028020303828201", symbol="MTR")
 </template>
 
 <script>
 import AddressLink from "@/components/AddressLink";
+import AmountTag from "@/components/AmountTag";
 export default {
   name: "AddressLinkPage",
-  components: { AddressLink },
+  components: { AddressLink, AmountTag },
   computed: {
     address() {
       return this.$route.params.address;

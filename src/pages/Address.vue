@@ -24,7 +24,6 @@
 import DataTableV2 from "@/components/DataTableV2.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
-import { fromWei } from "@/utils";
 export default {
   name: "Address",
   components: {
@@ -96,6 +95,7 @@ export default {
         { name: "Buckets" },
       ],
       tabValue: 0,
+      name: "",
       address: "0x",
       summary: [],
       account: {},
@@ -161,7 +161,7 @@ export default {
         fields: [
           { key: "bucketid", label: "ID" },
           { key: "address", label: "Candidate Address" },
-          { key: "totalVotesStr", label: "Votes" },
+          { key: "totalVotes", label: "Votes" },
           { key: "timestamp", label: "Time" },
           { key: "status", label: "Status" },
         ],
@@ -204,23 +204,36 @@ export default {
       try {
         const { address } = this.$route.params;
         this.address = address;
+        const knowns = this.$store.state.dom.knownAddresses;
+        this.summary = [];
+
+        if (this.address.toLowerCase() in knowns) {
+          this.name = knowns[this.address.toLowerCase()];
+          this.summary.push({ key: "Name", value: this.name });
+        }
         const res = await this.$api.account.getAccountDetail(
           this.network,
           address
         );
 
         const { account } = res;
-        this.summary = [
+        this.summary = this.summary.concat([
           // { key: "Address", value: account.address },
           {
             key: "MTR Balance",
-            value: account.mtrBalanceStr,
+            value: account.mtrBalance,
+            type: "amount",
+            token: "MTR",
+            precision: -1,
           },
           {
             key: "MTRG Balance",
-            value: account.mtrgBalanceStr,
+            value: account.mtrgBalance,
+            type: "amount",
+            token: "MTRG",
+            precision: -1,
           },
-        ];
+        ]);
         // if (account.name) {
         //   this.summary.push({ key: "Name", value: account.name });
         // }
@@ -258,7 +271,12 @@ export default {
         return {
           bucketid: b.id,
           address: b.candidate,
-          totalVotesStr: fromWei(b.totalVotes, 6, "MTRG"),
+          totalVotes: {
+            type: "amount",
+            amount: b.totalVotes,
+            precision: 6,
+            token: "MTRG",
+          },
           timestamp: b.createTime,
           status: b.unbounded ? "Unbounded" : "Created",
         };
@@ -276,12 +294,16 @@ export default {
       );
       const { transfers, totalRows } = res;
       const items = transfers.map((t) => {
-        const amount = fromWei(t.amount, -1, t.token);
         return {
           from: t.from,
           direct: t.to === this.address ? "In" : "Out",
           to: t.to,
-          amount,
+          amount: {
+            type: "amount",
+            amount: t.amount,
+            token: t.token,
+            precision: 8,
+          },
           txHash: t.txHash,
           blockNum: t.block.number,
           timestamp: t.block.timestamp,
@@ -295,14 +317,18 @@ export default {
       const res = await this.$api.account.getTxs(network, address, page, limit);
       const { txSummaries, totalRows } = res;
       const items = txSummaries.map((t) => {
-        const amount = fromWei(t.totalClauseAmount, -1, t.token);
         return {
           txhash: t.hash,
           blocknum: t.block.number,
           from: t.origin,
           direct: t.origin === this.address ? "Out" : "In",
           to: t.majorTo || "nobody",
-          amount,
+          amount: {
+            type: "amount",
+            amount: t.totalClauseAmount,
+            token: t.token,
+            precision: 8,
+          },
           timestamp: t.block.timestamp,
         };
       });
@@ -325,7 +351,12 @@ export default {
         from: t.from === this.address ? t.from : t.tokenAddress,
         to: t.to === this.address ? t.to : t.tokenAddress,
         direct: t.from === this.address ? "Out" : "In",
-        amount: fromWei(t.amount) + (t.symbol ? ` ${t.symbol}` : " "),
+        amount: {
+          type: "amount",
+          amount: t.amount,
+          token: t.symbol || " ",
+          precision: 8,
+        },
         timestamp: t.block.timestamp,
       }));
       return { items, totalRows };
@@ -345,7 +376,12 @@ export default {
           ...b,
           blockNum: b.number,
           blockhash: b.hash,
-          actualRewardStr: fromWei(b.actualReward, -1, "MTR"),
+          actualRewardStr: {
+            type: "amount",
+            amount: b.actualReward,
+            precision: -1,
+            token: "MTR",
+          },
         };
       });
       return { items, totalRows };
@@ -364,10 +400,29 @@ export default {
         console.log(b);
         return {
           ...b,
-          amountStr: fromWei(b.amount, 6, "MTR"),
-          hammerPriceStr: b.pending ? "-" : fromWei(b.hammerPrice, 4, "MTR"),
+          amountStr: {
+            type: "amount",
+            amount: b.amount,
+            precision: 8,
+            token: "MTR",
+          },
+          hammerPriceStr: b.pending
+            ? "-"
+            : {
+                type: "amount",
+                amount: b.hammerPrice,
+                precision: 4,
+                token: "MTR",
+              },
           lotAmountStr:
-            b.pending || !b.lotAmount ? "-" : fromWei(b.lotAmount, 6, "MTRG"),
+            b.pending || !b.lotAmount
+              ? "-"
+              : {
+                  type: "amount",
+                  amount: b.lotAmount,
+                  precision: 8,
+                  token: "MTRG",
+                },
         };
       });
       return { items, totalRows };

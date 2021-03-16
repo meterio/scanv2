@@ -39,7 +39,6 @@
 import DataTableV2 from "@/components/DataTableV2.vue";
 import StatusTag from "@/components/StatusTag.vue";
 import DataSummary from "@/components/DataSummary.vue";
-import { fromWei } from "@/utils";
 export default {
   name: "BlockDetail",
   components: {
@@ -91,7 +90,13 @@ export default {
             type: "address-or-name-link",
           },
           { key: "Gas Used", value: b.gasUsed },
-          { key: "Reward", value: fromWei(b.actualReward, -1, "MTR") },
+          {
+            key: "Reward",
+            value: b.actualReward,
+            type: "amount",
+            precision: -1,
+            token: "MTR",
+          },
           { key: "Txs Count", value: b.txCount },
           { key: "Time", value: b.timestamp, type: "timestamp" },
         ];
@@ -99,13 +104,21 @@ export default {
       let items = [];
       if (res.block.txSummaries) {
         items = res.block.txSummaries.map((tx) => {
-          const amount = fromWei(tx.totalClauseAmount, -1, tx.token);
-          const fee = fromWei(tx.paid, 6) + " MTR";
           return {
             hash: tx.hash,
             type: tx.type,
-            amount,
-            fee,
+            amount: {
+              type: "amount",
+              amount: tx.totalClauseAmount,
+              token: tx.token,
+              precision: 8,
+            },
+            fee: {
+              type: "amount",
+              amount: tx.paid,
+              token: "MTR",
+              precision: 8,
+            },
             result: tx.reverted ? "reverted" : "success",
             clauseCount: tx.clauseCount,
           };

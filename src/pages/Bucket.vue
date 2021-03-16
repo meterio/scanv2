@@ -5,7 +5,7 @@
 
 <script>
 import DataSummary from "@/components/DataSummary.vue";
-import { fromWei, fromNow } from "@/utils";
+import { fromNow } from "@/utils";
 
 export default {
   name: "Bucket",
@@ -46,7 +46,13 @@ export default {
         this.summary = [
           { key: "Owner", value: bucket.owner, type: "address-link" },
           { key: "Candidate", value: bucket.candidate, type: "address-link" },
-          { key: "Value", value: fromWei(bucket.value) + " MTRG" },
+          {
+            key: "Value",
+            value: bucket.value,
+            type: "amount",
+            token: "MTRG",
+            precision: -1,
+          },
           { key: "Lock Option", value: this.getLockOption(bucket.option) },
           { key: "Created At", value: fromNow(bucket.createTime * 1000) },
           { key: "Nonce", value: bucket.nonce },

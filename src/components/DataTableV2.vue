@@ -40,7 +40,7 @@
               class="link"
               :to="{
                 name: 'epochDetail',
-                params: { epoch: data.value }
+                params: { epoch: data.value },
               }"
               >{{ data.value }}</router-link
             >
@@ -90,7 +90,7 @@
               class="link"
               :to="{
                 name: 'txDetail',
-                params: { hash: data.value }
+                params: { hash: data.value },
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -104,7 +104,7 @@
               class="link"
               :to="{
                 name: 'bucket',
-                params: { id: data.value }
+                params: { id: data.value },
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -136,22 +136,6 @@
           <div v-else class="dt-row">-</div>
         </template>
 
-        <!-- Address And Name column template -->
-        <template v-slot:cell(addrAndName)="data">
-          <div class="dt-row">
-            <router-link
-              v-if="data.value.name"
-              :to="{ name: 'address', params: { address: data.value.address } }"
-              >{{ data.value.name }}</router-link
-            >
-            <router-link
-              v-else
-              :to="{ name: 'address', params: { address: data.value.address } }"
-              >{{ data.value.address }}</router-link
-            >
-          </div>
-        </template>
-
         <!-- Block column template-->
         <template v-slot:cell(blocknum)="data">
           <div class="dt-row">
@@ -159,7 +143,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value }
+                params: { revision: data.value },
               }"
               >#{{ data.value }}</router-link
             >
@@ -171,7 +155,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value }
+                params: { revision: data.value },
               }"
               >#{{ data.value }}</router-link
             >
@@ -184,7 +168,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value }
+                params: { revision: data.value },
               }"
               >#{{ data.value }}</router-link
             >
@@ -198,7 +182,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value }
+                params: { revision: data.value },
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -221,7 +205,7 @@
               v-if="data.value.bidCount && data.value.bidCount > 0"
               :to="{
                 name: 'auctionDetail',
-                params: { auctionID: data.value.id }
+                params: { auctionID: data.value.id },
               }"
               >{{ data.value.bidCount }}</router-link
             >
@@ -253,7 +237,24 @@
         <!-- default template -->
         <template v-slot:cell()="data">
           <div class="dt-row">
-            <span>{{ data.value }}</span>
+            <!-- amount tag -->
+            <amount-tag
+              v-if="data.value.type == 'amount'"
+              :amount="data.value.amount"
+              :token="data.value.token"
+              :precision="data.value.precision"
+            />
+            <router-link
+              v-if="data.value.type == 'block'"
+              class="link"
+              :to="{
+                name: 'blockDetail',
+                params: { revision: data.value.block },
+              }"
+              >#{{ data.value.block }}</router-link
+            >
+
+            <span v-if="!data.value.type">{{ data.value }}</span>
           </div>
         </template>
       </b-table>
@@ -276,51 +277,52 @@
 
 <script>
 import DirectTag from "./DirectTag.vue";
+import AmountTag from "./AmountTag.vue";
 import AddressLink from "./AddressLink.vue";
 export default {
-  components: { DirectTag, AddressLink },
+  components: { DirectTag, AddressLink, AmountTag },
   name: "DataTable",
   props: {
     sortBy: { type: String },
     sortDesc: { type: Boolean },
     title: {
-      type: String
+      type: String,
     },
     minHeight: {
       type: String,
-      default: "auto"
+      default: "auto",
     },
     items: {
       type: Array,
-      default: function() {
+      default: function () {
         return [];
-      }
+      },
     },
     fields: {
       type: Array,
-      default: function() {
+      default: function () {
         return [];
-      }
+      },
     },
     pagination: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           show: false,
-          align: "right"
+          align: "right",
         };
-      }
+      },
     },
     loadItems: {
-      type: Function
-    }
+      type: Function,
+    },
   },
   data() {
     return {
       itemsLocal: [],
       totalRows: 0,
       currentPage: 1,
-      loading: true
+      loading: true,
     };
   },
   async beforeMount() {
@@ -329,16 +331,16 @@ export default {
   computed: {
     passedItems() {
       if (this.items) {
-        return this.items.map(i => i);
+        return this.items.map((i) => i);
       }
       return undefined;
-    }
+    },
   },
   watch: {
     passedItems(to, from) {
       // console.log("item changed");
       this.initWithPassed();
-    }
+    },
   },
   methods: {
     async initWithPassed() {
@@ -394,8 +396,8 @@ export default {
       this.currentPage = val;
       this.$emit("tablePaginationChange", val);
       this.init();
-    }
-  }
+    },
+  },
 };
 </script>
 

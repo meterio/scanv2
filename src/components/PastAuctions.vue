@@ -21,7 +21,6 @@
 <script>
 import BigNumber from "bignumber.js";
 import DataTableV2 from "@/components/DataTableV2.vue";
-import { fromWei } from "@/utils";
 
 export default {
   name: "PastAuctions",
@@ -34,7 +33,6 @@ export default {
           perPage: 8,
         },
         fields: [
-          { key: "prefix", label: "" },
           { key: "auction_start_height", label: "Start KBlock" },
           { key: "auction_end_height", label: "End KBlock" },
           { key: "mtrg_on_auction", label: "MTRG on Auction" },
@@ -61,13 +59,32 @@ export default {
         return {
           prefix: "",
           epoch_range: `${a.startEpoch} - ${a.endEpoch}`,
-          auction_start_height: a.auctionStartHeight,
-          auction_end_height: a.auctionEndHeight,
-          mtr_received: fromWei(a.received, 6) + " MTR",
-          mtrg_on_auction: fromWei(a.released, 4) + " MTRG",
-          sold_mtrg:
-            fromWei(new BigNumber(a.released).minus(a.leftover), 6) + " MTRG",
-          final_price: fromWei(a.actualPrice, 4),
+          auction_start_height: { type: "block", block: a.auctionStartHeight },
+          auction_end_height: { type: "block", block: a.auctionEndHeight },
+          mtr_received: {
+            type: "amount",
+            amount: a.received,
+            precision: 4,
+            token: "MTR",
+          },
+          mtrg_on_auction: {
+            type: "amount",
+            amount: a.released,
+            precision: 4,
+            token: "MTRG",
+          },
+          sold_mtrg: {
+            type: "amount",
+            amount: new BigNumber(a.released).minus(a.leftover).toFixed(),
+            precision: 4,
+            token: "MTRG",
+          },
+          final_price: {
+            type: "amount",
+            amount: a.actualPrice,
+            precision: 4,
+            token: "MTR",
+          },
           auctionDetail: {
             id: a.id,
             bidCount: a.bidCount,
