@@ -255,7 +255,6 @@ export default {
       let selfNum = self.dividedBy(1e18).toNumber();
       let othersNum = others.dividedBy(1e18).toNumber();
       let totalNum = selfNum + othersNum;
-      console.log("self:", selfNum, "others:", othersNum, "total:", totalNum);
       this.delegated_chart.data.datasets = [
         {
           backgroundColor: ["#FFB84F", "#287DF9"],

@@ -88,7 +88,6 @@ export default {
     };
   },
   async mounted() {
-    console.log("MOUNTED");
     this.initData();
     this.clearTime();
     const me = this;
@@ -97,14 +96,12 @@ export default {
     }, 3000);
   },
   async beforeDestroy() {
-    console.log("BEFORE DESTROY");
     this.clearTime();
   },
   methods: {
     ...mapActions(["configVal"]),
     async initData() {
       try {
-        console.log("init data for block");
         const res = await this.$api.block.getRecentBlocks(this.network);
         this.loading = false;
         this.recent_blocks = res.blocks.splice(0, 10);

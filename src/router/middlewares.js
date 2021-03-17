@@ -41,9 +41,7 @@ export function setPageTitleMiddleware(to, from, next) {
 
 export function redirectNetwork(to, from, next) {
   const { network } = to.params;
-  console.log($store.state);
   const curNetwork = $store.state.dom.network;
-  console.log("CUR NETWORK:", curNetwork);
   const tgtNetwork = curNetwork || from.params.network || "main";
 
   if (!network) {

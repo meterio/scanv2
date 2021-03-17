@@ -76,7 +76,6 @@ export default {
       const { auctionID } = this.$route.params;
       const res = await this.$api.auction.getAuction(this.network, auctionID);
       const { summary } = res;
-      console.log(summary);
       this.summary = [
         { key: "ID", value: summary.id },
         {

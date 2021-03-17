@@ -82,7 +82,6 @@ new Vue({
   store,
   async mounted() {
     let knowns = {};
-    console.log("NETWORK:", this.network);
     if (this.network == "main") {
       knowns["0xe9061c2517bba8a7e2d2c20053cd8323b577efe7"] = "Foundation Ops";
       knowns["0xab22ab75f8c42b6969c5d226f39aeb7be35bf24b"] = "Locked Batch 5";
@@ -118,8 +117,6 @@ new Vue({
       console.log("ignore issue for getting known addresses");
     }
     store.commit("dom/SET_KNOWN_ADDRESSES", knowns);
-    console.log("Knowns: ", knowns);
-
     store.commit("dom/SET_WINDOW_WIDTH", window.innerWidth);
     window.addEventListener("resize", () =>
       store.commit("dom/SET_WINDOW_WIDTH", window.innerWidth)

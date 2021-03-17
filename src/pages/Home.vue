@@ -64,7 +64,6 @@ export default {
   },
   methods: {
     async init() {
-      console.log("hello:>>", this.hello);
       const res = await this.$api.metric.getAll(this.network);
       this.loading = false;
       const { mtr, mtrg, pos, pow, staking, committee } = res;
@@ -115,12 +114,10 @@ export default {
     async searchKeyWords(key) {
       try {
         const str = key.replace(/\r?\n|\r/g, "");
-        console.log("STR: ", str);
         const { type } = await this.$api.search.searchKeyWord(
           this.network,
           str
         );
-        console.log("res:>>", type);
         if (type === "tx") {
           this.$router.push("/tx/" + key);
         } else if (type == "block") {

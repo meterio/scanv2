@@ -42,7 +42,6 @@ export default {
         this.id = id;
         const res = await this.$api.bucket.getBucket(this.network, id);
         const { bucket } = res;
-        console.log(res);
         this.summary = [
           { key: "Owner", value: bucket.owner, type: "address-link" },
           { key: "Candidate", value: bucket.candidate, type: "address-link" },

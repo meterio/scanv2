@@ -198,7 +198,6 @@ export default {
         default:
           this.loadTarget = "transfers";
       }
-      console.log("loadtarget:", this.loadTarget);
     },
     async loadAddress() {
       try {
@@ -285,7 +284,6 @@ export default {
     },
     async loadTransfers(network, page, limit) {
       const { address } = this.$route.params;
-      console.log("load transfers");
       const res = await this.$api.account.getTransfers(
         network,
         address,
@@ -313,7 +311,6 @@ export default {
     },
     async loadTxs(network, page, limit) {
       const { address } = this.$route.params;
-      console.log("load txs");
       const res = await this.$api.account.getTxs(network, address, page, limit);
       const { txSummaries, totalRows } = res;
       const items = txSummaries.map((t) => {
@@ -336,8 +333,6 @@ export default {
     },
     async loadTxs20(network, page, limit) {
       const { address } = this.$route.params;
-      console.log("txs erc20");
-
       const res = await this.$api.account.getTxs20(
         network,
         address,
@@ -397,7 +392,6 @@ export default {
       );
 
       const items = bids.map((b) => {
-        console.log(b);
         return {
           ...b,
           amountStr: {

@@ -45,7 +45,6 @@ export default {
     this.loading = false;
     const { summary, powBlocks } = res;
     this.summaryTitle = "Epoch Detail";
-    console.log(summary);
 
     if (!!summary) {
       this.summary = [
