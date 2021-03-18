@@ -1,6 +1,8 @@
-import Vue from "vue";
-import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
+import Vue from "vue";
+import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 import AppLayout from "./layout/index.vue";
 import router from "./router";
 import store from "./store";
@@ -29,7 +31,7 @@ Vue.prototype.$network = "";
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin);
+Vue.use(BootstrapVueIcons);
 
 // Vue.use(globalEventBus);
 

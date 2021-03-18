@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import BigNumber from "bignumber.js";
 import DataTableV2 from "@/components/DataTableV2.vue";
+import { bigNumMinus } from "@/utils";
 
 export default {
   name: "PastAuctions",
@@ -75,7 +75,7 @@ export default {
           },
           sold_mtrg: {
             type: "amount",
-            amount: new BigNumber(a.released).minus(a.leftover).toFixed(),
+            amount: bigNumMinus(a.released, a.leftover),
             precision: 4,
             token: "MTRG",
           },

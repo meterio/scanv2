@@ -1,14 +1,14 @@
 @import "reset";
 
 // import bootstrap style
-@import "node_modules/bootstrap/scss/bootstrap";
+@import "node_modules/bootstrap/scss/bootstrap.scss";
 @import "node_modules/bootstrap-vue/src/index.scss";
 
 @import "color";
 @import "variables";
 @import "media";
-@import "global";
 @import "fonts";
+@import "global";
 @import "table";
 @import "helpers";
 

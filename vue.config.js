@@ -1,8 +1,12 @@
 const debug = process.env.NODE_ENV !== "production";
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
 
 module.exports = {
   configureWebpack: {
-    devtool: "source-map"
+    devtool: "source-map",
+    // plugins: [new BundleAnalyzerPlugin()]
+    externals: { moment: "moment" }
   },
   chainWebpack: config => {
     config.module

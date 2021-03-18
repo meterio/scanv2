@@ -46,3 +46,25 @@ export const fromWei = (
 export const toWei = (val /* string | number | BigNumber*/) => {
   return new BigNumber(val).times(UNIT_WEI).toFixed();
 };
+
+export const bigNumMinus = (a, b) => {
+  return new BigNumber(a).minus(b).toFixed();
+};
+
+export const bigNumDiv = (a, b) => {
+  return new BigNumber(a).dividedBy(b).toFixed();
+};
+
+export const bigNumCompare = (a, b) => {
+  return new BigNumber(a).isLessThan(b) ? -1 : 1;
+};
+
+export const bigNum = (a, precision = undefined) => {
+  if (typeof precision === "undefined") {
+    return new BigNumber(a).toFixed();
+  }
+  if (typeof precision === "number") {
+    return new BigNumber(a).toFixed(precision);
+  }
+  return "";
+};

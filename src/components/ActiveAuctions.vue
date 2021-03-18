@@ -15,8 +15,8 @@
 
 <script>
 import DataTableV2 from "@/components/DataTableV2.vue";
-import { formatNum } from "@/utils";
-import BigNumber from "bignumber.js";
+import { formatNum, bigNumDiv, bigNumCompare } from "@/utils";
+
 export default {
   name: "ActiveAuctions",
   data() {
@@ -48,14 +48,9 @@ export default {
         this.load = false;
         const items = [];
         if (present.startHeight) {
-          let actualPrice = new BigNumber(present.received).dividedBy(
-            present.released
-          );
-
-          const reservedPrice = new BigNumber(present.reservedPrice).dividedBy(
-            1e18
-          );
-          if (actualPrice.isLessThan(reservedPrice)) {
+          let actualPrice = bigNumDiv(present.received, present.released);
+          const reservedPrice = bigNumDiv(present.reservedPrice, 1e18);
+          if (bigNumCompare(actualPrice, reservedPrice) < 0) {
             actualPrice = reservedPrice;
           }
           items.push({

@@ -13,7 +13,7 @@
 import StatusTag from "@/components/StatusTag.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import DataSummary from "@/components/DataSummary.vue";
-import BigNumber from "bignumber.js";
+import { bigNum, bigNumMinus } from "@/utils";
 
 export default {
   components: {
@@ -57,14 +57,14 @@ export default {
         txid: b.id,
         amount: {
           type: "amount",
-          amount: new BigNumber(b.amount).toFixed(),
+          amount: bigNum(b.amount),
           token: "MTR",
           precision: 6,
         },
         lotAmount: b.lotAmount
           ? {
               type: "amount",
-              amount: new BigNumber(b.lotAmount).toFixed(),
+              amount: bigNum(b.lotAmount),
               token: "MTRG",
               precision: 6,
             }
@@ -87,9 +87,7 @@ export default {
         {
           key: "MTRG on Auction",
           type: "amount",
-          value: new BigNumber(summary.released)
-            .minus(summary.leftover)
-            .toFixed(),
+          value: bigNumMinus(summary.released, summary.leftover),
           token: "MTRG",
           precision: -1,
         },

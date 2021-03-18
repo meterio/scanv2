@@ -24,8 +24,7 @@
 import DataDashboard from "@/components/DataDashboard.vue";
 import HashRateChart from "@/components/HashRateChart.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
-import BigNumber from "bignumber.js";
-import { formatNum, fromNow } from "@/utils";
+import { formatNum, fromNow, bigNum, bigNumDiv } from "@/utils";
 
 export default {
   name: "Mining",
@@ -76,17 +75,15 @@ export default {
           ],
           [
             {
-              content: `${new BigNumber(pow.hashrate)
-                .dividedBy(1000000)
-                .toFixed(0)} MH/s`,
+              content: `${bigNum(bigNumDiv(pow.hashrate, 1000000), 0)} MH/s`,
               label: "Network Hash Rate",
             },
             {
-              content: new BigNumber(pow.rewardPerDay).toFixed(3) + " MTR",
+              content: bigNum(pow.rewardPerDay, 3) + " MTR",
               label: "Reward (TH/s*Day)",
             },
             {
-              content: "$ " + new BigNumber(pow.costParity).toFixed(3),
+              content: "$ " + bigNum(pow.costParity, 3),
               label: "MTR Cost Parity",
             },
           ],

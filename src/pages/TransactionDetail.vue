@@ -58,33 +58,14 @@
 </template>
 
 <script>
-import BigNumber from "bignumber.js";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
-import * as dev from "@meterio/devkit";
+import { ScriptEngine } from "@meterio/devkit/dist/scriptEngine";
 import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
+import { bigNum } from "@/utils";
 
-// import "vue-json-pretty/lib/style.css";
-export const StakingModuleAddress =
-  "0x" +
-  Buffer.from("staking-module-address")
-    .toString("hex")
-    .padStart(40, "0")
-    .slice(-40);
-export const AuctionModuleAddress =
-  "0x" +
-  Buffer.from("auction-account-address")
-    .toString("hex")
-    .padStart(40, "0")
-    .slice(-40);
-export const AccountLockModuleAddress =
-  "0x" +
-  Buffer.from("account-lock-address")
-    .toString("hex")
-    .padStart(40, "0")
-    .slice(-40);
 export default {
   components: {
     NavTabs,
@@ -161,7 +142,7 @@ export default {
         let hint = "";
 
         try {
-          const se = dev.ScriptEngine;
+          const se = ScriptEngine;
           // try decode account-lock data
           if (se.IsScriptEngineData(c.data)) {
             const scriptData = se.decodeScriptData(
@@ -190,7 +171,7 @@ export default {
           data: hint ? `${c.data} (${hint})` : c.data,
           amount: {
             type: "amount",
-            amount: new BigNumber(c.value),
+            amount: bigNum(c.value),
             token: c.token,
             precision: 6,
           },
@@ -207,7 +188,7 @@ export default {
         to: tr.recipient,
         amountStr: {
           type: "amount",
-          amount: new BigNumber(tr.amount).toFixed(),
+          amount: bigNum(tr.amount),
           token: tr.token == 0 ? "MTR" : "MTRG",
           precision: 8,
         },
