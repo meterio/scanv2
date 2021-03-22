@@ -77,6 +77,49 @@ var mixin = {
 };
 
 Vue.mixin(mixin);
+const StakingModuleAddress =
+  "0x" +
+  Buffer.from("staking-module-address")
+    .toString("hex")
+    .padStart(40, "0")
+    .slice(-40);
+const AuctionModuleAddress =
+  "0x" +
+  Buffer.from("auction-account-address")
+    .toString("hex")
+    .padStart(40, "0")
+    .slice(-40);
+const AccountLockModuleAddress =
+  "0x" +
+  Buffer.from("account-lock-address")
+    .toString("hex")
+    .padStart(40, "0")
+    .slice(-40);
+const ValidatorBenefitAddress =
+  "0x" +
+  Buffer.from("validator-benefit-address")
+    .toString("hex")
+    .padStart(40, "0")
+    .slice(-40);
+const AuctionAccountAddress =
+  "0x" +
+  Buffer.from("auction-account-address")
+    .toString("hex")
+    .padStart(40, "0")
+    .slice(-40);
+const AuctionLeftOverAddress = "0xe852f654dfaee0e2b60842657379a56e1cafa292";
+
+export const ParamsAddress =
+  "0x" +
+  Buffer.from("Params")
+    .toString("hex")
+    .padStart(40, "0");
+export const ExecutorAddress =
+  "0x" +
+  Buffer.from("Executor")
+    .toString("hex")
+    .padStart(40, "0");
+export const BridgePoolAddress = "0x5c5713656c6819ebe3921936fd28bed2a387cda5";
 
 new Vue({
   name: "Root",
@@ -108,16 +151,25 @@ new Vue({
         "MTR system contract";
       knowns["0x228ebbee999c6a7ad74a6130e81b12f9fe237ba3"] =
         "MTRG system contract";
+      knowns[AccountLockModuleAddress] = "Account Lock Engine";
+      knowns[AuctionAccountAddress] = "Auction Account";
+      knowns[AuctionLeftOverAddress] = "Auction Leftover";
+      knowns[AuctionModuleAddress] = "Auction Engine";
+      knowns[BridgePoolAddress] = "Bridge Pool";
+      knowns[ExecutorAddress] = "Executor";
+      knowns[ParamsAddress] = "Params";
+      knowns[StakingModuleAddress] = "Staking Engine";
+      knowns[ValidatorBenefitAddress] = "Staking Reward";
     }
-    try {
-      const res = await this.$api.known.getAddresses(this.network);
-      const { addresses } = res;
-      for (const k in addresses) {
-        knowns[k.toLowerCase()] = addresses[k];
-      }
-    } catch (e) {
-      console.log("ignore issue for getting known addresses");
-    }
+    // try {
+    //   const res = await this.$api.known.getAddresses(this.network);
+    //   const { addresses } = res;
+    //   for (const k in addresses) {
+    //     knowns[k.toLowerCase()] = addresses[k];
+    //   }
+    // } catch (e) {
+    //   console.log("ignore issue for getting known addresses");
+    // }
     store.commit("dom/SET_KNOWN_ADDRESSES", knowns);
     store.commit("dom/SET_WINDOW_WIDTH", window.innerWidth);
     window.addEventListener("resize", () =>
