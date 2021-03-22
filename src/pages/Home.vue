@@ -101,7 +101,7 @@ export default {
           },
           {
             label: "Staked MTRG",
-            content: fromWei(staking.totalStaked, 0) + " MTRG",
+            content: fromWei(staking.totalStaked, 0),
           },
           { label: "MTRG Annual Inflation", content: pos.inflation },
           {
