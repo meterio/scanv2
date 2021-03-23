@@ -49,14 +49,6 @@ export default {
     padding: 9px 12px;
     align-items: center;
     justify-content: center;
-    &.active,
-    &:hover {
-      color: #007bff;
-      cursor: pointer;
-    }
-    &.active {
-      border-bottom: 2px solid #007bff;
-    }
   }
   .col {
     flex: 1;

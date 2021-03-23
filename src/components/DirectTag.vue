@@ -37,7 +37,7 @@ export default {
   }
 
   &.badge-primary {
-    color: #287df9;
+    color: #6171ff;
     background-color: #e9f2ff;
   }
 

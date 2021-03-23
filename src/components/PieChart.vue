@@ -1,8 +1,12 @@
 <template lang="pug">
 b-container
   b-row
-    b-col(style="display:flex; align-items: center; justify-content: center")
-      pie-chart(:chart-data="pieCollections" :options="options", style="width: 300px")
+    b-col(style="display: flex; align-items: center; justify-content: center")
+      pie-chart(
+        :chart-data="pieCollections",
+        :options="options",
+        style="width: 300px"
+      )
     b-col.pie-column
       div 67%
       div 5.78%
@@ -15,7 +19,6 @@ b-container
       div 28920
       div 13920
       div 5920
-
 </template>
 
 <script>
@@ -29,11 +32,11 @@ export default {
           {
             data: [67, 5.78, 23.4, 15.68, 5.44],
             backgroundColor: [
-              "#287df9",
+              "#6171ff",
               "#80d2e4",
               "#a6b5cc",
               "#b871ff",
-              "#ffb84f",
+              "#42DCFE",
             ],
           },
         ],

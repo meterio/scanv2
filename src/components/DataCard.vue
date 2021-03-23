@@ -29,7 +29,7 @@ export default {
     font-size: 1.17rem;
 
     .change {
-      color: #287df9;
+      color: #6171ff;
       font-size: 1rem;
     }
   }

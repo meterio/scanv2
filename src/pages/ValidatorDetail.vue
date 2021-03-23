@@ -257,7 +257,7 @@ export default {
       let totalNum = selfNum + othersNum;
       this.delegated_chart.data.datasets = [
         {
-          backgroundColor: ["#FFB84F", "#287DF9"],
+          backgroundColor: ["#6171ff", "#42DCFE"],
           data: [selfNum, othersNum],
         },
       ];
@@ -407,7 +407,7 @@ h2.title {
     }
 
     &.others {
-      background-color: #287df9;
+      background-color: #6171ff;
     }
   }
 }

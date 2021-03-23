@@ -48,6 +48,15 @@ body {
   font-size: 13px;
 }
 
+.card-header {
+  font-weight: bold;
+  background: white !important;
+}
+.card-footer {
+  font-weight: bold;
+  background: white !important;
+}
+
 .card-title,
 .col-row-third {
   color: $third-font-color !important;
@@ -309,7 +318,7 @@ body {
 
 .top-dropdown.active {
   a.nav-link.dropdown-toggle {
-    color: #007bff !important;
+    color: #6171ff !important;
   }
 }
 

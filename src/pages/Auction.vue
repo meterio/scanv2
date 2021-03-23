@@ -72,7 +72,8 @@ export default {
 
 <style lang="scss" scoped>
 .banner {
-  background-image: url("~@/assets/banner_bg.png");
+  // background-image: url("~@/assets/banner_bg.png");
+  background: #6171ff;
   height: 164px;
   background-size: cover;
   display: flex;

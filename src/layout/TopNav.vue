@@ -3,9 +3,12 @@
     <b-modal v-model="modal_show" hide-footer hide-header>
       <div class="text-center">Search No More Data</div>
     </b-modal>
-    <b-navbar toggleable="lg" type="light" variant="light" class="px-4 py-3">
+    <b-navbar toggleable="lg" type="light" variant="light" class="px-4 py-2">
       <b-navbar-brand href="/" class="mr-5">
-        <b-img src="@/assets/logo.svg" height="32" />
+        <b-img src="@/assets/newlogo.png" height="40" />
+        <span class="ml-1" style="font-size: 19px; font-weight: bold"
+          >Meter</span
+        >
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -82,7 +85,7 @@
           <b-dropdown
             :text="searchPrefix"
             size="sm"
-            variant="outline-success"
+            variant="outline-primary"
             class="mx-2"
           >
             <b-dropdown-item @click="changeNetwork('main')"
@@ -210,6 +213,7 @@ export default {
 <style lang="scss" scoped>
 .navbar {
   border-bottom: 1px solid #dfdfdf;
+  background: white !important;
 }
 
 .navbar-nav .nav-link {
@@ -222,8 +226,9 @@ export default {
 }
 
 .navbar-expand-lg .navbar-nav .nav-link {
-  padding-right: 1rem;
-  padding-left: 1rem;
+  padding-right: 0.6rem !important;
+  padding-left: 0.6rem !important;
+  font-weight: bold !important;
 }
 .m-bar {
   a {
@@ -234,7 +239,7 @@ export default {
     }
     &.active,
     &.active:hover {
-      color: #007bff;
+      color: #6171ff;
     }
   }
 }

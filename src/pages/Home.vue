@@ -138,16 +138,16 @@ export default {
 
 <style lang="scss" scoped>
 .search-banner {
-  background-image: url("~@/assets/banner_bg.png");
+  background: #f0f2ff;
   height: 180px;
   background-size: cover;
   display: flex;
-  padding-top: 50px;
+  padding-top: 40px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 
   .title {
-    color: #fff;
     font-size: 20px;
-    font-weight: 400;
+    font-weight: bold;
     text-align: center;
   }
 }

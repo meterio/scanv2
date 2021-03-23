@@ -78,6 +78,7 @@ export default {
   padding: 5px;
   background-color: #fff;
   border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
 
   .search-select {
     // width: 120px;
