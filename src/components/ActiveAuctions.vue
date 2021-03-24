@@ -25,7 +25,9 @@ export default {
       auction: {
         fields: [
           { key: "end_height", label: "Start KBlock" },
-          { key: "epoch_range", label: "Epoch Range" },
+          { key: "auction_leftover_epoch", label: "End Time" },
+          { key: "current_epoch", label: "Current Epoch" },
+          { key: "auction_end_epoch", label: "End Epoch" },
           { key: "mtrg_on_auction", label: "MTRG on Auction" },
           { key: "mtr_received", label: "Received MTR" },
           { key: "expected_final_price", label: "Expected Price" },
@@ -44,6 +46,9 @@ export default {
     },
     async loadAuctions() {
       try {
+        const res = await this.$api.block.getBest(this.network);
+        const best = res.block;
+
         const { present } = await this.$api.auction.getPresent(this.network);
         this.load = false;
         const items = [];
@@ -53,10 +58,16 @@ export default {
           if (bigNumCompare(actualPrice, reservedPrice) < 0) {
             actualPrice = reservedPrice;
           }
+          let leftoverEpoch = present.endEpoch + 24 - best.epoch || 0;
           items.push({
             prefix: "",
             epoch_range: `${present.startEpoch} - ${present.endEpoch}`,
             end_height: { type: "block", block: present.endHeight },
+            auction_end_epoch: present.endEpoch + 24,
+            current_epoch: best.epoch,
+            auction_leftover_epoch: `in ${leftoverEpoch} hour${
+              leftoverEpoch > 1 ? "s" : ""
+            }`,
             mtr_received: {
               type: "amount",
               amount: present.received,

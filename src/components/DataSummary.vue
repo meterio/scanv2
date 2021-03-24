@@ -22,8 +22,8 @@
               :to="{
                 name: 'blockDetail',
                 params: {
-                  revision: item.block,
-                },
+                  revision: item.block
+                }
               }"
               >#{{ item.block }}</router-link
             >
@@ -38,6 +38,40 @@
             >#{{ item.value }}</b-link
           >
 
+          <!-- block-range -->
+          <div v-if="item.type === 'block-range'">
+            <b-link
+              href="#"
+              :to="{ name: 'blockDetail', params: { revision: item.start } }"
+              >#{{ item.start }}</b-link
+            >
+            <span class="mx-1">-</span>
+            <b-link
+              href="#"
+              v-if="item.end"
+              :to="{ name: 'blockDetail', params: { revision: item.end } }"
+              >#{{ item.end }}</b-link
+            >
+            <span v-else>active</span>
+          </div>
+
+          <!-- epoch-range -->
+          <div v-if="item.type === 'epoch-range'">
+            <b-link
+              href="#"
+              :to="{ name: 'epochDetail', params: { epoch: item.start } }"
+              >#{{ item.start }}</b-link
+            >
+            <span class="mx-1">-</span>
+            <b-link
+              href="#"
+              v-if="item.end"
+              :to="{ name: 'epochDetail', params: { epoch: item.end } }"
+              >{{ item.end }}
+            </b-link>
+            <span v-else>{{ item.start + 24 }}</span>
+          </div>
+
           <!-- address-link -->
           <address-link
             :address="item.value"
@@ -48,7 +82,7 @@
           <router-link
             :to="{
               name: 'address',
-              params: { address: item.value.address },
+              params: { address: item.value.address }
             }"
             v-if="item.type === 'address-or-name-link' && !!item.value.name"
             >{{ item.value.name }}</router-link
@@ -96,22 +130,22 @@ export default {
   name: "DataList",
   props: {
     title: {
-      type: String,
+      type: String
     },
     data: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
-      },
+      }
     },
     wide: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
-      currentPage: 1,
+      currentPage: 1
     };
   },
   computed: {
@@ -123,8 +157,8 @@ export default {
     },
     contentCols() {
       return this.wide ? 9 : 10;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

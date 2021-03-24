@@ -14,6 +14,7 @@ import StatusTag from "@/components/StatusTag.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import DataSummary from "@/components/DataSummary.vue";
 import { bigNum, bigNumMinus } from "@/utils";
+import BigNumber from "bignumber.js";
 
 export default {
   components: {
@@ -76,14 +77,27 @@ export default {
       const { auctionID } = this.$route.params;
       const res = await this.$api.auction.getAuction(this.network, auctionID);
       const { summary } = res;
+      let actualPrice = summary.actualPrice;
+      if (!summary.auctionEndHeight) {
+        actualPrice = new BigNumber(summary.received)
+          .dividedBy(summary.released)
+          .times(1e18)
+          .toFixed();
+      }
       this.summary = [
         { key: "ID", value: summary.id },
         {
-          key: "Auction Start Height",
-          value: summary.auctionStartHeight,
-          type: "block-link",
+          key: "Height Range",
+          start: summary.auctionStartHeight,
+          end: summary.auctionEndHeight,
+          type: "block-range",
         },
-        { key: "Auction End Height", value: summary.auctionEndHeight },
+        {
+          key: "Epoch Range",
+          start: summary.auctionStartEpoch,
+          end: summary.auctionEndEpoch,
+          type: "epoch-range",
+        },
         {
           key: "MTRG on Auction",
           type: "amount",
@@ -120,7 +134,7 @@ export default {
         {
           key: "Actual Price",
           type: "amount",
-          value: summary.actualPrice,
+          value: actualPrice,
           token: "MTR",
           precision: 4,
         },
