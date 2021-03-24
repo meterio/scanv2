@@ -28,6 +28,7 @@ import DataDashboard from "@/components/DataDashboard.vue";
 import RecentBlocks from "@/components/RecentBlocks.vue";
 import RecentTxs from "@/components/RecentTxs.vue";
 import { fromWei, formatNum } from "@/utils";
+import BigNumber from "bignumber.js";
 import { mapState } from "vuex";
 
 export default {
@@ -68,6 +69,12 @@ export default {
       this.loading = false;
       const { mtr, mtrg, pos, pow, staking, committee } = res;
 
+      const x = new BigNumber(staking.totalCirculationStaked)
+        .dividedBy(1e18)
+        .dividedBy(mtrg.circulation)
+        .times(100)
+        .toFixed();
+      console.log("x = ", x);
       this.data = [
         [
           {
@@ -100,8 +107,13 @@ export default {
             content: `${staking.healthyNodes} / ${staking.candidates}`,
           },
           {
-            label: "Staked MTRG",
-            content: fromWei(staking.totalStaked, 0),
+            label: "Circulation Staked",
+            content:
+              new BigNumber(staking.totalCirculationStaked)
+                .dividedBy(1e18)
+                .dividedBy(mtrg.circulation)
+                .times(100)
+                .toFixed(2) + "%",
           },
           { label: "MTRG Annual Inflation", content: pos.inflation },
           {
