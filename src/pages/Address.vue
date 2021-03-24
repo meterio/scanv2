@@ -218,18 +218,26 @@ export default {
         const { account } = res;
         this.summary = this.summary.concat([
           // { key: "Address", value: account.address },
-          {
-            key: "MTR Balance",
-            value: account.mtrBalance,
-            type: "amount",
-            token: "MTR",
-            precision: -1,
-          },
+
           {
             key: "MTRG Balance",
             value: account.mtrgBalance,
             type: "amount",
             token: "MTRG",
+            precision: -1,
+          },
+          {
+            key: "MTRG Staked",
+            value: account.mtrgBounded,
+            type: "amount",
+            token: "MTRG",
+            precision: -1,
+          },
+          {
+            key: "MTR Balance",
+            value: account.mtrBalance,
+            type: "amount",
+            token: "MTR",
             precision: -1,
           },
         ]);
