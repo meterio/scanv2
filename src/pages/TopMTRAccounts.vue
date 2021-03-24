@@ -10,6 +10,8 @@
 
 <script>
 import DataTableV2 from "@/components/DataTableV2.vue";
+import BigNumber from "bignumber.js";
+
 export default {
   name: "TopMTRAccounts",
   components: {
@@ -22,7 +24,7 @@ export default {
         fields: [
           { key: "mtrRank", label: "Rank" },
           { key: "fullAddress", label: "Address" },
-          { key: "mtrBalanceStr", label: "MTR Balance" },
+          { key: "totalMTR", label: "MTR Balance" },
         ],
       },
     };
@@ -36,7 +38,15 @@ export default {
         limit
       );
       const items = accounts.map((a) => {
-        return { ...a, fullAddress: a.address };
+        return {
+          totalMTR: {
+            type: "amount",
+            amount: new BigNumber(a.mtrBalance).plus(a.mtrBounded).toFixed(),
+            token: "MTR",
+            precision: 4,
+          },
+          fullAddress: a.address,
+        };
       });
       return { items, totalRows };
     },

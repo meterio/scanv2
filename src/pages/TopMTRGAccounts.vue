@@ -10,6 +10,7 @@
 
 <script>
 import DataTableV2 from "@/components/DataTableV2.vue";
+import BigNumber from "bignumber.js";
 
 export default {
   name: "TopMTRGAccounts",
@@ -23,7 +24,7 @@ export default {
         fields: [
           { key: "mtrgRank", label: "Rank" },
           { key: "fullAddress", label: "Address" },
-          { key: "mtrgBalanceStr", label: "MTRG Balance" },
+          { key: "totalMTRG", label: "MTRG Balance" },
         ],
       },
     };
@@ -37,7 +38,15 @@ export default {
         limit
       );
       const items = accounts.map((a) => {
-        return { ...a, fullAddress: a.address };
+        return {
+          totalMTRG: {
+            type: "amount",
+            amount: new BigNumber(a.mtrgBalance).plus(a.mtrgBounded).toFixed(),
+            precision: 4,
+            token: "MTRG",
+          },
+          fullAddress: a.address,
+        };
       });
       return { items, totalRows };
     },
