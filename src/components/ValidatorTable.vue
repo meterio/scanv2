@@ -178,7 +178,7 @@ export default {
             { key: "addressWithName", label: "Address" },
             { key: "votingPowerStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
-            { key: "shares%", label: "Pool Share%" },
+            // { key: "shares%", label: "Pool Share%" },
             { key: "totalPoints", label: "Penalty Points" },
           ];
           this.validator_data.items = res.delegates.map((d) => ({

@@ -16,6 +16,7 @@
 <script>
 import DataTableV2 from "@/components/DataTableV2.vue";
 import { formatNum, bigNumDiv, bigNumCompare } from "@/utils";
+import BigNumber from "bignumber.js";
 
 export default {
   name: "ActiveAuctions",
@@ -25,7 +26,6 @@ export default {
       auction: {
         fields: [
           { key: "end_height", label: "Start KBlock" },
-          { key: "auction_leftover_epoch", label: "End Time" },
           { key: "current_epoch", label: "Current Epoch" },
           { key: "auction_end_epoch", label: "End Epoch" },
           { key: "mtrg_on_auction", label: "MTRG on Auction" },
@@ -53,8 +53,10 @@ export default {
         this.load = false;
         const items = [];
         if (present.startHeight) {
-          let actualPrice = bigNumDiv(present.received, present.released);
-          const reservedPrice = bigNumDiv(present.reservedPrice, 1e18);
+          let actualPrice = new BigNumber(
+            bigNumDiv(present.received, present.released)
+          ).times(1e18);
+          const reservedPrice = present.reservedPrice;
           if (bigNumCompare(actualPrice, reservedPrice) < 0) {
             actualPrice = reservedPrice;
           }
@@ -63,24 +65,28 @@ export default {
             prefix: "",
             epoch_range: `${present.startEpoch} - ${present.endEpoch}`,
             end_height: { type: "block", block: present.endHeight },
-            auction_end_epoch: present.endEpoch + 24,
+            auction_end_epoch: `${
+              present.endEpoch + 24
+            } (in ${leftoverEpoch} hour${leftoverEpoch > 1 ? "s" : ""})`,
             current_epoch: best.epoch,
-            auction_leftover_epoch: `in ${leftoverEpoch} hour${
-              leftoverEpoch > 1 ? "s" : ""
-            }`,
             mtr_received: {
               type: "amount",
               amount: present.received,
               token: "MTR",
-              precision: 6,
+              precision: 4,
             },
             mtrg_on_auction: {
               type: "amount",
               amount: present.released,
               token: "MTRG",
-              precision: 6,
+              precision: 4,
             },
-            expected_final_price: formatNum(actualPrice, 4),
+            expected_final_price: {
+              type: "amount",
+              amount: actualPrice,
+              token: "MTR",
+              precision: 4,
+            },
             auctionDetail: {
               id: present.id,
               bidCount: present.bidCount,
