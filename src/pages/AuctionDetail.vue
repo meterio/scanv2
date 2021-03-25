@@ -2,17 +2,20 @@
 .detail-page
   data-summary(:data="summary", :title="summaryTitle", :wide="true")
   data-table-v2(
-    title="Bids",
-    :loadItems="loadBids",
-    :fields="bids.fields",
-    :pagination="bids.pagination"
+    :loadItems="loadItems",
+    :fields="fields",
+    :pagination="pagination",
+    :key="tabValue"
   )
+    div(slot="header")
+      nav-tabs.px-0(:tabs="tabs", :value="tabValue", @changeTab="navTabChange")
 </template>
 
 <script>
 import StatusTag from "@/components/StatusTag.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import DataSummary from "@/components/DataSummary.vue";
+import NavTabs from "@/components/NavTabs.vue";
 import { bigNum, bigNumMinus } from "@/utils";
 import BigNumber from "bignumber.js";
 
@@ -21,12 +24,58 @@ export default {
     DataTableV2,
     DataSummary,
     StatusTag,
+    NavTabs,
+  },
+  computed: {
+    fields() {
+      switch (this.tabValue) {
+        case 0:
+          return this.autobids.fields;
+        case 1:
+          return this.userbids.fields;
+      }
+      return this.autobids.fields;
+    },
+    pagination() {
+      switch (this.tabValue) {
+        case 0:
+          return this.autobids.pagination;
+        case 1:
+          return this.userbids.pagination;
+      }
+      return this.autobids.pagination;
+    },
+    loadItems() {
+      switch (this.tabValue) {
+        case 0:
+          return this.loadAutobidSummaries;
+        case 1:
+          return this.loadUserbids;
+      }
+      return this.loadAutobidSummaries;
+    },
   },
   data() {
     return {
       summaryTitle: "Auction Detail",
       summary: [],
-      bids: {
+      tabs: [{ name: "Autobids" }, { name: "Userbids" }],
+      tabValue: 0,
+      autobids: {
+        fields: [
+          { key: "epoch", label: "Epoch" },
+          { key: "blockNum", label: "Block" },
+          { key: "amount", label: "Total Amount" },
+          { key: "bidCount", label: "Bids" },
+        ],
+        items: [],
+        pagination: {
+          show: false,
+          align: "center",
+          perPage: 15,
+        },
+      },
+      userbids: {
         fields: [
           { key: "fullAddress", label: "Address" },
           { key: "type", label: "Type" },
@@ -44,28 +93,31 @@ export default {
     };
   },
   methods: {
-    async loadBids(network, page, limit) {
+    navTabChange(val) {
+      console.log("VAL: ", val);
+      this.tabValue = val;
+    },
+    async loadUserbids(network, page, limit) {
       const { auctionID } = this.$route.params;
-      const { bids, totalRows } = await this.$api.auction.getBids(
+      const { userbids, totalRows } = await this.$api.auction.getUserbids(
         auctionID,
         network,
         page,
         limit
       );
-      const items = bids.map((b) => ({
+      const items = userbids.map((b) => ({
         ...b,
         fullAddress: b.address,
-        txid: b.id,
         amount: {
           type: "amount",
-          amount: bigNum(b.amount),
+          amount: b.amount,
           token: "MTR",
           precision: 6,
         },
         lotAmount: b.lotAmount
           ? {
               type: "amount",
-              amount: bigNum(b.lotAmount),
+              amount: b.lotAmount,
               token: "MTRG",
               precision: 6,
             }
@@ -73,6 +125,19 @@ export default {
       }));
       return { items, totalRows };
     },
+    async loadAutobidSummaries(network, page, limit) {
+      const { auctionID } = this.$route.params;
+      const { autobidSummaries } = await this.$api.auction.getAutobidSummaries(
+        auctionID,
+        network
+      );
+      const items = autobidSummaries.map((b) => ({
+        ...b,
+        amount: { type: "amount", amount: b.total, token: "MTR", precision: 6 },
+      }));
+      return { items, totalRows: items.length };
+    },
+
     async init() {
       const { auctionID } = this.$route.params;
       const res = await this.$api.auction.getAuction(this.network, auctionID);

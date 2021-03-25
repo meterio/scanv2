@@ -53,6 +53,14 @@
             No data available.
           </div>
         </template>
+        <template v-slot:cell(addressWithName)="data">
+          <div class="dt-row">
+            <address-link
+              :address="data.value.address"
+              :name="data.value.name"
+            />
+          </div>
+        </template>
         <template v-slot:cell(name)="data">
           <div class="dt-row" style="word-break: break-all">
             {{ data.value }}
@@ -101,6 +109,7 @@
 
 <script>
 import Loading from "@/components/Loading";
+import AddressLink from "@/components/AddressLink";
 import { fromNow, formatTime } from "@/utils";
 
 export default {
@@ -124,6 +133,7 @@ export default {
   },
   components: {
     Loading,
+    AddressLink,
   },
   watch: {
     validate_right_search(newVal) {
@@ -165,33 +175,40 @@ export default {
         this.validate_table_total = res.totalRows;
         if (this.current_tab === "Delegates") {
           this.validator_data.fields = [
-            { key: "name", label: "Name", tdClass: "flex" },
-            { key: "address", label: "Address" },
+            { key: "addressWithName", label: "Address" },
             { key: "votingPowerStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
+            { key: "shares%", label: "Pool Share%" },
             { key: "totalPoints", label: "Penalty Points" },
           ];
-          this.validator_data.items = res.delegates;
+          this.validator_data.items = res.delegates.map((d) => ({
+            ...d,
+            addressWithName: { address: d.address, name: d.name },
+          }));
         }
         if (this.current_tab === "Candidates") {
           this.validator_data.fields = [
-            { key: "name", label: "Name", tdClass: "flex align-center" },
-            { key: "address", label: "Address" },
+            { key: "addressWithName", label: "Address" },
             { key: "totalVotesStr", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
             { key: "totalPoints", label: "Penalty Points" },
           ];
-          this.validator_data.items = res.candidates;
+          this.validator_data.items = res.candidates.map((c) => ({
+            ...c,
+            addressWithName: { address: c.address, name: c.name },
+          }));
         }
         if (this.current_tab === "Jailed") {
           this.validator_data.fields = [
-            { key: "name", label: "Name" },
-            { key: "address", label: "Address" },
+            { key: "addressWithName", label: "Address" },
             { key: "totalPoints", label: "Penalty Points" },
             { key: "jailedTime", label: "Jailed Time" },
             { key: "bailAmount", label: "Bail Amount" },
           ];
-          this.validator_data.items = res.jailed;
+          this.validator_data.items = res.jailed.map((j) => ({
+            ...j,
+            addressWithName: { address: j.address, name: j.name },
+          }));
         }
       } catch (e) {
         this.loading = false;

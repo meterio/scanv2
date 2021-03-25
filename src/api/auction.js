@@ -15,6 +15,25 @@ export default {
       `auctions/${auctionID}/bids?page=${page}&limit=${limit}`
     );
   },
+
+  getAutobidSummaries(auctionID, network) {
+    return get(network, `auctions/${auctionID}/autobidSummaries`);
+  },
+
+  getAutobids(epoch, network, page, limit) {
+    return get(
+      network,
+      `auctions/${epoch}/autobidSummaries?page=${page}&limit=${limit}`
+    );
+  },
+
+  getUserbids(auctionID, network, page, limit) {
+    return get(
+      network,
+      `auctions/${auctionID}/userbids?page=${page}&limit=${limit}`
+    );
+  },
+
   getAuction(network, auctionID) {
     return get(network, `auctions/${auctionID}`);
   }

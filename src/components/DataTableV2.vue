@@ -119,6 +119,11 @@
         </template>
 
         <!-- Address column template -->
+        <template v-slot:cell(addressWithName)="data">
+          <div class="dt-row">
+            <address-link :address="data.address" :name="data.name" />
+          </div>
+        </template>
         <template v-slot:cell(address)="data">
           <div class="dt-row">
             <address-link :address="data.value" :short="true" />

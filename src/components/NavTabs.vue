@@ -45,10 +45,22 @@ export default {
   border-bottom: 1px solid #ddd;
   .nav-item {
     font-size: 16px;
-    font-weight: bold;
     padding: 9px 12px;
     align-items: center;
     justify-content: center;
+    &:hover {
+      cursor: pointer;
+      background: #f0f2ff;
+      border-radius: 5px 5px 0 0;
+    }
+    &.active {
+      font-weight: bold;
+      color: #6171ff;
+      border-bottom: 2px solid #6171ff;
+      // border: 1px solid #ddd;
+      // border-bottom: none;
+      // border-radius: 5px 5px 0 0;
+    }
   }
   .col {
     flex: 1;

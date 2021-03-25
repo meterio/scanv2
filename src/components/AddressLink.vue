@@ -25,6 +25,10 @@ export default {
       type: String,
       default: "0x",
     },
+    name: {
+      type: String,
+      default: "",
+    },
     short: {
       type: Boolean,
       default: false,
@@ -44,6 +48,9 @@ export default {
       const knowns = this.$store.state.dom.knownAddresses;
       if (this.address.toLowerCase() in knowns) {
         return knowns[this.address.toLowerCase()];
+      }
+      if (this.name) {
+        return this.name;
       }
       if (this.short) {
         return this.shortAddr(this.address.toLowerCase(), 12);
