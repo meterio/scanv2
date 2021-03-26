@@ -18,6 +18,7 @@ import TopMTRAccountsPage from "@/pages/TopMTRAccounts.vue";
 import TopMTRGAccountsPage from "@/pages/TopMTRGAccounts.vue";
 import BucketPage from "@/pages/Bucket.vue";
 import AddressLinkPage from "@/pages/AddressLinkPage.vue";
+import StatPage from "@/pages/Stat.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
 import { DOMAIN_TITLE } from "../.env";
@@ -138,6 +139,19 @@ export const routes = [
     component: BucketPage,
     meta: { title: `${DOMAIN_TITLE} | Bucket` }
   },
+  {
+    path: "/stats",
+    name: "stats",
+    component: StatPage,
+    meta: { title: `${DOMAIN_TITLE} | Stat` }
+  },
+  {
+    path: "/stats/:address",
+    name: "statDetail",
+    component: StatPage,
+    meta: { title: `${DOMAIN_TITLE} | Stat` }
+  },
+
   {
     path: "*",
     component: notFoundPage,

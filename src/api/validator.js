@@ -3,7 +3,7 @@ import { get } from "@/utils/http";
 const validateTypeUrl = {
   Delegates: "validators/delegate",
   Candidates: "validators/candidate",
-  Jailed: "validators/jailed",
+  Jailed: "validators/jailed"
 };
 
 export default {
@@ -29,4 +29,8 @@ export default {
   getDelegators(network, address) {
     return get(network, `validators/${address}/delegators`);
   },
+
+  getStats(network) {
+    return get(network, `validators/stats`);
+  }
 };

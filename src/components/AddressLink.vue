@@ -45,12 +45,12 @@ export default {
       return randomHex();
     },
     text() {
+      if (this.name) {
+        return this.name;
+      }
       const knowns = this.$store.state.dom.knownAddresses;
       if (this.address.toLowerCase() in knowns) {
         return knowns[this.address.toLowerCase()];
-      }
-      if (this.name) {
-        return this.name;
       }
       if (this.short) {
         return this.shortAddr(this.address.toLowerCase(), 12);

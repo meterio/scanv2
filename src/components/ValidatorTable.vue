@@ -61,6 +61,19 @@
             />
           </div>
         </template>
+        <template v-slot:cell(totalPoints)="data">
+          <div class="dt-row">
+            <router-link
+              v-if="data.value.penalty > 0"
+              :to="{
+                name: 'statDetail',
+                params: { address: data.value.address },
+              }"
+              >{{ data.value.penalty }}</router-link
+            >
+            <span v-else>-</span>
+          </div>
+        </template>
         <template v-slot:cell(name)="data">
           <div class="dt-row" style="word-break: break-all">
             {{ data.value }}
@@ -87,7 +100,14 @@
 
         <template v-slot:cell()="data">
           <div class="dt-row">
-            <span>{{ data.value }}</span>
+            <!-- amount tag -->
+            <amount-tag
+              v-if="data.value.type == 'amount'"
+              :amount="data.value.amount"
+              :token="data.value.token"
+              :precision="data.value.precision"
+            />
+            <span v-else>{{ data.value }}</span>
           </div>
         </template>
       </b-table>
@@ -110,6 +130,7 @@
 <script>
 import Loading from "@/components/Loading";
 import AddressLink from "@/components/AddressLink";
+import AmountTag from "@/components/AmountTag";
 import { fromNow, formatTime } from "@/utils";
 
 export default {
@@ -118,7 +139,7 @@ export default {
     return {
       sortBy: "votingPowerStr",
       sortDesc: true,
-      page_size: 20,
+      page_size: 15,
       loading: true,
       current_tab: "Delegates",
       tabs: ["Delegates", "Candidates", "Jailed"],
@@ -133,6 +154,7 @@ export default {
   },
   components: {
     Loading,
+    AmountTag,
     AddressLink,
   },
   watch: {
@@ -176,26 +198,40 @@ export default {
         if (this.current_tab === "Delegates") {
           this.validator_data.fields = [
             { key: "addressWithName", label: "Address" },
-            { key: "votingPowerStr", label: "Total Votes" },
+            { key: "votingPower", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
             // { key: "shares%", label: "Pool Share%" },
             { key: "totalPoints", label: "Penalty Points" },
           ];
           this.validator_data.items = res.delegates.map((d) => ({
             ...d,
+            votingPower: {
+              type: "amount",
+              amount: d.votingPower,
+              token: "MTRG",
+              precision: 2,
+            },
             addressWithName: { address: d.address, name: d.name },
+            totalPoints: { address: d.address, penalty: d.totalPoints },
           }));
         }
         if (this.current_tab === "Candidates") {
           this.validator_data.fields = [
             { key: "addressWithName", label: "Address" },
-            { key: "totalVotesStr", label: "Total Votes" },
+            { key: "totalVotes", label: "Total Votes" },
             { key: "commission%", label: "Commission Rate" },
             { key: "totalPoints", label: "Penalty Points" },
           ];
           this.validator_data.items = res.candidates.map((c) => ({
             ...c,
+            totalVotes: {
+              type: "amount",
+              amount: c.totalVotes,
+              token: "MTRG",
+              precision: 2,
+            },
             addressWithName: { address: c.address, name: c.name },
+            totalPoints: { address: c.address, penalty: c.totalPoints },
           }));
         }
         if (this.current_tab === "Jailed") {
@@ -208,6 +244,7 @@ export default {
           this.validator_data.items = res.jailed.map((j) => ({
             ...j,
             addressWithName: { address: j.address, name: j.name },
+            totalPoints: { address: j.address, penalty: j.totalPoints },
           }));
         }
       } catch (e) {
