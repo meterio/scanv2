@@ -178,10 +178,12 @@ export default {
       try {
         const key = this.searchKey.replace(/\r?\n|\r/g, "");
         this.searchKey = key;
-        const { type } = await this.$api.search.searchKeyWord(
+        const res = await this.$api.search.searchKeyWord(
           this.network,
           this.searchKey
         );
+        const { type } = res;
+        console.log(res);
         let jump_url = "";
         if (type === "tx") {
           jump_url = `/tx/${this.searchKey}`;

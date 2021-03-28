@@ -85,9 +85,11 @@ export default {
   font-weight: bold;
 }
 .badge {
+  font-weight: bold;
   font-size: 11px !important;
 }
-.badge-light.badge-mtrg {
-  border: 1px solid #e2e3e5;
+.badge-light {
+  background: darken(#f8f9fa, 2%);
+  // border: 1px solid #e2e3e5;
 }
 </style>

@@ -108,93 +108,10 @@ export default {
     };
   },
   async mounted() {
-    const { hash } = this.$route.params;
-    const res = await this.$api.transaction.getTxDetail(this.network, hash);
-    this.loading = false;
-    const { tx, summary } = res;
-    if (!!summary) {
-      this.summary = [
-        { key: "Hash", value: summary.hash },
-        { key: "Type", value: summary.type },
-        { key: "Origin", value: summary.origin, type: "address-link" },
-        {
-          key: "Amount",
-          value: summary.totalClauseAmount,
-          type: "amount",
-          token: summary.token,
-        },
-        { key: "Fee", value: summary.paid, type: "amount", token: "MTR" },
-        {
-          key: "Result",
-          value: summary.reverted ? "reverted" : "success",
-          type: "status",
-        },
-        { key: "Clause Count", value: summary.clauseCount },
-        { key: "Block", value: summary.block.number, type: "block-link" },
-      ];
-    }
-    this.tx = tx;
-    let clauses = [];
-    if (tx.clauseCount > 0) {
-      let index = 1;
-      clauses = tx.clauses.map((c) => {
-        let decoded = undefined;
-        let hint = "";
-
-        try {
-          const se = ScriptEngine;
-          // try decode account-lock data
-          if (se.IsScriptEngineData(c.data)) {
-            const scriptData = se.decodeScriptData(
-              Buffer.from(c.data.replace("0xffffffff", ""), "hex")
-            );
-            if (scriptData.header.modId === se.ModuleID.AccountLock) {
-              const body = se.decodeAccountLockBody(scriptData.payload);
-              decoded = se.jsonFromAccountLockBody(body);
-              hint = se.explainAccountLockOpCode(body.opCode);
-            } else if (scriptData.header.modId === se.ModuleID.Auction) {
-              const body = se.decodeAuctionBody(scriptData.payload);
-              decoded = se.jsonFromAuctionBody(body);
-              hint = se.explainAuctionOpCode(body.opCode, body.option);
-            } else if (scriptData.header.modId === se.ModuleID.Staking) {
-              const body = se.decodeStakingBody(scriptData.payload);
-              decoded = se.jsonFromStakingBody(body);
-              hint = se.explainStakingOpCode(body.opCode);
-            }
-          }
-        } catch (e) {
-          console.log(e);
-        }
-
-        return {
-          ...c,
-          data: hint ? `${c.data} (${hint})` : c.data,
-          amount: {
-            type: "amount",
-            amount: bigNum(c.value),
-            token: c.token,
-            precision: 6,
-          },
-          index: index++,
-          decoded,
-          hint,
-        };
-      });
-    }
-    this.clauses.items = clauses;
-    this.transfers.items = tx.transfers.map((tr) => {
-      return {
-        from: tr.sender,
-        to: tr.recipient,
-        amountStr: {
-          type: "amount",
-          amount: bigNum(tr.amount),
-          token: tr.token == 0 ? "MTR" : "MTRG",
-          precision: 8,
-        },
-      };
-    });
-    this.events.items = tx.events;
+    await this.init();
+  },
+  async updated() {
+    await this.init();
   },
   computed: {
     items() {
@@ -223,6 +140,95 @@ export default {
   methods: {
     navTabChange(val) {
       this.tabValue = val;
+    },
+    async init() {
+      const { hash } = this.$route.params;
+      const res = await this.$api.transaction.getTxDetail(this.network, hash);
+      this.loading = false;
+      const { tx, summary } = res;
+      if (!!summary) {
+        this.summary = [
+          { key: "Hash", value: summary.hash },
+          { key: "Type", value: summary.type },
+          { key: "Origin", value: summary.origin, type: "address-link" },
+          {
+            key: "Amount",
+            value: summary.totalClauseAmount,
+            type: "amount",
+            token: summary.token,
+          },
+          { key: "Fee", value: summary.paid, type: "amount", token: "MTR" },
+          {
+            key: "Result",
+            value: summary.reverted ? "reverted" : "success",
+            type: "status",
+          },
+          { key: "Clause Count", value: summary.clauseCount },
+          { key: "Block", value: summary.block.number, type: "block-link" },
+        ];
+      }
+      this.tx = tx;
+      let clauses = [];
+      if (tx.clauseCount > 0) {
+        let index = 1;
+        clauses = tx.clauses.map((c) => {
+          let decoded = undefined;
+          let hint = "";
+
+          try {
+            const se = ScriptEngine;
+            // try decode account-lock data
+            if (se.IsScriptEngineData(c.data)) {
+              const scriptData = se.decodeScriptData(
+                Buffer.from(c.data.replace("0xffffffff", ""), "hex")
+              );
+              if (scriptData.header.modId === se.ModuleID.AccountLock) {
+                const body = se.decodeAccountLockBody(scriptData.payload);
+                decoded = se.jsonFromAccountLockBody(body);
+                hint = se.explainAccountLockOpCode(body.opCode);
+              } else if (scriptData.header.modId === se.ModuleID.Auction) {
+                const body = se.decodeAuctionBody(scriptData.payload);
+                decoded = se.jsonFromAuctionBody(body);
+                hint = se.explainAuctionOpCode(body.opCode, body.option);
+              } else if (scriptData.header.modId === se.ModuleID.Staking) {
+                const body = se.decodeStakingBody(scriptData.payload);
+                decoded = se.jsonFromStakingBody(body);
+                hint = se.explainStakingOpCode(body.opCode);
+              }
+            }
+          } catch (e) {
+            console.log(e);
+          }
+
+          return {
+            ...c,
+            data: hint ? `${c.data} (${hint})` : c.data,
+            amount: {
+              type: "amount",
+              amount: bigNum(c.value),
+              token: c.token,
+              precision: 6,
+            },
+            index: index++,
+            decoded,
+            hint,
+          };
+        });
+      }
+      this.clauses.items = clauses;
+      this.transfers.items = tx.transfers.map((tr) => {
+        return {
+          from: tr.sender,
+          to: tr.recipient,
+          amountStr: {
+            type: "amount",
+            amount: bigNum(tr.amount),
+            token: tr.token == 0 ? "MTR" : "MTRG",
+            precision: 8,
+          },
+        };
+      });
+      this.events.items = tx.events;
     },
   },
 };

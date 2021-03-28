@@ -41,9 +41,7 @@ export default {
       const items = epochs.map((e) => {
         return {
           ...e,
-          duration: e.active
-            ? 0
-            : formatDuration(1000 * (e.endTime - e.startTime)),
+          duration: e.active ? 0 : 1000 * (e.endTime - e.startTime),
           endKBlock: e.endKBlock == 0 ? -1 : e.endKBlock,
         };
       });
