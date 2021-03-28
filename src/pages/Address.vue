@@ -300,9 +300,16 @@ export default {
       );
       const { transfers, totalRows } = res;
       const items = transfers.map((t) => {
+        let direct = "";
+        if (t.from.toLowerCase() === t.to.toLowerCase()) {
+          direct = "Self";
+        } else {
+          direct =
+            t.to.toLowerCase() === this.address.toLowerCase() ? "In" : "Out";
+        }
         return {
           from: t.from,
-          direct: t.to === this.address ? "In" : "Out",
+          direct,
           to: t.to,
           amount: {
             type: "amount",
@@ -322,11 +329,23 @@ export default {
       const res = await this.$api.account.getTxs(network, address, page, limit);
       const { txSummaries, totalRows } = res;
       const items = txSummaries.map((t) => {
+        let direct = "";
+        if (
+          t.clauseCount === 1 &&
+          t.origin.toLowerCase() === t.majorTo.toLowerCase()
+        ) {
+          direct = "Self";
+        } else {
+          direct =
+            t.origin.toLowerCase() === this.address.toLowerCase()
+              ? "Out"
+              : "In";
+        }
         return {
           txhash: t.hash,
           blocknum: t.block.number,
           from: t.origin,
-          direct: t.origin === this.address ? "Out" : "In",
+          direct,
           to: t.majorTo || "nobody",
           amount: {
             type: "amount",

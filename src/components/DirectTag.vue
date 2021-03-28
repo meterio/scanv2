@@ -12,8 +12,10 @@ export default {
     status() {
       if (this.direct.toLowerCase() === "in") {
         return "success";
-      } else {
+      } else if (this.direct.toLowerCase() === "out") {
         return "warning";
+      } else {
+        return "grey";
       }
     },
   },
@@ -23,22 +25,11 @@ export default {
 <style lang="scss">
 // badge
 .badge-status {
-  padding: 0.4rem 0.8rem !important;
+  padding: 0.3rem 0.6rem !important;
   font-size: 90% !important;
 
   svg {
     margin-right: 0.2rem;
-  }
-
-  &.badge-info {
-    color: #0c5460;
-    background-color: #d1ecf1;
-    border-color: #bee5eb;
-  }
-
-  &.badge-primary {
-    color: #6171ff;
-    background-color: #e9f2ff;
   }
 
   &.badge-success {
@@ -46,10 +37,11 @@ export default {
     background-color: rgba(32, 172, 105, 0.12);
   }
 
-  &.badge-failed {
-    color: rgba(244, 133, 133, 01);
-    background-color: rgba(244, 133, 133, 0.12);
+  &.badge-grey {
+    color: #626c76;
+    background-color: rgba(119, 131, 143, 0.12);
   }
+
   &.badge-warning {
     color: #856404;
     background-color: #fff3cd;
