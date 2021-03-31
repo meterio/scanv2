@@ -24,6 +24,7 @@
 import DataTableV2 from "@/components/DataTableV2.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
+import BigNumber from "bignumber.js";
 export default {
   name: "Address",
   components: {
@@ -216,6 +217,20 @@ export default {
         );
 
         const { account } = res;
+        if (this.address === "0x0000000000000000000000000000000000000000") {
+          if (new BigNumber(account.mtrgBalance).isLessThan(0)) {
+            account.mtrgBalance = "0";
+          }
+          if (new BigNumber(account.mtrgBounded).isLessThan(0)) {
+            account.mtrgBounded = "0";
+          }
+          if (new BigNumber(account.mtrBalance).isLessThan(0)) {
+            account.mtrBalance = "0";
+          }
+          if (new BigNumber(account.mtrBounded).isLessThan(0)) {
+            account.mtrBounded = "0";
+          }
+        }
         this.summary = this.summary.concat([
           // { key: "Address", value: account.address },
 
