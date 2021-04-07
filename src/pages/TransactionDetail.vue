@@ -65,6 +65,19 @@ import { ScriptEngine } from "@meterio/devkit/dist/scriptEngine";
 import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
 import { bigNum } from "@/utils";
+import { abi } from "@meterio/devkit";
+import BigNumber from "bignumber.js";
+
+const TransferABI = new abi.Event({
+  anonymous: false,
+  inputs: [
+    { indexed: true, name: "_from", type: "address" },
+    { indexed: true, name: "_to", type: "address" },
+    { indexed: false, name: "_value", type: "uint256" },
+  ],
+  name: "Transfer",
+  type: "event",
+});
 
 export default {
   components: {
@@ -229,6 +242,38 @@ export default {
         };
       });
       this.events.items = tx.events;
+      let transferHighlights = [];
+      const tokens = this.$store.state.dom.knownTokens;
+      for (const ev of tx.events) {
+        const { topics, address, data } = ev;
+        if (topics && topics.length > 1) {
+          const topic0 = topics[0];
+
+          if (topic0 === TransferABI.signature) {
+            const decoded = TransferABI.decode(data, topics);
+            let token = tokens[address];
+            console.log("TOKEN: ", token);
+            if (!token) {
+              token = "ERC20";
+            }
+            transferHighlights.push({
+              address,
+              from: decoded._from,
+              to: decoded._to,
+              amount: new BigNumber(decoded._value).toFixed(),
+              token,
+              decimals: 18,
+            });
+          }
+        }
+      }
+      if (transferHighlights.length > 0) {
+        this.summary.push({
+          key: "Token Transfers",
+          value: transferHighlights,
+          type: "transfer-highlight",
+        });
+      }
     },
   },
 };

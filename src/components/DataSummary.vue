@@ -101,13 +101,31 @@
           <span v-if="item.type === 'duration'">
             <span>{{ formatDuration(item.value) }}</span>
           </span>
-          <!-- status -->
+          <!-- amount -->
           <span v-if="item.type === 'amount'">
             <AmountTag
               :amount="item.value"
               :token="item.token"
               :precision="item.precision"
             ></AmountTag>
+          </span>
+
+          <!-- status -->
+          <span v-if="item.type === 'transfer-highlight'">
+            <div
+              class="d-flex justify-content-start"
+              :key="index"
+              v-for="(row, index) in item.value"
+            >
+              <address-link class="mr-3" short :address="row.from" />
+              <span class="mr-3">to</span>
+              <address-link class="mr-3" short :address="row.to" />
+              <AmountTag
+                :amount="row.amount"
+                :token="row.token"
+                :precision="row.decimals"
+              />
+            </div>
           </span>
 
           <!-- status -->

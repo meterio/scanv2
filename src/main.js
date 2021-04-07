@@ -161,6 +161,12 @@ new Vue({
       knowns[StakingModuleAddress] = "Staking Engine";
       knowns[ValidatorBenefitAddress] = "Staking Reward";
     }
+    let tokens = {};
+    if (this.network == "main") {
+      tokens["0x687a6294d0d6d63e751a059bf1ca68e4ae7b13e2"] = "MTR";
+      tokens["0x228ebbee999c6a7ad74a6130e81b12f9fe237ba3"] = "MTRG";
+    }
+
     // try {
     //   const res = await this.$api.known.getAddresses(this.network);
     //   const { addresses } = res;
@@ -171,6 +177,7 @@ new Vue({
     //   console.log("ignore issue for getting known addresses");
     // }
     store.commit("dom/SET_KNOWN_ADDRESSES", knowns);
+    store.commit("dom/SET_KNOWN_TOKENS", tokens);
     store.commit("dom/SET_WINDOW_WIDTH", window.innerWidth);
     window.addEventListener("resize", () =>
       store.commit("dom/SET_WINDOW_WIDTH", window.innerWidth)

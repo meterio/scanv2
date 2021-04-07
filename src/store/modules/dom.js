@@ -13,6 +13,7 @@ export default {
     widthSmall: 640,
     widthTablet: 1024,
     knownAddresses: {},
+    knownTokens: {},
     network:
       process.env.NODE_ENV === "development"
         ? "test"
@@ -32,6 +33,10 @@ export default {
     },
     SET_KNOWN_ADDRESSES(state, valMap) {
       state.knownAddresses = valMap;
+    },
+    SET_KNOWN_TOKENS(state, valMap) {
+      console.log("SET KNOWN TOKENS", "WITH: ", valMap);
+      state.knownTokens = valMap;
     }
   },
   actions: {
