@@ -268,7 +268,10 @@ export default {
             }
             transferHighlights.push({
               address,
-              from: address,
+              from:
+                decoded._from === "0x0000000000000000000000000000000000000000"
+                  ? address
+                  : decoded._from,
               to: decoded._to,
               amount: new BigNumber(decoded._value).toFixed(),
               token: sym,
