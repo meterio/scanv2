@@ -17,7 +17,7 @@
             class="link"
             :to="{
               name: 'address',
-              params: { address: data.value },
+              params: { address: data.value }
             }"
             >{{ data.value }}</router-link
           >
@@ -73,10 +73,10 @@ const TransferABI = new abi.Event({
   inputs: [
     { indexed: true, name: "_from", type: "address" },
     { indexed: true, name: "_to", type: "address" },
-    { indexed: false, name: "_value", type: "uint256" },
+    { indexed: false, name: "_value", type: "uint256" }
   ],
   name: "Transfer",
-  type: "event",
+  type: "event"
 });
 
 export default {
@@ -84,7 +84,7 @@ export default {
     NavTabs,
     DataSummary,
     DataTableV2,
-    VueJsonPretty,
+    VueJsonPretty
   },
   data() {
     return {
@@ -98,34 +98,33 @@ export default {
           { key: "index", label: "Index" },
           { key: "to", label: "To" },
           { key: "amount", label: "Amount" },
-          { key: "data", label: "Data" },
+          { key: "data", label: "Data" }
         ],
-        items: [],
+        items: []
       },
       transfers: {
         fields: [
           { key: "from", label: "Sender" },
           { key: "to", label: "Recipient" },
-          { key: "amountStr", label: "Amount" },
+          { key: "amountStr", label: "Amount" }
         ],
-        items: [],
+        items: []
       },
       events: {
         fields: [
           { key: "address", label: "Contract Address" },
-          { key: "topics", label: "Topics" },
-          { key: "data", label: "Data" },
+          { key: "details", label: "Details" }
         ],
-        items: [],
-      },
+        items: []
+      }
     };
   },
   async mounted() {
     await this.init();
   },
-  async updated() {
-    await this.init();
-  },
+  // async updated() {
+  // await this.init();
+  // },
   computed: {
     items() {
       switch (this.tabValue) {
@@ -148,7 +147,7 @@ export default {
           return this.events.fields;
       }
       return this.clauses.fields;
-    },
+    }
   },
   methods: {
     navTabChange(val) {
@@ -158,7 +157,7 @@ export default {
       const { hash } = this.$route.params;
       const res = await this.$api.transaction.getTxDetail(this.network, hash);
       this.loading = false;
-      const { tx, summary } = res;
+      const { tx, summary, tokens } = res;
       if (!!summary) {
         this.summary = [
           { key: "Hash", value: summary.hash },
@@ -168,23 +167,23 @@ export default {
             key: "Amount",
             value: summary.totalClauseAmount,
             type: "amount",
-            token: summary.token,
+            token: summary.token
           },
           { key: "Fee", value: summary.paid, type: "amount", token: "MTR" },
           {
             key: "Result",
             value: summary.reverted ? "reverted" : "success",
-            type: "status",
+            type: "status"
           },
           { key: "Clause Count", value: summary.clauseCount },
-          { key: "Block", value: summary.block.number, type: "block-link" },
+          { key: "Block", value: summary.block.number, type: "block-link" }
         ];
       }
       this.tx = tx;
       let clauses = [];
       if (tx.clauseCount > 0) {
         let index = 1;
-        clauses = tx.clauses.map((c) => {
+        clauses = tx.clauses.map(c => {
           let decoded = undefined;
           let hint = "";
 
@@ -220,16 +219,16 @@ export default {
               type: "amount",
               amount: bigNum(c.value),
               token: c.token,
-              precision: 6,
+              precision: 6
             },
             index: index++,
             decoded,
-            hint,
+            hint
           };
         });
       }
       this.clauses.items = clauses;
-      this.transfers.items = tx.transfers.map((tr) => {
+      this.transfers.items = tx.transfers.map(tr => {
         return {
           from: tr.sender,
           to: tr.recipient,
@@ -237,13 +236,19 @@ export default {
             type: "amount",
             amount: bigNum(tr.amount),
             token: tr.token == 0 ? "MTR" : "MTRG",
-            precision: 8,
-          },
+            precision: 8
+          }
         };
       });
-      this.events.items = tx.events;
+      this.events.items = tx.events.map(e => ({
+        address: e.address,
+        details: {
+          topics: e.topics,
+          data: e.data
+        }
+      }));
       let transferHighlights = [];
-      const tokens = this.$store.state.dom.knownTokens;
+      const knownTokens = this.$store.state.dom.knownTokens;
       for (const ev of tx.events) {
         const { topics, address, data } = ev;
         if (topics && topics.length > 1) {
@@ -252,17 +257,22 @@ export default {
           if (topic0 === TransferABI.signature) {
             const decoded = TransferABI.decode(data, topics);
             let token = tokens[address];
-            console.log("TOKEN: ", token);
-            if (!token) {
-              token = "ERC20";
+            if (!token && address in knownTokens) {
+              token = knownTokens[address];
+            }
+            let sym = "ERC20";
+            let decimals = 18;
+            if (token) {
+              sym = token.symbol;
+              decimals = token.decimals;
             }
             transferHighlights.push({
               address,
-              from: decoded._from,
+              from: address,
               to: decoded._to,
               amount: new BigNumber(decoded._value).toFixed(),
-              token,
-              decimals: 18,
+              token: sym,
+              decimals
             });
           }
         }
@@ -271,11 +281,11 @@ export default {
         this.summary.push({
           key: "Token Transfers",
           value: transferHighlights,
-          type: "transfer-highlight",
+          type: "transfer-highlight"
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

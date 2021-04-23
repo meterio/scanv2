@@ -74,7 +74,6 @@ export default {
         .dividedBy(mtrg.circulation)
         .times(100)
         .toFixed();
-      console.log("x = ", x);
       this.data = [
         [
           {

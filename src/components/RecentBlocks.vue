@@ -71,8 +71,6 @@
 
 <script>
 import Loading from "@/components/Loading";
-import { fromNow, shortAddress } from "@/utils";
-import { setInterval } from "timers";
 import { mapActions } from "vuex";
 
 export default {
@@ -85,18 +83,15 @@ export default {
       loading: true,
       recent_blocks: [],
       time: null,
+      running: false,
     };
   },
   async mounted() {
+    this.running = true;
     this.initData();
-    this.clearTime();
-    const me = this;
-    this.time = setInterval(function () {
-      me.initData();
-    }, 3000);
   },
   async beforeDestroy() {
-    this.clearTime();
+    this.running = false;
   },
   methods: {
     ...mapActions(["configVal"]),
@@ -114,10 +109,8 @@ export default {
       } catch (e) {
         this.loading = false;
       }
-    },
-    clearTime() {
-      if (this.time) {
-        clearInterval(this.time);
+      if (this.running) {
+        setTimeout(this.initData, 3000);
       }
     },
   },

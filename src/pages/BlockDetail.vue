@@ -124,7 +124,6 @@ export default {
           };
         });
       }
-      console.log(items);
       this.txs.items = items;
       this.loading = false;
     },

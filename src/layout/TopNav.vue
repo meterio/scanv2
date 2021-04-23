@@ -183,7 +183,6 @@ export default {
           this.searchKey
         );
         const { type } = res;
-        console.log(res);
         let jump_url = "";
         if (type === "tx") {
           jump_url = `/tx/${this.searchKey}`;

@@ -29,13 +29,16 @@ export const numFilter = val => {
 export const fromWei = (
   val /* number|string|BigNumber */,
   precision = -1,
-  symbol = ""
+  symbol = "",
+  decimals = 18
 ) => {
   let p = undefined;
   if (precision >= 0) {
     p = precision;
   }
-  const num = new BigNumber(val).dividedBy(UNIT_WEI).toFixed(p);
+  const num = new BigNumber(val)
+    .dividedBy("1" + "0".repeat(decimals))
+    .toFixed(p);
   const numStr = commaSeparated(num);
   if (symbol !== "") {
     return numStr + " " + symbol;

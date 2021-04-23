@@ -94,7 +94,6 @@ export default {
   },
   methods: {
     navTabChange(val) {
-      console.log("VAL: ", val);
       this.tabValue = val;
     },
     async loadUserbids(network, page, limit) {

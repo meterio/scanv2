@@ -23,6 +23,10 @@ export default {
       type: Number,
       default: -1,
     },
+    decimals: {
+      type: Number,
+      default: 18,
+    },
   },
   data() {
     return {
@@ -45,7 +49,7 @@ export default {
   },
   methods: {
     init() {
-      const items = fromWei(this.amount, -1).split(".");
+      const items = fromWei(this.amount, -1, "", this.decimals).split(".");
       if (items.length == 1) {
         this.integer = items[0];
         this.mantissa = "";

@@ -78,7 +78,6 @@ export default {
           this.options = [];
         }
         if (address) {
-          console.log("address = ", address);
           this.selected = address.toLowerCase();
         }
       } catch (e) {

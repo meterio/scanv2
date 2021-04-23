@@ -124,6 +124,7 @@
                 :amount="row.amount"
                 :token="row.token"
                 :precision="row.decimals"
+                :decimals="row.decimals"
               />
             </div>
           </span>

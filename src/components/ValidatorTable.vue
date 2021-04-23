@@ -179,7 +179,6 @@ export default {
       this.loadData();
     },
     pageChange(val) {
-      console.log("page pg", val);
       this.current_page = val;
       this.loading = true;
       this.loadData();

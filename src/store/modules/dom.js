@@ -35,7 +35,7 @@ export default {
       state.knownAddresses = valMap;
     },
     SET_KNOWN_TOKENS(state, valMap) {
-      console.log("SET KNOWN TOKENS", "WITH: ", valMap);
+      console.log("KNOWN TOKENS", valMap);
       state.knownTokens = valMap;
     }
   },

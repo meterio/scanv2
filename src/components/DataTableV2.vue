@@ -239,6 +239,20 @@
           </div>
         </template>
 
+        <!-- Pos Reward template -->
+        <template v-slot:cell(details)="data">
+          <div class="dt-row">
+            <div v-for="(topic, index) in data.value.topics" :key="index">
+              <span class="mr-1">topic {{ index }}:</span>
+              <span>{{ topic }}</span>
+            </div>
+            <div class="mt-3">
+              <span class="mr-1">data:</span>
+              <span>{{ data.value.data }}</span>
+            </div>
+          </div>
+        </template>
+
         <!-- default template -->
         <template v-slot:cell()="data">
           <div class="dt-row">

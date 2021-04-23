@@ -126,6 +126,31 @@ new Vue({
   router,
   store,
   async mounted() {
+    // set known tokens
+    let knownTokens = {};
+    if (this.network == "main") {
+      knownTokens["0x687a6294d0d6d63e751a059bf1ca68e4ae7b13e2"] = "MTR";
+      knownTokens["0x228ebbee999c6a7ad74a6130e81b12f9fe237ba3"] = "MTRG";
+    } else if (this.network == "test") {
+      knownTokens[
+        "0x8A419EF4941355476CF04933E90BF3BBF2F73814".toLowerCase()
+      ] = {
+        symbol: "MTRG",
+        decimals: 18
+      };
+    }
+    try {
+      const res = await this.$api.known.getTokens(this.network);
+      const { tokens } = res;
+      for (const k of tokens) {
+        knownTokens[k.address.toLowerCase()] = k;
+      }
+    } catch (e) {
+      console.log("ignore issue for getting known addresses");
+    }
+    store.commit("dom/SET_KNOWN_TOKENS", knownTokens);
+
+    // set known addresses
     let knowns = {};
     if (this.network == "main") {
       knowns["0xe9061c2517bba8a7e2d2c20053cd8323b577efe7"] = "Foundation Ops";
@@ -161,11 +186,6 @@ new Vue({
       knowns[StakingModuleAddress] = "Staking Engine";
       knowns[ValidatorBenefitAddress] = "Staking Reward";
     }
-    let tokens = {};
-    if (this.network == "main") {
-      tokens["0x687a6294d0d6d63e751a059bf1ca68e4ae7b13e2"] = "MTR";
-      tokens["0x228ebbee999c6a7ad74a6130e81b12f9fe237ba3"] = "MTRG";
-    }
 
     // try {
     //   const res = await this.$api.known.getAddresses(this.network);
@@ -176,8 +196,8 @@ new Vue({
     // } catch (e) {
     //   console.log("ignore issue for getting known addresses");
     // }
+
     store.commit("dom/SET_KNOWN_ADDRESSES", knowns);
-    store.commit("dom/SET_KNOWN_TOKENS", tokens);
     store.commit("dom/SET_WINDOW_WIDTH", window.innerWidth);
     window.addEventListener("resize", () =>
       store.commit("dom/SET_WINDOW_WIDTH", window.innerWidth)

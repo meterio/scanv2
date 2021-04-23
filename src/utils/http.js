@@ -109,14 +109,13 @@ axios.interceptors.response.use(
  * @param {Object} params [请求时携带的参数]
  */
 export function get(network, url, params) {
-  console.log(`http get | network: ${network}, url: ${url}`);
   if (!(network in API_BASE)) {
     throw Error(`Invalid network: ${network} for ${url}`);
   }
   const base = API_BASE[network];
+  console.log(`network:${network} GET: ${base}${url} ${params ? params : ""}`);
   axios.defaults.baseURL = base;
   return new Promise((resolve, reject) => {
-    console.log(base, url, params);
     axios
       .get(url, { params })
       .then(res => {
