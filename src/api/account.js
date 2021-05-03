@@ -40,5 +40,8 @@ export default {
       network,
       `accounts/${address}/proposed?page=${page}&limit=${limit}`
     );
+  },
+  getHolders(network, address) {
+    return get(network, `accounts/${address}/holders`);
   }
 };

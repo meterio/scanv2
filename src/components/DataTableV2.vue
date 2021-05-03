@@ -262,6 +262,7 @@
               :amount="data.value.amount"
               :token="data.value.token"
               :precision="data.value.precision"
+              :decimals="data.value.decimals || 18"
             />
             <router-link
               v-if="data.value.type == 'block'"
@@ -271,6 +272,9 @@
                 params: { revision: data.value.block },
               }"
               >#{{ data.value.block }}</router-link
+            >
+            <label v-if="data.value.type == 'percentage'"
+              >{{ Math.round(data.value.amount * 1000) / 10 }}%</label
             >
 
             <span v-if="!data.value.type">{{ data.value }}</span>

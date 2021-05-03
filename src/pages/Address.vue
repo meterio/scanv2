@@ -1,6 +1,6 @@
 <template lang="pug">
 .detail-page
-  data-summary(:title="'Address: ' + address", :data="summary")
+  data-summary(:title="title", :data="summary")
 
   b-container.summary
     #b-card.mt-2pert.px-5
@@ -14,7 +14,7 @@
     )
       div(slot="header")
         nav-tabs.px-0(
-          :tabs="address_tabs",
+          :tabs="tabs",
           :value="tabValue",
           @changeTab="navTabChange"
         )
@@ -33,6 +33,21 @@ export default {
     DataSummary,
   },
   computed: {
+    title() {
+      if (this.isContract) {
+        if (this.isERC20) {
+          return `Token: ${this.address}`;
+        } else {
+          return `Contract: ${this.address}`;
+        }
+      } else {
+        return `Address: ${this.address}`;
+      }
+    },
+    tabs() {
+      console.log(this.isContract);
+      return this.isContract ? this.contract_tabs : this.address_tabs;
+    },
     fields() {
       switch (this.loadTarget) {
         case "transfers":
@@ -47,6 +62,8 @@ export default {
           return this.proposedBlocks.fields;
         case "buckets":
           return this.buckets.fields;
+        case "holders":
+          return this.holders.fields;
       }
       return this.txs.fields;
     },
@@ -64,6 +81,8 @@ export default {
           return this.proposedBlocks.pagination;
         case "buckets":
           return this.buckets.pagination;
+        case "holders":
+          return this.holders.pagination;
       }
       return this.txs.pagination;
     },
@@ -81,6 +100,8 @@ export default {
           return this.loadProposed;
         case "buckets":
           return this.loadBuckets;
+        case "holders":
+          return this.loadHolders;
       }
       return this.loadTxs;
     },
@@ -95,13 +116,26 @@ export default {
         { name: "Proposed Blocks" },
         { name: "Buckets" },
       ],
+      contract_tabs: [
+        { name: "Transfers" },
+        { name: "Transactions" },
+        { name: "Holders" },
+      ],
       tabValue: 0,
-      name: "",
+      isContract: false,
+      isToken: false,
       address: "0x",
       summary: [],
       account: {},
       loadTarget: "transfers",
-
+      holders: {
+        pagination: { show: true, align: "center", perPage: 20 },
+        fields: [
+          { key: "fullAddress", label: "Holder Address" },
+          { key: "balance", label: "Amount" },
+          { key: "percentage", label: "Percentage" },
+        ],
+      },
       transfers: {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
@@ -177,46 +211,59 @@ export default {
     navTabChange(val) {
       this.current_tab_index = val;
       this.tabValue = val;
-      switch (val) {
-        case 0:
-          this.loadTarget = "transfers";
-          break;
-        case 1:
-          this.loadTarget = "txs";
-          break;
-        case 2:
-          this.loadTarget = "erc20Txs";
-          break;
-        case 3:
-          this.loadTarget = "bids";
-          break;
-        case 4:
-          this.loadTarget = "proposedBlocks";
-          break;
-        case 5:
-          this.loadTarget = "buckets";
-          break;
-        default:
-          this.loadTarget = "transfers";
+      if (!this.isContract) {
+        switch (val) {
+          case 0:
+            this.loadTarget = "transfers";
+            break;
+          case 1:
+            this.loadTarget = "txs";
+            break;
+          case 2:
+            this.loadTarget = "erc20Txs";
+            break;
+          case 3:
+            this.loadTarget = "bids";
+            break;
+          case 4:
+            this.loadTarget = "proposedBlocks";
+            break;
+          case 5:
+            this.loadTarget = "buckets";
+            break;
+          default:
+            this.loadTarget = "transfers";
+        }
+      } else {
+        switch (val) {
+          case 0:
+            this.loadTarget = "transfers";
+            break;
+          case 1:
+            this.loadTarget = "txs";
+            break;
+          case 2:
+            this.loadTarget = "holders";
+            break;
+          default:
+            this.loadTarget = "transfers";
+        }
       }
     },
     async loadAddress() {
       try {
         const { address } = this.$route.params;
         this.address = address;
-        const knowns = this.$store.state.dom.knownAddresses;
         this.summary = [];
 
-        if (this.address.toLowerCase() in knowns) {
-          this.name = knowns[this.address.toLowerCase()];
-          this.summary.push({ key: "Name", value: this.name });
-        }
         const res = await this.$api.account.getAccountDetail(
           this.network,
           address
         );
 
         const { account } = res;
+        this.isContract = !!account.isContract;
+        this.isERC20 = !!account.isERC20;
         if (this.address === "0x0000000000000000000000000000000000000000") {
           if (new BigNumber(account.mtrgBalance).isLessThan(0)) {
             account.mtrgBalance = "0";
@@ -233,7 +280,6 @@ export default {
         }
         this.summary = this.summary.concat([
           // { key: "Address", value: account.address },
-
           {
             key: "MTRG Balance",
             value: account.mtrgBalance,
@@ -275,6 +321,36 @@ export default {
             block: account.lastUpdate.number,
           });
         }
+        if (account.hasCode) {
+          this.summary.push({ key: "Type", value: "Contract" });
+        }
+        if (account.isERC20) {
+          this.summary.push({
+            key: "ERC20 Token",
+            value: `${account.tokenName || "Unnamed Token"} (${
+              account.tokenSymbol || "ERC20"
+            })`,
+          });
+          this.summary.push({
+            key: "Decimals",
+            value: account.decimals || 18,
+          });
+          if (account.circulation) {
+            this.summary.push({
+              key: "Circulation",
+              type: "amount",
+              value: account.circulation,
+              token: account.tokenSymbol,
+              decimals: account.tokenDecimals,
+            });
+          }
+          if (account.holdersCount) {
+            this.summary.push({
+              key: "Holders Count",
+              value: account.holdersCount,
+            });
+          }
+        }
         this.account = account;
       } catch (e) {
         console.log(e);
@@ -305,6 +381,31 @@ export default {
       });
       return { items, totalRows };
     },
+
+    async loadHolders(network, page, limit) {
+      const { address } = this.$route.params;
+      const res = await this.$api.account.getHolders(network, address);
+      const { holders, token } = res;
+      const items = holders.map((h) => {
+        return {
+          ...h,
+          fullAddress: h.address,
+          balance: {
+            type: "amount",
+            amount: h.balance,
+            precision: 6,
+            decimals: token.decimals || 18,
+            token: h.symbol,
+          },
+          percentage: {
+            type: "percentage",
+            amount: h.percentage,
+          },
+        };
+      });
+      return { items, totalRows: items.length };
+    },
+
     async loadTransfers(network, page, limit) {
       const { address } = this.$route.params;
       const res = await this.$api.account.getTransfers(
@@ -322,15 +423,28 @@ export default {
           direct =
             t.to.toLowerCase() === this.address.toLowerCase() ? "In" : "Out";
         }
+        let decimals = 18;
+        let from = t.from;
+        let to = t.to;
+        if (t.erc20 && t.erc20.address) {
+          decimals = t.erc20.decimals || 18;
+          if (from === "0x0000000000000000000000000000000000000000") {
+            from = t.tokenAddress;
+          }
+          if (to === "0x0000000000000000000000000000000000000000") {
+            to = t.tokenAddress;
+          }
+        }
         return {
-          from: t.from,
+          from: from,
           direct,
-          to: t.to,
+          to: to,
           amount: {
             type: "amount",
             amount: t.amount,
             token: t.token,
             precision: 8,
+            decimals,
           },
           txHash: t.txHash,
           blockNum: t.block.number,
@@ -391,8 +505,9 @@ export default {
         amount: {
           type: "amount",
           amount: t.amount,
-          token: t.symbol || " ",
+          token: t.symbol || "ERC20",
           precision: 8,
+          decimals: t.decimals || 18,
         },
         timestamp: t.block.timestamp,
       }));

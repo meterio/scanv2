@@ -21,12 +21,16 @@ export default {
   },
   data() {
     return {
-      localTabs: [],
       localTabIndex: 0,
     };
   },
+  computed: {
+    localTabs() {
+      return !!this.tabs ? this.tabs : [];
+    },
+  },
   beforeMount() {
-    this.localTabs = this.tabs;
+    // this.localTabs = this.tabs;
     this.localTabIndex = this.value;
   },
   methods: {
