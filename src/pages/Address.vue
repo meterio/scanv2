@@ -64,6 +64,8 @@ export default {
           return this.buckets.fields;
         case "holders":
           return this.holders.fields;
+        case "tokens":
+          return this.tokens.fields;
       }
       return this.txs.fields;
     },
@@ -83,6 +85,8 @@ export default {
           return this.buckets.pagination;
         case "holders":
           return this.holders.pagination;
+        case "tokens":
+          return this.tokens.pagination;
       }
       return this.txs.pagination;
     },
@@ -102,6 +106,8 @@ export default {
           return this.loadBuckets;
         case "holders":
           return this.loadHolders;
+        case "tokens":
+          return this.loadTokens;
       }
       return this.loadTxs;
     },
@@ -115,6 +121,7 @@ export default {
         { name: "Auction Bids" },
         { name: "Proposed Blocks" },
         { name: "Buckets" },
+        { name: "Tokens" },
       ],
       contract_tabs: [
         { name: "Transfers" },
@@ -201,6 +208,14 @@ export default {
           { key: "status", label: "Status" },
         ],
       },
+      tokens: {
+        pagination: { show: true, align: "center", perPage: 20 },
+        fields: [
+          { key: "fullAddress", label: "Token Address" },
+          { key: "blocknum", label: "Block" },
+          { key: "balance", label: "Amount" }
+        ],
+      },
     };
   },
   beforeMount() {},
@@ -230,6 +245,9 @@ export default {
             break;
           case 5:
             this.loadTarget = "buckets";
+            break;
+          case 6:
+            this.loadTarget = "tokens";
             break;
           default:
             this.loadTarget = "transfers";
@@ -577,6 +595,26 @@ export default {
         };
       });
       return { items, totalRows };
+    },
+    async loadTokens(network, page, limit) {
+      this.load = true;
+      const { address } = this.$route.params;
+      const { tokens } = await this.$api.account.getTokens(network, address);
+      const items = tokens.map((t) => {
+        return {
+          ...t,
+          fullAddress: t.tokenAddress,
+          blocknum: t.lastUpdate.number,
+          balance: {
+            type: "amount",
+            amount: t.balance,
+            token: t.symbol,
+            precision: 8,
+            decimals: 18
+          }
+        };
+      });
+      return { items, totalRows: items.length};
     },
   },
 };

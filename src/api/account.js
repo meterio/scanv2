@@ -43,5 +43,8 @@ export default {
   },
   getHolders(network, address) {
     return get(network, `accounts/${address}/holders`);
+  },
+  getTokens(network, address) {
+    return get(network, `accounts/${address}/tokens`);
   }
 };
