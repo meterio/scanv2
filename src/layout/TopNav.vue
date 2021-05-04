@@ -9,6 +9,16 @@
         <span class="ml-1" style="font-size: 19px; font-weight: bold"
           >Meter</span
         >
+        <!--
+          Upgrade Badge
+        <b-badge
+          class="ml-2"
+          variant="warning"
+          v-b-tooltip.hover
+          title="Account balance might be incorrect during upgrading"
+          >upgrading ...</b-badge
+        >
+        -->
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
