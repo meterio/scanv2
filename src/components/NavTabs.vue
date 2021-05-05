@@ -48,9 +48,11 @@ export default {
   display: flex;
   border-bottom: 1px solid #ddd;
   .nav-item {
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: bold;
     padding: 9px 12px;
     align-items: center;
+    color: #192a56;
     justify-content: center;
     &:hover {
       cursor: pointer;

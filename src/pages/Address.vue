@@ -117,11 +117,11 @@ export default {
       address_tabs: [
         { name: "Transfers" },
         { name: "Transactions" },
+        { name: "ERC20 Tokens" },
         { name: "ERC20 Transactions" },
         { name: "Auction Bids" },
         { name: "Proposed Blocks" },
         { name: "Buckets" },
-        { name: "Tokens" },
       ],
       contract_tabs: [
         { name: "Transfers" },
@@ -212,8 +212,8 @@ export default {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "fullAddress", label: "Token Address" },
-          { key: "blocknum", label: "Block" },
-          { key: "balance", label: "Amount" }
+          { key: "balance", label: "Balance" },
+          { key: "blocknum", label: "Last Updated on Block" },
         ],
       },
     };
@@ -235,19 +235,19 @@ export default {
             this.loadTarget = "txs";
             break;
           case 2:
-            this.loadTarget = "erc20Txs";
+            this.loadTarget = "tokens";
             break;
           case 3:
-            this.loadTarget = "bids";
+            this.loadTarget = "erc20Txs";
             break;
           case 4:
-            this.loadTarget = "proposedBlocks";
+            this.loadTarget = "bids";
             break;
           case 5:
-            this.loadTarget = "buckets";
+            this.loadTarget = "proposedBlocks";
             break;
           case 6:
-            this.loadTarget = "tokens";
+            this.loadTarget = "buckets";
             break;
           default:
             this.loadTarget = "transfers";
@@ -610,11 +610,11 @@ export default {
             amount: t.balance,
             token: t.symbol,
             precision: 8,
-            decimals: 18
-          }
+            decimals: t.decimals,
+          },
         };
       });
-      return { items, totalRows: items.length};
+      return { items, totalRows: items.length };
     },
   },
 };
