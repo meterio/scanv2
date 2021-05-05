@@ -219,6 +219,11 @@ export default {
     };
   },
   beforeMount() {},
+  watch: {
+    address() {
+      this.navTabChange(0);
+    },
+  },
   methods: {
     init() {
       this.loadAddress();
