@@ -356,7 +356,7 @@ export default {
           });
           this.summary.push({
             key: "Decimals",
-            value: account.decimals || 18,
+            value: account.tokenDecimals || 18,
           });
           if (account.circulation) {
             this.summary.push({
