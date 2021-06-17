@@ -349,7 +349,7 @@ export default {
     };
   },
   async beforeMount() {
-    this.init();
+    // this.init();
   },
   computed: {
     passedItems() {
