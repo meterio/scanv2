@@ -150,7 +150,7 @@ export default {
           { key: "direct", label: "" },
           { key: "to", label: "To" },
           { key: "amount", label: "Amount" },
-          { key: "txHash", label: "Transaction" },
+          { key: "txhashWithStatus", label: "Transaction" },
           { key: "blockNum", label: "Block" },
           { key: "timestamp", label: "Time" },
         ],
@@ -188,7 +188,7 @@ export default {
           perPage: 20,
         },
         fields: [
-          { key: "txhash", label: "Hash" },
+          { key: "txhashWithStatus", label: "Hash" },
           { key: "blocknum", label: "Block" },
           { key: "timestamp", label: "Time" },
           { key: "from", label: "From" },
@@ -469,7 +469,10 @@ export default {
             precision: 8,
             decimals,
           },
-          txHash: t.txHash,
+          txhashWithStatus: {
+            hash: t.txHash,
+            status: t.reverted
+          },
           blockNum: t.block.number,
           timestamp: t.block.timestamp,
         };
@@ -494,7 +497,10 @@ export default {
               : "In";
         }
         return {
-          txhash: t.hash,
+          txhashWithStatus: {
+            hash: t.hash,
+            status: t.reverted
+          },
           blocknum: t.block.number,
           from: t.origin,
           direct,
@@ -520,7 +526,10 @@ export default {
       );
       const { transfers, totalRows } = res;
       const items = transfers.map((t) => ({
-        txhash: t.txHash,
+        txhashWithStatus: {
+          hash: t.txHash,
+          status: t.reverted
+        },
         blocknum: t.block.number,
         from: t.from === this.address ? t.from : t.tokenAddress,
         to: t.to === this.address ? t.to : t.tokenAddress,

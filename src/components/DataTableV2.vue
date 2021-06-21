@@ -97,6 +97,22 @@
           </div>
         </template>
 
+        <template v-slot:cell(txhashWithStatus)="data">
+          <div class="dt-row">
+            <span :style="{display: !!data.value.status ? 'inline' : 'none' }" class="danger-icon">
+              <b-icon icon="exclamation-circle-fill" variant="danger"></b-icon>
+            </span>
+            <router-link
+              class="link"
+              :to="{
+                name: 'txDetail',
+                params: { hash: data.value.hash },
+              }"
+              >{{ shortHash(data.value.hash) }}</router-link
+            >
+          </div>
+        </template>
+
         <!-- Bucketid column template -->
         <template v-slot:cell(bucketid)="data">
           <div class="dt-row">
@@ -427,6 +443,9 @@ export default {
 .data-table {
   .dt-row {
     margin: 0.02rem !important;
+  }
+  .danger-icon {
+    margin-right: 2px;
   }
 }
 .data-table-container {
