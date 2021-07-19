@@ -116,7 +116,7 @@
             <div
               class="d-flex justify-content-start"
               :key="index"
-              v-for="(row, index) in item.value"
+              v-for="(row, index) in item.value.slice(0, 10)"
             >
               <address-link class="mr-3" short :address="row.from" />
               <span class="mr-3">to</span>
@@ -128,6 +128,7 @@
                 :decimals="row.decimals"
               />
             </div>
+            <div v-if="item.value.length > 10">...</div>
           </span>
 
           <!-- status -->

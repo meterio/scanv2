@@ -99,7 +99,10 @@
 
         <template v-slot:cell(txhashWithStatus)="data">
           <div class="dt-row">
-            <span :style="{display: !!data.value.status ? 'inline' : 'none' }" class="danger-icon">
+            <span
+              :style="{ display: !!data.value.status ? 'inline' : 'none' }"
+              class="danger-icon"
+            >
               <b-icon icon="exclamation-circle-fill" variant="danger"></b-icon>
             </span>
             <router-link
@@ -378,6 +381,11 @@ export default {
   watch: {
     passedItems(to, from) {
       this.initWithPassed();
+    },
+    currentPage(to, from) {
+      if (!this.loadItems) {
+        this.initWithPassed();
+      }
     },
   },
   methods: {

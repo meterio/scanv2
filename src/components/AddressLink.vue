@@ -7,7 +7,7 @@
       >{{ text }}</b-link
     >
     <b-popover triggers="hover" :target="id">
-      {{ address }}
+      {{ tip }}
       <b-button @click="copyToClipBoard" variant="light" pill size="sm">
         <b-icon icon="clipboard"></b-icon>
       </b-button>
@@ -43,6 +43,12 @@ export default {
   computed: {
     id() {
       return randomHex();
+    },
+    tip() {
+      if (this.text.toLowerCase() === this.address.toLowerCase()) {
+        return "";
+      }
+      return this.address;
     },
     text() {
       if (this.name) {

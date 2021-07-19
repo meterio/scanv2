@@ -50,8 +50,8 @@ export default {
     },
     fields() {
       switch (this.loadTarget) {
-        case "transfers":
-          return this.transfers.fields;
+        // case "transfers":
+        // return this.transfers.fields;
         case "txs":
           return this.txs.fields;
         case "erc20Txs":
@@ -71,8 +71,8 @@ export default {
     },
     pagination() {
       switch (this.loadTarget) {
-        case "transfers":
-          return this.transfers.pagination;
+        // case "transfers":
+        // return this.transfers.pagination;
         case "txs":
           return this.txs.pagination;
         case "erc20Txs":
@@ -92,8 +92,8 @@ export default {
     },
     loadItems() {
       switch (this.loadTarget) {
-        case "transfers":
-          return this.loadTransfers;
+        // case "transfers":
+        // return this.loadTransfers;
         case "txs":
           return this.loadTxs;
         case "erc20Txs":
@@ -115,7 +115,7 @@ export default {
   data() {
     return {
       address_tabs: [
-        { name: "Transfers" },
+        // { name: "Transfers" },
         { name: "Transactions" },
         { name: "ERC20 Tokens" },
         { name: "ERC20 Transactions" },
@@ -124,7 +124,7 @@ export default {
         { name: "Buckets" },
       ],
       contract_tabs: [
-        { name: "Transfers" },
+        // { name: "Transfers" },
         { name: "Transactions" },
         { name: "Holders" },
       ],
@@ -134,7 +134,7 @@ export default {
       address: "0x",
       summary: [],
       account: {},
-      loadTarget: "transfers",
+      loadTarget: "txs",
       holders: {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
@@ -233,43 +233,43 @@ export default {
       this.tabValue = val;
       if (!this.isContract) {
         switch (val) {
+          // case 0:
+          // this.loadTarget = "transfers";
+          // break;
           case 0:
-            this.loadTarget = "transfers";
-            break;
-          case 1:
             this.loadTarget = "txs";
             break;
-          case 2:
+          case 1:
             this.loadTarget = "tokens";
             break;
-          case 3:
+          case 2:
             this.loadTarget = "erc20Txs";
             break;
-          case 4:
+          case 3:
             this.loadTarget = "bids";
             break;
-          case 5:
+          case 4:
             this.loadTarget = "proposedBlocks";
             break;
-          case 6:
+          case 5:
             this.loadTarget = "buckets";
             break;
           default:
-            this.loadTarget = "transfers";
+            this.loadTarget = "txs";
         }
       } else {
         switch (val) {
+          // case 0:
+          // this.loadTarget = "transfers";
+          // break;
           case 0:
-            this.loadTarget = "transfers";
-            break;
-          case 1:
             this.loadTarget = "txs";
             break;
-          case 2:
+          case 1:
             this.loadTarget = "holders";
             break;
           default:
-            this.loadTarget = "transfers";
+            this.loadTarget = "txs";
         }
       }
     },
@@ -471,7 +471,7 @@ export default {
           },
           txhashWithStatus: {
             hash: t.txHash,
-            status: t.reverted
+            status: t.reverted,
           },
           blockNum: t.block.number,
           timestamp: t.block.timestamp,
@@ -499,7 +499,7 @@ export default {
         return {
           txhashWithStatus: {
             hash: t.hash,
-            status: t.reverted
+            status: t.reverted,
           },
           blocknum: t.block.number,
           from: t.origin,
@@ -528,7 +528,7 @@ export default {
       const items = transfers.map((t) => ({
         txhashWithStatus: {
           hash: t.txHash,
-          status: t.reverted
+          status: t.reverted,
         },
         blocknum: t.block.number,
         from: t.from === this.address ? t.from : t.tokenAddress,

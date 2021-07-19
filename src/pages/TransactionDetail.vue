@@ -2,7 +2,7 @@
   <div class="detail-page">
     <DataSummary :data="summary" :title="summaryTitle" />
 
-    <DataTableV2 :fields="fields" :items="items">
+    <DataTableV2 :fields="fields" :items="items" :pagination="pagination">
       <template slot="header">
         <NavTabs
           class="px-0"
@@ -100,6 +100,7 @@ export default {
           { key: "amount", label: "Amount" },
           { key: "data", label: "Data" }
         ],
+        pagination: { show: true, align: "center", perPage: 20 },
         items: []
       },
       transfers: {
@@ -108,14 +109,16 @@ export default {
           { key: "to", label: "Recipient" },
           { key: "amountStr", label: "Amount" }
         ],
-        items: []
+        items: [],
+        pagination: { show: true, align: "center", perPage: 20 }
       },
       events: {
         fields: [
           { key: "address", label: "Contract Address" },
           { key: "details", label: "Details" }
         ],
-        items: []
+        items: [],
+        pagination: { show: true, align: "center", perPage: 20 }
       }
     };
   },
@@ -147,6 +150,17 @@ export default {
           return this.events.fields;
       }
       return this.clauses.fields;
+    },
+    pagination() {
+      switch (this.tabValue) {
+        case 0:
+          return this.clauses.pagination;
+        case 1:
+          return this.transfers.pagination;
+        case 2:
+          return this.events.pagination;
+      }
+      return this.clauses.pagination;
     }
   },
   methods: {
@@ -155,7 +169,12 @@ export default {
     },
     async init() {
       const { hash } = this.$route.params;
+      let start = new Date();
       const res = await this.$api.transaction.getTxDetail(this.network, hash);
+      let end = new Date();
+      console.log(`api cost ${end - start}`);
+
+      start = new Date();
       this.loading = false;
       const { tx, summary, tokens } = res;
       if (!!summary) {
@@ -176,10 +195,19 @@ export default {
             type: "status"
           },
           { key: "Clause Count", value: summary.clauseCount },
-          { key: "Block", value: summary.block.number, type: "block-link" }
+          {
+            key: "Block",
+            block: summary.block.number,
+            value: this.fromNow(summary.block.timestamp),
+            type: "block-link-with-note"
+          }
         ];
       }
       this.tx = tx;
+      end = new Date();
+      console.log(`summary cost ${end - start}`);
+
+      start = new Date();
       let clauses = [];
       if (tx.clauseCount > 0) {
         let index = 1;
@@ -228,7 +256,11 @@ export default {
         });
       }
       this.clauses.items = clauses;
-      this.transfers.items = tx.transfers.map(tr => {
+      end = new Date();
+      console.log(`clauses cost ${end - start}`);
+
+      start = new Date();
+      this.transfers.items = tx.groupedTransfers.map(tr => {
         return {
           from: tr.sender,
           to: tr.recipient,
@@ -240,6 +272,10 @@ export default {
           }
         };
       });
+      end = new Date();
+      console.log(`transfers cost ${end - start}`);
+
+      start = new Date();
       this.events.items = tx.events.map(e => ({
         address: e.address,
         details: {
@@ -247,6 +283,10 @@ export default {
           data: e.data
         }
       }));
+      end = new Date();
+      console.log(`events cost ${end - start}`);
+
+      start = new Date();
       let transferHighlights = [];
       const knownTokens = this.$store.state.dom.knownTokens;
       for (const ev of tx.events) {
@@ -280,6 +320,9 @@ export default {
           }
         }
       }
+      end = new Date();
+      console.log(`events cost ${end - start}`);
+
       if (transferHighlights.length > 0) {
         this.summary.push({
           key: "Token Transfers",
