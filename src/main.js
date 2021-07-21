@@ -185,6 +185,7 @@ new Vue({
       knowns[ParamsAddress] = "Params";
       knowns[StakingModuleAddress] = "Staking Engine";
       knowns[ValidatorBenefitAddress] = "Staking Reward";
+      knowns["0xc6e88363ea74f31f514b56e979413b3ee8d76f39"] = "Meter Swap";
     }
 
     // try {
