@@ -485,30 +485,40 @@ export default {
       const { txSummaries, totalRows } = res;
       const items = txSummaries.map((t) => {
         let direct = "";
+        let fromAddr = "";
+        let toAddr = "";
+        let amount = "";
+        let token = -1;
+
+        const { relatedTransfers } = t;
+        if (relatedTransfers && relatedTransfers.length == 1) {
+          fromAddr = relatedTransfers[0].sender;
+          toAddr = relatedTransfers[0].recipient;
+          amount = relatedTransfers[0].amount;
+          token = relatedTransfers[0].token;
+        }
         if (
           t.clauseCount === 1 &&
           t.origin.toLowerCase() === t.majorTo.toLowerCase()
         ) {
           direct = "Self";
         } else {
-          direct =
-            t.origin.toLowerCase() === this.address.toLowerCase()
-              ? "Out"
-              : "In";
+          direct = fromAddr === this.address.toLowerCase() ? "Out" : "In";
         }
+
         return {
           txhashWithStatus: {
             hash: t.hash,
             status: t.reverted,
           },
           blocknum: t.block.number,
-          from: t.origin,
+          from: fromAddr || t.origin,
           direct,
-          to: t.majorTo || "nobody",
+          to: toAddr || t.majorTo || "nobody",
           amount: {
             type: "amount",
-            amount: t.totalClauseAmount,
-            token: t.token,
+            amount: amount || t.totalClauseAmount,
+            token: token < 0 ? t.token : token == 0 ? "MTR" : "MTRG",
             precision: 8,
           },
           timestamp: t.block.timestamp,
