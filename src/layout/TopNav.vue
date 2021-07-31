@@ -6,11 +6,11 @@
     <b-navbar toggleable="lg" type="light" variant="light" class="px-4 py-2">
       <b-navbar-brand href="/" class="mr-5">
         <b-img src="@/assets/newlogo.png" height="40" />
+
         <span class="ml-1" style="font-size: 19px; font-weight: bold"
           >Meter</span
         >
-        <!--
-          Upgrade Badge
+        <!-- Upgrade Badge
         <b-badge
           class="ml-2"
           variant="warning"

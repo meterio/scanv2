@@ -69,11 +69,9 @@ export default {
       this.loading = false;
       const { mtr, mtrg, pos, pow, staking, committee } = res;
 
-      const x = new BigNumber(staking.totalCirculationStaked)
+      const stakingRatio = new BigNumber(staking.totalStaked)
         .dividedBy(1e18)
-        .dividedBy(mtrg.circulation)
-        .times(100)
-        .toFixed();
+        .dividedBy(40e6);
       this.data = [
         [
           {
@@ -106,15 +104,24 @@ export default {
             content: `${staking.healthyNodes} / ${staking.candidates}`,
           },
           {
-            label: "Circulation Staked",
+            label: "Staking Ratio",
+            content: stakingRatio.times(100).toFixed(2) + "%",
+            // content:
+            //   new BigNumber(staking.totalCirculationStaked)
+            //     .dividedBy(1e18)
+            //     .dividedBy(mtrg.circulation)
+            //     .times(100)
+            //     .toFixed(2) + "%",
+          },
+          // { label: "MTRG Annual Inflation", content: pos.inflation },
+          {
+            label: "Avg Staking APY",
             content:
-              new BigNumber(staking.totalCirculationStaked)
-                .dividedBy(1e18)
-                .dividedBy(mtrg.circulation)
+              new BigNumber(0.05)
+                .dividedBy(stakingRatio)
                 .times(100)
                 .toFixed(2) + "%",
           },
-          { label: "MTRG Annual Inflation", content: pos.inflation },
           {
             label: "Address Count",
             content: pos.addressCount,
