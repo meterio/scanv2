@@ -485,26 +485,43 @@ export default {
       const { txSummaries, totalRows } = res;
       const items = txSummaries.map((t) => {
         let direct = "";
-        let fromAddr = "";
-        let toAddr = "";
-        let amount = "";
-        let token = -1;
+        let fromAddr = t.origin;
+        let toAddr = t.majorTo;
+        let amount = t.value;
+        let token = 0;
 
         const { relatedTransfers } = t;
-        if (relatedTransfers && relatedTransfers.length == 1) {
-          fromAddr = relatedTransfers[0].sender;
-          toAddr = relatedTransfers[0].recipient;
-          amount = relatedTransfers[0].amount;
-          token = relatedTransfers[0].token;
+        let relatedTransfer;
+        if (relatedTransfers && relatedTransfers.length >= 1) {
+          for (const tr of relatedTransfers) {
+            if (
+              tr.sender.toLowerCase() === this.address.toLowerCase() ||
+              tr.recipient.toLowerCase() === this.address.toLowerCase()
+            ) {
+              relatedTransfer = tr;
+              break;
+            }
+          }
+          if (!relatedTransfer) {
+            relatedTransfer = relatedTransfers[0];
+          }
         }
+        if (relatedTransfer) {
+          fromAddr = relatedTransfer.sender;
+          toAddr = relatedTransfer.recipient;
+          amount = relatedTransfer.amount;
+          token = relatedTransfer.token;
+        }
+
         if (
           t.clauseCount === 1 &&
           t.origin.toLowerCase() === t.majorTo.toLowerCase()
         ) {
           direct = "Self";
         } else {
-          direct = fromAddr === this.address.toLowerCase() ? "Out" : "In";
+          direct = fromAddr === address.toLowerCase() ? "Out" : "In";
         }
+        console.log("direct = ", direct);
 
         return {
           txhashWithStatus: {
@@ -512,9 +529,9 @@ export default {
             status: t.reverted,
           },
           blocknum: t.block.number,
-          from: fromAddr || t.origin,
+          from: fromAddr,
           direct,
-          to: toAddr || t.majorTo || "nobody",
+          to: toAddr || "nobody",
           amount: {
             type: "amount",
             amount: amount || t.totalClauseAmount,

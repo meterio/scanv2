@@ -10,8 +10,8 @@
         <span class="ml-1" style="font-size: 19px; font-weight: bold"
           >Meter</span
         >
-        <!-- Upgrade Badge
-        <b-badge
+        <!-- Upgrade Badge -->
+        <!--<b-badge
           class="ml-2"
           variant="warning"
           v-b-tooltip.hover
