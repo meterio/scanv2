@@ -48,6 +48,7 @@ export default {
 
   data() {
     return {
+      running: false,
       modal_show: false,
       // top nav tabs
       nav_tabs: ["PoS", "PoW"],
@@ -63,11 +64,15 @@ export default {
       }
     },
   },
+  mounted() {
+    this.running = true;
+  },
   methods: {
     async init() {
       const res = await this.$api.metric.getAll(this.network);
       this.loading = false;
       const { mtr, mtrg, pos, pow, staking, committee } = res;
+      console.log('mtrg', mtrg)
 
       const stakingRatio = new BigNumber(staking.totalStaked)
         .dividedBy(1e18)
@@ -128,6 +133,12 @@ export default {
           },
         ],
       ];
+
+      if (this.running) {
+        setTimeout(() => {
+          this.init()
+        }, 60 * 30 * 1000);  // 30 min
+      }
     },
     async searchKeyWords(key) {
       try {
@@ -149,8 +160,11 @@ export default {
         console.error(e);
         this.modal_show = true;
       }
-    },
+    }
   },
+  beforeDestroy() {
+    this.running = false;
+  }
 };
 </script>
 
