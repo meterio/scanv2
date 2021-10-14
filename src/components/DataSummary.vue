@@ -22,8 +22,8 @@
               :to="{
                 name: 'blockDetail',
                 params: {
-                  revision: item.block
-                }
+                  revision: item.block,
+                },
               }"
               >#{{ item.block }}</router-link
             >
@@ -82,7 +82,7 @@
           <router-link
             :to="{
               name: 'address',
-              params: { address: item.value.address }
+              params: { address: item.value.address },
             }"
             v-if="item.type === 'address-or-name-link' && !!item.value.name"
             >{{ item.value.name }}</router-link
@@ -116,7 +116,7 @@
             <div
               class="d-flex justify-content-start"
               :key="index"
-              v-for="(row, index) in item.value.slice(0, 10)"
+              v-for="(row, index) in item.value"
             >
               <address-link class="mr-3" short :address="row.from" />
               <span class="mr-3">to</span>
@@ -128,7 +128,6 @@
                 :decimals="row.decimals"
               />
             </div>
-            <div v-if="item.value.length > 10">...</div>
           </span>
 
           <!-- status -->
@@ -151,22 +150,22 @@ export default {
   name: "DataList",
   props: {
     title: {
-      type: String
+      type: String,
     },
     data: {
       type: Array,
-      default: function() {
+      default: function () {
         return [];
-      }
+      },
     },
     wide: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      currentPage: 1
+      currentPage: 1,
     };
   },
   computed: {
@@ -178,8 +177,8 @@ export default {
     },
     contentCols() {
       return this.wide ? 9 : 10;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
