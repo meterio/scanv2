@@ -9,6 +9,7 @@ import search from "./search";
 import bucket from "./bucket";
 import epoch from "./epoch";
 import known from "./known";
+import verify from "./verify";
 
 export default {
   block,
@@ -21,5 +22,6 @@ export default {
   search,
   bucket,
   epoch,
-  known
+  known,
+  verify,
 };

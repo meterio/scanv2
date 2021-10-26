@@ -39,7 +39,7 @@ axios.defaults.headers.post["Content-Type"] =
 
 // 响应拦截器
 axios.interceptors.response.use(
-  response => {
+  (response) => {
     if (response.status === 200) {
       return Promise.resolve(response);
     } else {
@@ -47,7 +47,7 @@ axios.interceptors.response.use(
     }
   },
   // 服务器状态码不是200的情况
-  error => {
+  (error) => {
     // if (error.response.status) {
     //   switch (error.response.status) {
     //     // 401: 未登录
@@ -118,13 +118,13 @@ export function get(network, url, params) {
   return new Promise((resolve, reject) => {
     axios
       .get(url, { params })
-      .then(res => {
+      .then((res) => {
         // get data success
         if (res.data) {
           resolve(res.data);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         reject(err.data);
       });
@@ -135,18 +135,51 @@ export function get(network, url, params) {
  * @param {String} url [请求的url地址]
  * @param {Object} params [请求时携带的参数]
  */
-export function post(url, params) {
-  getHttpBaseUrl();
+export function post(network, url, params) {
+  if (!(network in API_BASE)) {
+    throw Error(`Invalid network: ${network} for ${url}`);
+  }
+  const base = API_BASE[network];
+  console.log(`network:${network} post: ${base}${url} ${params ? params : ""}`);
+  console.log("params: ", params);
+  axios.defaults.baseURL = base;
   return new Promise((resolve, reject) => {
     axios
-      .post(url, QS.stringify(params))
-      .then(res => {
+      .post(url, params)
+      .then((res) => {
+        console.log("res", res);
         // get data success
-        if (res.data.code === 0) {
-          resolve(res.data.data);
+        if (res && res.data) {
+          resolve(res.data);
+        } else {
+          resolve(res);
         }
       })
-      .catch(err => {
+      .catch((err) => {
+        console.log("err", err);
+        if (err && err.data) {
+          reject(err.data);
+        } else {
+          reject(err);
+        }
+      });
+  });
+}
+
+/**
+ * This get set default baseURL empty
+ */
+export function commonGet(url, params) {
+  axios.defaults.baseURL = "";
+  return new Promise((resolve, reject) => {
+    axios
+      .get(url, {
+        params: { ...params },
+      })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
         reject(err.data);
       });
   });
