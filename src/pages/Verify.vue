@@ -88,12 +88,49 @@
           <b-button class="ml-1" type="reset" variant="secondary">Reset</b-button>
         </section>
       </b-form>
+
+      <b-form @submit="onSubmit1" @reset="onReset">
+        <b-form-group
+          label="Enter the Solidity Contract Code below:"
+          label-for="solidity-code"
+        >
+          <b-form-textarea
+            id="solidity-code"
+            v-model="form1.sourceCode"
+            type="text"
+            placeholder=""
+            rows="6"
+            required
+          ></b-form-textarea>
+        </b-form-group>
+
+        <b-form-group
+          label="Enter the Solidity Metadata below:"
+          label-for="metadata-code"
+        >
+          <b-form-textarea
+            id="Metadata-code"
+            v-model="form1.metadata"
+            type="text"
+            placeholder=""
+            rows="6"
+            required
+          ></b-form-textarea>
+        </b-form-group>
+
+        <section class="text-center">
+          <b-button type="submit" variant="primary">Verify</b-button>
+          <b-button class="ml-1" type="reset" variant="secondary">Reset</b-button>
+        </section>
+      </b-form>
+
     </section>
   </b-container>
 </template>
 
 <script>
 import api from '@/api';
+import axios from 'axios';
 
 export default {
   name: "Verify",
@@ -110,6 +147,10 @@ export default {
         version: null,
         licenseType: null,
         optimizer: null,
+        sourceCode: ''
+      },
+      form1: {
+        metadata: '',
         sourceCode: ''
       },
       compilerTypes: [
@@ -156,6 +197,28 @@ export default {
     this.compilerVersions.splice(1, 0, ...solcVersionList)
   },
   methods: {
+    async onSubmit1(e) {
+      e.preventDefault();
+      const options = {
+        url: "https://staging.sourcify.dev/",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const data = {
+        address: '0xB9A395c843620822E6cA2B20905bFfb71f4e05C4',
+        chain: "83",
+        files: {
+          sourceCode: this.form1.sourceCode.toString(),
+          metadata: this.form1.metadata.toString(),
+        },
+      };
+      console.log(data)
+      const res = await axios({ data, ...options });
+      console.log('verify res: ', res);
+    },
     async onSubmit(e) {
       e.preventDefault();
       this.isError.status = false;

@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      isContract: null,
+      isContract: true,
       isERC20: false,
       address: "0x",
       account: {},
@@ -51,7 +51,7 @@ export default {
         console.log("res: ", res)
 
         const { account } = res;
-        this.isContract = !!account.isContract;
+        // this.isContract = !!account.isContract;
         this.isERC20 = !!account.isERC20;
         if (this.address === "0x0000000000000000000000000000000000000000") {
           if (new BigNumber(account.mtrgBalance).isLessThan(0)) {

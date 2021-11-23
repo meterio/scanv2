@@ -12,7 +12,7 @@ export default {
   name: "AmountTag",
   props: {
     amount: {
-      type: String,
+      type: [String, Number],
       default: "0",
     },
     token: {
