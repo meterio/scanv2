@@ -200,7 +200,7 @@ export default {
     async onSubmit1(e) {
       e.preventDefault();
       const options = {
-        url: "https://staging.sourcify.dev/",
+        url: "http://13.214.30.180:5000/",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
