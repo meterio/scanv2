@@ -162,16 +162,33 @@
               <span class="label">verified:</span>
             </b-col>
             <b-col sm="12" :md="contentCols">
-              <span>no, you can </span>
-              <router-link
-                  :to="{
-                    name: 'verify',
-                    params: {
-                      address: contractAddress
-                    }
-                  }"
-                  >VERIFY</router-link>
-              <span> your contract source code.</span>
+              <template v-if="verifyStatus === 'perfect'">
+                <span>yes, your verify is perfect</span>
+              </template>
+              <template v-else-if="verifyStatus === 'partial'">
+                <span>yes, but it's partial, you can </span>
+                <router-link
+                    :to="{
+                      name: 'verify',
+                      params: {
+                        address: contractAddress
+                      }
+                    }"
+                    >VERIFY</router-link>
+                <span>again.</span>
+              </template>
+              <template v-else>
+                <span>no, you can </span>
+                <router-link
+                    :to="{
+                      name: 'verify',
+                      params: {
+                        address: contractAddress
+                      }
+                    }"
+                    >VERIFY</router-link>
+                <span> your contract source code.</span>
+              </template>
             </b-col>
           </b-row>
         </b-col>
@@ -205,6 +222,10 @@ export default {
     isContract: {
       type: Boolean,
       default: false
+    },
+    verifyStatus: {
+      type: String,
+      default: ''
     }
   },
   data() {

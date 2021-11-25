@@ -7,19 +7,6 @@
       </div>
     </div>
     <b-form v-else @submit.prevent>
-      <b-form-group
-        label="Solidity Contract Code:"
-        label-for="solidity-code"
-      >
-        <b-form-textarea
-          id="solidity-code"
-          v-model="form.sourceCode"
-          type="text"
-          placeholder=""
-          rows="6"
-          required
-        ></b-form-textarea>
-      </b-form-group>
 
       <b-form-group
         label="Contract ABI:"
@@ -30,7 +17,7 @@
           v-model="form.contractAbi"
           type="text"
           placeholder=""
-          rows="6"
+          rows="15"
           required
         ></b-form-textarea>
       </b-form-group>
@@ -42,19 +29,26 @@
 <script>
 export default {
   name: "Contract",
+  props: ['address', 'verifyStatus'],
   data() {
     return {
-      loading: true,
+      loading: false,
       form: {
-        sourceCode: 'source code',
-        contractAbi: 'contract abi'
+        contractAbi: ''
       }
     }
   },
-  created() {
-    setTimeout(() => {
+  async created() {
+    const data = {
+      chain: this.network === 'main' ? '82' : '83',
+      address: this.address
+    }
+    if (this.verifyStatus === 'perfect' || this.verifyStatus === 'partial') {
+      this.loading = true;
+      const res = await this.$api.verify.metadata(data);
+      this.form.contractAbi = JSON.stringify(res.data.output.abi, null, 2);
       this.loading = false;
-    }, 2000);
+    }
   }
 }
 </script>
