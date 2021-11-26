@@ -9,6 +9,6 @@ export const API_BASE = {
 };
 
 export const SOURCIFY_API = {
-  server: "//13.214.30.180:5000",
-  repo: "//13.214.30.180:10000"
+  server: "http://13.214.30.180:5000",
+  repo: "http://13.214.30.180:10000"
 }

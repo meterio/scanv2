@@ -16,7 +16,7 @@ instance.interceptors.response.use((res) => {
 
 export const fetch = (url, method, data = {}, options = {
   Headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
   }
 }) => {
   return instance({
