@@ -149,7 +149,7 @@
               <span class="label">owner:</span>
             </b-col>
             <b-col sm="12" :md="contentCols">
-              <span>0x</span>
+              <span>{{ computedOwner }}</span>
             </b-col>
           </b-row>
           <b-row>
@@ -157,7 +157,7 @@
               <span class="label">creation tx:</span>
             </b-col>
             <b-col sm="12" :md="contentCols">
-              <span>0x</span>
+              <span>{{ computedCreationTxHash }}</span>
             </b-col>
           </b-row>
           <b-row>
@@ -250,6 +250,22 @@ export default {
     },
     contractAddress() {
       return this.title.split(":")[1].trim();
+    },
+    computedOwner() {
+      for (const obj of this.data) {
+        if (obj.key === "owner") {
+          return obj.value;
+        }
+      }
+      return "0x";
+    },
+    computedCreationTxHash() {
+      for (const obj of this.data) {
+        if (obj.key === "creationTxHash") {
+          return obj.value;
+        }
+      }
+      return "0x";
     },
   },
 };

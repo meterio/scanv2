@@ -96,7 +96,7 @@ export default {
       if (res.error) {
         this.isError = {
           status: true,
-          msg: res.msg.error,
+          msg: res.msg.error || res.msg,
         };
       } else {
         if (

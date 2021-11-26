@@ -140,6 +140,16 @@ export default {
             });
           }
         }
+        if (account.isContract) {
+          this.summary.push({
+            key: "owner",
+            value: account.master,
+          });
+          this.summary.push({
+            key: "creationTxHash",
+            value: account.creationTxHash,
+          });
+        }
         this.account = account;
       } catch (e) {
         console.log(e);
