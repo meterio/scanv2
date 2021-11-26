@@ -1,10 +1,12 @@
 <template>
   <b-container class="verify-container">
     <section class="title-container my-3">
-      <h3 class="text-center">Verify & Publish Contract Source Code </h3>
+      <h3 class="text-center">Verify & Publish Contract Source Code</h3>
       <span></span>
     </section>
-    <b-alert v-if="isError.status" show variant="danger">{{ isError.msg }}</b-alert>
+    <b-alert v-if="isError.status" show variant="danger">{{
+      isError.msg
+    }}</b-alert>
     <section class="form-container">
       <div class="loading" v-if="loading">
         <div class="text-center text-primary my-2">
@@ -13,7 +15,6 @@
         </div>
       </div>
       <b-form v-else @submit="onSubmit" @reset="onReset">
-
         <b-form-group
           label="Enter the Solidity Contract Code below:"
           label-for="solidity-code"
@@ -43,10 +44,11 @@
 
         <section class="text-center">
           <b-button type="submit" variant="primary">Verify</b-button>
-          <b-button class="ml-1" type="reset" variant="secondary">Reset</b-button>
+          <b-button class="ml-1" type="reset" variant="secondary"
+            >Reset</b-button
+          >
         </section>
       </b-form>
-
     </section>
   </b-container>
 </template>
@@ -59,20 +61,20 @@ export default {
       loading: false,
       isError: {
         status: false,
-        msg: 'Some error occur.'
+        msg: "Some error occur.",
       },
       form: {
-        address: '',
-        chain: '',
-        sourceCode: '',
-        metadata: ''
-      }
+        address: "",
+        chain: "",
+        sourceCode: "",
+        metadata: "",
+      },
     };
   },
   async created() {
     const { address } = this.$route.params;
     this.form.address = address;
-    this.form.chain = this.network === 'main' ? '82' : '83';
+    this.form.chain = this.network === "main" ? "82" : "83";
   },
   methods: {
     async onSubmit(e) {
@@ -88,24 +90,21 @@ export default {
         },
       };
 
-      const res = await this.$api.verify.verify(data)
-      console.log('verify res', res);
+      const res = await this.$api.verify.verify(data);
+      console.log("verify res", res);
       this.loading = false;
-      if (res.data.result[0].status === 'perfect' || res.data.result[0].status === 'partial') {
-        // success
-        this.$router.go(-1)
+      if (res.error) {
+        this.isError = {
+          status: true,
+          msg: res.msg.error,
+        };
       } else {
-        // failure
-        if (res && res.result && res.result.error) {
-          this.isError = {
-            status: true,
-            msg: res.result.error
-          }
-        } else {
-          this.isError = {
-            status: true,
-            msg: 'Some error occur.'
-          }
+        if (
+          res.data.result[0].status === "perfect" ||
+          res.data.result[0].status === "partial"
+        ) {
+          // success
+          this.$router.go(-1);
         }
       }
     },
@@ -113,18 +112,18 @@ export default {
       e.preventDefault();
       this.form = {
         ...this.form,
-        sourceCode: '',
-        metadata: ''
-      }
+        sourceCode: "",
+        metadata: "",
+      };
       this.isError.status = false;
-    }
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
-  .loading {
-    opacity: 0.55;
-    font-size: 14px;
-    font-weight: bold;
-  }
+.loading {
+  opacity: 0.55;
+  font-size: 14px;
+  font-weight: bold;
+}
 </style>

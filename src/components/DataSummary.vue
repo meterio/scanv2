@@ -24,8 +24,8 @@
                   :to="{
                     name: 'blockDetail',
                     params: {
-                      revision: item.block
-                    }
+                      revision: item.block,
+                    },
                   }"
                   >#{{ item.block }}</router-link
                 >
@@ -44,7 +44,10 @@
               <div v-if="item.type === 'block-range'">
                 <b-link
                   href="#"
-                  :to="{ name: 'blockDetail', params: { revision: item.start } }"
+                  :to="{
+                    name: 'blockDetail',
+                    params: { revision: item.start },
+                  }"
                   >#{{ item.start }}</b-link
                 >
                 <span class="mx-1">-</span>
@@ -84,7 +87,7 @@
               <router-link
                 :to="{
                   name: 'address',
-                  params: { address: item.value.address }
+                  params: { address: item.value.address },
                 }"
                 v-if="item.type === 'address-or-name-link' && !!item.value.name"
                 >{{ item.value.name }}</router-link
@@ -168,25 +171,27 @@
               <template v-else-if="verifyStatus === 'partial'">
                 <span>yes, but it's partial, you can </span>
                 <router-link
-                    :to="{
-                      name: 'verify',
-                      params: {
-                        address: contractAddress
-                      }
-                    }"
-                    >VERIFY</router-link>
-                <span>again.</span>
+                  :to="{
+                    name: 'verify',
+                    params: {
+                      address: contractAddress,
+                    },
+                  }"
+                  >VERIFY</router-link
+                >
+                <span> again.</span>
               </template>
               <template v-else>
                 <span>no, you can </span>
                 <router-link
-                    :to="{
-                      name: 'verify',
-                      params: {
-                        address: contractAddress
-                      }
-                    }"
-                    >VERIFY</router-link>
+                  :to="{
+                    name: 'verify',
+                    params: {
+                      address: contractAddress,
+                    },
+                  }"
+                  >VERIFY</router-link
+                >
                 <span> your contract source code.</span>
               </template>
             </b-col>
@@ -207,30 +212,30 @@ export default {
   name: "DataList",
   props: {
     title: {
-      type: String
+      type: String,
     },
     data: {
       type: Array,
-      default: function() {
+      default: function () {
         return [];
-      }
+      },
     },
     wide: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isContract: {
       type: Boolean,
-      default: false
+      default: false,
     },
     verifyStatus: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
   data() {
     return {
-      currentPage: 1
+      currentPage: 1,
     };
   },
   computed: {
@@ -244,9 +249,9 @@ export default {
       return this.wide ? 9 : 10;
     },
     contractAddress() {
-      return this.title.split(':')[1].trim()
-    }
-  }
+      return this.title.split(":")[1].trim();
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

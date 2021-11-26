@@ -19,6 +19,10 @@ export default {
     const url = `${SOURCIFY_API.repo}/contracts/full_match/${chain}/${address}/metadata.json`;
     return fetch(url, 'GET');
   },
+  partialMetadata({ chain, address }) {
+    const url = `${SOURCIFY_API.repo}/contracts/partial_match/${chain}/${address}/metadata.json`;
+    return fetch(url, 'GET');
+  },
   check({ chain, address }) {
     const url = `${SOURCIFY_API.server}/checkByAddresses?addresses=${address}&chainIds=${chain}`;
     return fetch(url, 'GET');

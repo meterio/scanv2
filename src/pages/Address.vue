@@ -1,9 +1,9 @@
 <template lang="pug">
-  div
-    .text-center.text-primary(v-if="isContract === null")
-      b-spinner.my-5
-    ContractAddress(v-else-if="isContract" :address-info="addressInfo")
-    UserAddress(v-else  :address-info="addressInfo")
+div
+  .text-center.text-primary(v-if="isContract === null")
+    b-spinner.my-5
+  ContractAddress(v-else-if="isContract", :address-info="addressInfo")
+  UserAddress(v-else, :address-info="addressInfo")
 </template>
 
 <script>
@@ -13,15 +13,15 @@ export default {
   name: "Address",
   components: {
     UserAddress,
-    ContractAddress
+    ContractAddress,
   },
   data() {
     return {
-      isContract: true,
+      isContract: false,
       isERC20: false,
       address: "0x",
       account: {},
-      summary: []
+      summary: [],
     };
   },
   computed: {
@@ -30,9 +30,9 @@ export default {
         isContract: this.isContract,
         isERC20: this.isERC20,
         address: this.address,
-        summary: this.summary
-      }
-    }
+        summary: this.summary,
+      };
+    },
   },
   methods: {
     init() {
@@ -48,10 +48,10 @@ export default {
           this.network,
           address
         );
-        console.log("res: ", res)
+        console.log("res: ", res);
 
         const { account } = res;
-        // this.isContract = !!account.isContract;
+        this.isContract = !!account.isContract;
         this.isERC20 = !!account.isERC20;
         if (this.address === "0x0000000000000000000000000000000000000000") {
           if (new BigNumber(account.mtrgBalance).isLessThan(0)) {
@@ -144,11 +144,10 @@ export default {
       } catch (e) {
         console.log(e);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-
 </style>
