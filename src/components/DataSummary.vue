@@ -11,7 +11,7 @@
 
       <b-row v-else>
         <b-col :md="!isContract || 6">
-          <b-row class="row" :key="item.key" v-for="item in data">
+          <b-row class="row" :key="item.key" v-for="item in computedData">
             <b-col sm="12" :md="labelCols">
               <span class="label">{{ item.key }}:</span>
             </b-col>
@@ -146,23 +146,39 @@
         <b-col v-if="isContract" md="6">
           <b-row>
             <b-col sm="12" :md="labelCols">
-              <span class="label">owner:</span>
+              <span class="label">Owner:</span>
             </b-col>
             <b-col sm="12" :md="contentCols">
-              <span>{{ computedOwner }}</span>
+              <router-link
+                :to="{
+                  name: 'address',
+                  params: {
+                    address: computedOwner,
+                  },
+                }"
+                >{{ computedOwner }}</router-link
+              >
             </b-col>
           </b-row>
           <b-row>
             <b-col sm="12" :md="labelCols">
-              <span class="label">creation tx:</span>
+              <span class="label">Creation Tx:</span>
             </b-col>
             <b-col sm="12" :md="contentCols">
-              <span>{{ computedCreationTxHash }}</span>
+              <router-link
+                :to="{
+                  name: 'txDetail',
+                  params: {
+                    hash: computedCreationTxHash,
+                  },
+                }"
+                >{{ computedCreationTxHash }}</router-link
+              >
             </b-col>
           </b-row>
           <b-row>
             <b-col sm="12" :md="labelCols">
-              <span class="label">verified:</span>
+              <span class="label">Verified:</span>
             </b-col>
             <b-col sm="12" :md="contentCols">
               <template v-if="verifyStatus === 'perfect'">
@@ -182,7 +198,7 @@
                 <span> again.</span>
               </template>
               <template v-else>
-                <span>no, you can </span>
+                <span>Now you can </span>
                 <router-link
                   :to="{
                     name: 'verify',
@@ -250,6 +266,15 @@ export default {
     },
     contractAddress() {
       return this.title.split(":")[1].trim();
+    },
+    computedData() {
+      const temp = [];
+      for (const obj of this.data) {
+        if (obj.key !== "owner" && obj.key !== "creationTxHash") {
+          temp.push(obj);
+        }
+      }
+      return temp;
     },
     computedOwner() {
       for (const obj of this.data) {

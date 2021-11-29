@@ -65,7 +65,6 @@ export default {
       },
       form: {
         address: "",
-        chain: "",
         sourceCode: "",
         metadata: "",
       },
@@ -74,7 +73,6 @@ export default {
   async created() {
     const { address } = this.$route.params;
     this.form.address = address;
-    this.form.chain = this.network === "main" ? "82" : "83";
   },
   methods: {
     async onSubmit(e) {
@@ -83,14 +81,12 @@ export default {
       this.loading = true;
       const data = {
         address: this.form.address,
-        chain: this.form.chain,
         files: {
           sourceCode: this.form.sourceCode.toString(),
           metadata: this.form.metadata.toString(),
         },
       };
-
-      const res = await this.$api.verify.verify(data);
+      const res = await this.$api.verify.verify(this.network, data);
       console.log("verify res", res);
       this.loading = false;
       if (res.error) {

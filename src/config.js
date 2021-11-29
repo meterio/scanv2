@@ -9,6 +9,6 @@ export const API_BASE = {
 };
 
 export const SOURCIFY_API = {
-  server: "http://13.214.30.180:5000",
-  repo: "http://13.214.30.180:10000"
+  main: "https://sourcify-test.meter.io",
+  test: "https://sourcify-test.meter.io"
 }

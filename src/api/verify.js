@@ -11,20 +11,23 @@ export default {
   verifyContract(network, url, params) {
     return post(network, url, params);
   },
-  verify(data) {
-    const url = SOURCIFY_API.server;
-    return fetch(url, 'POST', data);
+  verify(network, { address, files }) {
+    const url = SOURCIFY_API[network];
+    const chain = network === 'main' ? '82' : '83';
+    return fetch(url, 'POST', {
+      chain,
+      address,
+      files
+    });
   },
-  metadata({ chain, address }) {
-    const url = `${SOURCIFY_API.repo}/contracts/full_match/${chain}/${address}/metadata.json`;
+  files(network, { address }) {
+    const chain = network === 'main' ? '82' : '83';
+    const url = `${SOURCIFY_API[network]}/files/any/${chain}/${address}`;
     return fetch(url, 'GET');
   },
-  partialMetadata({ chain, address }) {
-    const url = `${SOURCIFY_API.repo}/contracts/partial_match/${chain}/${address}/metadata.json`;
-    return fetch(url, 'GET');
-  },
-  check({ chain, address }) {
-    const url = `${SOURCIFY_API.server}/checkByAddresses?addresses=${address}&chainIds=${chain}`;
+  check(network, { address }) {
+    const chain = network === 'main' ? '82' : '83';
+    const url = `${SOURCIFY_API[network]}/checkByAddresses?addresses=${address}&chainIds=${chain}`;
     return fetch(url, 'GET');
   }
 };

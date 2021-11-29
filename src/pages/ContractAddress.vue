@@ -24,10 +24,7 @@
           @changeTab="navTabChange"
         )
       div(slot="otherData")
-        contract-detail(
-          :address="addressInfo.address",
-          :verifyStatus="verifyStatus"
-        )
+        contract-detail(:files="files")
 </template>
 
 <script>
@@ -113,6 +110,7 @@ export default {
   data() {
     return {
       verifyStatus: null,
+      files: [],
       contract_tabs: [
         // { name: "Transfers" },
         { name: "Transactions" },
@@ -150,16 +148,18 @@ export default {
   },
   async created() {
     const data = {
-      chain: this.network === "main" ? "82" : "83",
       address: this.addressInfo.address,
     };
-    const res = await this.$api.verify.check(data);
-    let verifyStatus = res.data[0].status;
-    if (verifyStatus !== "perfect") {
-      const partial = await this.$api.verify.partialMetadata(data);
-      if (!partial.error) {
+    const filesRes = await this.$api.verify.files(this.network, data);
+    console.log("files: ", filesRes);
+    let verifyStatus = "not find";
+    if (filesRes.data) {
+      if (files.data.status === "partial") {
         verifyStatus = "partial";
+      } else {
+        verifyStatus = "perfect";
       }
+      this.files = filesRes.data.files;
     }
     this.verifyStatus = verifyStatus;
   },
