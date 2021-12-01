@@ -15,38 +15,27 @@
         </div>
       </div>
       <b-form v-else @submit="onSubmit" @reset="onReset">
-        <b-form-group
-          label="Enter the Solidity Contract Code below:"
-          label-for="solidity-code"
-        >
-          <b-form-textarea
-            id="solidity-code"
-            v-model="form.sourceCode"
-            type="text"
-            placeholder=""
-            rows="6"
+        <b-form-group label="Choose the Solidity Contract Code:">
+          <b-form-file
+            multiple
+            v-model="form.sourceCodeFiles"
             required
-          ></b-form-textarea>
+          >
+            <template slot="file-name" slot-scope="{ names }">
+              <b-badge variant="dark">{{ names[0] }}</b-badge>
+              <b-badge v-if="names.length > 1" variant="dark" class="ml-1">
+                + {{ names.length - 1 }} More files
+              </b-badge>
+            </template>
+          </b-form-file>
         </b-form-group>
-        <b-form-group
-          label="Enter the Metadata Code below:"
-          label-for="metadata"
-        >
-          <b-form-textarea
-            id="metadata"
-            v-model="form.metadata"
-            type="text"
-            placeholder=""
-            rows="6"
-            required
-          ></b-form-textarea>
+        <b-form-group label="Choose the Metadata Code:">
+          <b-form-file v-model="form.metadataFile" required></b-form-file>
         </b-form-group>
 
         <section class="text-center">
           <b-button type="submit" variant="primary">Verify</b-button>
-          <b-button class="ml-1" type="reset" variant="secondary"
-            >Reset</b-button
-          >
+          <b-button class="ml-1" type="reset" variant="secondary">Reset</b-button>
         </section>
       </b-form>
     </section>
@@ -67,6 +56,8 @@ export default {
         address: "",
         sourceCode: "",
         metadata: "",
+        sourceCodeFiles: [],
+        metadataFile: null,
       },
     };
   },
@@ -79,14 +70,13 @@ export default {
       e.preventDefault();
       this.isError.status = false;
       this.loading = true;
+      const files = [this.form.metadataFile];
+      this.form.sourceCodeFiles.forEach(item => files.push(item))
       const data = {
         address: this.form.address,
-        files: {
-          sourceCode: this.form.sourceCode.toString(),
-          metadata: this.form.metadata.toString(),
-        },
+        files,
       };
-      const res = await this.$api.verify.verify(this.network, data);
+      const res = await this.$api.verify.verifyFormData(this.network, data);
       console.log("verify res", res);
       this.loading = false;
       if (res.error) {

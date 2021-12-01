@@ -151,10 +151,9 @@ export default {
       address: this.addressInfo.address,
     };
     const filesRes = await this.$api.verify.files(this.network, data);
-    console.log("files: ", filesRes);
     let verifyStatus = "not find";
     if (filesRes.data) {
-      if (files.data.status === "partial") {
+      if (filesRes.data.status === "partial") {
         verifyStatus = "partial";
       } else {
         verifyStatus = "perfect";

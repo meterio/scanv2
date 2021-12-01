@@ -20,6 +20,21 @@ export default {
       files
     });
   },
+  verifyFormData(network, { address, files }) {
+    const url = SOURCIFY_API[network];
+    const chain = network === 'main' ? '82' : '83';
+    let data = new FormData();
+    data.append("address", address);
+    data.append("chain", chain);
+    if (files.length > 0) {
+      files.forEach(file => data.append('files', file));
+    }
+    return fetch(url, 'POST', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  },
   files(network, { address }) {
     const chain = network === 'main' ? '82' : '83';
     const url = `${SOURCIFY_API[network]}/files/any/${chain}/${address}`;
