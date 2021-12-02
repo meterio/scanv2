@@ -43,6 +43,8 @@
 </template>
 
 <script>
+import { abi } from "@meterio/devkit";
+
 export default {
   name: "Verify",
   data() {
@@ -78,8 +80,9 @@ export default {
       };
       const res = await this.$api.verify.verifyFormData(this.network, data);
       console.log("verify res", res);
-      this.loading = false;
+      
       if (res.error) {
+        this.loading = false;
         this.isError = {
           status: true,
           msg: res.msg.error || res.msg,
@@ -90,9 +93,43 @@ export default {
           res.data.result[0].status === "partial"
         ) {
           // success
-          this.$router.go(-1);
+          await this.saveKnowMethodAndEvent();
         }
       }
+    },
+    async saveKnowMethodAndEvent() {
+      let file = this.form.metadataFile;
+      let reader = new FileReader();
+      reader.onload = async (res) => {
+        const result = JSON.parse(res.target.result);
+        const events = [];
+        const methods = [];
+        for (const a of result.output.abi) {
+          if (a.type === 'function') {
+            const fun = new abi.Function(a);
+            methods.push({
+              signature: fun.signature,
+              name: fun.canonicalName,
+              abi: JSON.stringify(a)
+            })
+          }
+          if (a.type === 'event') {
+            const eve = new abi.Event(a);
+            events.push({
+              signature: eve.signature,
+              name: eve.canonicalName,
+              abi: JSON.stringify(a)
+            })
+          }
+        }
+        const saveKnowMethodAndEventRes = await this.$api.known.saveKnowMethodAndEvent(this.network, events, methods);
+        console.log('saveKnowMethodAndEventRes', saveKnowMethodAndEventRes);
+
+        this.loading = false;
+
+        this.$router.go(-1);
+      };
+      reader.readAsText(file);
     },
     onReset(e) {
       e.preventDefault();
