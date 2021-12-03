@@ -154,7 +154,7 @@ export const routes = [
     meta: { title: `${DOMAIN_TITLE} | Stat` },
   },
   {
-    path: "/verify/:address",
+    path: "/verify",
     name: "verify",
     component: VerifyPage,
     meta: { title: `${DOMAIN_TITLE} | verify` },

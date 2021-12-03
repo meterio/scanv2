@@ -38,6 +38,7 @@
           <b-button class="ml-1" type="reset" variant="secondary">Reset</b-button>
         </section>
       </b-form>
+      <!-- <b-button @click="test" class="ml-1" type="reset" variant="secondary">TEST</b-button> -->
     </section>
   </b-container>
 </template>
@@ -65,6 +66,9 @@ export default {
   },
   async created() {
     const { address } = this.$route.params;
+    if (!address) {
+      return this.$router.push('/')
+    }
     this.form.address = address;
   },
   methods: {
@@ -96,6 +100,29 @@ export default {
           await this.saveKnowMethodAndEvent();
         }
       }
+    },
+    async test() {
+      const events = [];
+      const methods = [
+        {
+          signature: '0x00000001',
+          name: 'test-name-1',
+          abi: 'test-abi-1'
+        },
+        {
+          signature: '0x00000002',
+          name: 'test-name-2',
+          abi: 'test-abi-2'
+        },
+        {
+          signature: '0x00000003',
+          name: 'test-name-3',
+          abi: 'test-abi-3'
+        }
+      ];
+
+      const saveKnowMethodAndEventRes = await this.$api.known.saveKnowMethodAndEvent(this.network, events, methods);
+      console.log('saveKnowMethodAndEventRes', saveKnowMethodAndEventRes);
     },
     async saveKnowMethodAndEvent() {
       let file = this.form.metadataFile;
