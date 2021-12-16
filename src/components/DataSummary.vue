@@ -18,35 +18,19 @@
             <b-col sm="12" :md="contentCols">
               <span v-if="!item.type" class="value">{{ item.value }}</span>
 
-<<<<<<< HEAD
-          <!-- block-link-with-note -->
-          <span v-if="item.type == 'block-link-with-note'">
-            <router-link
-              :to="{
-                name: 'blockDetail',
-                params: {
-                  revision: item.block,
-                },
-              }"
-              >#{{ item.block }}</router-link
-            >
-            <span class="value"> ({{ item.value }})</span>
-          </span>
-=======
               <!-- block-link-with-note -->
               <span v-if="item.type == 'block-link-with-note'">
                 <router-link
                   :to="{
                     name: 'blockDetail',
                     params: {
-                      revision: item.block
-                    }
+                      revision: item.block,
+                    },
                   }"
                   >#{{ item.block }}</router-link
                 >
                 <span class="value"> ({{ item.value }})</span>
               </span>
->>>>>>> 4b16cbf837081a3ac2855a611166ea1b74e7b836
 
               <!-- block-link -->
               <b-link
@@ -60,7 +44,10 @@
               <div v-if="item.type === 'block-range'">
                 <b-link
                   href="#"
-                  :to="{ name: 'blockDetail', params: { revision: item.start } }"
+                  :to="{
+                    name: 'blockDetail',
+                    params: { revision: item.start },
+                  }"
                   >#{{ item.start }}</b-link
                 >
                 <span class="mx-1">-</span>
@@ -96,27 +83,15 @@
                 v-if="item.type === 'address-link'"
               />
 
-<<<<<<< HEAD
-          <!-- address-or-name-link -->
-          <router-link
-            :to="{
-              name: 'address',
-              params: { address: item.value.address },
-            }"
-            v-if="item.type === 'address-or-name-link' && !!item.value.name"
-            >{{ item.value.name }}</router-link
-          >
-=======
               <!-- address-or-name-link -->
               <router-link
                 :to="{
                   name: 'address',
-                  params: { address: item.value.address }
+                  params: { address: item.value.address },
                 }"
                 v-if="item.type === 'address-or-name-link' && !!item.value.name"
                 >{{ item.value.name }}</router-link
               >
->>>>>>> 4b16cbf837081a3ac2855a611166ea1b74e7b836
 
               <!-- timestamp -->
               <span v-if="item.type === 'timestamp'">
@@ -141,26 +116,6 @@
                 ></AmountTag>
               </span>
 
-<<<<<<< HEAD
-          <!-- status -->
-          <span v-if="item.type === 'transfer-highlight'">
-            <div
-              class="d-flex justify-content-start"
-              :key="index"
-              v-for="(row, index) in item.value"
-            >
-              <address-link class="mr-3" short :address="row.from" />
-              <span class="mr-3">to</span>
-              <address-link class="mr-3" short :address="row.to" />
-              <AmountTag
-                :amount="row.amount"
-                :token="row.token"
-                :precision="row.decimals"
-                :decimals="row.decimals"
-              />
-            </div>
-          </span>
-=======
               <!-- status -->
               <span v-if="item.type === 'transfer-highlight'">
                 <div
@@ -180,7 +135,6 @@
                 </div>
                 <div v-if="item.value.length > 10">...</div>
               </span>
->>>>>>> 4b16cbf837081a3ac2855a611166ea1b74e7b836
 
               <!-- status -->
               <span v-if="item.type === 'status'">
@@ -213,13 +167,14 @@
             <b-col sm="12" :md="contentCols">
               <span>no, you can </span>
               <router-link
-                  :to="{
-                    name: 'verify',
-                    params: {
-                      address: contractAddress
-                    }
-                  }"
-                  >VERIFY</router-link>
+                :to="{
+                  name: 'verify',
+                  params: {
+                    address: contractAddress,
+                  },
+                }"
+                >VERIFY</router-link
+              >
               <span> your contract source code.</span>
             </b-col>
           </b-row>
@@ -249,17 +204,12 @@ export default {
     },
     wide: {
       type: Boolean,
-<<<<<<< HEAD
       default: false,
-    },
-=======
-      default: false
     },
     isContract: {
       type: Boolean,
-      default: false
-    }
->>>>>>> 4b16cbf837081a3ac2855a611166ea1b74e7b836
+      default: false,
+    },
   },
   data() {
     return {
@@ -276,14 +226,10 @@ export default {
     contentCols() {
       return this.wide ? 9 : 10;
     },
-<<<<<<< HEAD
-  },
-=======
     contractAddress() {
-      return this.title.split(':')[1].trim()
-    }
-  }
->>>>>>> 4b16cbf837081a3ac2855a611166ea1b74e7b836
+      return this.title.split(":")[1].trim();
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

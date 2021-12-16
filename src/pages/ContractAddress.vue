@@ -5,7 +5,7 @@
   b-container.summary
     .mt-2pert.px-5
     data-table-v3.mt-2pert.px-0(
-      :isTableData="isTableData"
+      :isTableData="isTableData",
       :loadItems="loadItems",
       :fields="fields",
       :pagination="pagination",
@@ -32,7 +32,7 @@ export default {
     DataTableV3,
     NavTabs,
     DataSummary,
-    ContractDetail
+    ContractDetail,
   },
   props: {
     addressInfo: {
@@ -41,11 +41,11 @@ export default {
         return {
           isContract: true,
           isERC20: false,
-          address: '0x',
-          summary: []
-        }
-      }
-    }
+          address: "0x",
+          summary: [],
+        };
+      },
+    },
   },
   computed: {
     title() {
@@ -93,13 +93,13 @@ export default {
       return this.loadTxs;
     },
     isTableData() {
-      console.log('loadTarget', this.loadTarget)
-      if (this.loadTarget === 'contract') {
-        return false
+      console.log("loadTarget", this.loadTarget);
+      if (this.loadTarget === "contract") {
+        return false;
       }
 
-      return true
-    }
+      return true;
+    },
   },
   data() {
     return {
@@ -107,7 +107,7 @@ export default {
         // { name: "Transfers" },
         { name: "Transactions" },
         { name: "Holders" },
-        { name: "Contract" }
+        { name: "Contract" },
       ],
       tabValue: 0,
       loadTarget: "txs",
@@ -135,7 +135,7 @@ export default {
           { key: "amount", label: "Amount" },
         ],
         items: [],
-      }
+      },
     };
   },
   watch: {
@@ -202,7 +202,9 @@ export default {
           direct = "Self";
         } else {
           direct =
-            t.to.toLowerCase() === this.address.toLowerCase() ? "In" : "Out";
+            t.to.toLowerCase() === this.addressInfo.address.toLowerCase()
+              ? "In"
+              : "Out";
         }
         let decimals = 18;
         let from = t.from;
@@ -252,9 +254,12 @@ export default {
         let relatedTransfer;
         if (relatedTransfers && relatedTransfers.length >= 1) {
           for (const tr of relatedTransfers) {
+            console.log("TR:", tr);
             if (
-              tr.sender.toLowerCase() === this.address.toLowerCase() ||
-              tr.recipient.toLowerCase() === this.address.toLowerCase()
+              tr.sender.toLowerCase() ===
+                this.addressInfo.address.toLowerCase() ||
+              tr.recipient.toLowerCase() ===
+                this.addressInfo.address.toLowerCase()
             ) {
               relatedTransfer = tr;
               break;
@@ -316,9 +321,9 @@ export default {
           status: t.reverted,
         },
         blocknum: t.block.number,
-        from: t.from === this.address ? t.from : t.tokenAddress,
-        to: t.to === this.address ? t.to : t.tokenAddress,
-        direct: t.from === this.address ? "Out" : "In",
+        from: t.from === this.addressInfo.address ? t.from : t.tokenAddress,
+        to: t.to === this.addressInfo.address ? t.to : t.tokenAddress,
+        direct: t.from === this.addressInfo.address ? "Out" : "In",
         amount: {
           type: "amount",
           amount: t.amount,
@@ -329,8 +334,8 @@ export default {
         timestamp: t.block.timestamp,
       }));
       return { items, totalRows };
-    }
-  }
+    },
+  },
 };
 </script>
 
