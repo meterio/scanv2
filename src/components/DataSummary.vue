@@ -149,15 +149,7 @@
               <span class="label">Owner:</span>
             </b-col>
             <b-col sm="12" :md="contentCols">
-              <router-link
-                :to="{
-                  name: 'address',
-                  params: {
-                    address: computedOwner,
-                  },
-                }"
-                >{{ computedOwner }}</router-link
-              >
+              <address-link class="mr-3" short :address="computedOwner" />
             </b-col>
           </b-row>
           <b-row>
@@ -172,7 +164,7 @@
                     hash: computedCreationTxHash,
                   },
                 }"
-                >{{ computedCreationTxHash }}</router-link
+                >{{ shortHash(computedCreationTxHash) }}</router-link
               >
             </b-col>
           </b-row>
