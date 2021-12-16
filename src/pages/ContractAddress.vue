@@ -1,6 +1,12 @@
 <template lang="pug">
 .detail-page
-  data-summary(:title="title", :data="addressInfo.summary", wide, isContract)
+  data-summary(
+    :title="title",
+    :data="addressInfo.summary",
+    wide,
+    isContract,
+    :verifyStatus="verifyStatus"
+  )
 
   b-container.summary
     .mt-2pert.px-5
@@ -18,7 +24,7 @@
           @changeTab="navTabChange"
         )
       div(slot="otherData")
-        contract-detail
+        contract-detail(:files="files")
 </template>
 
 <script>
@@ -103,6 +109,8 @@ export default {
   },
   data() {
     return {
+      verifyStatus: null,
+      files: [],
       contract_tabs: [
         // { name: "Transfers" },
         { name: "Transactions" },
@@ -137,6 +145,22 @@ export default {
         items: [],
       },
     };
+  },
+  async created() {
+    const data = {
+      address: this.addressInfo.address,
+    };
+    const filesRes = await this.$api.verify.files(this.network, data);
+    let verifyStatus = "not find";
+    if (filesRes.data) {
+      if (filesRes.data.status === "partial") {
+        verifyStatus = "partial";
+      } else {
+        verifyStatus = "perfect";
+      }
+      this.files = filesRes.data.files;
+    }
+    this.verifyStatus = verifyStatus;
   },
   watch: {
     address() {

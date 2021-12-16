@@ -1,40 +1,15 @@
 <template>
   <div class="my-2">
-    <div class="loading" v-if="loading">
-      <div class="text-center text-primary my-2">
-        <b-spinner class="align-middle mr-2"></b-spinner>
-        <strong>Loading...</strong>
-      </div>
-    </div>
-    <b-form v-else @submit.prevent>
-      <b-form-group
-        label="Solidity Contract Code:"
-        label-for="solidity-code"
-      >
+    <b-form @submit.prevent>
+      <b-form-group v-for="item in files" :label="item.name" :key="item.path">
         <b-form-textarea
-          id="solidity-code"
-          v-model="form.sourceCode"
+          :value="item.content"
           type="text"
           placeholder=""
-          rows="6"
+          rows="15"
           required
         ></b-form-textarea>
       </b-form-group>
-
-      <b-form-group
-        label="Contract ABI:"
-        label-for="contract-abi"
-      >
-        <b-form-textarea
-          id="contract-abi"
-          v-model="form.contractAbi"
-          type="text"
-          placeholder=""
-          rows="6"
-          required
-        ></b-form-textarea>
-      </b-form-group>
-
     </b-form>
   </div>
 </template>
@@ -42,27 +17,24 @@
 <script>
 export default {
   name: "Contract",
-  data() {
-    return {
-      loading: true,
-      form: {
-        sourceCode: 'source code',
-        contractAbi: 'contract abi'
-      }
-    }
+  props: {
+    files: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
-  created() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 2000);
-  }
-}
+  data() {
+    return {};
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .loading {
-    opacity: 0.55;
-    font-size: 14px;
-    font-weight: bold;
-  }
+.loading {
+  opacity: 0.55;
+  font-size: 14px;
+  font-weight: bold;
+}
 </style>

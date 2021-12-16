@@ -11,7 +11,7 @@
 
       <b-row v-else>
         <b-col :md="!isContract || 6">
-          <b-row class="row" :key="item.key" v-for="item in data">
+          <b-row class="row" :key="item.key" v-for="item in computedData">
             <b-col sm="12" :md="labelCols">
               <span class="label">{{ item.key }}:</span>
             </b-col>
@@ -146,36 +146,70 @@
         <b-col v-if="isContract" md="6">
           <b-row>
             <b-col sm="12" :md="labelCols">
-              <span class="label">owner:</span>
+              <span class="label">Owner:</span>
             </b-col>
             <b-col sm="12" :md="contentCols">
-              <span>0x</span>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col sm="12" :md="labelCols">
-              <span class="label">creation tx:</span>
-            </b-col>
-            <b-col sm="12" :md="contentCols">
-              <span>0x</span>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col sm="12" :md="labelCols">
-              <span class="label">verified:</span>
-            </b-col>
-            <b-col sm="12" :md="contentCols">
-              <span>no, you can </span>
               <router-link
                 :to="{
-                  name: 'verify',
+                  name: 'address',
                   params: {
-                    address: contractAddress,
+                    address: computedOwner,
                   },
                 }"
-                >VERIFY</router-link
+                >{{ computedOwner }}</router-link
               >
-              <span> your contract source code.</span>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="12" :md="labelCols">
+              <span class="label">Creation Tx:</span>
+            </b-col>
+            <b-col sm="12" :md="contentCols">
+              <router-link
+                :to="{
+                  name: 'txDetail',
+                  params: {
+                    hash: computedCreationTxHash,
+                  },
+                }"
+                >{{ computedCreationTxHash }}</router-link
+              >
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="12" :md="labelCols">
+              <span class="label">Verified:</span>
+            </b-col>
+            <b-col sm="12" :md="contentCols">
+              <template v-if="verifyStatus === 'perfect'">
+                <span>yes, your verify is perfect</span>
+              </template>
+              <template v-else-if="verifyStatus === 'partial'">
+                <span>yes, but it's partial, you can </span>
+                <router-link
+                  :to="{
+                    name: 'verify',
+                    params: {
+                      address: contractAddress,
+                    },
+                  }"
+                  >VERIFY</router-link
+                >
+                <span> again.</span>
+              </template>
+              <template v-else>
+                <span>Now you can </span>
+                <router-link
+                  :to="{
+                    name: 'verify',
+                    params: {
+                      address: contractAddress,
+                    },
+                  }"
+                  >VERIFY</router-link
+                >
+                <span> your contract source code.</span>
+              </template>
             </b-col>
           </b-row>
         </b-col>
@@ -210,6 +244,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    verifyStatus: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
@@ -228,6 +266,31 @@ export default {
     },
     contractAddress() {
       return this.title.split(":")[1].trim();
+    },
+    computedData() {
+      const temp = [];
+      for (const obj of this.data) {
+        if (obj.key !== "owner" && obj.key !== "creationTxHash") {
+          temp.push(obj);
+        }
+      }
+      return temp;
+    },
+    computedOwner() {
+      for (const obj of this.data) {
+        if (obj.key === "owner") {
+          return obj.value;
+        }
+      }
+      return "0x";
+    },
+    computedCreationTxHash() {
+      for (const obj of this.data) {
+        if (obj.key === "creationTxHash") {
+          return obj.value;
+        }
+      }
+      return "0x";
     },
   },
 };

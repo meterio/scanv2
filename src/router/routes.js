@@ -20,6 +20,7 @@ import BucketPage from "@/pages/Bucket.vue";
 import AddressLinkPage from "@/pages/AddressLinkPage.vue";
 import StatPage from "@/pages/Stat.vue";
 import VerifyPage from "@/pages/Verify.vue";
+import TokenAddress from "@/pages/tokenAddress.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
 import { DOMAIN_TITLE } from "../.env";
@@ -153,10 +154,16 @@ export const routes = [
     meta: { title: `${DOMAIN_TITLE} | Stat` },
   },
   {
-    path: "/verify/:address",
+    path: "/verify",
     name: "verify",
     component: VerifyPage,
     meta: { title: `${DOMAIN_TITLE} | verify` },
+  },
+  {
+    path: "/token/:address",
+    name: "tokenInfo",
+    component: TokenAddress,
+    meta: { title: `${DOMAIN_TITLE} | token` },
   },
 
   {

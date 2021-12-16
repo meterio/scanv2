@@ -10,6 +10,7 @@ import bucket from "./bucket";
 import epoch from "./epoch";
 import known from "./known";
 import verify from "./verify";
+import token from "./token";
 
 export default {
   block,
@@ -24,4 +25,5 @@ export default {
   epoch,
   known,
   verify,
+  token,
 };

@@ -1,9 +1,9 @@
 <template lang="pug">
-  div
-    .text-center.text-primary(v-if="isContract === null")
-      b-spinner.my-5
-    ContractAddress(v-else-if="isContract" :address-info="addressInfo")
-    UserAddress(v-else  :address-info="addressInfo")
+div
+  .text-center.text-primary(v-if="isContract === null")
+    b-spinner.my-5
+  ContractAddress(v-else-if="isContract", :address-info="addressInfo")
+  UserAddress(v-else, :address-info="addressInfo")
 </template>
 
 <script>
@@ -13,15 +13,15 @@ export default {
   name: "Address",
   components: {
     UserAddress,
-    ContractAddress
+    ContractAddress,
   },
   data() {
     return {
-      isContract: null,
+      isContract: false,
       isERC20: false,
       address: "0x",
       account: {},
-      summary: []
+      summary: [],
     };
   },
   computed: {
@@ -30,9 +30,13 @@ export default {
         isContract: this.isContract,
         isERC20: this.isERC20,
         address: this.address,
-        summary: this.summary
-      }
-    }
+        summary: this.summary,
+      };
+    },
+  },
+  async created() {
+    const result = await this.$api.known.getAllMethodAndEvent(this.network);
+    console.log('all known methods and events: ', result);
   },
   methods: {
     init() {
@@ -48,7 +52,7 @@ export default {
           this.network,
           address
         );
-        console.log("res: ", res)
+        console.log("res: ", res);
 
         const { account } = res;
         this.isContract = !!account.isContract;
@@ -140,15 +144,24 @@ export default {
             });
           }
         }
+        if (account.isContract) {
+          this.summary.push({
+            key: "owner",
+            value: account.master,
+          });
+          this.summary.push({
+            key: "creationTxHash",
+            value: account.creationTxHash,
+          });
+        }
         this.account = account;
       } catch (e) {
         console.log(e);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-
 </style>
