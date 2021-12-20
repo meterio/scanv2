@@ -135,6 +135,7 @@ export default {
         },
         fields: [
           { key: "txhashWithStatus", label: "Hash" },
+          { key: "methodName", label: "Method" },
           { key: "blocknum", label: "Block" },
           { key: "timestamp", label: "Time" },
           { key: "from", label: "From" },
@@ -147,27 +148,31 @@ export default {
     };
   },
   async created() {
-    const data = {
-      address: this.addressInfo.address,
-    };
-    const filesRes = await this.$api.verify.files(this.network, data);
-    let verifyStatus = "not find";
-    if (filesRes.data) {
-      if (filesRes.data.status === "partial") {
-        verifyStatus = "partial";
-      } else {
-        verifyStatus = "perfect";
-      }
-      this.files = filesRes.data.files;
-    }
-    this.verifyStatus = verifyStatus;
+    this.getVerifyStatus();
   },
   watch: {
-    address() {
+    "addressInfo.address"() {
       this.navTabChange(0);
+      this.getVerifyStatus();
     },
   },
   methods: {
+    async getVerifyStatus() {
+      const data = {
+        address: this.addressInfo.address,
+      };
+      const filesRes = await this.$api.verify.files(this.network, data);
+      let verifyStatus = "not find";
+      if (filesRes.data) {
+        if (filesRes.data.status === "partial") {
+          verifyStatus = "partial";
+        } else {
+          verifyStatus = "perfect";
+        }
+        this.files = filesRes.data.files;
+      }
+      this.verifyStatus = verifyStatus;
+    },
     navTabChange(val) {
       this.tabValue = val;
       switch (val) {
@@ -310,11 +315,21 @@ export default {
         }
         console.log("direct = ", direct);
 
+        let methodName = '';
+        if (t.knowMethod) {
+          if (t.knowMethod.abi) {
+            methodName = JSON.parse(t.knowMethod.abi).name;
+          } else {
+            methodName = t.knowMethod.signature
+          }
+        }
+
         return {
           txhashWithStatus: {
             hash: t.hash,
             status: t.reverted,
           },
+          methodName,
           blocknum: t.block.number,
           from: fromAddr,
           direct,

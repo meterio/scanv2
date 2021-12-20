@@ -26,7 +26,14 @@
 
       <template v-slot:cell(data)="row">
         <div class="dt-row breakable">
-          {{ row.value }}
+          <template v-if="row.hind !== ''">
+            <div v-for="item in row.value" :key="item.index">
+              {{ item }}
+            </div>
+          </template>
+          <template v-else>
+            {{ row.value }}
+          </template>
         </div>
 
         <div v-if="row.row_hovered"></div>
@@ -67,6 +74,7 @@ import "vue-json-pretty/lib/styles.css";
 import { bigNum } from "@/utils";
 import { abi } from "@meterio/devkit";
 import BigNumber from "bignumber.js";
+import { ethers } from "@meterio/ethers";
 
 const TransferABI = new abi.Event({
   anonymous: false,
@@ -214,6 +222,8 @@ export default {
         clauses = tx.clauses.map(c => {
           let decoded = undefined;
           let hint = "";
+          const abiData = []
+          const scriptengineData = []
 
           try {
             const se = ScriptEngine;
@@ -235,14 +245,33 @@ export default {
                 decoded = se.jsonFromStakingBody(body);
                 hint = se.explainStakingOpCode(body.opCode);
               }
+            } else {
+              if(c.knownMethod) {
+                if (c.knownMethod.name) {
+                  abiData.push(`Function: ${c.knownMethod.name}`);
+                }
+                if (c.knownMethod.signature) {
+                  abiData.push(`MethodID: ${c.knownMethod.signature}`);
+                }
+              }
+              
+              for (let i = 10; i < c.data.length; i += 64) {
+                abiData.push(`[${Math.ceil(i / 64)}]: ${c.data.substr(i, 64)}`);
+              }
             }
           } catch (e) {
             console.log(e);
           }
 
+          if (hint) {
+            scriptengineData.push('Function: scriptengine');
+            scriptengineData.push('MethodID: 0xffffffff');
+            scriptengineData.push(`${c.data} (${hint})`);
+          }
+
           return {
             ...c,
-            data: hint ? `${c.data} (${hint})` : c.data,
+            data: hint ? scriptengineData : abiData,
             amount: {
               type: "amount",
               amount: bigNum(c.value),
@@ -276,13 +305,20 @@ export default {
       console.log(`transfers cost ${end - start}`);
 
       start = new Date();
-      this.events.items = tx.events.map(e => ({
-        address: e.address,
-        details: {
-          topics: e.topics,
-          data: e.data
+      this.events.items = tx.events.map(e => {
+        const _data = [];
+        for (let i = 10; i < e.data.length; i += 64) {
+          _data.push(e.data.substr(i, 64))
         }
-      }));
+        return {
+          address: e.address,
+          details: {
+            name: e.knownEvent.name,
+            topics: e.topics,
+            data: _data
+          }
+        }
+      });
       end = new Date();
       console.log(`events cost ${end - start}`);
 

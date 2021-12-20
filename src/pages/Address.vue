@@ -34,10 +34,6 @@ export default {
       };
     },
   },
-  async created() {
-    const result = await this.$api.known.getAllMethodAndEvent(this.network);
-    console.log('all known methods and events: ', result);
-  },
   methods: {
     init() {
       this.loadAddress();

@@ -273,6 +273,13 @@
           </div>
         </template>
 
+        <!-- method name -->
+        <template v-slot:cell(methodName)="data">
+          <div class="dt-row">
+            <DirectTag :direct="data.value" />
+          </div>
+        </template>
+
         <!-- default template -->
         <template v-slot:cell()="data">
           <div class="dt-row">

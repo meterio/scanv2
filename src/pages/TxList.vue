@@ -22,6 +22,7 @@ export default {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "txhash", label: "Hash" },
+          { key: "methodName", label: "Method" },
           { key: "blocknum", label: "Block" },
           { key: "timestamp", label: "Time" },
           { key: "from", label: "From" },
@@ -40,8 +41,18 @@ export default {
         limit
       );
       const items = txs.map((tx) => {
+        let methodName = '';
+        if (tx.knowMethod) {
+          if (tx.knowMethod.abi) {
+            methodName = JSON.parse(tx.knowMethod.abi).name;
+          } else {
+            methodName = tx.knowMethod.signature
+          }
+        }
+
         return {
           txhash: tx.hash,
+          methodName,
           blocknum: tx.block.number,
           from: tx.origin,
           to: tx.majorTo,

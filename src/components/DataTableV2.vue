@@ -260,15 +260,25 @@
 
         <!-- Pos Reward template -->
         <template v-slot:cell(details)="data">
-          <div class="dt-row">
+          <div class="dt-row breakable">
+            <div>name: {{ data.value.name }}</div>
             <div v-for="(topic, index) in data.value.topics" :key="index">
               <span class="mr-1">topic {{ index }}:</span>
               <span>{{ topic }}</span>
             </div>
             <div class="mt-3">
-              <span class="mr-1">data:</span>
-              <span>{{ data.value.data }}</span>
+              <div v-for="(value, index) in data.value.data" :key="index">
+                <span class="mr-1">data {{ index }}:</span>
+                <span>{{ value }}</span>
+              </div>
             </div>
+          </div>
+        </template>
+
+        <!-- method name -->
+        <template v-slot:cell(methodName)="data">
+          <div class="dt-row">
+            <DirectTag :direct="data.value" />
           </div>
         </template>
 

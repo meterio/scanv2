@@ -193,6 +193,7 @@ export default {
         },
         fields: [
           { key: "txhashWithStatus", label: "Hash" },
+          { key: "methodName", label: "Method" },
           { key: "blocknum", label: "Block" },
           { key: "timestamp", label: "Time" },
           { key: "from", label: "From" },
@@ -528,11 +529,21 @@ export default {
         }
         console.log("direct = ", direct);
 
+        let methodName = '';
+        if (t.knowMethod) {
+          if (t.knowMethod.abi) {
+            methodName = JSON.parse(t.knowMethod.abi).name;
+          } else {
+            methodName = t.knowMethod.signature
+          }
+        }
+
         return {
           txhashWithStatus: {
             hash: t.hash,
             status: t.reverted,
           },
+          methodName,
           blocknum: t.block.number,
           from: fromAddr,
           direct,

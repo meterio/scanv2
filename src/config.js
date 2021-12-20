@@ -4,8 +4,8 @@ export const DEPLOY_DOMAIN = {
 };
 
 export const API_BASE = {
-  // main: "http://13.214.30.180:3000/api",
-  // test: "http://13.214.30.180:3000/api",
+  // main: "http://13.214.30.180:3000/api/",
+  // test: "http://13.214.30.180:3000/api/",
   main: "https://api.meter.io:8000/api/",
   test: "https://api.meter.io:4000/api/",
 };
