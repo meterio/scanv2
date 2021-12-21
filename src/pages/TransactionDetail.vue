@@ -26,14 +26,15 @@
 
       <template v-slot:cell(data)="row">
         <div class="dt-row breakable">
-          <template v-if="row.hind !== ''">
+          {{ row.value }}
+          <!-- <template v-if="row.hind !== ''">
             <div v-for="item in row.value" :key="item.index">
               {{ item }}
             </div>
           </template>
           <template v-else>
             {{ row.value }}
-          </template>
+          </template> -->
         </div>
 
         <div v-if="row.row_hovered"></div>
@@ -222,8 +223,6 @@ export default {
         clauses = tx.clauses.map(c => {
           let decoded = undefined;
           let hint = "";
-          const abiData = []
-          const scriptengineData = []
 
           try {
             const se = ScriptEngine;
@@ -247,31 +246,28 @@ export default {
               }
             } else {
               if(c.knownMethod) {
-                if (c.knownMethod.name) {
-                  abiData.push(`Function: ${c.knownMethod.name}`);
+                if (c.knownMethod.abi) {
+                  const abi = JSON.parse(c.knownMethod.abi);
+                  console.log(abi)
+                  const coder = new ethers.utils.AbiCoder();
+                  const inputsType = abi.inputs.map(item => item.type);
+                  console.log('inputsType', inputsType)
+                  decoded = coder.decode(inputsType, c.data);
+                  console.log('decoded', decoded)
+                  // const coder = new ethers.utils.AbiCoder();
+                  // decoded = coder.decode([funName], ethers.utils.hexDataSlice(c.data, 4));
+                  // console.log('decoded', decoded)
                 }
-                if (c.knownMethod.signature) {
-                  abiData.push(`MethodID: ${c.knownMethod.signature}`);
-                }
-              }
-              
-              for (let i = 10; i < c.data.length; i += 64) {
-                abiData.push(`[${Math.ceil(i / 64)}]: ${c.data.substr(i, 64)}`);
               }
             }
           } catch (e) {
             console.log(e);
           }
 
-          if (hint) {
-            scriptengineData.push('Function: scriptengine');
-            scriptengineData.push('MethodID: 0xffffffff');
-            scriptengineData.push(`${c.data} (${hint})`);
-          }
-
+          console.log(`${c.data} (${hint})`)
           return {
             ...c,
-            data: hint ? scriptengineData : abiData,
+            data: hint ? `${c.data} (${hint})` : c.data,
             amount: {
               type: "amount",
               amount: bigNum(c.value),

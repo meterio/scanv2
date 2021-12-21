@@ -136,6 +136,7 @@ export default {
             const fun = new abi.Function(a);
             methods.push({
               signature: fun.signature,
+              contractAddress: this.form.address.toLowerCase(),
               name: fun.canonicalName,
               abi: JSON.stringify(a)
             })
@@ -144,6 +145,7 @@ export default {
             const eve = new abi.Event(a);
             events.push({
               signature: eve.signature,
+              contractAddress: this.form.address.toLowerCase(),
               name: eve.canonicalName,
               abi: JSON.stringify(a)
             })
