@@ -51,7 +51,7 @@ export default {
       running: false,
       modal_show: false,
       // top nav tabs
-      nav_tabs: ["PoS", "PoW"],
+      // nav_tabs: ["PoS", "PoW"],
       // fake data
       msg: "Welcome to Index!!!",
       data: [],

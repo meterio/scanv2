@@ -30,14 +30,14 @@
                 <li>
                   <router-link :to="{ name: 'pos' }">PoS chain</router-link>
                 </li>
-                <li>
-                  <router-link :to="{ name: 'pow' }">PoW chain</router-link>
-                </li>
+<!--                <li>-->
+<!--                  <router-link :to="{ name: 'pow' }">PoW chain</router-link>-->
+<!--                </li>-->
               </ul>
               <ul class="footer-menu">
-                <li>
-                  <router-link :to="{ name: 'auction' }">Auction</router-link>
-                </li>
+<!--                <li>-->
+<!--                  <router-link :to="{ name: 'auction' }">Auction</router-link>-->
+<!--                </li>-->
                 <li>
                   <router-link :to="{ name: 'txList' }">Txs</router-link>
                 </li>

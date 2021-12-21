@@ -123,7 +123,7 @@ export default {
         { name: "Transactions" },
         { name: "ERC20 Tokens" },
         { name: "ERC20 Transactions" },
-        { name: "Auction Bids" },
+        // { name: "Auction Bids" },
         { name: "Proposed Blocks" },
         { name: "Buckets" },
       ],

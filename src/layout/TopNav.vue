@@ -66,7 +66,7 @@
             :class="blockActive ? 'top-dropdown active' : ''"
           >
             <b-dropdown-item :to="{ name: 'pos' }">PoS</b-dropdown-item>
-            <b-dropdown-item :to="{ name: 'pow' }">PoW</b-dropdown-item>
+<!--            <b-dropdown-item :to="{ name: 'pow' }">PoW</b-dropdown-item>-->
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item :to="{ name: 'txList' }">View Txs</b-dropdown-item>
             <b-dropdown-item :to="{ name: 'blockList' }"
@@ -84,13 +84,13 @@
             >
           </b-nav-item-dropdown>
 
-          <b-nav-item
-            ><router-link
-              :to="{ name: 'auction', network: $route.params.network }"
-              :class="auctionActive ? 'active' : ''"
-              >Auctions</router-link
-            ></b-nav-item
-          >
+<!--          <b-nav-item-->
+<!--            ><router-link-->
+<!--              :to="{ name: 'auction', network: $route.params.network }"-->
+<!--              :class="auctionActive ? 'active' : ''"-->
+<!--              >Auctions</router-link-->
+<!--            ></b-nav-item-->
+<!--          >-->
 
           <b-dropdown
             :text="searchPrefix"

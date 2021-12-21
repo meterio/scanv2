@@ -1,15 +1,15 @@
 // single pages
 import HomePage from "@/pages/Home.vue";
-import AuctionPage from "@/pages/Auction.vue";
-import PowPage from "@/pages/Pow.vue";
+// import AuctionPage from "@/pages/Auction.vue";
+// import PowPage from "@/pages/Pow.vue";
 import PosPage from "@/pages/Pos.vue";
 import ValidatorDetailpage from "@/pages/ValidatorDetail.vue";
 import BlockDetailpage from "@/pages/BlockDetail.vue";
 import TransactionDetailPage from "@/pages/TransactionDetail.vue";
 import AddressPage from "@/pages/Address.vue";
-import PowRewardsPage from "@/pages/PowRewards.vue";
+// import PowRewardsPage from "@/pages/PowRewards.vue";
 import PosRewardsPage from "@/pages/PosRewards.vue";
-import AuctionDetailPage from "@/pages/AuctionDetail.vue";
+// import AuctionDetailPage from "@/pages/AuctionDetail.vue";
 import BlockListPage from "@/pages/BlockList.vue";
 import TxListPage from "@/pages/TxList.vue";
 import EpochListPage from "@/pages/EpochList.vue";
@@ -38,30 +38,30 @@ export const routes = [
     component: HomePage,
     meta: { title: `${DOMAIN_TITLE} | Explorer` },
   },
-  {
-    path: "/auction",
-    name: "auction",
-    component: AuctionPage,
-    meta: { title: `${DOMAIN_TITLE} | Auctions` },
-  },
-  {
-    path: "/auction/:auctionID",
-    name: "auctionDetail",
-    component: AuctionDetailPage,
-    meta: { title: `${DOMAIN_TITLE} | Auction ` },
-  },
-  {
-    path: "/pow",
-    name: "pow",
-    component: PowPage,
-    meta: { title: `${DOMAIN_TITLE} | PoW` },
-  },
-  {
-    path: "/pow/rewards/:epoch",
-    name: "powRewards",
-    component: PowRewardsPage,
-    meta: { title: `${DOMAIN_TITLE} | Mining Rewards` },
-  },
+  // {
+  //   path: "/auction",
+  //   name: "auction",
+  //   component: AuctionPage,
+  //   meta: { title: `${DOMAIN_TITLE} | Auctions` },
+  // },
+  // {
+  //   path: "/auction/:auctionID",
+  //   name: "auctionDetail",
+  //   component: AuctionDetailPage,
+  //   meta: { title: `${DOMAIN_TITLE} | Auction ` },
+  // },
+  // {
+  //   path: "/pow",
+  //   name: "pow",
+  //   component: PowPage,
+  //   meta: { title: `${DOMAIN_TITLE} | PoW` },
+  // },
+  // {
+  //   path: "/pow/rewards/:epoch",
+  //   name: "powRewards",
+  //   component: PowRewardsPage,
+  //   meta: { title: `${DOMAIN_TITLE} | Mining Rewards` },
+  // },
 
   {
     path: "/pos",
