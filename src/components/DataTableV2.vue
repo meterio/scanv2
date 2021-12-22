@@ -261,18 +261,29 @@
         <!-- Pos Reward template -->
         <template v-slot:cell(details)="data">
           <div class="dt-row breakable">
-            <div>name: {{ data.value.name }}</div>
             <div v-for="(topic, index) in data.value.topics" :key="index">
               <span class="mr-1">topic {{ index }}:</span>
               <span>{{ topic }}</span>
             </div>
             <div class="mt-3">
-              <div v-for="(value, index) in data.value.data" :key="index">
-                <span class="mr-1">data {{ index }}:</span>
-                <span>{{ value }}</span>
-              </div>
+              <span class="mr-1">data:</span>
+              <span>{{ data.value.data }}</span>
             </div>
           </div>
+          <b-button
+            v-if="data.item.decoded"
+            size="sm"
+            variant="outline-secondary"
+            @click="data.toggleDetails"
+            class="mr-2 float-right"
+          >
+            <span v-if="!data.detailsShowing">
+              <b-icon icon="chevron-double-down"></b-icon> Show Decoded
+            </span>
+            <span v-else>
+              <b-icon icon="chevron-double-up"></b-icon> Hide Decoded
+            </span>
+          </b-button>
         </template>
 
         <!-- method name -->

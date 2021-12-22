@@ -27,14 +27,6 @@
       <template v-slot:cell(data)="row">
         <div class="dt-row breakable">
           {{ row.value }}
-          <!-- <template v-if="row.hind !== ''">
-            <div v-for="item in row.value" :key="item.index">
-              {{ item }}
-            </div>
-          </template>
-          <template v-else>
-            {{ row.value }}
-          </template> -->
         </div>
 
         <div v-if="row.row_hovered"></div>
@@ -248,15 +240,20 @@ export default {
               if(c.knownMethod) {
                 if (c.knownMethod.abi) {
                   const abi = JSON.parse(c.knownMethod.abi);
-                  console.log(abi)
                   const coder = new ethers.utils.AbiCoder();
                   const inputsType = abi.inputs.map(item => item.type);
-                  console.log('inputsType', inputsType)
-                  decoded = coder.decode(inputsType, c.data);
-                  console.log('decoded', decoded)
-                  // const coder = new ethers.utils.AbiCoder();
-                  // decoded = coder.decode([funName], ethers.utils.hexDataSlice(c.data, 4));
-                  // console.log('decoded', decoded)
+                  // console.log('inputsType', inputsType)
+                  const method = abi.name + '(' + abi.inputs.map(item => item.name + ' ' + item.type).join(',') + ')';
+                  const result = coder.decode(inputsType, ethers.utils.hexDataSlice(c.data, 4));
+                  // console.log('result: ', result)
+                  const formatRes = {};
+                  for (let index in abi.inputs) {
+                    formatRes[abi.inputs[index].name] = result[index].toString()
+                  }
+                  decoded = {
+                    method,
+                    ...formatRes
+                  }
                 }
               }
             }
@@ -264,7 +261,6 @@ export default {
             console.log(e);
           }
 
-          console.log(`${c.data} (${hint})`)
           return {
             ...c,
             data: hint ? `${c.data} (${hint})` : c.data,
@@ -302,17 +298,53 @@ export default {
 
       start = new Date();
       this.events.items = tx.events.map(e => {
-        const _data = [];
-        for (let i = 10; i < e.data.length; i += 64) {
-          _data.push(e.data.substr(i, 64))
+        let decoded = undefined;
+        if (e.topics.length && e.knownEvent.abi) {
+          const abi = JSON.parse(e.knownEvent.abi);
+          console.log('event abi', abi)
+          const coder = new ethers.utils.AbiCoder();
+          const inputsType = abi.inputs.map(item => item.type);
+          // console.log('inputsType', inputsType)
+          const method = abi.name + '(' + abi.inputs.map(item => {
+            let params = item.name;
+            if (item.indexed) {
+              params += ' indexed '
+            }
+            params += item.type
+            return params
+          }).join(',') + ')';
+          console.log('method', method)
+          const topicStr = e.topics.map((t, i) => {
+            if (i === 0) {
+              return ''
+            } else {
+              return t.substr(2)  //remove 0x
+            }
+          });
+          let eventData = '';
+          if (e.data) {
+            eventData = e.data.substr(2)
+          }
+          const data = '0x' + topicStr.join('') + eventData;
+          const result = coder.decode(inputsType, data);
+          console.log('result: ', result)
+          const formatRes = {};
+          for (let index in abi.inputs) {
+            formatRes[abi.inputs[index].name] = result[index].toString()
+          }
+          decoded = {
+            method,
+            ...formatRes
+          }
         }
+        console.log()
         return {
           address: e.address,
           details: {
-            name: e.knownEvent.name,
             topics: e.topics,
-            data: _data
-          }
+            data: e.data
+          },
+          decoded
         }
       });
       end = new Date();
