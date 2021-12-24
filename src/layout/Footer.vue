@@ -13,9 +13,9 @@
             </div>
 
             <div class="download-wallet">
-              <!-- <p class="blue">Download Meter Wallets!</p> -->
+              <!-- <p class="blue">Download Verse Wallets!</p> -->
               <a href="https://www.meter.io/wallets/" class="desktop-btn">
-                <b-icon icon="laptop"></b-icon> Download Meter Desktop Wallets
+                <b-icon icon="laptop"></b-icon> Download Verse Desktop Wallets
               </a>
             </div>
           </div>

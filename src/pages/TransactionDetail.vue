@@ -196,7 +196,7 @@ export default {
             type: "amount",
             token: summary.token
           },
-          { key: "Fee", value: summary.paid, type: "amount", token: "MTR" },
+          { key: "Fee", value: summary.paid, type: "amount", token: "STPT" },
           {
             key: "Result",
             value: summary.reverted ? "reverted" : "success",
@@ -254,7 +254,7 @@ export default {
                   abiData.push(`MethodID: ${c.knownMethod.signature}`);
                 }
               }
-              
+
               for (let i = 10; i < c.data.length; i += 64) {
                 abiData.push(`[${Math.ceil(i / 64)}]: ${c.data.substr(i, 64)}`);
               }
@@ -296,7 +296,7 @@ export default {
           amountStr: {
             type: "amount",
             amount: bigNum(tr.amount),
-            token: tr.token == 0 ? "MTR" : "MTRG",
+            token: tr.token == 0 ? "STPT" : "VERSE",
             precision: 8
           }
         };

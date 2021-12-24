@@ -49,7 +49,7 @@ export default {
             key: "Value",
             value: bucket.value,
             type: "amount",
-            token: "MTRG",
+            token: "VERSE",
             precision: -1,
           },
           { key: "Lock Option", value: this.getLockOption(bucket.option) },

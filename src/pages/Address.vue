@@ -70,24 +70,24 @@ export default {
         this.summary = this.summary.concat([
           // { key: "Address", value: account.address },
           {
-            key: "MTRG Balance",
+            key: "VERSE Balance",
             value: account.mtrgBalance,
             type: "amount",
-            token: "MTRG",
+            token: "VERSE",
             precision: -1,
           },
           {
-            key: "MTRG Staked",
+            key: "VERSE Staked",
             value: account.mtrgBounded,
             type: "amount",
-            token: "MTRG",
+            token: "VERSE",
             precision: -1,
           },
           {
-            key: "MTR Balance",
+            key: "STPT Balance",
             value: account.mtrBalance,
             type: "amount",
-            token: "MTR",
+            token: "STPT",
             precision: -1,
           },
         ]);

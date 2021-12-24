@@ -8,7 +8,7 @@
         <b-img src="@/assets/newlogo.png" height="40" />
 
         <span class="ml-1" style="font-size: 19px; font-weight: bold"
-          >Meter</span
+          >Verse</span
         >
         <!-- Upgrade Badge -->
         <!--<b-badge

@@ -1,7 +1,7 @@
 <template lang="pug">
 .detail-page
   data-table-v2.mt-2pert.px-0(
-    title="Top MTR Accounts",
+    title="Top STPT Accounts",
     :fields="accounts.fields",
     :pagination="accounts.pagination",
     :loadItems="loadTopMTR"
@@ -24,7 +24,7 @@ export default {
         fields: [
           { key: "mtrRank", label: "Rank" },
           { key: "fullAddress", label: "Address" },
-          { key: "totalMTR", label: "MTR Balance" },
+          { key: "totalMTR", label: "STPT Balance" },
         ],
       },
     };
@@ -42,7 +42,7 @@ export default {
           totalMTR: {
             type: "amount",
             amount: new BigNumber(a.mtrBalance).plus(a.mtrBounded).toFixed(),
-            token: "MTR",
+            token: "STPT",
             precision: 4,
           },
           fullAddress: a.address,

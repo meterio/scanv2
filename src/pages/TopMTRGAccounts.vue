@@ -1,7 +1,7 @@
 <template lang="pug">
 .detail-page
   data-table-v2.mt-2pert.px-0(
-    title="Top MTRG Accounts",
+    title="Top VERSE Accounts",
     :fields="accounts.fields",
     :pagination="accounts.pagination",
     :loadItems="loadTopMTRG"
@@ -24,7 +24,7 @@ export default {
         fields: [
           { key: "mtrgRank", label: "Rank" },
           { key: "fullAddress", label: "Address" },
-          { key: "totalMTRG", label: "MTRG Balance" },
+          { key: "totalMTRG", label: "VERSE Balance" },
         ],
       },
     };
@@ -43,7 +43,7 @@ export default {
             type: "amount",
             amount: new BigNumber(a.mtrgBalance).plus(a.mtrgBounded).toFixed(),
             precision: 4,
-            token: "MTRG",
+            token: "VERSE",
           },
           fullAddress: a.address,
         };

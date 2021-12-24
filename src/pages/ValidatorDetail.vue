@@ -26,7 +26,7 @@
             <b-col cols="8" class="pt-3">
               <label
                 >Total Votes: {{ delegated_chart_legend.total }}
-                <span>MTRG</span></label
+                <span>VERSE</span></label
               >
 
               <b-row>

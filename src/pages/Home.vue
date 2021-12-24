@@ -3,7 +3,7 @@
   //- search-banner
   .search-banner
     .container
-      h1.title Meter Blockchain Explorer
+      h1.title Verse Blockchain Explorer
       search.mt25(
         :btnType="2",
         placeholder="Search Transation/Blocks/Address",
@@ -80,22 +80,22 @@ export default {
       this.data = [
         [
           {
-            label: "MTRG Price",
+            label: "VERSE Price",
             content: "$ " + mtrg.price,
             change: mtrg.priceChange,
           },
           {
-            label: "MTR Price",
+            label: "STPT Price",
             content: "$ " + mtr.price,
             change: mtr.priceChange,
           },
         ],
         [
           {
-            label: "MTRG Circulation",
+            label: "VERSE Circulation",
             content: formatNum(mtrg.circulation, 0),
           },
-          { label: "MTR Circulation", content: formatNum(mtr.circulation, 0) },
+          { label: "STPT Circulation", content: formatNum(mtr.circulation, 0) },
         ],
         [
           { label: "Block Height", content: pos.best },

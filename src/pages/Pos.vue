@@ -73,7 +73,7 @@ export default {
             type: "amount",
             amount: r.totalReward,
             precision: 6,
-            token: "MTR",
+            token: "STPT",
           },
           posReward: r.epoch,
         };
@@ -96,13 +96,13 @@ export default {
               label: "Validators",
             },
             {
-              content: fromWei(staking.totalStaked, 0) + " MTRG",
+              content: fromWei(staking.totalStaked, 0) + " VERSE",
               label: "Total Staked",
             },
           ],
           [
             { content: pos.best, label: "PoS Chain Height" },
-            { content: "$ " + mtrg.price, label: "MTRG Price" },
+            { content: "$ " + mtrg.price, label: "VERSE Price" },
             {
               content: `${committee.healthy} Healthy / ${
                 committee.invalid + committee.down

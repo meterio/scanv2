@@ -95,7 +95,7 @@ export default {
             value: b.actualReward,
             type: "amount",
             precision: -1,
-            token: "MTR",
+            token: "STPT",
           },
           { key: "Txs Count", value: b.txCount },
           { key: "Time", value: b.timestamp, type: "timestamp" },
@@ -116,7 +116,7 @@ export default {
             fee: {
               type: "amount",
               amount: tx.paid,
-              token: "MTR",
+              token: "STPT",
               precision: 8,
             },
             result: tx.reverted ? "reverted" : "success",
