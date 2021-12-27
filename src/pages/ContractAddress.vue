@@ -311,16 +311,22 @@ export default {
         ) {
           direct = "Self";
         } else {
-          direct = fromAddr === address.toLowerCase() ? "Out" : "In";
+          if (fromAddr === address.toLowerCase()) {
+            direct = "Out";
+          } else if (toAddr === address.toLowerCase()) {
+            direct = "In";
+          } else {
+            direct = "Transfer";
+          }
         }
         console.log("direct = ", direct);
 
-        let methodName = '';
+        let methodName = "";
         if (t.knowMethod) {
           if (t.knowMethod.abi) {
             methodName = JSON.parse(t.knowMethod.abi).name;
           } else {
-            methodName = t.knowMethod.signature
+            methodName = t.knowMethod.signature;
           }
         }
 
