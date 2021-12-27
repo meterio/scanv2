@@ -286,6 +286,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.col-md-3 {
+  padding-right: 0 !important;
+}
 .summary {
   .title {
     font-size: 19px;
