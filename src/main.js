@@ -129,13 +129,13 @@ new Vue({
     // set known tokens
     let knownTokens = {};
     if (this.network == "main") {
-      knownTokens["0x687a6294d0d6d63e751a059bf1ca68e4ae7b13e2"] = "MTR";
-      knownTokens["0x228ebbee999c6a7ad74a6130e81b12f9fe237ba3"] = "MTRG";
+      knownTokens["0x687a6294d0d6d63e751a059bf1ca68e4ae7b13e2"] = "STPT";
+      knownTokens["0x228ebbee999c6a7ad74a6130e81b12f9fe237ba3"] = "VERSE";
     } else if (this.network == "test") {
       knownTokens[
         "0x8A419EF4941355476CF04933E90BF3BBF2F73814".toLowerCase()
       ] = {
-        symbol: "MTRG",
+        symbol: "VERSE",
         decimals: 18
       };
     }
@@ -173,9 +173,9 @@ new Vue({
       knowns["0x0d0707963952f2fba59dd06f2b425ace40b492fe"] = "Gate.io";
       knowns["0x5c5713656c6819ebe3921936fd28bed2a387cda5"] = "Bridge Active";
       knowns["0x687a6294d0d6d63e751a059bf1ca68e4ae7b13e2"] =
-        "MTR system contract";
+        "STPT system contract";
       knowns["0x228ebbee999c6a7ad74a6130e81b12f9fe237ba3"] =
-        "MTRG system contract";
+        "VERSE system contract";
       knowns[AccountLockModuleAddress] = "Account Lock Engine";
       knowns[AuctionAccountAddress] = "Auction Account";
       knowns[AuctionLeftOverAddress] = "Auction Leftover";

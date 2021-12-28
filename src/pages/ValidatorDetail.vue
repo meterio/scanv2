@@ -35,7 +35,7 @@
                   <span class="percent">
                     <amount-tag
                       :amount="delegated_chart_legend.self"
-                      token="MTRG"
+                      token="VERSE"
                       :precision="precision"
                     />
                     ({{ delegated_chart_legend.selfRatio }})</span
@@ -48,7 +48,7 @@
                   <span class="percent">
                     <amount-tag
                       :amount="delegated_chart_legend.others"
-                      token="MTRG"
+                      token="VERSE"
                       :precision="precision"
                     />
                     ({{ delegated_chart_legend.othersRatio }})</span
@@ -236,7 +236,7 @@ export default {
       this.votes_array = votes.map((v) => ({
         ...v,
         bucketid: v.id,
-        value: { type: "amount", amount: v.value, precision: 4, token: "MTRG" },
+        value: { type: "amount", amount: v.value, precision: 4, token: "VERSE" },
       }));
       this.votes.total = votes.length;
       this.votes.data.items = this.votes_array.slice(
@@ -299,7 +299,7 @@ export default {
         amount: {
           type: "amount",
           amount: d.amount,
-          token: "MTRG",
+          token: "VERSE",
           precision: 4,
         },
       }));
@@ -334,7 +334,7 @@ export default {
           reward: {
             type: "amount",
             amount: b.actualReward,
-            token: "MTR",
+            token: "STPT",
             precision: 8,
           },
         };

@@ -17,7 +17,7 @@ export default {
     },
     token: {
       type: String,
-      default: "MTR",
+      default: "STPT",
     },
     precision: {
       type: Number,
@@ -72,10 +72,10 @@ export default {
   },
   computed: {
     badgeClass() {
-      if (this.token === "MTR") {
+      if (this.token === "STPT") {
         return "badge badge-light ml-1";
       }
-      if (this.token === "MTRG") {
+      if (this.token === "VERSE") {
         return "badge badge-light badge-mtrg ml-1";
       }
       return "badge badge-black ml-1";

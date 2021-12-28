@@ -207,7 +207,7 @@ export default {
             votingPower: {
               type: "amount",
               amount: d.votingPower,
-              token: "MTRG",
+              token: "VERSE",
               precision: 2,
             },
             addressWithName: { address: d.address, name: d.name },
@@ -226,7 +226,7 @@ export default {
             totalVotes: {
               type: "amount",
               amount: c.totalVotes,
-              token: "MTRG",
+              token: "VERSE",
               precision: 2,
             },
             addressWithName: { address: c.address, name: c.name },

@@ -1,6 +1,6 @@
 <template>
   <b-container class="table-container">
-    <h3 class="title">Past Auctions (MTRG)</h3>
+    <h3 class="title">Past Auctions (VERSE)</h3>
     <DataTableV2
       :fields="auctions.fields"
       class="px-0"
@@ -35,9 +35,9 @@ export default {
         fields: [
           { key: "auction_start_height", label: "Start KBlock" },
           { key: "auction_end_height", label: "End KBlock" },
-          { key: "mtrg_on_auction", label: "MTRG on Auction" },
-          { key: "mtr_received", label: "Received MTR" },
-          { key: "sold_mtrg", label: "Sold MTRG" },
+          { key: "mtrg_on_auction", label: "VERSE on Auction" },
+          { key: "mtr_received", label: "Received STPT" },
+          { key: "sold_mtrg", label: "Sold VERSE" },
           { key: "final_price", label: "Final Price" },
           { key: "auctionDetail", label: "Bids" },
         ],
@@ -65,25 +65,25 @@ export default {
             type: "amount",
             amount: a.received,
             precision: 4,
-            token: "MTR",
+            token: "STPT",
           },
           mtrg_on_auction: {
             type: "amount",
             amount: a.released,
             precision: 4,
-            token: "MTRG",
+            token: "VERSE",
           },
           sold_mtrg: {
             type: "amount",
             amount: bigNumMinus(a.released, a.leftover),
             precision: 4,
-            token: "MTRG",
+            token: "VERSE",
           },
           final_price: {
             type: "amount",
             amount: a.actualPrice,
             precision: 4,
-            token: "MTR",
+            token: "STPT",
           },
           auctionDetail: {
             id: a.id,

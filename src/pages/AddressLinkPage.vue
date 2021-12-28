@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   address-link(:address="address")
-  amount-tag(amount="010239882028020303828201", symbol="MTR")
+  amount-tag(amount="010239882028020303828201", symbol="STPT")
 </template>
 
 <script>

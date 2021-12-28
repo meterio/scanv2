@@ -124,13 +124,13 @@ export const routes = [
     meta: { title: `${DOMAIN_TITLE} | Transaction` },
   },
   {
-    path: "/accounts/mtr",
+    path: "/accounts/stpt",
     name: "topMTR",
     component: TopMTRAccountsPage,
     meta: { title: `${DOMAIN_TITLE} | Top STPT Accounts` },
   },
   {
-    path: "/accounts/mtrg",
+    path: "/accounts/verse",
     name: "topMTRG",
     component: TopMTRGAccountsPage,
     meta: { title: `${DOMAIN_TITLE} | Top VERSE Accounts` },

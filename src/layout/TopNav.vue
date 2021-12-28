@@ -77,10 +77,10 @@
             >
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item :to="{ name: 'topMTR' }"
-              >Top MTR Accounts</b-dropdown-item
+              >Top STPT Accounts</b-dropdown-item
             >
             <b-dropdown-item :to="{ name: 'topMTRG' }"
-              >Top MTRG Accounts</b-dropdown-item
+              >Top VERSE Accounts</b-dropdown-item
             >
           </b-nav-item-dropdown>
 

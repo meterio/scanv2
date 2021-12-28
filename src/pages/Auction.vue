@@ -6,21 +6,21 @@
         <b-row>
           <b-col class="border-r">
             <div class="box">
-              <p class="label">MTR Market Price</p>
+              <p class="label">STPT Market Price</p>
               <p class="value">{{ mtrPrice }}</p>
             </div>
           </b-col>
 
           <b-col>
             <div class="box">
-              <p class="label">MTRG Market Price</p>
+              <p class="label">VERSE Market Price</p>
               <p class="value">{{ mtrgPrice }}</p>
             </div>
           </b-col>
 
           <b-col>
             <div class="box">
-              <p class="label">MTRG Price</p>
+              <p class="label">VERSE Price</p>
               <p class="value">{{ mtrgPriceInMtr }}</p>
             </div>
           </b-col>
@@ -53,7 +53,7 @@ export default {
       msg: "Welcome to Index!!!",
       mtrPrice: "$ -.--",
       mtrgPrice: "$ -.--",
-      mtrgPriceInMtr: "- MTR",
+      mtrgPriceInMtr: "- STPT",
     };
   },
 
@@ -64,7 +64,7 @@ export default {
       this.mtrPrice = "$ " + mtr.price;
       this.mtrgPrice = "$ " + mtrg.price;
       this.mtrgPriceInMtr =
-        Math.floor((100 * mtrg.price) / mtr.price) / 100 + " MTR";
+        Math.floor((100 * mtrg.price) / mtr.price) / 100 + " STPT";
     },
   },
 };

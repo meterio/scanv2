@@ -310,24 +310,24 @@ export default {
         this.summary = this.summary.concat([
           // { key: "Address", value: account.address },
           {
-            key: "MTRG Balance",
+            key: "VERSE Balance",
             value: account.mtrgBalance,
             type: "amount",
-            token: "MTRG",
+            token: "VERSE",
             precision: -1,
           },
           {
-            key: "MTRG Staked",
+            key: "VERSE Staked",
             value: account.mtrgBounded,
             type: "amount",
-            token: "MTRG",
+            token: "VERSE",
             precision: -1,
           },
           {
-            key: "MTR Balance",
+            key: "STPT Balance",
             value: account.mtrBalance,
             type: "amount",
-            token: "MTR",
+            token: "STPT",
             precision: -1,
           },
         ]);
@@ -402,7 +402,7 @@ export default {
             type: "amount",
             amount: b.totalVotes,
             precision: 6,
-            token: "MTRG",
+            token: "VERSE",
           },
           timestamp: b.createTime,
           status: b.unbounded ? "Unbounded" : "Created",
@@ -551,7 +551,7 @@ export default {
           amount: {
             type: "amount",
             amount: amount || t.totalClauseAmount,
-            token: token < 0 ? t.token : token == 0 ? "MTR" : "MTRG",
+            token: token < 0 ? t.token : token == 0 ? "STPT" : "VERSE",
             precision: 8,
           },
           timestamp: t.block.timestamp,
@@ -607,7 +607,7 @@ export default {
             type: "amount",
             amount: b.actualReward,
             precision: -1,
-            token: "MTR",
+            token: "STPT",
           },
         };
       });
@@ -630,7 +630,7 @@ export default {
             type: "amount",
             amount: b.amount,
             precision: 8,
-            token: "MTR",
+            token: "STPT",
           },
           hammerPriceStr: b.pending
             ? "-"
@@ -638,7 +638,7 @@ export default {
                 type: "amount",
                 amount: b.hammerPrice,
                 precision: 4,
-                token: "MTR",
+                token: "STPT",
               },
           lotAmountStr:
             b.pending || !b.lotAmount
@@ -647,7 +647,7 @@ export default {
                   type: "amount",
                   amount: b.lotAmount,
                   precision: 8,
-                  token: "MTRG",
+                  token: "VERSE",
                 },
         };
       });

@@ -67,10 +67,10 @@ export default {
         this.pow_data = [
           [
             { content: pow.best, label: "PoW Chain Height" },
-            { content: "$ " + mtr.price, label: "MTR Price" },
+            { content: "$ " + mtr.price, label: "STPT Price" },
             {
               content: formatNum(mtr.circulation, 0),
-              label: "MTR Circulations",
+              label: "STPT Circulations",
             },
           ],
           [
@@ -79,12 +79,12 @@ export default {
               label: "Network Hash Rate",
             },
             {
-              content: bigNum(pow.rewardPerDay, 3) + " MTR",
+              content: bigNum(pow.rewardPerDay, 3) + " STPT",
               label: "Reward (TH/s*Day)",
             },
             {
               content: "$ " + bigNum(pow.costParity, 3),
-              label: "MTR Cost Parity",
+              label: "STPT Cost Parity",
             },
           ],
         ];
@@ -105,7 +105,7 @@ export default {
           amount: {
             type: "amount",
             amount: r.totalAmount,
-            token: "MTR",
+            token: "STPT",
             precision: -1,
           },
           time: fromNow(r.timestamp * 1000),

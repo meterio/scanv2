@@ -110,14 +110,14 @@ export default {
         amount: {
           type: "amount",
           amount: b.amount,
-          token: "MTR",
+          token: "STPT",
           precision: 6,
         },
         lotAmount: b.lotAmount
           ? {
               type: "amount",
               amount: b.lotAmount,
-              token: "MTRG",
+              token: "VERSE",
               precision: 6,
             }
           : "-",
@@ -132,7 +132,7 @@ export default {
       );
       const items = autobidSummaries.map((b) => ({
         ...b,
-        amount: { type: "amount", amount: b.total, token: "MTR", precision: 6 },
+        amount: { type: "amount", amount: b.total, token: "STPT", precision: 6 },
       }));
       return { items, totalRows: items.length };
     },
@@ -163,35 +163,35 @@ export default {
           type: "epoch-range",
         },
         {
-          key: "MTRG on Auction",
+          key: "VERSE on Auction",
           type: "amount",
           value: bigNumMinus(summary.released, summary.leftover),
-          token: "MTRG",
+          token: "VERSE",
           precision: -1,
         },
         {
-          key: "MTRG on Auction Generated Heights",
+          key: "VERSE on Auction Generated Heights",
           value: `${summary.startHeight} - ${summary.endHeight}`,
         },
         {
           key: "Userbid Total",
           type: "amount",
           value: summary.userbidTotal,
-          token: "MTR",
+          token: "STPT",
           precision: -1,
         },
         {
           key: "Autobid Total",
           type: "amount",
           value: summary.autobidTotal,
-          token: "MTR",
+          token: "STPT",
           precision: -1,
         },
         {
           key: "Total Received",
           type: "amount",
           value: summary.received,
-          token: "MTR",
+          token: "STPT",
           precision: -1,
         },
         { key: "Bids Count", value: summary.bidCount },
@@ -199,7 +199,7 @@ export default {
           key: "Actual Price",
           type: "amount",
           value: actualPrice,
-          token: "MTR",
+          token: "STPT",
           precision: 4,
         },
       ];

@@ -118,7 +118,7 @@ export default {
             //     .times(100)
             //     .toFixed(2) + "%",
           },
-          // { label: "MTRG Annual Inflation", content: pos.inflation },
+          // { label: "VERSE Annual Inflation", content: pos.inflation },
           {
             label: "Avg Staking APY",
             content:
