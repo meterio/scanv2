@@ -6,8 +6,8 @@ export const DEPLOY_DOMAIN = {
 export const API_BASE = {
   // main: "http://13.214.30.180:3000/api",
   // test: "http://13.214.30.180:3000/api",
-  main: "http://13.214.215.46:3456/api/",
-  test: "http://13.214.215.46:3456/api/",
+  main: "http://18.141.219.204:3456/api/",
+  test: "http://18.141.219.204:3456/api/",
 };
 
 export const SOURCIFY_API = {
