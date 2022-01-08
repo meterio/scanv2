@@ -48,14 +48,14 @@ export default {
       this.summary = [
         { key: "Epoch", value: epoch },
         { key: "Height", value: summary.blockNum, type: "block-link" },
-        { key: "Autobid Count", value: summary.autobidCount },
-        {
-          key: "Autobid Total",
-          type: "amount",
-          value: summary.autobidTotal,
-          token: "STPT",
-          precision: -1,
-        },
+        // { key: "Autobid Count", value: summary.autobidCount },
+        // {
+        //   key: "Autobid Total",
+        //   type: "amount",
+        //   value: summary.autobidTotal,
+        //   token: "STPT",
+        //   precision: -1,
+        // },
         { key: "Transfer Count", value: summary.transferCount },
         {
           key: "Transfer Total",

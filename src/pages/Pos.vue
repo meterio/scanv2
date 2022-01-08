@@ -45,7 +45,7 @@ export default {
           { key: "blockNum", label: "Block" },
           { key: "amount", label: "Total Rewards" },
           { key: "timestamp", label: "Time" },
-          { key: "autobidCount", label: "nAutobid" },
+          // { key: "autobidCount", label: "nAutobid" },
           { key: "transferCount", label: "nTransfer" },
           { key: "posReward", label: "More" },
         ],
