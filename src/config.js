@@ -7,7 +7,7 @@ export const API_BASE = {
   // main: "http://13.214.30.180:3000/api",
   // test: "http://13.214.30.180:3000/api",
   main: "http://18.141.219.204:3456/api/",
-  test: "http://172.31.4.237:3456/api/",
+  test: "https://testnet-explorer.stp.network/api/",
 };
 
 export const SOURCIFY_API = {
