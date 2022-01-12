@@ -5,7 +5,7 @@
         <b-col cols="12" md="6">
           <div class="footer-meter">
             <div class="brand">
-              <img class="logo" src="@/assets/meter-logo.png" alt="logo" />
+              <img class="logo" src="@/assets/logo_h.png" alt="logo" />
               <div class="copyright">
                 <p>Copyright © 2019-{{ currentYear }}</p>
                 <p>Decentralized Finance Labs inc.</p>
