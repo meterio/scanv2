@@ -6,21 +6,21 @@
         <b-row>
           <b-col class="border-r">
             <div class="box">
-              <p class="label">STPT Market Price</p>
+              <p class="label">{{ systemCoin }} Market Price</p>
               <p class="value">{{ mtrPrice }}</p>
             </div>
           </b-col>
 
           <b-col>
             <div class="box">
-              <p class="label">VERSE Market Price</p>
+              <p class="label">{{ systemToken }} Market Price</p>
               <p class="value">{{ mtrgPrice }}</p>
             </div>
           </b-col>
 
           <b-col>
             <div class="box">
-              <p class="label">VERSE Price</p>
+              <p class="label">{{ systemToken }} Price</p>
               <p class="value">{{ mtrgPriceInMtr }}</p>
             </div>
           </b-col>
@@ -39,6 +39,7 @@
 <script>
 import ActiveAuctions from "@/components/ActiveAuctions.vue";
 import PastAuctions from "@/components/PastAuctions.vue";
+import {SYSTEM_COIN, SYSTEM_TOKEN} from "../config";
 
 export default {
   name: "Home",
@@ -50,10 +51,12 @@ export default {
 
   data() {
     return {
+      systemCoin: SYSTEM_COIN,
+      systemToken: SYSTEM_TOKEN,
       msg: "Welcome to Index!!!",
       mtrPrice: "$ -.--",
       mtrgPrice: "$ -.--",
-      mtrgPriceInMtr: "- STPT",
+      mtrgPriceInMtr: "- " + SYSTEM_COIN,
     };
   },
 
@@ -64,7 +67,7 @@ export default {
       this.mtrPrice = "$ " + mtr.price;
       this.mtrgPrice = "$ " + mtrg.price;
       this.mtrgPriceInMtr =
-        Math.floor((100 * mtrg.price) / mtr.price) / 100 + " STPT";
+        Math.floor((100 * mtrg.price) / mtr.price) / 100 + " " + SYSTEM_COIN;
     },
   },
 };

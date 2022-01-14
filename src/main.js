@@ -23,6 +23,7 @@ import "./mixins";
 import "./scss/style.scss";
 // import "./assets/fonts/bebasneue.css";
 import "./assets/fonts/nunito/nunito.css";
+import {SYSTEM_COIN, SYSTEM_TOKEN} from "./config";
 
 // 将api挂载到vue的原型上
 Vue.prototype.$api = api;
@@ -129,13 +130,13 @@ new Vue({
     // set known tokens
     let knownTokens = {};
     if (this.network == "main") {
-      knownTokens["0x687a6294d0d6d63e751a059bf1ca68e4ae7b13e2"] = "STPT";
-      knownTokens["0x228ebbee999c6a7ad74a6130e81b12f9fe237ba3"] = "VERSE";
+      knownTokens["0x687a6294d0d6d63e751a059bf1ca68e4ae7b13e2"] = SYSTEM_COIN;
+      knownTokens["0x228ebbee999c6a7ad74a6130e81b12f9fe237ba3"] = SYSTEM_TOKEN;
     } else if (this.network == "test") {
       knownTokens[
         "0x8A419EF4941355476CF04933E90BF3BBF2F73814".toLowerCase()
       ] = {
-        symbol: "VERSE",
+        symbol: SYSTEM_TOKEN,
         decimals: 18
       };
     }

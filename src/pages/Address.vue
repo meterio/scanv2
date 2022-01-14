@@ -9,6 +9,8 @@ div
 <script>
 import UserAddress from "./UserAddress.vue";
 import ContractAddress from "./ContractAddress.vue";
+import { DEPLOY_DOMAIN, SYSTEM_COIN, SYSTEM_TOKEN } from "@/config";
+
 export default {
   name: "Address",
   components: {
@@ -70,24 +72,24 @@ export default {
         this.summary = this.summary.concat([
           // { key: "Address", value: account.address },
           {
-            key: "VERSE Balance",
+            key: SYSTEM_TOKEN + " Balance",
             value: account.mtrgBalance,
             type: "amount",
-            token: "VERSE",
+            token: SYSTEM_TOKEN,
             precision: -1,
           },
           {
-            key: "VERSE Staked",
+            key: SYSTEM_TOKEN + " Staked",
             value: account.mtrgBounded,
             type: "amount",
-            token: "VERSE",
+            token: SYSTEM_TOKEN,
             precision: -1,
           },
           {
-            key: "STPT Balance",
+            key: SYSTEM_COIN + " Balance",
             value: account.mtrBalance,
             type: "amount",
-            token: "STPT",
+            token: SYSTEM_COIN,
             precision: -1,
           },
         ]);

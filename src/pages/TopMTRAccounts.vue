@@ -1,7 +1,7 @@
 <template lang="pug">
 .detail-page
   data-table-v2.mt-2pert.px-0(
-    title="Top STPT Accounts",
+    :title="title",
     :fields="accounts.fields",
     :pagination="accounts.pagination",
     :loadItems="loadTopMTR"
@@ -11,6 +11,7 @@
 <script>
 import DataTableV2 from "@/components/DataTableV2.vue";
 import BigNumber from "bignumber.js";
+import { DEPLOY_DOMAIN, SYSTEM_COIN, SYSTEM_TOKEN } from "@/config";
 
 export default {
   name: "TopMTRAccounts",
@@ -19,12 +20,13 @@ export default {
   },
   data() {
     return {
+        title: "Top " + SYSTEM_COIN + " Accounts",
       accounts: {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "mtrRank", label: "Rank" },
           { key: "fullAddress", label: "Address" },
-          { key: "totalMTR", label: "STPT Balance" },
+          { key: "totalMTR", label: SYSTEM_COIN + " Balance" },
         ],
       },
     };
@@ -42,7 +44,7 @@ export default {
           totalMTR: {
             type: "amount",
             amount: new BigNumber(a.mtrBalance).plus(a.mtrBounded).toFixed(),
-            token: "STPT",
+            token: SYSTEM_COIN,
             precision: 4,
           },
           fullAddress: a.address,

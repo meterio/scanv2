@@ -19,6 +19,7 @@ import DataDashboard from "@/components/DataDashboard.vue";
 import ValidatorTable from "@/components/ValidatorTable.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import { fromWei } from "@/utils";
+import {SYSTEM_COIN, SYSTEM_TOKEN} from "../config";
 
 export default {
   name: "Validator",
@@ -73,7 +74,7 @@ export default {
             type: "amount",
             amount: r.totalReward,
             precision: 6,
-            token: "STPT",
+            token: SYSTEM_COIN,
           },
           posReward: r.epoch,
         };
@@ -96,13 +97,13 @@ export default {
               label: "Validators",
             },
             {
-              content: fromWei(staking.totalStaked, 0) + " VERSE",
+              content: fromWei(staking.totalStaked, 0) + " " + SYSTEM_TOKEN,
               label: "Total Staked",
             },
           ],
           [
             { content: pos.best, label: "PoS Chain Height" },
-            { content: "$ " + mtrg.price, label: "VERSE Price" },
+            { content: "$ " + mtrg.price, label: SYSTEM_TOKEN + " Price" },
             {
               content: `${committee.healthy} Healthy / ${
                 committee.invalid + committee.down

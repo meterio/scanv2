@@ -77,10 +77,10 @@
             >
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item :to="{ name: 'topMTR' }"
-              >Top STPT Accounts</b-dropdown-item
+              >Top {{ systemCoin }} Accounts</b-dropdown-item
             >
             <b-dropdown-item :to="{ name: 'topMTRG' }"
-              >Top VERSE Accounts</b-dropdown-item
+              >Top {{ systemToken }} Accounts</b-dropdown-item
             >
           </b-nav-item-dropdown>
 
@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import { DEPLOY_DOMAIN } from "@/config";
+import { DEPLOY_DOMAIN, SYSTEM_COIN, SYSTEM_TOKEN } from "@/config";
 
 export default {
   name: "TopNav",
@@ -120,6 +120,8 @@ export default {
     return {
       modal_show: false,
       searchKey: "",
+      systemCoin: SYSTEM_COIN,
+      systemToken: SYSTEM_TOKEN,
     };
   },
   computed: {

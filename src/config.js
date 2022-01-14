@@ -14,3 +14,6 @@ export const SOURCIFY_API = {
   main: "https://sourcify.dev/server",
   test: "https://sourcify-test.meter.io",
 };
+
+export const SYSTEM_COIN = 'STPT';
+export const SYSTEM_TOKEN = 'STPD';

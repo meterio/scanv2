@@ -39,6 +39,7 @@
 import DataTableV2 from "@/components/DataTableV2.vue";
 import StatusTag from "@/components/StatusTag.vue";
 import DataSummary from "@/components/DataSummary.vue";
+import {SYSTEM_COIN} from "../config";
 export default {
   name: "BlockDetail",
   components: {
@@ -95,7 +96,7 @@ export default {
             value: b.actualReward,
             type: "amount",
             precision: -1,
-            token: "STPT",
+            token: SYSTEM_COIN,
           },
           { key: "Txs Count", value: b.txCount },
           { key: "Time", value: b.timestamp, type: "timestamp" },
@@ -116,7 +117,7 @@ export default {
             fee: {
               type: "amount",
               amount: tx.paid,
-              token: "STPT",
+              token: SYSTEM_COIN,
               precision: 8,
             },
             result: tx.reverted ? "reverted" : "success",

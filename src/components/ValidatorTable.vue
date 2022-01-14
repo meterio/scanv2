@@ -132,6 +132,7 @@ import Loading from "@/components/Loading";
 import AddressLink from "@/components/AddressLink";
 import AmountTag from "@/components/AmountTag";
 import { fromNow, formatTime } from "@/utils";
+import {SYSTEM_TOKEN} from "../config";
 
 export default {
   name: "ValidatorTable",
@@ -207,7 +208,7 @@ export default {
             votingPower: {
               type: "amount",
               amount: d.votingPower,
-              token: "VERSE",
+              token: SYSTEM_TOKEN,
               precision: 2,
             },
             addressWithName: { address: d.address, name: d.name },
@@ -226,7 +227,7 @@ export default {
             totalVotes: {
               type: "amount",
               amount: c.totalVotes,
-              token: "VERSE",
+              token: SYSTEM_TOKEN,
               precision: 2,
             },
             addressWithName: { address: c.address, name: c.name },

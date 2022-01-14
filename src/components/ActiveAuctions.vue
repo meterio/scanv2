@@ -1,6 +1,6 @@
 <template>
   <b-container class="table-container">
-    <h3 class="bold">Active Auctions (VERSE)</h3>
+    <h3 class="bold">Active Auctions ({{systemToken}})</h3>
     <DataTableV2 :fields="auction.fields" :items="auction.items" class="px-0">
       <!-- column: height_range -->
       <template v-slot:cell(prefix)="data">
@@ -17,19 +17,21 @@
 import DataTableV2 from "@/components/DataTableV2.vue";
 import { formatNum, bigNumDiv, bigNumCompare } from "@/utils";
 import BigNumber from "bignumber.js";
+import { DEPLOY_DOMAIN, SYSTEM_COIN, SYSTEM_TOKEN } from "@/config";
 
 export default {
   name: "ActiveAuctions",
   data() {
     return {
+      systemToken: SYSTEM_TOKEN,
       // Note `isActive` is left out and will not appear in the rendered table
       auction: {
         fields: [
           { key: "end_height", label: "Start KBlock" },
           { key: "current_epoch", label: "Current Epoch" },
           { key: "auction_end_epoch", label: "End Epoch" },
-          { key: "mtrg_on_auction", label: "VERSE on Auction" },
-          { key: "mtr_received", label: "Received STPT" },
+          { key: "mtrg_on_auction", label: SYSTEM_TOKEN + " on Auction" },
+          { key: "mtr_received", label: "Received " + SYSTEM_COIN },
           { key: "expected_final_price", label: "Expected Price" },
           { key: "auctionDetail", label: "Bids" },
         ],
@@ -72,19 +74,19 @@ export default {
             mtr_received: {
               type: "amount",
               amount: present.received,
-              token: "STPT",
+              token: SYSTEM_COIN,
               precision: 4,
             },
             mtrg_on_auction: {
               type: "amount",
               amount: present.released,
-              token: "VERSE",
+              token: SYSTEM_TOKEN,
               precision: 4,
             },
             expected_final_price: {
               type: "amount",
               amount: actualPrice,
-              token: "STPT",
+              token: SYSTEM_COIN,
               precision: 4,
             },
             auctionDetail: {

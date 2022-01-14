@@ -6,6 +6,7 @@
 <script>
 import DataSummary from "@/components/DataSummary.vue";
 import { fromNow } from "@/utils";
+import {SYSTEM_TOKEN} from "../config";
 
 export default {
   name: "Bucket",
@@ -49,7 +50,7 @@ export default {
             key: "Value",
             value: bucket.value,
             type: "amount",
-            token: "VERSE",
+            token: SYSTEM_TOKEN,
             precision: -1,
           },
           { key: "Lock Option", value: this.getLockOption(bucket.option) },

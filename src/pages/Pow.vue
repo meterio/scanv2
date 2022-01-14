@@ -25,6 +25,7 @@ import DataDashboard from "@/components/DataDashboard.vue";
 import HashRateChart from "@/components/HashRateChart.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import { formatNum, fromNow, bigNum, bigNumDiv } from "@/utils";
+import {SYSTEM_COIN} from "../config";
 
 export default {
   name: "Mining",
@@ -67,10 +68,10 @@ export default {
         this.pow_data = [
           [
             { content: pow.best, label: "PoW Chain Height" },
-            { content: "$ " + mtr.price, label: "STPT Price" },
+            { content: "$ " + mtr.price, label: SYSTEM_COIN + " Price" },
             {
               content: formatNum(mtr.circulation, 0),
-              label: "STPT Circulations",
+              label: SYSTEM_COIN + " Circulations",
             },
           ],
           [
@@ -79,12 +80,12 @@ export default {
               label: "Network Hash Rate",
             },
             {
-              content: bigNum(pow.rewardPerDay, 3) + " STPT",
+              content: bigNum(pow.rewardPerDay, 3) + " " + SYSTEM_COIN,
               label: "Reward (TH/s*Day)",
             },
             {
               content: "$ " + bigNum(pow.costParity, 3),
-              label: "STPT Cost Parity",
+              label: SYSTEM_COIN + " Cost Parity",
             },
           ],
         ];
@@ -105,7 +106,7 @@ export default {
           amount: {
             type: "amount",
             amount: r.totalAmount,
-            token: "STPT",
+            token: SYSTEM_COIN,
             precision: -1,
           },
           time: fromNow(r.timestamp * 1000),

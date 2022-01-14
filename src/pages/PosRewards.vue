@@ -13,6 +13,7 @@
 import StatusTag from "@/components/StatusTag.vue";
 import DataSummary from "@/components/DataSummary.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
+import {SYSTEM_COIN} from "../config";
 export default {
   components: {
     DataTableV2,
@@ -53,7 +54,7 @@ export default {
         //   key: "Autobid Total",
         //   type: "amount",
         //   value: summary.autobidTotal,
-        //   token: "STPT",
+        //   token: SYSTEM_COIN,
         //   precision: -1,
         // },
         { key: "Transfer Count", value: summary.transferCount },
@@ -61,7 +62,7 @@ export default {
           key: "Transfer Total",
           type: "amount",
           value: summary.transferTotal,
-          token: " STPT",
+          token: SYSTEM_COIN,
           precision: -1,
         },
         { key: "Reward Count", value: rewards ? rewards.length : 0 },
@@ -69,7 +70,7 @@ export default {
           key: "Total Reward",
           type: "amount",
           value: summary.totalReward,
-          token: "STPT",
+          token: SYSTEM_COIN,
           precision: -1,
         },
         { key: "Time", value: summary.timestamp, type: "timestamp" },
@@ -81,7 +82,7 @@ export default {
             amount: {
               type: "amount",
               amount: r.amount,
-              token: "STPT",
+              token: SYSTEM_COIN,
               precision: -1,
             },
             type: r.type,

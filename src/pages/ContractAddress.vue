@@ -32,6 +32,7 @@ import DataTableV3 from "@/components/DataTableV3.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
 import ContractDetail from "./ContractDetail.vue";
+import {SYSTEM_COIN, SYSTEM_TOKEN} from "../config";
 export default {
   name: "ContractAddress",
   components: {
@@ -337,7 +338,7 @@ export default {
           amount: {
             type: "amount",
             amount: amount || t.totalClauseAmount,
-            token: token < 0 ? t.token : token == 0 ? "STPT" : "VERSE",
+            token: token < 0 ? t.token : token == 0 ? SYSTEM_COIN : SYSTEM_TOKEN,
             precision: 8,
           },
           timestamp: t.block.timestamp,

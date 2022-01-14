@@ -24,6 +24,7 @@ import TokenAddress from "@/pages/tokenAddress.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
 import { DOMAIN_TITLE } from "../.env";
+import {SYSTEM_COIN, SYSTEM_TOKEN} from "../config";
 
 export const routes = [
   {
@@ -127,13 +128,13 @@ export const routes = [
     path: "/accounts/stpt",
     name: "topMTR",
     component: TopMTRAccountsPage,
-    meta: { title: `${DOMAIN_TITLE} | Top STPT Accounts` },
+    meta: { title: `${DOMAIN_TITLE} | Top ${SYSTEM_COIN} Accounts` },
   },
   {
     path: "/accounts/verse",
     name: "topMTRG",
     component: TopMTRGAccountsPage,
-    meta: { title: `${DOMAIN_TITLE} | Top VERSE Accounts` },
+    meta: { title: `${DOMAIN_TITLE} | Top ${SYSTEM_TOKEN} Accounts` },
   },
   {
     path: "/buckets/:id",

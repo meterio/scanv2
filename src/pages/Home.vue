@@ -30,6 +30,7 @@ import RecentTxs from "@/components/RecentTxs.vue";
 import { fromWei, formatNum } from "@/utils";
 import BigNumber from "bignumber.js";
 import { mapState } from "vuex";
+import {SYSTEM_COIN, SYSTEM_TOKEN} from "../config";
 
 export default {
   name: "Home",
@@ -80,22 +81,22 @@ export default {
       this.data = [
         [
           {
-            label: "VERSE Price",
+            label: SYSTEM_TOKEN + " Price",
             content: "$ " + mtrg.price,
             change: mtrg.priceChange,
           },
           {
-            label: "STPT Price",
+            label: SYSTEM_COIN + " Price",
             content: "$ " + mtr.price,
             change: mtr.priceChange,
           },
         ],
         [
           {
-            label: "VERSE Circulation",
+            label: SYSTEM_TOKEN + " Circulation",
             content: formatNum(mtrg.circulation, 0),
           },
-          { label: "STPT Circulation", content: formatNum(mtr.circulation, 0) },
+          { label: SYSTEM_COIN + " Circulation", content: formatNum(mtr.circulation, 0) },
         ],
         [
           { label: "Block Height", content: pos.best },
@@ -118,7 +119,7 @@ export default {
             //     .times(100)
             //     .toFixed(2) + "%",
           },
-          // { label: "VERSE Annual Inflation", content: pos.inflation },
+          // { label: SYSTEM_TOKEN + " Annual Inflation", content: pos.inflation },
           {
             label: "Avg Staking APY",
             content:

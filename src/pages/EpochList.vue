@@ -28,7 +28,7 @@ export default {
           { key: "startTime", label: "Start Time" },
           { key: "duration", label: "Duration" },
           { key: "committeeSize", label: "nCommittee" },
-          { key: "powBlockCount", label: "nPowBlocks" },
+          // { key: "powBlockCount", label: "nPowBlocks" },
         ],
       },
     };

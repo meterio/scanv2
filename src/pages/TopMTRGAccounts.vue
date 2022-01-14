@@ -1,7 +1,7 @@
 <template lang="pug">
 .detail-page
   data-table-v2.mt-2pert.px-0(
-    title="Top VERSE Accounts",
+    :title="title",
     :fields="accounts.fields",
     :pagination="accounts.pagination",
     :loadItems="loadTopMTRG"
@@ -11,6 +11,7 @@
 <script>
 import DataTableV2 from "@/components/DataTableV2.vue";
 import BigNumber from "bignumber.js";
+import {SYSTEM_TOKEN} from "../config";
 
 export default {
   name: "TopMTRGAccounts",
@@ -19,12 +20,13 @@ export default {
   },
   data() {
     return {
+        title: "Top " + SYSTEM_TOKEN + " Accounts",
       accounts: {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "mtrgRank", label: "Rank" },
           { key: "fullAddress", label: "Address" },
-          { key: "totalMTRG", label: "VERSE Balance" },
+          { key: "totalMTRG", label: SYSTEM_TOKEN + " Balance" },
         ],
       },
     };
@@ -43,7 +45,7 @@ export default {
             type: "amount",
             amount: new BigNumber(a.mtrgBalance).plus(a.mtrgBounded).toFixed(),
             precision: 4,
-            token: "VERSE",
+            token: SYSTEM_TOKEN,
           },
           fullAddress: a.address,
         };

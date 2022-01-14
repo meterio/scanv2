@@ -18,6 +18,7 @@ import DataSummary from "@/components/DataSummary.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import { bigNum, bigNumMinus } from "@/utils";
 import BigNumber from "bignumber.js";
+import {SYSTEM_COIN, SYSTEM_TOKEN} from "../config";
 
 export default {
   components: {
@@ -110,14 +111,14 @@ export default {
         amount: {
           type: "amount",
           amount: b.amount,
-          token: "STPT",
+          token: SYSTEM_COIN,
           precision: 6,
         },
         lotAmount: b.lotAmount
           ? {
               type: "amount",
               amount: b.lotAmount,
-              token: "VERSE",
+              token: SYSTEM_TOKEN,
               precision: 6,
             }
           : "-",
@@ -132,7 +133,7 @@ export default {
       );
       const items = autobidSummaries.map((b) => ({
         ...b,
-        amount: { type: "amount", amount: b.total, token: "STPT", precision: 6 },
+        amount: { type: "amount", amount: b.total, token: SYSTEM_COIN, precision: 6 },
       }));
       return { items, totalRows: items.length };
     },
@@ -163,35 +164,35 @@ export default {
           type: "epoch-range",
         },
         {
-          key: "VERSE on Auction",
+          key: SYSTEM_TOKEN + " on Auction",
           type: "amount",
           value: bigNumMinus(summary.released, summary.leftover),
-          token: "VERSE",
+          token: SYSTEM_TOKEN,
           precision: -1,
         },
         {
-          key: "VERSE on Auction Generated Heights",
+          key: SYSTEM_TOKEN + " on Auction Generated Heights",
           value: `${summary.startHeight} - ${summary.endHeight}`,
         },
         {
           key: "Userbid Total",
           type: "amount",
           value: summary.userbidTotal,
-          token: "STPT",
+          token: SYSTEM_COIN,
           precision: -1,
         },
         {
           key: "Autobid Total",
           type: "amount",
           value: summary.autobidTotal,
-          token: "STPT",
+          token: SYSTEM_COIN,
           precision: -1,
         },
         {
           key: "Total Received",
           type: "amount",
           value: summary.received,
-          token: "STPT",
+          token: SYSTEM_COIN,
           precision: -1,
         },
         { key: "Bids Count", value: summary.bidCount },
@@ -199,7 +200,7 @@ export default {
           key: "Actual Price",
           type: "amount",
           value: actualPrice,
-          token: "STPT",
+          token: SYSTEM_COIN,
           precision: 4,
         },
       ];

@@ -8,6 +8,8 @@
 
 <script>
 import { fromWei } from "@/utils";
+import { DEPLOY_DOMAIN, SYSTEM_COIN, SYSTEM_TOKEN } from "@/config";
+
 export default {
   name: "AmountTag",
   props: {
@@ -17,7 +19,7 @@ export default {
     },
     token: {
       type: String,
-      default: "STPT",
+      default: SYSTEM_COIN,
     },
     precision: {
       type: Number,
@@ -72,10 +74,10 @@ export default {
   },
   computed: {
     badgeClass() {
-      if (this.token === "STPT") {
+      if (this.token === SYSTEM_COIN) {
         return "badge badge-light ml-1";
       }
-      if (this.token === "VERSE") {
+      if (this.token === SYSTEM_TOKEN) {
         return "badge badge-light badge-mtrg ml-1";
       }
       return "badge badge-black ml-1";

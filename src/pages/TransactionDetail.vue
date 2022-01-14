@@ -75,6 +75,7 @@ import { bigNum } from "@/utils";
 import { abi } from "@meterio/devkit";
 import BigNumber from "bignumber.js";
 import { ethers } from "@meterio/ethers";
+import {SYSTEM_COIN, SYSTEM_TOKEN} from "../config";
 
 const TransferABI = new abi.Event({
   anonymous: false,
@@ -196,7 +197,7 @@ export default {
             type: "amount",
             token: summary.token
           },
-          { key: "Fee", value: summary.paid, type: "amount", token: "STPT" },
+          { key: "Fee", value: summary.paid, type: "amount", token: SYSTEM_COIN },
           {
             key: "Result",
             value: summary.reverted ? "reverted" : "success",
@@ -296,7 +297,7 @@ export default {
           amountStr: {
             type: "amount",
             amount: bigNum(tr.amount),
-            token: tr.token == 0 ? "STPT" : "VERSE",
+            token: tr.token == 0 ? SYSTEM_COIN : SYSTEM_TOKEN,
             precision: 8
           }
         };

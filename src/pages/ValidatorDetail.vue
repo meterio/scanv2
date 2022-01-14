@@ -26,7 +26,7 @@
             <b-col cols="8" class="pt-3">
               <label
                 >Total Votes: {{ delegated_chart_legend.total }}
-                <span>VERSE</span></label
+                <span>{{systemToken}}</span></label
               >
 
               <b-row>
@@ -35,7 +35,7 @@
                   <span class="percent">
                     <amount-tag
                       :amount="delegated_chart_legend.self"
-                      token="VERSE"
+                      :token="systemToken"
                       :precision="precision"
                     />
                     ({{ delegated_chart_legend.selfRatio }})</span
@@ -48,7 +48,7 @@
                   <span class="percent">
                     <amount-tag
                       :amount="delegated_chart_legend.others"
-                      token="VERSE"
+                      :token="systemToken"
                       :precision="precision"
                     />
                     ({{ delegated_chart_legend.othersRatio }})</span
@@ -123,6 +123,7 @@ import DataTable from "@/components/DataTable.vue";
 import DataTableV2 from "@/components/DataTableV2.vue";
 import BigNumber from "bignumber.js";
 import AmountTag from "@/components/AmountTag.vue";
+import { DEPLOY_DOMAIN, SYSTEM_COIN, SYSTEM_TOKEN } from "@/config";
 
 export default {
   name: "ValidatorDetail",
@@ -134,6 +135,8 @@ export default {
   },
   data() {
     return {
+      systemCoin: SYSTEM_COIN,
+      systemToken: SYSTEM_TOKEN,
       precision: 2,
       delegators_current: 1,
       delegators_array: [],
@@ -236,7 +239,7 @@ export default {
       this.votes_array = votes.map((v) => ({
         ...v,
         bucketid: v.id,
-        value: { type: "amount", amount: v.value, precision: 4, token: "VERSE" },
+        value: { type: "amount", amount: v.value, precision: 4, token: SYSTEM_TOKEN },
       }));
       this.votes.total = votes.length;
       this.votes.data.items = this.votes_array.slice(
@@ -299,7 +302,7 @@ export default {
         amount: {
           type: "amount",
           amount: d.amount,
-          token: "VERSE",
+          token: SYSTEM_TOKEN,
           precision: 4,
         },
       }));
@@ -334,7 +337,7 @@ export default {
           reward: {
             type: "amount",
             amount: b.actualReward,
-            token: "STPT",
+            token: SYSTEM_COIN,
             precision: 8,
           },
         };

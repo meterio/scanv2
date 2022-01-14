@@ -25,6 +25,7 @@ import DataTableV2 from "@/components/DataTableV2.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
 import BigNumber from "bignumber.js";
+import {SYSTEM_COIN, SYSTEM_TOKEN} from "../config";
 export default {
   name: "UserAddress",
   components: {
@@ -310,24 +311,24 @@ export default {
         this.summary = this.summary.concat([
           // { key: "Address", value: account.address },
           {
-            key: "VERSE Balance",
+            key: SYSTEM_TOKEN + " Balance",
             value: account.mtrgBalance,
             type: "amount",
-            token: "VERSE",
+            token: SYSTEM_TOKEN,
             precision: -1,
           },
           {
-            key: "VERSE Staked",
+            key: SYSTEM_TOKEN + " Staked",
             value: account.mtrgBounded,
             type: "amount",
-            token: "VERSE",
+            token: SYSTEM_TOKEN,
             precision: -1,
           },
           {
-            key: "STPT Balance",
+            key: SYSTEM_COIN + " Balance",
             value: account.mtrBalance,
             type: "amount",
-            token: "STPT",
+            token: SYSTEM_COIN,
             precision: -1,
           },
         ]);
@@ -402,7 +403,7 @@ export default {
             type: "amount",
             amount: b.totalVotes,
             precision: 6,
-            token: "VERSE",
+            token: SYSTEM_TOKEN,
           },
           timestamp: b.createTime,
           status: b.unbounded ? "Unbounded" : "Created",
@@ -551,7 +552,7 @@ export default {
           amount: {
             type: "amount",
             amount: amount || t.totalClauseAmount,
-            token: token < 0 ? t.token : token == 0 ? "STPT" : "VERSE",
+            token: token < 0 ? t.token : token == 0 ? SYSTEM_COIN : SYSTEM_TOKEN,
             precision: 8,
           },
           timestamp: t.block.timestamp,
@@ -607,7 +608,7 @@ export default {
             type: "amount",
             amount: b.actualReward,
             precision: -1,
-            token: "STPT",
+            token: SYSTEM_COIN,
           },
         };
       });
@@ -630,7 +631,7 @@ export default {
             type: "amount",
             amount: b.amount,
             precision: 8,
-            token: "STPT",
+            token: SYSTEM_COIN,
           },
           hammerPriceStr: b.pending
             ? "-"
@@ -638,7 +639,7 @@ export default {
                 type: "amount",
                 amount: b.hammerPrice,
                 precision: 4,
-                token: "STPT",
+                token: SYSTEM_COIN,
               },
           lotAmountStr:
             b.pending || !b.lotAmount
@@ -647,7 +648,7 @@ export default {
                   type: "amount",
                   amount: b.lotAmount,
                   precision: 8,
-                  token: "VERSE",
+                  token: SYSTEM_TOKEN,
                 },
         };
       });
