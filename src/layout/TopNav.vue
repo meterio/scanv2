@@ -104,6 +104,9 @@
             <b-dropdown-item @click="changeNetwork('test')"
               >Testnet</b-dropdown-item
             >
+            <b-dropdown-item @click="changeNetwork('meter')"
+            >Meter</b-dropdown-item
+            >
           </b-dropdown>
         </b-navbar-nav>
       </b-collapse>
