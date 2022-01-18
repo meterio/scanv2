@@ -18,7 +18,7 @@ export default {
     network:
       process.env.NODE_ENV === "development"
         ? "test"
-        : DEPLOY_DOMAIN["main"].includes(window.location.hostname)
+        : DEPLOY_DOMAIN["meter_main"].includes(window.location.hostname)
         ? "main"
         : "test",
   },
