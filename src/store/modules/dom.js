@@ -14,6 +14,7 @@ export default {
     widthTablet: 1024,
     knownAddresses: {},
     knownTokens: {},
+    //TODO: change me
     network:
       process.env.NODE_ENV === "development"
         ? "test"

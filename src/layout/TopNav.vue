@@ -98,14 +98,14 @@
             variant="outline-primary"
             class="mx-2"
           >
-            <b-dropdown-item @click="changeNetwork('main')"
-              >Mainnet</b-dropdown-item
+            <b-dropdown-item @click="changeNetwork('verse_test')"
+              >Verse Testnet</b-dropdown-item
             >
-            <b-dropdown-item @click="changeNetwork('test')"
-              >Testnet</b-dropdown-item
+            <b-dropdown-item @click="changeNetwork('meter_main')"
+            >Meter Mainnet</b-dropdown-item
             >
-            <b-dropdown-item @click="changeNetwork('meter')"
-            >Meter</b-dropdown-item
+            <b-dropdown-item @click="changeNetwork('meter_test')"
+            >Meter Testnet</b-dropdown-item
             >
           </b-dropdown>
         </b-navbar-nav>

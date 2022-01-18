@@ -24,7 +24,7 @@ import TokenAddress from "@/pages/tokenAddress.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
 import { DOMAIN_TITLE } from "../.env";
-import {SYSTEM_COIN, SYSTEM_TOKEN} from "../config";
+import {SYSTEM_COIN, SYSTEM_TOKEN} from "@/config";
 
 export const routes = [
   {
@@ -131,7 +131,7 @@ export const routes = [
     meta: { title: `${DOMAIN_TITLE} | Top ${SYSTEM_COIN} Accounts` },
   },
   {
-    path: "/accounts/verse",
+    path: "/accounts/stpd",
     name: "topMTRG",
     component: TopMTRGAccountsPage,
     meta: { title: `${DOMAIN_TITLE} | Top ${SYSTEM_TOKEN} Accounts` },
