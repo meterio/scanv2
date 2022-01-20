@@ -96,6 +96,7 @@
             :text="searchPrefix"
             size="sm"
             variant="outline-primary"
+            right
             class="mx-2"
           >
             <b-dropdown-item @click="changeNetwork('verse_test')"
