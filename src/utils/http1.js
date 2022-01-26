@@ -1,28 +1,38 @@
 import axios from "axios";
 
-const instance = axios.create();
+const instance = axios.create({
+  timeout: 20000,
+});
 
-instance.interceptors.response.use((res) => {
-  return {
-    error: false,
-    data: res.data
-  };
-}, err => {
-  return {
-    error: true,
-    msg: err.response ? err.response.data : err.message
+instance.interceptors.response.use(
+  (res) => {
+    return {
+      error: false,
+      data: res.data,
+    };
+  },
+  (err) => {
+    return {
+      error: true,
+      msg: err.response ? err.response.data : err.message,
+    };
   }
-})
+);
 
-export const fetch = (url, method, data = {}, options = {
-  Headers: {
-    "Content-Type": "application/json",
+export const fetch = (
+  url,
+  method,
+  data = {},
+  options = {
+    Headers: {
+      "Content-Type": "application/json",
+    },
   }
-}) => {
+) => {
   return instance({
     url,
     method,
     data,
-    ...options
-  })
-}
+    ...options,
+  });
+};

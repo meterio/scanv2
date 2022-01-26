@@ -174,10 +174,10 @@
             </b-col>
             <b-col sm="12" :md="contentCols">
               <template v-if="verifyStatus === 'perfect'">
-                <span>Contract Source Code Verified (Exact Match)</span>
+                <span>Contract Source Code and Metadata Fully Verified</span>
               </template>
               <template v-else-if="verifyStatus === 'partial'">
-                <span>Contract Source Code Verified (Partial Match)</span>
+                <span>Contract Source Code Verified</span>
                 <!-- <span>yes, but it's partial, you can </span>
                 <router-link
                   :to="{

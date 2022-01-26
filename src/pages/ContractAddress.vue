@@ -21,6 +21,7 @@
         nav-tabs.px-0(
           :tabs="tabs",
           :value="tabValue",
+          :verifyStatus="verifyStatus",
           @changeTab="navTabChange"
         )
       div(slot="otherData")

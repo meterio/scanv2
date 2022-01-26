@@ -6,6 +6,7 @@ b-container
       :class="localTabIndex == index ? 'active' : ''",
       @click="clickTab(index)"
     ) {{ tab.name }}
+      <b-icon v-if="isShowCheck(tab.name)" icon="check-circle" variant="primary"></b-icon>
 </template>
 <script>
 export default {
@@ -18,6 +19,10 @@ export default {
       type: Number,
       default: 0,
     },
+    verifyStatus: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
@@ -38,6 +43,9 @@ export default {
       this.localTabIndex = tabIndex;
       this.$emit("changeTab", tabIndex);
     },
+    isShowCheck(name) {
+      return name === 'Contract' && (this.verifyStatus === 'perfect' || this.verifyStatus === 'partial')
+    }
   },
 };
 </script>
