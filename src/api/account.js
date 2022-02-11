@@ -41,10 +41,13 @@ export default {
       `accounts/${address}/proposed?page=${page}&limit=${limit}`
     );
   },
-  getHolders(network, address) {
-    return get(network, `accounts/${address}/holders`);
+  getHolders(network, address, page, limit = 8) {
+    return get(
+      network,
+      `accounts/${address}/holders?page=${page}&limit=${limit}`
+    );
   },
   getTokens(network, address) {
     return get(network, `accounts/${address}/tokens`);
-  }
+  },
 };

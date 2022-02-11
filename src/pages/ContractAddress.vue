@@ -195,7 +195,7 @@ export default {
     },
     async loadHolders(network, page, limit) {
       const { address } = this.$route.params;
-      const res = await this.$api.account.getHolders(network, address);
+      const res = await this.$api.account.getHolders(network, address, page, limit);
       const { holders, token } = res;
       const items = holders.map((h) => {
         return {
