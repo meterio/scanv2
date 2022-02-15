@@ -656,7 +656,7 @@ export default {
     async loadTokens(network, page, limit) {
       this.load = true;
       const { address } = this.$route.params;
-      const { tokens } = await this.$api.account.getTokens(network, address);
+      const { tokens } = await this.$api.account.getTokens(network, address, page, limit);
       const items = tokens.map((t) => {
         return {
           ...t,

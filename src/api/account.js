@@ -47,7 +47,10 @@ export default {
       `accounts/${address}/holders?page=${page}&limit=${limit}`
     );
   },
-  getTokens(network, address) {
-    return get(network, `accounts/${address}/tokens`);
+  getTokens(network, address, page, limit = 8) {
+    return get(
+      network,
+      `accounts/${address}/tokens?page=${page}&limit=${limit}`
+    );
   },
 };
