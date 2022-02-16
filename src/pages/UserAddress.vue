@@ -432,7 +432,7 @@ export default {
           },
         };
       });
-      return { items, totalRows: items.length };
+      return { items, totalRows: token.holdersCount };
     },
 
     async loadTransfers(network, page, limit) {
