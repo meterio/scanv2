@@ -230,9 +230,10 @@ export default {
     },
   },
   methods: {
-    // init() {
-    //   this.loadAddress();
-    // },
+    init() {
+      this.address = this.addressInfo.address
+      // this.loadAddress();
+    },
     navTabChange(val) {
       this.current_tab_index = val;
       this.tabValue = val;
@@ -573,9 +574,10 @@ export default {
           hash: t.txHash,
           status: t.reverted,
         },
+        methodName: "transfer",
         blocknum: t.block.number,
-        from: t.from === this.address ? t.from : t.tokenAddress,
-        to: t.to === this.address ? t.to : t.tokenAddress,
+        from: t.from,
+        to: t.to,
         direct: t.from === this.address ? "Out" : "In",
         amount: {
           type: "amount",
