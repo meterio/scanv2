@@ -25,7 +25,7 @@
           @changeTab="navTabChange"
         )
       div(slot="otherData")
-        contract-detail(:files="files")
+        contract-detail(:files="files", :address="addressInfo.address")
 </template>
 
 <script>
@@ -195,7 +195,12 @@ export default {
     },
     async loadHolders(network, page, limit) {
       const { address } = this.$route.params;
-      const res = await this.$api.account.getHolders(network, address, page, limit);
+      const res = await this.$api.account.getHolders(
+        network,
+        address,
+        page,
+        limit
+      );
       const { holders, token } = res;
       const items = holders.map((h) => {
         return {

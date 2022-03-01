@@ -12,5 +12,5 @@ export const API_BASE = {
 
 export const SOURCIFY_API = {
   main: "https://sourcify.dev/server",
-  test: "https://sourcify-test.meter.io",
+  test: "https://sourcify.dev/server",
 };
