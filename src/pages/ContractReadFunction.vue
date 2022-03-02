@@ -1,18 +1,47 @@
 <template>
   <div>
     <div class="function-container m-2 p-1" v-if="abi">
-      <div class="function-name" @click="v = !v">{{ abi.name }}</div>
+      <div class="function-name d-flex justify-content-between" @click="v = !v">
+        <span>{{ computedFunName }}</span>
+        <span class="d-flex align-center">
+          <b-icon v-if="!v" icon="arrow-right"></b-icon>
+          <b-icon @click.stop="refresh" v-else icon="arrow-clockwise"></b-icon>
+        </span>
+      </div>
       <b-collapse v-model="v">
-        <b-card>{{ res }}</b-card>
+        <b-card>
+          <Loading v-if="readLoading" />
+          <b-form v-if="paramsLength" @submit.prevent="onSubmit">
+            <b-form-group
+              v-for="(item, index) in computedParams"
+              :key="item.name"
+              :label="item.name"
+            >
+              <b-form-input
+                required
+                v-model="params[index]"
+                trim
+                :placeholder="item.type"
+              ></b-form-input>
+            </b-form-group>
+            <section>
+              <b-button type="submit" variant="primary">Read</b-button>
+            </section>
+          </b-form>
+          <span>{{ res }}</span>
+        </b-card>
       </b-collapse>
     </div>
   </div>
 </template>
 
 <script>
-import BigNumber from "bignumber.js";
+import Loading from "@/components/Loading";
 export default {
   name: "ContractReadFunction",
+  components: {
+    Loading,
+  },
   props: {
     abi: {
       type: Object,
@@ -31,11 +60,31 @@ export default {
     return {
       v: false,
       res: "",
+      params: [],
+      readLoading: false,
     };
   },
   computed: {
     paramsLength() {
       return this.abi.inputs.length;
+    },
+    computedFunName() {
+      let p = [];
+      for (const item of this.abi.inputs) {
+        p.push(`${item.name}:${item.type}`);
+      }
+      return `${this.abi.name}(${p.join(",")})`;
+    },
+    computedParams() {
+      const inputs = [];
+      for (const i of this.abi.inputs) {
+        // this.params[i.name] = 1;
+        inputs.push({
+          name: i.name,
+          type: i.type,
+        });
+      }
+      return inputs;
     },
   },
   watch: {
@@ -46,16 +95,35 @@ export default {
     },
   },
   methods: {
+    onSubmit() {
+      this.read();
+    },
     async read() {
       if (this.contract) {
-        console.log("abi", this.abi);
-        console.log("contract", this.contract);
-        const res = await this.contract.callStatic[this.abi.name].apply(
-          null,
-          []
-        );
-        console.log(res);
-        this.res = res;
+        try {
+          this.readLoading = true;
+          const params = this.paramsLength === 0 ? [] : [...this.params];
+          const res = await this.contract.callStatic[this.abi.name].apply(
+            null,
+            params
+          );
+          console.log("res", res);
+          this.res = res;
+          this.readLoading = false;
+        } catch (err) {
+          this.readLoading = false;
+          alert(err.message);
+        }
+      } else {
+        alert("Please connet you web3 provider.");
+      }
+    },
+    refresh() {
+      console.log("refresh");
+      if (this.paramsLength) {
+        this.params = [];
+      } else {
+        this.read();
       }
     },
   },

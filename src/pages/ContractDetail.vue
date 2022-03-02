@@ -19,23 +19,23 @@
         </b-form>
       </b-tab>
       <b-tab title="Read">
-        <b-button @click="connect" variant="light" pill size="sm">
+        <b-button @click="connect" :variant="variantBtn" pill size="sm">
           {{ computedBtnText }}
         </b-button>
         <ContractReadFunction
-          v-for="item in readAbi"
-          :key="item.name"
+          v-for="(item, index) in readAbi"
+          :key="index"
           :abi="item"
           :contract="contract"
         />
       </b-tab>
       <b-tab title="Write">
-        <b-button @click="connect" variant="light" pill size="sm">
+        <b-button @click="connect" :variant="variantBtn" pill size="sm">
           {{ computedBtnText }}
         </b-button>
         <ContractWriteFunction
-          v-for="item in writeAbi"
-          :key="item.name"
+          v-for="(item, index) in writeAbi"
+          :key="index"
           :abi="item"
           :contract="contract"
         />
@@ -73,18 +73,26 @@ export default {
       provider: null,
       contract: null,
       account: null,
+      chainId: null,
       abi: null,
       readAbi: [],
     };
   },
   computed: {
+    variantBtn() {
+      if (this.account) {
+        return "primary";
+      } else {
+        return "danger";
+      }
+    },
     computedFiles() {
       return this.files.map((item) => {
         let rows = 2;
         if (item.content.includes("\n")) {
           rows = item.content.split("\n").length;
         } else {
-          rows = Math.ceil(item.content.length / 100);
+          rows = Math.ceil(item.content.length / 200);
         }
         return {
           ...item,
@@ -101,14 +109,12 @@ export default {
     },
   },
   async created() {
-    console.log("file", this.files);
     const readAbi = [];
     const writeAbi = [];
     const metadata = this.files.find((item) => item.name === "metadata.json");
     const abi = JSON.parse(metadata.content).output.abi;
     for (const f of abi) {
       if (f.type === "function") {
-        console.log(f);
         if (f.stateMutability === "view") {
           readAbi.push(f);
         } else {
@@ -122,11 +128,24 @@ export default {
     const provider = await detectEthereumProvider();
     this.provider = provider;
   },
+  watch: {
+    async chainId(newVal, oldVal) {
+      if (!oldVal) {
+        return;
+      }
+      this.removeAllListeners();
+      const provider = await detectEthereumProvider();
+      this.provider = provider;
+      this.connect();
+    },
+  },
   methods: {
     connect() {
       if (!this.provider) {
         return;
       }
+      this.provider.on("chainChanged", this.chainChangedHandle);
+      this.provider.on("accountsChanged", this.accountsChangeHandle);
 
       this.provider
         .request({ method: "eth_requestAccounts" })
@@ -140,7 +159,28 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      this.provider.request({ method: "eth_chainId" }).then((chainId) => {
+        this.chainId = chainId;
+      });
     },
+    chainChangedHandle(chainId) {
+      this.chainId = chainId;
+    },
+    accountsChangeHandle(accounts) {
+      this.account = accounts[0];
+    },
+    removeAllListeners() {
+      if (this.provider) {
+        this.provider.removeListener("chainChanged", this.chainChangedHandle);
+        this.provider.removeListener(
+          "accountsChanged",
+          this.accountsChangeHandle
+        );
+      }
+    },
+  },
+  beforeDestroy() {
+    this.removeAllListeners();
   },
 };
 </script>

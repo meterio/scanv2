@@ -1,7 +1,13 @@
 <template>
   <div>
     <div class="function-container m-2 p-1" v-if="abi">
-      <div class="function-name" @click="v = !v">{{ abi.name }}</div>
+      <div class="function-name d-flex justify-content-between" @click="v = !v">
+        <span>{{ computedFunName }}</span>
+        <span class="d-flex align-center">
+          <b-icon v-if="!v" icon="arrow-right"></b-icon>
+          <b-icon @click.stop="refresh" v-else icon="arrow-clockwise"></b-icon>
+        </span>
+      </div>
       <b-collapse v-model="v">
         <b-card>
           <b-form @submit.prevent="onSubmit">
@@ -10,10 +16,23 @@
               :key="item.name"
               :label="item.name"
             >
-              <b-form-input v-model="params[index]" trim></b-form-input>
+              <b-form-input
+                required
+                v-model="params[index]"
+                trim
+                :placeholder="item.type"
+              ></b-form-input>
             </b-form-group>
-            <section class="text-center">
-              <b-button type="submit" variant="primary">Call</b-button>
+            <section>
+              <b-button type="submit" variant="primary">Write</b-button>
+              <b-button
+                class="ml-2"
+                v-if="!!hash"
+                @click="viewTransaction"
+                type="button"
+                variant="primary"
+                >View Transaction</b-button
+              >
             </section>
           </b-form>
         </b-card>
@@ -23,7 +42,6 @@
 </template>
 
 <script>
-import BigNumber from "bignumber.js";
 export default {
   name: "ContractWriteFunction",
   props: {
@@ -43,18 +61,17 @@ export default {
   data() {
     return {
       v: false,
-      res: "",
+      hash: "",
       params: [],
     };
   },
-  watch: {
-    params(val) {
-      console.log(val);
-    },
-  },
   computed: {
-    paramsLength() {
-      return this.abi.inputs.length;
+    computedFunName() {
+      let p = [];
+      for (const item of this.abi.inputs) {
+        p.push(`${item.name}:${item.type}`);
+      }
+      return `${this.abi.name}(${p.join(",")})`;
     },
     computedParams() {
       const inputs = [];
@@ -69,27 +86,34 @@ export default {
     },
   },
   methods: {
-    async read() {
-      if (this.contract) {
-        console.log("abi", this.abi);
-        console.log("contract", this.contract);
-        const res = await this.contract.callStatic[this.abi.name].apply(
-          null,
-          []
-        );
-        console.log(res);
-        this.res = new BigNumber(String(res));
-      }
-    },
     onSubmit() {
+      this.hash = "";
       this.write();
     },
     async write() {
       if (this.contract) {
-        const tx = await this.contract[this.abi.name].apply(null, this.params);
-        console.log("tx", tx);
-        await tx.wait();
+        try {
+          const tx = await this.contract[this.abi.name].apply(
+            null,
+            this.params
+          );
+
+          this.hash = tx.hash;
+        } catch (e) {
+          alert(e.message);
+        }
+      } else {
+        alert("Please connet you web3 provider.");
       }
+    },
+    refresh() {
+      this.params = [];
+    },
+    viewTransaction() {
+      const href = window.location.href;
+      const index = href.indexOf("/", 9);
+      const preUrl = href.substr(0, index);
+      window.open(`${preUrl}/tx/${this.hash}`);
     },
   },
 };
