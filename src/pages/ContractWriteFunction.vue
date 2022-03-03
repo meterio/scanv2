@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="function-container m-2 p-1" v-if="abi">
-      <div class="function-name d-flex justify-content-between" @click="v = !v">
+      <div
+        class="function-name d-flex justify-content-between"
+        @click="isOpenFolder"
+      >
         <span>{{ computedFunName }}</span>
         <span class="d-flex align-center">
           <b-icon v-if="!v" icon="arrow-right"></b-icon>
@@ -10,7 +13,8 @@
       </div>
       <b-collapse v-model="v">
         <b-card>
-          <b-form @submit.prevent="onSubmit">
+          <Loading v-if="writeLoading" />
+          <b-form v-else @submit.prevent="onSubmit">
             <b-form-group
               v-for="(item, index) in computedParams"
               :key="item.name"
@@ -42,8 +46,12 @@
 </template>
 
 <script>
+import Loading from "@/components/Loading";
 export default {
   name: "ContractWriteFunction",
+  components: {
+    Loading,
+  },
   props: {
     abi: {
       type: Object,
@@ -63,6 +71,7 @@ export default {
       v: false,
       hash: "",
       params: [],
+      writeLoading: false,
     };
   },
   computed: {
@@ -86,24 +95,36 @@ export default {
     },
   },
   methods: {
+    isOpenFolder() {
+      if (this.contract) {
+        this.v = !this.v;
+      } else {
+        alert("Please connet you web3 provider.");
+      }
+    },
     onSubmit() {
       this.hash = "";
       this.write();
     },
     async write() {
+      if (this.writeLoading) {
+        return;
+      }
       if (this.contract) {
+        this.writeLoading = true;
         try {
           const tx = await this.contract[this.abi.name].apply(
             null,
             this.params
           );
 
+          await tx.wait();
           this.hash = tx.hash;
+          this.writeLoading = false;
         } catch (e) {
+          this.writeLoading = false;
           alert(e.message);
         }
-      } else {
-        alert("Please connet you web3 provider.");
       }
     },
     refresh() {
@@ -121,6 +142,7 @@ export default {
 
 <style lang="scss" scoped>
 .function-container {
+  border-radius: 4px;
   background-color: lightgray;
   cursor: pointer;
 }

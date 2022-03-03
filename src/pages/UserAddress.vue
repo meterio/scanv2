@@ -10,7 +10,9 @@
       :loadItems="loadItems",
       :fields="fields",
       :pagination="pagination",
-      :key="loadTarget"
+      :key="loadTarget",
+      :currentPage="currentPage",
+      @tablePaginationChange="currentPageChange"
     )
       div(slot="header")
         nav-tabs.px-0(
@@ -39,11 +41,11 @@ export default {
         return {
           isContract: true,
           isERC20: false,
-          address: '0x',
-          summary: []
-        }
-      }
-    }
+          address: "0x",
+          summary: [],
+        };
+      },
+    },
   },
   computed: {
     title() {
@@ -221,22 +223,37 @@ export default {
           { key: "blocknum", label: "Last Updated on Block" },
         ],
       },
+      currentPage: 1,
     };
   },
-  beforeMount() {},
-  watch: {
-    address() {
-      this.navTabChange(0);
-    },
+  created() {
+    const q = this.$route.query;
+    if (q.tab) {
+      this.tabValue = Number(q.tab);
+      this.getLoadTarget(Number(q.tab));
+    }
+    if (q.p) {
+      this.currentPage = Number(q.p);
+    }
   },
   methods: {
+    currentPageChange(val) {
+      const query = JSON.parse(JSON.stringify(this.$route.query));
+      this.$router.replace({ query: { ...query, p: val } });
+      this.currentPage = val;
+    },
     init() {
-      this.address = this.addressInfo.address
-      // this.loadAddress();
+      this.address = this.addressInfo.address;
     },
     navTabChange(val) {
-      this.current_tab_index = val;
+      const query = JSON.parse(JSON.stringify(this.$route.query));
+      this.$router.replace({ query: { ...query, tab: val } });
+
+      this.currentPage = 1;
       this.tabValue = val;
+      this.getLoadTarget(val);
+    },
+    getLoadTarget(val) {
       if (!this.isContract) {
         switch (val) {
           // case 0:
@@ -279,113 +296,6 @@ export default {
         }
       }
     },
-    async loadAddress() {
-      try {
-        const { address } = this.$route.params;
-        this.address = address;
-        this.summary = [];
-
-        const res = await this.$api.account.getAccountDetail(
-          this.network,
-          address
-        );
-        console.log("res: ", res)
-
-        const { account } = res;
-        this.isContract = !!account.isContract;
-        this.isERC20 = !!account.isERC20;
-        if (this.address === "0x0000000000000000000000000000000000000000") {
-          if (new BigNumber(account.mtrgBalance).isLessThan(0)) {
-            account.mtrgBalance = "0";
-          }
-          if (new BigNumber(account.mtrgBounded).isLessThan(0)) {
-            account.mtrgBounded = "0";
-          }
-          if (new BigNumber(account.mtrBalance).isLessThan(0)) {
-            account.mtrBalance = "0";
-          }
-          if (new BigNumber(account.mtrBounded).isLessThan(0)) {
-            account.mtrBounded = "0";
-          }
-        }
-        this.summary = this.summary.concat([
-          // { key: "Address", value: account.address },
-          {
-            key: "MTRG Balance",
-            value: account.mtrgBalance,
-            type: "amount",
-            token: "MTRG",
-            precision: -1,
-          },
-          {
-            key: "MTRG Staked",
-            value: account.mtrgBounded,
-            type: "amount",
-            token: "MTRG",
-            precision: -1,
-          },
-          {
-            key: "MTR Balance",
-            value: account.mtrBalance,
-            type: "amount",
-            token: "MTR",
-            precision: -1,
-          },
-        ]);
-        // if (account.name) {
-        //   this.summary.push({ key: "Name", value: account.name });
-        // }
-        if (account.firstSeen && account.firstSeen.number > 0) {
-          this.summary.push({
-            key: "First Seen",
-            type: "block-link-with-note",
-            value: this.fromNow(account.firstSeen.timestamp),
-            block: account.firstSeen.number,
-          });
-        }
-        if (account.lastUpdate && account.lastUpdate.number > 0) {
-          this.summary.push({
-            key: "Last Updated",
-            type: "block-link-with-note",
-            value: this.fromNow(account.lastUpdate.timestamp),
-            block: account.lastUpdate.number,
-          });
-        }
-        if (account.hasCode) {
-          this.summary.push({ key: "Type", value: "Contract" });
-        }
-        if (account.isERC20) {
-          this.summary.push({
-            key: "ERC20 Token",
-            value: `${account.tokenName || "Unnamed Token"} (${
-              account.tokenSymbol || "ERC20"
-            })`,
-          });
-          this.summary.push({
-            key: "Decimals",
-            value: account.tokenDecimals || 18,
-          });
-          if (account.circulation) {
-            this.summary.push({
-              key: "Circulation",
-              type: "amount",
-              value: account.circulation,
-              token: account.tokenSymbol,
-              decimals: account.tokenDecimals,
-            });
-          }
-          if (account.holdersCount) {
-            this.summary.push({
-              key: "Holders Count",
-              value: account.holdersCount,
-            });
-          }
-        }
-        this.account = account;
-      } catch (e) {
-        console.log(e);
-      }
-    },
     async loadBuckets(network, page, limit) {
       const { address } = this.$route.params;
       const res = await this.$api.account.getBuckets(
@@ -414,7 +324,12 @@ export default {
 
     async loadHolders(network, page, limit) {
       const { address } = this.$route.params;
-      const res = await this.$api.account.getHolders(network, address, page, limit);
+      const res = await this.$api.account.getHolders(
+        network,
+        address,
+        page,
+        limit
+      );
       const { holders, token } = res;
       const items = holders.map((h) => {
         return {
@@ -530,12 +445,12 @@ export default {
         }
         console.log("direct = ", direct);
 
-        let methodName = '';
+        let methodName = "";
         if (t.knowMethod) {
           if (t.knowMethod.abi) {
             methodName = JSON.parse(t.knowMethod.abi).name;
           } else {
-            methodName = t.knowMethod.signature
+            methodName = t.knowMethod.signature;
           }
         }
 
@@ -658,7 +573,12 @@ export default {
     async loadTokens(network, page, limit) {
       this.load = true;
       const { address } = this.$route.params;
-      const { tokens, totalRows } = await this.$api.account.getTokens(network, address, page, limit);
+      const { tokens, totalRows } = await this.$api.account.getTokens(
+        network,
+        address,
+        page,
+        limit
+      );
       const items = tokens.map((t) => {
         return {
           ...t,

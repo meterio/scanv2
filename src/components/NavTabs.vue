@@ -3,10 +3,10 @@ b-container
   .s-nav-tabbar
     .nav-item(
       v-for="(tab, index) in localTabs",
-      :class="localTabIndex == index ? 'active' : ''",
+      :class="computedTab == index ? 'active' : ''",
       @click="clickTab(index)"
     ) {{ tab.name }}
-      <b-icon v-if="isShowCheck(tab.name)" icon="check-circle" variant="primary"></b-icon>
+      b-icon v-if="isShowCheck(tab.name)" icon="check-circle" variant="primary"
 </template>
 <script>
 export default {
@@ -21,8 +21,8 @@ export default {
     },
     verifyStatus: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
   data() {
     return {
@@ -32,6 +32,10 @@ export default {
   computed: {
     localTabs() {
       return !!this.tabs ? this.tabs : [];
+    },
+    computedTab() {
+      console.log("nav tab", this.value);
+      return this.value;
     },
   },
   beforeMount() {
@@ -44,8 +48,11 @@ export default {
       this.$emit("changeTab", tabIndex);
     },
     isShowCheck(name) {
-      return name === 'Contract' && (this.verifyStatus === 'perfect' || this.verifyStatus === 'partial')
-    }
+      return (
+        name === "Contract" &&
+        (this.verifyStatus === "perfect" || this.verifyStatus === "partial")
+      );
+    },
   },
 };
 </script>

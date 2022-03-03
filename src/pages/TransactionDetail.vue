@@ -17,7 +17,7 @@
             class="link"
             :to="{
               name: 'address',
-              params: { address: data.value }
+              params: { address: data.value },
             }"
             >{{ data.value }}</router-link
           >
@@ -74,10 +74,10 @@ const TransferABI = new abi.Event({
   inputs: [
     { indexed: true, name: "_from", type: "address" },
     { indexed: true, name: "_to", type: "address" },
-    { indexed: false, name: "_value", type: "uint256" }
+    { indexed: false, name: "_value", type: "uint256" },
   ],
   name: "Transfer",
-  type: "event"
+  type: "event",
 });
 
 export default {
@@ -85,7 +85,7 @@ export default {
     NavTabs,
     DataSummary,
     DataTableV2,
-    VueJsonPretty
+    VueJsonPretty,
   },
   data() {
     return {
@@ -99,28 +99,28 @@ export default {
           { key: "index", label: "Index" },
           { key: "to", label: "To" },
           { key: "amount", label: "Amount" },
-          { key: "data", label: "Data" }
+          { key: "data", label: "Data" },
         ],
         pagination: { show: true, align: "center", perPage: 20 },
-        items: []
+        items: [],
       },
       transfers: {
         fields: [
           { key: "from", label: "Sender" },
           { key: "to", label: "Recipient" },
-          { key: "amountStr", label: "Amount" }
+          { key: "amountStr", label: "Amount" },
         ],
         items: [],
-        pagination: { show: true, align: "center", perPage: 20 }
+        pagination: { show: true, align: "center", perPage: 20 },
       },
       events: {
         fields: [
           { key: "address", label: "Contract Address" },
-          { key: "details", label: "Details" }
+          { key: "details", label: "Details" },
         ],
         items: [],
-        pagination: { show: true, align: "center", perPage: 20 }
-      }
+        pagination: { show: true, align: "center", perPage: 20 },
+      },
     };
   },
   async mounted() {
@@ -162,7 +162,7 @@ export default {
           return this.events.pagination;
       }
       return this.clauses.pagination;
-    }
+    },
   },
   methods: {
     navTabChange(val) {
@@ -187,21 +187,21 @@ export default {
             key: "Amount",
             value: summary.totalClauseAmount,
             type: "amount",
-            token: summary.token
+            token: summary.token,
           },
           { key: "Fee", value: summary.paid, type: "amount", token: "MTR" },
           {
             key: "Result",
             value: summary.reverted ? "reverted" : "success",
-            type: "status"
+            type: "status",
           },
           { key: "Clause Count", value: summary.clauseCount },
           {
             key: "Block",
             block: summary.block.number,
             value: this.fromNow(summary.block.timestamp),
-            type: "block-link-with-note"
-          }
+            type: "block-link-with-note",
+          },
         ];
       }
       this.tx = tx;
@@ -212,7 +212,7 @@ export default {
       let clauses = [];
       if (tx.clauseCount > 0) {
         let index = 1;
-        clauses = tx.clauses.map(c => {
+        clauses = tx.clauses.map((c) => {
           let decoded = undefined;
           let hint = "";
 
@@ -237,23 +237,33 @@ export default {
                 hint = se.explainStakingOpCode(body.opCode);
               }
             } else {
-              if(c.knownMethod) {
+              if (c.knownMethod) {
                 if (c.knownMethod.abi) {
                   const abi = JSON.parse(c.knownMethod.abi);
                   const coder = new ethers.utils.AbiCoder();
-                  const inputsType = abi.inputs.map(item => item.type);
+                  const inputsType = abi.inputs.map((item) => item.type);
                   // console.log('inputsType', inputsType)
-                  const method = abi.name + '(' + abi.inputs.map(item => item.name + ' ' + item.type).join(',') + ')';
-                  const result = coder.decode(inputsType, ethers.utils.hexDataSlice(c.data, 4));
+                  const method =
+                    abi.name +
+                    "(" +
+                    abi.inputs
+                      .map((item) => item.name + " " + item.type)
+                      .join(",") +
+                    ")";
+                  const result = coder.decode(
+                    inputsType,
+                    ethers.utils.hexDataSlice(c.data, 4)
+                  );
                   // console.log('result: ', result)
                   const formatRes = {};
                   for (let index in abi.inputs) {
-                    formatRes[abi.inputs[index].name] = result[index].toString()
+                    formatRes[abi.inputs[index].name] =
+                      result[index].toString();
                   }
                   decoded = {
                     method,
-                    ...formatRes
-                  }
+                    ...formatRes,
+                  };
                 }
               }
             }
@@ -268,11 +278,11 @@ export default {
               type: "amount",
               amount: bigNum(c.value),
               token: c.token,
-              precision: 6
+              precision: 6,
             },
             index: index++,
             decoded,
-            hint
+            hint,
           };
         });
       }
@@ -281,7 +291,7 @@ export default {
       console.log(`clauses cost ${end - start}`);
 
       start = new Date();
-      this.transfers.items = tx.groupedTransfers.map(tr => {
+      this.transfers.items = tx.groupedTransfers.map((tr) => {
         return {
           from: tr.sender,
           to: tr.recipient,
@@ -289,63 +299,69 @@ export default {
             type: "amount",
             amount: bigNum(tr.amount),
             token: tr.token == 0 ? "MTR" : "MTRG",
-            precision: 8
-          }
+            precision: 8,
+          },
         };
       });
       end = new Date();
       console.log(`transfers cost ${end - start}`);
 
       start = new Date();
-      this.events.items = tx.events.map(e => {
+      this.events.items = tx.events.map((e) => {
         let decoded = undefined;
         if (e.topics.length && e.knownEvent.abi) {
           const abi = JSON.parse(e.knownEvent.abi);
-          console.log('event abi', abi)
+          console.log("event abi", abi);
           const coder = new ethers.utils.AbiCoder();
-          const inputsType = abi.inputs.map(item => item.type);
+          const inputsType = abi.inputs.map((item) => item.type);
           // console.log('inputsType', inputsType)
-          const method = abi.name + '(' + abi.inputs.map(item => {
-            let params = item.name;
-            if (item.indexed) {
-              params += ' indexed '
-            }
-            params += item.type
-            return params
-          }).join(',') + ')';
-          console.log('method', method)
+          const event =
+            abi.name +
+            "(" +
+            abi.inputs
+              .map((item) => {
+                let params = item.name;
+                if (item.indexed) {
+                  params += " indexed";
+                }
+                params += " " + item.type;
+                return params;
+              })
+              .join(",") +
+            ")";
+
           const topicStr = e.topics.map((t, i) => {
             if (i === 0) {
-              return ''
+              return "";
             } else {
-              return t.substr(2)  //remove 0x
+              return t.substr(2); //remove 0x
             }
           });
-          let eventData = '';
+          let eventData = "";
           if (e.data) {
-            eventData = e.data.substr(2)
+            eventData = e.data.substr(2);
           }
-          const data = '0x' + topicStr.join('') + eventData;
+          const data = "0x" + topicStr.join("") + eventData;
           const result = coder.decode(inputsType, data);
-          console.log('result: ', result)
+          console.log("result: ", result);
           const formatRes = {};
           for (let index in abi.inputs) {
-            formatRes[abi.inputs[index].name] = result[index].toString()
+            formatRes[abi.inputs[index].name] = result[index].toString();
           }
           decoded = {
-            method,
-            ...formatRes
-          }
+            event,
+            ...formatRes,
+          };
         }
-        console.log()
+        console.log();
         return {
           address: e.address,
           details: {
             topics: e.topics,
-            data: e.data
+            data: e.data,
           },
-          decoded
-        }
+          decoded,
+        };
       });
       end = new Date();
       console.log(`events cost ${end - start}`);
@@ -379,7 +395,7 @@ export default {
               to: decoded._to,
               amount: new BigNumber(decoded._value).toFixed(),
               token: sym,
-              decimals
+              decimals,
             });
           }
         }
@@ -391,11 +407,11 @@ export default {
         this.summary.push({
           key: "Token Transfers",
           value: transferHighlights,
-          type: "transfer-highlight"
+          type: "transfer-highlight",
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

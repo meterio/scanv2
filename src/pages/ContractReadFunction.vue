@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="function-container m-2 p-1" v-if="abi">
-      <div class="function-name d-flex justify-content-between" @click="v = !v">
+      <div
+        class="function-name d-flex justify-content-between"
+        @click="isOpenFolder"
+      >
         <span>{{ computedFunName }}</span>
         <span class="d-flex align-center">
           <b-icon v-if="!v" icon="arrow-right"></b-icon>
@@ -95,6 +98,13 @@ export default {
     },
   },
   methods: {
+    isOpenFolder() {
+      if (this.contract) {
+        this.v = !this.v;
+      } else {
+        alert("Please connet you web3 provider.");
+      }
+    },
     onSubmit() {
       this.read();
     },
@@ -114,8 +124,6 @@ export default {
           this.readLoading = false;
           alert(err.message);
         }
-      } else {
-        alert("Please connet you web3 provider.");
       }
     },
     refresh() {
@@ -132,6 +140,7 @@ export default {
 
 <style lang="scss" scoped>
 .function-container {
+  border-radius: 4px;
   background-color: lightgray;
   cursor: pointer;
 }
