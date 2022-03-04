@@ -6,7 +6,11 @@ b-container
       :class="computedTab == index ? 'active' : ''",
       @click="clickTab(index)"
     ) {{ tab.name }}
-      b-icon v-if="isShowCheck(tab.name)" icon="check-circle" variant="primary"
+      b-icon(
+        v-if="isShowCheck(tab.name)",
+        icon="check-circle",
+        variant="primary"
+      )
 </template>
 <script>
 export default {
@@ -34,7 +38,6 @@ export default {
       return !!this.tabs ? this.tabs : [];
     },
     computedTab() {
-      console.log("nav tab", this.value);
       return this.value;
     },
   },

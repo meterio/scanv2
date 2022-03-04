@@ -5,7 +5,7 @@
         class="function-name d-flex justify-content-between"
         @click="isOpenFolder"
       >
-        <span>{{ computedFunName }}</span>
+        <span>{{ index + ". " + computedFunName }}</span>
         <span class="d-flex align-center">
           <b-icon v-if="!v" icon="arrow-right"></b-icon>
           <b-icon @click.stop="refresh" v-else icon="arrow-clockwise"></b-icon>
@@ -65,6 +65,12 @@ export default {
         return null;
       },
     },
+    open: {
+      type: Boolean,
+    },
+    index: {
+      type: Number,
+    },
   },
   data() {
     return {
@@ -96,10 +102,8 @@ export default {
   },
   methods: {
     isOpenFolder() {
-      if (this.contract) {
+      if (this.open) {
         this.v = !this.v;
-      } else {
-        alert("Please connet you web3 provider.");
       }
     },
     onSubmit() {
@@ -143,7 +147,7 @@ export default {
 <style lang="scss" scoped>
 .function-container {
   border-radius: 4px;
-  background-color: lightgray;
+  background-color: #f8f9fa;
   cursor: pointer;
 }
 </style>

@@ -15,7 +15,9 @@
       :loadItems="loadItems",
       :fields="fields",
       :pagination="pagination",
-      :key="loadTarget"
+      :key="loadTarget",
+      :currentPage="currentPage",
+      @tablePaginationChange="currentPageChange"
     )
       div(slot="header")
         nav-tabs.px-0(
@@ -100,7 +102,6 @@ export default {
       return this.loadTxs;
     },
     isTableData() {
-      console.log("loadTarget", this.loadTarget);
       if (this.loadTarget === "contract") {
         return false;
       }
@@ -146,10 +147,20 @@ export default {
         ],
         items: [],
       },
+      currentPage: 1,
     };
   },
   async created() {
     this.getVerifyStatus();
+
+    const q = this.$route.query;
+    if (q.tab) {
+      this.tabValue = Number(q.tab);
+      this.getLoadTarget(Number(q.tab));
+    }
+    if (q.p) {
+      this.currentPage = Number(q.p);
+    }
   },
   watch: {
     "addressInfo.address"() {
@@ -158,7 +169,13 @@ export default {
     },
   },
   methods: {
+    currentPageChange(val) {
+      const query = { ...this.$route.query };
+      this.$router.replace({ query: { ...query, p: val } });
+      this.currentPage = val;
+    },
     async getVerifyStatus() {
+      console.log("get verify status");
       const data = {
         address: this.addressInfo.address,
       };
@@ -175,7 +192,14 @@ export default {
       this.verifyStatus = verifyStatus;
     },
     navTabChange(val) {
+      const query = { ...this.$route.query };
+      this.$router.replace({ query: { ...query, tab: val, p: 1 } });
+      this.currentPage = 1;
       this.tabValue = val;
+
+      this.getLoadTarget(val);
+    },
+    getLoadTarget(val) {
       switch (val) {
         // case 0:
         // this.loadTarget = "transfers";
@@ -289,7 +313,6 @@ export default {
         let relatedTransfer;
         if (relatedTransfers && relatedTransfers.length >= 1) {
           for (const tr of relatedTransfers) {
-            console.log("TR:", tr);
             if (
               tr.sender.toLowerCase() ===
                 this.addressInfo.address.toLowerCase() ||
@@ -325,7 +348,6 @@ export default {
             direct = "Transfer";
           }
         }
-        console.log("direct = ", direct);
 
         let methodName = "";
         if (t.knowMethod) {

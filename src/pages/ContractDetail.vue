@@ -27,6 +27,8 @@
           :key="index"
           :abi="item"
           :contract="contract"
+          :open="openable"
+          :index="index + 1"
         />
       </b-tab>
       <b-tab title="Write">
@@ -38,6 +40,8 @@
           :key="index"
           :abi="item"
           :contract="contract"
+          :open="openable"
+          :index="index + 1"
         />
       </b-tab>
     </b-tabs>
@@ -49,6 +53,7 @@ import detectEthereumProvider from "@metamask/detect-provider";
 import ContractReadFunction from "./ContractReadFunction.vue";
 import ContractWriteFunction from "./ContractWriteFunction.vue";
 import { ethers } from "ethers";
+import { MATCH_CHAIN } from "@/config";
 
 export default {
   name: "Contract",
@@ -76,11 +81,12 @@ export default {
       chainId: null,
       abi: null,
       readAbi: [],
+      writeAbi: [],
     };
   },
   computed: {
     variantBtn() {
-      if (this.account) {
+      if (this.account && this.chainId == MATCH_CHAIN[this.network]) {
         return "primary";
       } else {
         return "danger";
@@ -102,10 +108,20 @@ export default {
     },
     computedBtnText() {
       if (this.account) {
+        if (this.chainId != MATCH_CHAIN[this.network]) {
+          return `Wrong Network`;
+        }
         return this.account.substr(0, 4) + "..." + this.account.substr(-2);
       } else {
         return "Connect";
       }
+    },
+    openable() {
+      return (
+        this.contract &&
+        this.account &&
+        this.chainId == MATCH_CHAIN[this.network]
+      );
     },
   },
   async created() {

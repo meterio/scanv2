@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      isContract: false,
+      isContract: null,
       isERC20: false,
       address: "0x",
       account: {},
@@ -34,6 +34,11 @@ export default {
       };
     },
   },
+  watch: {
+    isContract(val, old) {
+      console.log(val, old);
+    },
+  },
   methods: {
     init() {
       this.loadAddress();
@@ -48,7 +53,6 @@ export default {
           this.network,
           address
         );
-        console.log("res: ", res);
 
         const { account } = res;
         this.isContract = !!account.isContract;

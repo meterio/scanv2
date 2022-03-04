@@ -440,21 +440,19 @@ export default {
         this.loading = false;
         return;
       } else {
-        this.currentPage = 1;
+        this.computedCurrentPage = 1;
         this.itemsLocal = [];
         this.totalRows = 0;
         this.loading = false;
       }
     },
-    async init(currentPage) {
-      const cpage = !!currentPage ? currentPage : this.currentPage;
+    async init() {
       try {
         if (this.loadItems) {
-          console.log("load items");
           this.loading = true;
           const res = await this.loadItems(
             this.network,
-            cpage,
+            this.computedCurrentPage,
             this.pagination.perPage
           );
           const { items, totalRows } = res;
@@ -475,7 +473,7 @@ export default {
         return;
       }
 
-      this.init(val);
+      this.init();
     },
   },
 };

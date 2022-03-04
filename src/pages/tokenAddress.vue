@@ -1,6 +1,6 @@
 <template lang="pug">
 .detail-page
-  token-data-summary(:title="title" :data="computedTokenProfile", wide)
+  token-data-summary(:title="title", :data="computedTokenProfile", wide)
 
   b-container.summary
     .mt-2pert.px-5
@@ -8,7 +8,9 @@
       :loadItems="loadItems",
       :fields="fields",
       :pagination="pagination",
-      :key="loadTarget"
+      :key="loadTarget",
+      :currentPage="currentPage",
+      @tablePaginationChange="currentPageChange"
     )
       div(slot="header")
         nav-tabs.px-0(
@@ -25,17 +27,14 @@ import NavTabs from "@/components/NavTabs.vue";
 
 export default {
   name: "TokenAddress",
-  components: { 
+  components: {
     TokenDataSummary,
     DataTableV2,
-    NavTabs
+    NavTabs,
   },
   data() {
     return {
-      token_tabs: [
-        { name: "Transfers" },
-        { name: "Holders" },
-      ],
+      token_tabs: [{ name: "Transfers" }, { name: "Holders" }],
       tabValue: 0,
       loadTarget: "transfers",
       holders: {
@@ -73,8 +72,9 @@ export default {
         // circulation: 0,
         // holdersCount: 0,
         // transfersCount: 0,
-      }
-    }
+      },
+      currentPage: 1,
+    };
   },
   computed: {
     title() {
@@ -82,60 +82,60 @@ export default {
     },
     computedTokenProfile() {
       const data = {
-        'Name': this.tokenProfile.name,
-        'Symbol': this.tokenProfile.symbol,
-        'Decimals': this.tokenProfile.decimals,
-        'Contract': this.tokenProfile.address,
-        'Official Site': this.tokenProfile.officialSite,
-        'Total Supply': this.tokenProfile.totalSupply,
-        'Circulation': this.tokenProfile.circulation,
-        'Holders': this.tokenProfile.holdersCount,
-        'Transfers': this.tokenProfile.transfersCount
-      }
-      const profile = []
+        Name: this.tokenProfile.name,
+        Symbol: this.tokenProfile.symbol,
+        Decimals: this.tokenProfile.decimals,
+        Contract: this.tokenProfile.address,
+        "Official Site": this.tokenProfile.officialSite,
+        "Total Supply": this.tokenProfile.totalSupply,
+        Circulation: this.tokenProfile.circulation,
+        Holders: this.tokenProfile.holdersCount,
+        Transfers: this.tokenProfile.transfersCount,
+      };
+      const profile = [];
       for (const key of Object.keys(data)) {
-        if (key === 'Contract') {
+        if (key === "Contract") {
           profile.push({
             name: key,
-            type: 'address-link',
-            value: data[key]
-          })
-        } else if (key === 'Circulation') {
-          profile.push({
-            name: key,
-            type: 'amount',
+            type: "address-link",
             value: data[key],
-            token: data['Symbol'],
-            decimals: data['Decimals']
-          })
-        } else if (key === 'Total Supply') {
+          });
+        } else if (key === "Circulation") {
           profile.push({
             name: key,
-            type: 'amount',
+            type: "amount",
             value: data[key],
-            token: data['Symbol'],
-            decimals: data['Decimals']
-          })
-        } else if (key === 'Official Site') {
+            token: data["Symbol"],
+            decimals: data["Decimals"],
+          });
+        } else if (key === "Total Supply") {
           profile.push({
             name: key,
-            type: 'http-link',
+            type: "amount",
             value: data[key],
-          })
+            token: data["Symbol"],
+            decimals: data["Decimals"],
+          });
+        } else if (key === "Official Site") {
+          profile.push({
+            name: key,
+            type: "http-link",
+            value: data[key],
+          });
         } else {
           profile.push({
             name: key,
-            type: 'span',
-            value: data[key]
-          })
+            type: "span",
+            value: data[key],
+          });
         }
       }
-      return profile
+      return profile;
     },
     fields() {
       switch (this.loadTarget) {
         case "transfers":
-        return this.transfers.fields;
+          return this.transfers.fields;
         case "holders":
           return this.holders.fields;
       }
@@ -144,7 +144,7 @@ export default {
     pagination() {
       switch (this.loadTarget) {
         case "transfers":
-        return this.transfers.pagination;
+          return this.transfers.pagination;
         case "holders":
           return this.holders.pagination;
       }
@@ -153,7 +153,7 @@ export default {
     loadItems() {
       switch (this.loadTarget) {
         case "transfers":
-        return this.loadTransfers;
+          return this.loadTransfers;
         case "txs":
           return this.loadTxs;
         case "holders":
@@ -162,7 +162,21 @@ export default {
       return this.loadTransfers;
     },
   },
+  created() {
+    const q = this.$route.query;
+    if (q.tab) {
+      this.tabValue = Number(q.tab);
+      this.getLoadTarget(Number(q.tab));
+    }
+    if (q.p) {
+      this.currentPage = Number(q.p);
+    }
+  },
   methods: {
+    currentPageChange(val) {
+      this.$router.replace({ query: { ...this.$route.query, p: val } });
+      this.currentPage = val;
+    },
     init() {
       this.loadToken();
     },
@@ -174,13 +188,20 @@ export default {
           this.network,
           address
         );
-        this.tokenProfile = res.result ? res.result : {}
-      } catch(e) {
-        console.log('e: ', e)
+        this.tokenProfile = res.result ? res.result : {};
+      } catch (e) {
+        console.log("e: ", e);
       }
     },
     navTabChange(val) {
+      this.$router.replace({ query: { ...this.$route.query, tab: val, p: 1 } });
+
+      this.currentPage = 1;
       this.tabValue = val;
+
+      this.getLoadTarget(val);
+    },
+    getLoadTarget(val) {
       switch (val) {
         case 0:
           this.loadTarget = "transfers";
@@ -194,7 +215,12 @@ export default {
     },
     async loadHolders(network, page, limit) {
       const { address } = this.$route.params;
-      const res = await this.$api.account.getHolders(network, address, page, limit);
+      const res = await this.$api.account.getHolders(
+        network,
+        address,
+        page,
+        limit
+      );
       const { holders, token } = res;
       const items = holders.map((h) => {
         return {
@@ -265,11 +291,10 @@ export default {
         };
       });
       return { items, totalRows };
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-
 </style>

@@ -14,3 +14,8 @@ export const SOURCIFY_API = {
   main: "https://sourcify.dev/server",
   test: "https://sourcify.dev/server",
 };
+
+export const MATCH_CHAIN = {
+  main: 82,
+  test: 83
+}

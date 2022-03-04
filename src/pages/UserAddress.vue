@@ -238,16 +238,14 @@ export default {
   },
   methods: {
     currentPageChange(val) {
-      const query = JSON.parse(JSON.stringify(this.$route.query));
-      this.$router.replace({ query: { ...query, p: val } });
+      this.$router.replace({ query: { ...this.$route.query, p: val } });
       this.currentPage = val;
     },
     init() {
       this.address = this.addressInfo.address;
     },
     navTabChange(val) {
-      const query = JSON.parse(JSON.stringify(this.$route.query));
-      this.$router.replace({ query: { ...query, tab: val } });
+      this.$router.replace({ query: { ...this.$route.query, tab: val, p: 1 } });
 
       this.currentPage = 1;
       this.tabValue = val;

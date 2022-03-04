@@ -316,7 +316,7 @@
       >
         <b-pagination
           :align="pagination.align"
-          v-model="currentPage"
+          v-model="computedCurrentPage"
           :total-rows="totalRows"
           :per-page="pagination.perPage"
           @change="pageChange"
@@ -369,20 +369,23 @@ export default {
     },
     isTableData: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
+    currentPage: {
+      type: Number,
+      default: 1,
+    },
   },
   data() {
     return {
       itemsLocal: [],
       totalRows: 0,
-      currentPage: 1,
       loading: true,
     };
   },
   async beforeMount() {
     // this.init();
-    console.log('isTableData: ', this.isTableData)
+    console.log("isTableData: ", this.isTableData);
   },
   computed: {
     passedItems() {
@@ -390,6 +393,14 @@ export default {
         return this.items.map((i) => i);
       }
       return undefined;
+    },
+    computedCurrentPage: {
+      get() {
+        return this.currentPage;
+      },
+      set(val) {
+        this.$emit("tablePaginationChange", val);
+      },
     },
   },
   watch: {
@@ -434,7 +445,7 @@ export default {
           this.loading = true;
           const res = await this.loadItems(
             this.network,
-            this.currentPage,
+            this.computedCurrentPage,
             this.pagination.perPage
           );
           const { items, totalRows } = res;
@@ -453,8 +464,7 @@ export default {
       if (val === this.currentPage) {
         return;
       }
-      this.currentPage = val;
-      this.$emit("tablePaginationChange", val);
+
       this.init();
     },
   },
