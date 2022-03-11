@@ -125,22 +125,8 @@ export default {
     },
   },
   async created() {
-    const readAbi = [];
-    const writeAbi = [];
-    const metadata = this.files.find((item) => item.name === "metadata.json");
-    const abi = JSON.parse(metadata.content).output.abi;
-    for (const f of abi) {
-      if (f.type === "function") {
-        if (f.stateMutability === "view") {
-          readAbi.push(f);
-        } else {
-          writeAbi.push(f);
-        }
-      }
-    }
-    this.abi = abi;
-    this.readAbi = readAbi;
-    this.writeAbi = writeAbi;
+    this.initAbi();
+
     const provider = await detectEthereumProvider();
     this.provider = provider;
   },
@@ -154,8 +140,32 @@ export default {
       this.provider = provider;
       this.connect();
     },
+    files() {
+      this.initAbi();
+    },
   },
   methods: {
+    initAbi() {
+      if (!this.files.length) {
+        return;
+      }
+      const readAbi = [];
+      const writeAbi = [];
+      const metadata = this.files.find((item) => item.name === "metadata.json");
+      const abi = JSON.parse(metadata.content).output.abi;
+      for (const f of abi) {
+        if (f.type === "function") {
+          if (f.stateMutability === "view") {
+            readAbi.push(f);
+          } else {
+            writeAbi.push(f);
+          }
+        }
+      }
+      this.abi = abi;
+      this.readAbi = readAbi;
+      this.writeAbi = writeAbi;
+    },
     connect() {
       if (!this.provider) {
         return;
