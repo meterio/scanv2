@@ -1,6 +1,6 @@
 import { commonGet, post } from "@/utils/http";
 import { fetch } from "@/utils/http1";
-import { SOURCIFY_API } from "@/config";
+import { SOURCIFY_API, MATCH_CHAIN } from "@/config";
 
 const SOLC_V_LIST = " https://solc-bin.ethereum.org/bin/list.json";
 
@@ -13,7 +13,7 @@ export default {
   },
   verify(network, { address, files }) {
     const url = SOURCIFY_API[network];
-    const chain = network === "main" ? "82" : "83";
+    const chain = MATCH_CHAIN[network];
     return fetch(url, "POST", {
       chain,
       address,
@@ -22,7 +22,7 @@ export default {
   },
   verifyFormData(network, { address, files }) {
     const url = SOURCIFY_API[network];
-    const chain = network === "main" ? "82" : "83";
+    const chain = MATCH_CHAIN[network];
     let data = new FormData();
     data.append("address", address);
     data.append("chain", chain);
@@ -36,12 +36,12 @@ export default {
     });
   },
   files(network, { address }) {
-    const chain = network === "main" ? "82" : "83";
+    const chain = MATCH_CHAIN[network];
     const url = `${SOURCIFY_API[network]}/files/any/${chain}/${address}`;
     return fetch(url, "GET");
   },
   check(network, { address }) {
-    const chain = network === "main" ? "82" : "83";
+    const chain = MATCH_CHAIN[network];
     const url = `${SOURCIFY_API[network]}/checkByAddresses?addresses=${address}&chainIds=${chain}`;
     return fetch(url, "GET");
   },

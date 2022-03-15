@@ -2,21 +2,13 @@
   <div class="my-2">
     <b-tabs content-class="mt-3">
       <b-tab title="Code" active>
-        <b-form @submit.prevent>
-          <b-form-group
-            v-for="item in computedFiles"
-            :label="item.name"
-            :key="item.path"
-          >
-            <b-form-textarea
-              :value="item.content"
-              type="text"
-              placeholder=""
-              :rows="item.rows"
-              required
-            ></b-form-textarea>
-          </b-form-group>
-        </b-form>
+        <code-text-area
+          v-for="(item, index) in computedFiles"
+          :key="item.path"
+          :code="item"
+          :index="index + 1"
+          :total="computedFiles.length"
+        />
       </b-tab>
       <b-tab title="Read">
         <b-button @click="connect" :variant="variantBtn" pill size="sm">
@@ -52,6 +44,7 @@
 import detectEthereumProvider from "@metamask/detect-provider";
 import ContractReadFunction from "./ContractReadFunction.vue";
 import ContractWriteFunction from "./ContractWriteFunction.vue";
+import CodeTextArea from "@/components/CodeTextArea.vue";
 import { ethers } from "ethers";
 import { MATCH_CHAIN } from "@/config";
 
@@ -60,6 +53,7 @@ export default {
   components: {
     ContractReadFunction,
     ContractWriteFunction,
+    CodeTextArea,
   },
   props: {
     files: {
@@ -93,18 +87,15 @@ export default {
       }
     },
     computedFiles() {
-      return this.files.map((item) => {
-        let rows = 2;
-        if (item.content.includes("\n")) {
-          rows = item.content.split("\n").length;
+      const files = [];
+      for (const f of this.files) {
+        if (f.name.includes(".sol")) {
+          files.unshift(f);
         } else {
-          rows = Math.ceil(item.content.length / 200);
+          files.push(f);
         }
-        return {
-          ...item,
-          rows,
-        };
-      });
+      }
+      return files;
     },
     computedBtnText() {
       if (this.account) {

@@ -15,23 +15,38 @@
         <b-card>
           <Loading v-if="readLoading" />
           <b-form v-if="paramsLength" @submit.prevent="onSubmit">
-            <b-form-group
+            <div
+              class="my-2"
               v-for="(item, index) in computedParams"
-              :key="item.name"
-              :label="item.name"
+              :key="item.label"
             >
+              <div class="d-flex">
+                <label>{{ item.name }}</label>
+                <div v-if="item.isUnit">
+                  <b-icon
+                    class="ml-2"
+                    icon="plus-square-fill"
+                    @click="addNumberModal(index)"
+                  ></b-icon>
+                  <AddNumberModal
+                    v-model="showNumberModal"
+                    @ok="ok"
+                    @close="closeAddNumberModel"
+                  />
+                </div>
+              </div>
               <b-form-input
                 required
                 v-model="params[index]"
                 trim
-                :placeholder="item.type"
+                :placeholder="item.name"
               ></b-form-input>
-            </b-form-group>
+            </div>
             <section>
               <b-button type="submit" variant="primary">Read</b-button>
             </section>
           </b-form>
-          <span>{{ res }}</span>
+          <div class="mt-2">{{ res }}</div>
         </b-card>
       </b-collapse>
     </div>
@@ -40,10 +55,12 @@
 
 <script>
 import Loading from "@/components/Loading";
+import AddNumberModal from "@/components/AddNumberModal";
 export default {
   name: "ContractReadFunction",
   components: {
     Loading,
+    AddNumberModal,
   },
   props: {
     abi: {
@@ -71,6 +88,8 @@ export default {
       res: "",
       params: [],
       readLoading: false,
+      showNumberModal: false,
+      currentSelectIndex: 0,
     };
   },
   computed: {
@@ -78,19 +97,14 @@ export default {
       return this.abi.inputs.length;
     },
     computedFunName() {
-      let p = [];
-      for (const item of this.abi.inputs) {
-        p.push(`${item.name}:${item.type}`);
-      }
-      return `${this.abi.name}(${p.join(",")})`;
+      return this.abi.name;
     },
     computedParams() {
       const inputs = [];
       for (const i of this.abi.inputs) {
-        // this.params[i.name] = 1;
         inputs.push({
-          name: i.name,
-          type: i.type,
+          name: `${i.name}(${i.type})`,
+          isUnit: i.type.includes("uint"),
         });
       }
       return inputs;
@@ -104,6 +118,17 @@ export default {
     },
   },
   methods: {
+    closeAddNumberModel(show) {
+      this.showNumberModal = show;
+    },
+    ok(num) {
+      console.log("ok");
+      this.params[this.currentSelectIndex] = num;
+    },
+    addNumberModal(index) {
+      this.currentSelectIndex = index;
+      this.showNumberModal = true;
+    },
     isOpenFolder() {
       if (this.open) {
         this.v = !this.v;
@@ -113,6 +138,7 @@ export default {
       this.read();
     },
     async read() {
+      this.res = "";
       if (this.contract) {
         try {
           this.readLoading = true;
@@ -122,7 +148,12 @@ export default {
             params
           );
           console.log("res", res);
-          this.res = res;
+          if (res) {
+            this.res = res;
+          } else {
+            this.res = "no result";
+          }
+
           this.readLoading = false;
         } catch (err) {
           this.readLoading = false;
@@ -131,7 +162,7 @@ export default {
       }
     },
     refresh() {
-      console.log("refresh");
+      this.res = "";
       if (this.paramsLength) {
         this.params = [];
       } else {

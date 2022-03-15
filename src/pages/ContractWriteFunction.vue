@@ -15,18 +15,41 @@
         <b-card>
           <Loading v-if="writeLoading" />
           <b-form v-else @submit.prevent="onSubmit">
-            <b-form-group
+            <b-form-group v-if="computedPayable" :label="computedFunName">
+              <b-form-input
+                required
+                v-model="options.value"
+                trim
+                :placeholder="computedPayablePlaceholder"
+              ></b-form-input>
+            </b-form-group>
+            <div
+              class="my-2"
               v-for="(item, index) in computedParams"
-              :key="item.name"
-              :label="item.name"
+              :key="item.label"
             >
+              <div class="d-flex">
+                <label>{{ item.name }}</label>
+                <div v-if="item.isUnit">
+                  <b-icon
+                    class="ml-2"
+                    icon="plus-square-fill"
+                    @click="addNumberModal(index)"
+                  ></b-icon>
+                  <AddNumberModal
+                    v-model="showNumberModal"
+                    @ok="ok"
+                    @close="closeAddNumberModel"
+                  />
+                </div>
+              </div>
               <b-form-input
                 required
                 v-model="params[index]"
                 trim
-                :placeholder="item.type"
+                :placeholder="item.name"
               ></b-form-input>
-            </b-form-group>
+            </div>
             <section>
               <b-button type="submit" variant="primary">Write</b-button>
               <b-button
@@ -47,10 +70,13 @@
 
 <script>
 import Loading from "@/components/Loading";
+import { NATIVE_TOKEN } from "@/config";
+import AddNumberModal from "@/components/AddNumberModal";
 export default {
   name: "ContractWriteFunction",
   components: {
     Loading,
+    AddNumberModal,
   },
   props: {
     abi: {
@@ -78,29 +104,48 @@ export default {
       hash: "",
       params: [],
       writeLoading: false,
+      options: {
+        value: "",
+      },
+      showNumberModal: false,
+      currentSelectIndex: 0,
     };
   },
   computed: {
     computedFunName() {
-      let p = [];
-      for (const item of this.abi.inputs) {
-        p.push(`${item.name}:${item.type}`);
-      }
-      return `${this.abi.name}(${p.join(",")})`;
+      return this.abi.name;
     },
     computedParams() {
       const inputs = [];
+
       for (const i of this.abi.inputs) {
-        // this.params[i.name] = 1;
         inputs.push({
-          name: i.name,
-          type: i.type,
+          name: `${i.name}(${i.type})`,
+          isUnit: i.type.includes("uint"),
         });
       }
+
       return inputs;
+    },
+    computedPayable() {
+      return this.abi.stateMutability === "payable";
+    },
+    computedPayablePlaceholder() {
+      return `payable amount (${NATIVE_TOKEN[this.network]})`;
     },
   },
   methods: {
+    closeAddNumberModel(show) {
+      this.showNumberModal = show;
+    },
+    ok(num) {
+      console.log("ok");
+      this.params[this.currentSelectIndex] = num;
+    },
+    addNumberModal(index) {
+      this.currentSelectIndex = index;
+      this.showNumberModal = true;
+    },
     isOpenFolder() {
       if (this.open) {
         this.v = !this.v;
@@ -117,10 +162,12 @@ export default {
       if (this.contract) {
         this.writeLoading = true;
         try {
-          const tx = await this.contract[this.abi.name].apply(
-            null,
-            this.params
-          );
+          const parameters = [...this.params];
+          if (this.options.value) {
+            parameters.push(this.options);
+          }
+          console.log("params", parameters);
+          const tx = await this.contract[this.abi.name].apply(null, parameters);
 
           await tx.wait();
           this.hash = tx.hash;
@@ -132,7 +179,11 @@ export default {
       }
     },
     refresh() {
+      this.hash = "";
       this.params = [];
+      for (const key in this.options) {
+        this.options[key] = "";
+      }
     },
     viewTransaction() {
       const href = window.location.href;
