@@ -14,12 +14,12 @@ export default {
     widthTablet: 1024,
     knownAddresses: {},
     knownTokens: {},
-    network: "main"
-    // process.env.NODE_ENV === "development"
-    //   ? "test"
-    //   : DEPLOY_DOMAIN["main"].includes(window.location.hostname)
-    //   ? "main"
-    //   : "test",
+    network:
+      process.env.NODE_ENV === "development"
+        ? "test"
+        : DEPLOY_DOMAIN["main"].includes(window.location.hostname)
+          ? "main"
+          : "test",
   },
 
   mutations: {
