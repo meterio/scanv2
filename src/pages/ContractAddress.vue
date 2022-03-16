@@ -27,7 +27,13 @@
           @changeTab="navTabChange"
         )
       div(slot="otherData")
-        contract-detail(:files="files", :address="addressInfo.address")
+        <div class="loading" v-if="filesLoading">
+          <div class="text-center text-primary my-2">
+            b-spinner.align-middle.mr-2
+            strong Loading...
+          </div>
+        </div>
+        contract-detail(v-else, :files="files", :address="addressInfo.address")
 </template>
 
 <script>
@@ -35,6 +41,7 @@ import DataTableV3 from "@/components/DataTableV3.vue";
 import NavTabs from "@/components/NavTabs.vue";
 import DataSummary from "@/components/DataSummary.vue";
 import ContractDetail from "./ContractDetail.vue";
+import Loading from "@/components/Loading.vue";
 export default {
   name: "ContractAddress",
   components: {
@@ -42,6 +49,7 @@ export default {
     NavTabs,
     DataSummary,
     ContractDetail,
+    Loading,
   },
   props: {
     addressInfo: {
@@ -111,6 +119,7 @@ export default {
   },
   data() {
     return {
+      filesLoading: true,
       verifyStatus: null,
       files: [],
       contract_tabs: [
@@ -175,7 +184,7 @@ export default {
       this.currentPage = val;
     },
     async getVerifyStatus() {
-      console.log("get verify status");
+      this.filesLoading = true;
       const data = {
         address: this.addressInfo.address,
       };
@@ -190,6 +199,7 @@ export default {
         this.files = filesRes.data.files;
       }
       this.verifyStatus = verifyStatus;
+      this.filesLoading = false;
     },
     navTabChange(val) {
       const query = { ...this.$route.query };
@@ -428,6 +438,11 @@ export default {
   }
   .mt-2pert {
     margin-top: 2.6%;
+  }
+  .loading {
+    opacity: 0.55;
+    font-size: 14px;
+    font-weight: bold;
   }
 }
 </style>

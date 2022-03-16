@@ -1,6 +1,7 @@
 <template>
   <div class="my-2">
-    <b-tabs content-class="mt-3">
+    <div v-if="!files.length" class="text-center">NO DATA</div>
+    <b-tabs v-else content-class="mt-3">
       <b-tab title="Code" active>
         <code-text-area
           v-for="(item, index) in computedFiles"

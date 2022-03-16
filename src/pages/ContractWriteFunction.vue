@@ -159,6 +159,7 @@ export default {
       if (this.writeLoading) {
         return;
       }
+
       if (this.contract) {
         this.writeLoading = true;
         try {
@@ -166,7 +167,7 @@ export default {
           if (this.options.value) {
             parameters.push(this.options);
           }
-          console.log("params", parameters);
+
           const tx = await this.contract[this.abi.name].apply(null, parameters);
 
           await tx.wait();
