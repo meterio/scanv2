@@ -165,7 +165,10 @@ export default {
         try {
           const parameters = [...this.params];
           if (this.options.value) {
-            parameters.push(this.options);
+            const value = this.options.value;
+            parameters.push({
+              value: "0x" + Number(value).toString(16),
+            });
           }
 
           const tx = await this.contract[this.abi.name].apply(null, parameters);

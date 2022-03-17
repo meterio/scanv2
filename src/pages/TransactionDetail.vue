@@ -73,7 +73,7 @@ import "vue-json-pretty/lib/styles.css";
 import { bigNum } from "@/utils";
 import { abi } from "@meterio/devkit";
 import BigNumber from "bignumber.js";
-import { ethers } from "@meterio/ethers";
+import { ethers } from "ethers";
 
 const TransferABI = new abi.Event({
   anonymous: false,

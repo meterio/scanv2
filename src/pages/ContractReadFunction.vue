@@ -143,10 +143,7 @@ export default {
         try {
           this.readLoading = true;
           const params = this.paramsLength === 0 ? [] : [...this.params];
-          const res = await this.contract.callStatic[this.abi.name].apply(
-            null,
-            params
-          );
+          const res = await this.contract[this.abi.name].apply(null, params);
           console.log("res", res);
           if (res) {
             this.res = res;
