@@ -4,7 +4,9 @@
     title="Top MTRG Accounts",
     :fields="accounts.fields",
     :pagination="accounts.pagination",
-    :loadItems="loadTopMTRG"
+    :loadItems="loadTopMTRG",
+    :currentPage="currentPage",
+    @tablePaginationChange="currentPageChange"
   )
 </template>
 
@@ -19,6 +21,7 @@ export default {
   },
   data() {
     return {
+      currentPage: 1,
       accounts: {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
@@ -31,10 +34,15 @@ export default {
   },
 
   methods: {
+    currentPageChange(page) {
+      console.log("page", page);
+      this.currentPage = page;
+    },
     async loadTopMTRG(network, page, limit) {
+      console.log("load data");
       const { accounts, totalRows } = await this.$api.account.getTopMTRG(
         network,
-        page,
+        this.currentPage,
         limit
       );
       const items = accounts.map((a) => {

@@ -472,6 +472,7 @@ export default {
       if (val === this.currentPage) {
         return;
       }
+      this.computedCurrentPage = val;
 
       this.init();
     },
