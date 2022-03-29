@@ -178,7 +178,9 @@ export default {
           this.writeLoading = false;
         } catch (e) {
           this.writeLoading = false;
-          alert(e.message);
+          alert(
+            `${e.message} ${e.data && e.data.error && e.data.error.message}`
+          );
         }
       }
     },
