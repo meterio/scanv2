@@ -33,6 +33,7 @@ export default {
       localTabIndex: 0,
     };
   },
+
   computed: {
     localTabs() {
       return !!this.tabs ? this.tabs : [];
@@ -40,6 +41,14 @@ export default {
     computedTab() {
       return this.value;
     },
+  },
+  created() {
+    const q = this.$route.query;
+    if (q.tab) {
+      const tabIndex = Number(q.tab);
+      this.localTabIndex = tabIndex;
+      this.$emit("changeTab", tabIndex);
+    }
   },
   beforeMount() {
     // this.localTabs = this.tabs;
@@ -49,6 +58,10 @@ export default {
     clickTab(tabIndex) {
       this.localTabIndex = tabIndex;
       this.$emit("changeTab", tabIndex);
+
+      this.$router.replace({
+        query: { ...this.$route.query, tab: tabIndex, p: 1 },
+      });
     },
     isShowCheck(name) {
       return (
