@@ -15,9 +15,7 @@
       :loadItems="loadItems",
       :fields="fields",
       :pagination="pagination",
-      :key="loadTarget",
-      :currentPage="currentPage",
-      @tablePaginationChange="currentPageChange"
+      :key="loadTarget"
     )
       div(slot="header")
         nav-tabs.px-0(
@@ -156,20 +154,10 @@ export default {
         ],
         items: [],
       },
-      currentPage: 1,
     };
   },
   async created() {
     this.getVerifyStatus();
-
-    const q = this.$route.query;
-    if (q.tab) {
-      this.tabValue = Number(q.tab);
-      this.getLoadTarget(Number(q.tab));
-    }
-    if (q.p) {
-      this.currentPage = Number(q.p);
-    }
   },
   watch: {
     "addressInfo.address"() {
@@ -178,11 +166,6 @@ export default {
     },
   },
   methods: {
-    currentPageChange(val) {
-      const query = { ...this.$route.query };
-      this.$router.replace({ query: { ...query, p: val } });
-      this.currentPage = val;
-    },
     async getVerifyStatus() {
       this.filesLoading = true;
       const data = {
@@ -202,9 +185,6 @@ export default {
       this.filesLoading = false;
     },
     navTabChange(val) {
-      const query = { ...this.$route.query };
-      this.$router.replace({ query: { ...query, tab: val, p: 1 } });
-      this.currentPage = 1;
       this.tabValue = val;
 
       this.getLoadTarget(val);

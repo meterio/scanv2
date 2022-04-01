@@ -4,9 +4,7 @@
     title="Top MTR Accounts",
     :fields="accounts.fields",
     :pagination="accounts.pagination",
-    :loadItems="loadTopMTR",
-    :currentPage="currentPage",
-    @tablePaginationChange="currentPageChange"
+    :loadItems="loadTopMTR"
   )
 </template>
 
@@ -21,7 +19,6 @@ export default {
   },
   data() {
     return {
-      currentPage: 1,
       accounts: {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
@@ -34,13 +31,10 @@ export default {
   },
 
   methods: {
-    currentPageChange(page) {
-      this.currentPage = page;
-    },
     async loadTopMTR(network, page, limit) {
       const { accounts, totalRows } = await this.$api.account.getTopMTR(
         network,
-        this.currentPage,
+        page,
         limit
       );
       const items = accounts.map((a) => {

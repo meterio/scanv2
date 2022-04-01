@@ -48,7 +48,9 @@ var mixin = {
   },
   watch: {
     $route(to, from) {
-      if (this.init) this.init();
+      if (to.path !== from.path) {
+        if (this.init) this.init();
+      }
     },
     network(to, from) {
       if (this.init) this.init();

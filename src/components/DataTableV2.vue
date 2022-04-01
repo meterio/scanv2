@@ -328,7 +328,7 @@
       >
         <b-pagination
           :align="pagination.align"
-          v-model="computedCurrentPage"
+          v-model="currentPage"
           :total-rows="totalRows"
           :per-page="pagination.perPage"
           @change="pageChange"
@@ -376,10 +376,6 @@ export default {
         };
       },
     },
-    currentPage: {
-      type: Number,
-      default: 1,
-    },
     loadItems: {
       type: Function,
     },
@@ -388,8 +384,15 @@ export default {
     return {
       itemsLocal: [],
       totalRows: 0,
+      currentPage: 1,
       loading: true,
     };
+  },
+  created() {
+    const q = this.$route.query;
+    if (q.p) {
+      this.currentPage = Number(q.p);
+    }
   },
   async beforeMount() {
     // this.init();
@@ -400,14 +403,6 @@ export default {
         return this.items.map((i) => i);
       }
       return undefined;
-    },
-    computedCurrentPage: {
-      get() {
-        return this.currentPage;
-      },
-      set(val) {
-        this.$emit("tablePaginationChange", val);
-      },
     },
   },
   watch: {
@@ -440,7 +435,7 @@ export default {
         this.loading = false;
         return;
       } else {
-        this.computedCurrentPage = 1;
+        this.currentPage = 1;
         this.itemsLocal = [];
         this.totalRows = 0;
         this.loading = false;
@@ -452,7 +447,7 @@ export default {
           this.loading = true;
           const res = await this.loadItems(
             this.network,
-            this.computedCurrentPage,
+            this.currentPage,
             this.pagination.perPage
           );
           const { items, totalRows } = res;
@@ -468,13 +463,13 @@ export default {
       }
     },
     async pageChange(val) {
-      console.log("page change", val);
       if (val === this.currentPage) {
         return;
       }
-      this.computedCurrentPage = val;
-
+      this.currentPage = val;
       this.init();
+
+      this.$router.replace({ query: { ...this.$route.query, p: val } });
     },
   },
 };

@@ -10,9 +10,7 @@
       :loadItems="loadItems",
       :fields="fields",
       :pagination="pagination",
-      :key="loadTarget",
-      :currentPage="currentPage",
-      @tablePaginationChange="currentPageChange"
+      :key="loadTarget"
     )
       div(slot="header")
         nav-tabs.px-0(
@@ -218,31 +216,13 @@ export default {
           { key: "blocknum", label: "Last Updated on Block" },
         ],
       },
-      currentPage: 1,
     };
   },
-  created() {
-    const q = this.$route.query;
-    if (q.tab) {
-      this.tabValue = Number(q.tab);
-      this.getLoadTarget(Number(q.tab));
-    }
-    if (q.p) {
-      this.currentPage = Number(q.p);
-    }
-  },
   methods: {
-    currentPageChange(val) {
-      this.$router.replace({ query: { ...this.$route.query, p: val } });
-      this.currentPage = val;
-    },
     init() {
       this.address = this.addressInfo.address;
     },
     navTabChange(val) {
-      this.$router.replace({ query: { ...this.$route.query, tab: val, p: 1 } });
-
-      this.currentPage = 1;
       this.tabValue = val;
       this.getLoadTarget(val);
     },
