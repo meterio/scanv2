@@ -2,13 +2,7 @@
   <div class="detail-page">
     <DataSummary :data="summary" :title="summaryTitle" />
 
-    <DataTableV2
-      :fields="fields"
-      :items="items"
-      :pagination="pagination"
-      :currentPage="currentPage"
-      @tablePaginationChange="currentPageChange"
-    >
+    <DataTableV2 :fields="fields" :items="items" :pagination="pagination">
       <template slot="header">
         <NavTabs
           class="px-0"
@@ -127,17 +121,7 @@ export default {
         items: [],
         pagination: { show: true, align: "center", perPage: 20 },
       },
-      currentPage: 1,
     };
-  },
-  created() {
-    const q = this.$route.query;
-    if (q.tab) {
-      this.tabValue = Number(q.tab);
-    }
-    if (q.p) {
-      this.currentPage = Number(q.p);
-    }
   },
   computed: {
     items() {
@@ -175,13 +159,7 @@ export default {
     },
   },
   methods: {
-    currentPageChange(val) {
-      this.$router.replace({ query: { ...this.$route.query, p: val } });
-      this.currentPage = val;
-    },
     navTabChange(val) {
-      this.$router.replace({ query: { ...this.$route.query, tab: val, p: 1 } });
-      this.currentPage = 1;
       this.tabValue = val;
     },
     async init() {
