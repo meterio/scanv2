@@ -120,6 +120,7 @@ export function get(network, url, params) {
       .get(url, { params })
       .then((res) => {
         // get data success
+        console.log(res)
         if (res.data) {
           resolve(res.data);
         }

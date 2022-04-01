@@ -197,15 +197,10 @@ export default {
       if (!!summary) {
         this.summary = [
           { key: "Hash", value: summary.hash },
-          { key: "Type", value: summary.type },
           { key: "Origin", value: summary.origin, type: "address-link" },
-          {
-            key: "Amount",
-            value: summary.totalClauseAmount,
-            type: "amount",
-            token: summary.token,
-          },
           { key: "Fee", value: summary.paid, type: "amount", token: "MTR" },
+          // { key: "BlockRef", value: summary.blockRef },
+          { key: "Expiration", value: summary.expiration },
           {
             key: "Result",
             value: summary.reverted ? "reverted" : "success",
@@ -219,6 +214,12 @@ export default {
             type: "block-link-with-note",
           },
         ];
+        if (summary.reverted) {
+          this.summary.push({
+            key: "VM Error",
+            value: summary.vmError.reason,
+          });
+        }
       }
       this.tx = tx;
       end = new Date();
@@ -236,22 +237,9 @@ export default {
             const se = ScriptEngine;
             // try decode account-lock data
             if (se.IsScriptEngineData(c.data)) {
-              const scriptData = se.decodeScriptData(
-                Buffer.from(c.data.replace("0xffffffff", ""), "hex")
-              );
-              if (scriptData.header.modId === se.ModuleID.AccountLock) {
-                const body = se.decodeAccountLockBody(scriptData.payload);
-                decoded = se.jsonFromAccountLockBody(body);
-                hint = se.explainAccountLockOpCode(body.opCode);
-              } else if (scriptData.header.modId === se.ModuleID.Auction) {
-                const body = se.decodeAuctionBody(scriptData.payload);
-                decoded = se.jsonFromAuctionBody(body);
-                hint = se.explainAuctionOpCode(body.opCode, body.option);
-              } else if (scriptData.header.modId === se.ModuleID.Staking) {
-                const body = se.decodeStakingBody(scriptData.payload);
-                decoded = se.jsonFromStakingBody(body);
-                hint = se.explainStakingOpCode(body.opCode);
-              }
+              const scriptData = se.decodeScriptData(c.data);
+              decoded = scriptData.body;
+              hint = scriptData.action;
             } else {
               if (c.knownMethod) {
                 if (c.knownMethod.abi) {
@@ -307,7 +295,7 @@ export default {
       console.log(`clauses cost ${end - start}`);
 
       start = new Date();
-      this.transfers.items = tx.groupedTransfers.map((tr) => {
+      this.transfers.items = tx.transfers.map((tr) => {
         return {
           from: tr.sender,
           to: tr.recipient,

@@ -5,7 +5,7 @@
         <Loading v-if="loading" />
 
         <ul v-if="!loading" class="block-list">
-          <li class="block-detail" :key="tx.hash" v-for="tx in recent_txs">
+          <li class="block-detail" :key="tx.txHash" v-for="tx in recent_txs">
             <div class="height-view">
               <div class="block-icon"></div>
 
@@ -13,9 +13,9 @@
                 <router-link
                   :to="{
                     name: 'txDetail',
-                    params: { hash: tx.hash },
+                    params: { hash: tx.txHash },
                   }"
-                  >{{ shortHash(tx.hash, 8) }}</router-link
+                  >{{ shortHash(tx.txHash, 8) }}</router-link
                 >
                 <span class="ago">{{ fromNow(tx.block.timestamp) }}</span>
               </div>
@@ -26,23 +26,17 @@
                 From:
                 <router-link
                   class="link"
-                  :to="{
-                    name: 'address',
-                    params: { address: tx.origin },
-                  }"
-                  >{{ shortAddr(tx.origin, 12) }}</router-link
+                  :to="{ name: 'address', params: { address: tx.from } }"
+                  >{{ shortAddr(tx.from, 12) }}</router-link
                 >
               </p>
               <p>
                 To:
                 <router-link
-                  v-if="tx.majorTo"
+                  v-if="tx.to"
                   class="link"
-                  :to="{
-                    name: 'address',
-                    params: { address: tx.majorTo },
-                  }"
-                  >{{ shortAddr(tx.majorTo, 12) }}</router-link
+                  :to="{ name: 'address', params: { address: tx.to } }"
+                  >{{ shortAddr(tx.to, 12) }}</router-link
                 >
                 <span v-else>nobody</span>
               </p>
@@ -65,6 +59,7 @@
 <script>
 import Loading from "@/components/Loading";
 import { fromWei } from "@/utils";
+import { BigNumber } from "bignumber.js";
 export default {
   name: "RecentTxs",
   components: {
@@ -97,11 +92,23 @@ export default {
     async initData() {
       try {
         const res = await this.$api.transaction.getRecentTxs(this.network);
-        this.recent_txs = res.txs.splice(0, 10).map((tx) => {
-          const totalAmount = fromWei(tx.totalClauseAmount, 4, tx.token);
+        console.log(res.txs);
+        this.recent_txs = res.txs.slice(0, 10).map((tx) => {
+          try {
+            console.log("tx", tx);
+            let totalAmount = "";
+            if (tx.mtr && new BigNumber(tx.mtr).isGreaterThan(0)) {
+              totalAmount = fromWei(tx.mtr, 4, "MTR");
+            } else {
+              totalAmount = fromWei(tx.mtrg, 4, "MTRG");
+            }
 
-          return { ...tx, totalAmount };
+            return { ...tx, totalAmount };
+          } catch (e) {
+            console.log(e);
+          }
         });
+        console.log("recent txs:", this.recent_txs);
         this.loading = false;
       } catch (e) {
         this.loading = false;

@@ -311,69 +311,30 @@ export default {
     async loadTxs(network, page, limit) {
       const { address } = this.$route.params;
       const res = await this.$api.account.getTxs(network, address, page, limit);
-      const { txSummaries, totalRows } = res;
-      const items = txSummaries.map((t) => {
+      const { txs, totalRows } = res;
+      const items = txs.map((t) => {
         let direct = "";
-        let fromAddr = t.origin;
-        let toAddr = t.majorTo;
-        let amount = t.value;
-        let token = 0;
+        const fromAddr = t.from;
+        const toAddr = t.to;
+        const amount = t.mtr || t.mtrg;
+        const token = 0;
 
-        const { relatedTransfers } = t;
-        let relatedTransfer;
-        if (relatedTransfers && relatedTransfers.length >= 1) {
-          for (const tr of relatedTransfers) {
-            if (
-              tr.sender.toLowerCase() ===
-                this.addressInfo.address.toLowerCase() ||
-              tr.recipient.toLowerCase() ===
-                this.addressInfo.address.toLowerCase()
-            ) {
-              relatedTransfer = tr;
-              break;
-            }
-          }
-          if (!relatedTransfer) {
-            relatedTransfer = relatedTransfers[0];
-          }
-        }
-        if (relatedTransfer) {
-          fromAddr = relatedTransfer.sender;
-          toAddr = relatedTransfer.recipient;
-          amount = relatedTransfer.amount;
-          token = relatedTransfer.token;
-        }
-
-        if (
-          t.clauseCount === 1 &&
-          t.origin.toLowerCase() === t.majorTo.toLowerCase()
-        ) {
+        if (fromAddr === toAddr) {
           direct = "Self";
+        } else if (fromAddr === address.toLowerCase()) {
+          direct = "Out";
         } else {
-          if (fromAddr === address.toLowerCase()) {
-            direct = "Out";
-          } else if (toAddr === address.toLowerCase()) {
-            direct = "In";
-          } else {
-            direct = "Transfer";
-          }
+          direct = "In";
         }
 
-        let methodName = "";
-        if (t.knowMethod) {
-          if (t.knowMethod.abi) {
-            methodName = JSON.parse(t.knowMethod.abi).name;
-          } else {
-            methodName = t.knowMethod.signature;
-          }
-        }
+        console.log("direct = ", direct);
 
         return {
           txhashWithStatus: {
-            hash: t.hash,
+            hash: t.txHash,
             status: t.reverted,
           },
-          methodName,
+          methodName: t.method,
           blocknum: t.block.number,
           from: fromAddr,
           direct,
@@ -387,6 +348,7 @@ export default {
           timestamp: t.block.timestamp,
         };
       });
+      console.log(items);
       return { items, totalRows };
     },
     async loadTxs20(network, page, limit) {

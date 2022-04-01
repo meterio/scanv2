@@ -55,8 +55,11 @@ export default {
         );
 
         const { account } = res;
-        this.isContract = !!account.isContract;
-        this.isERC20 = !!account.isERC20;
+        console.log("account:", account);
+        this.isContract = account.type !== undefined;
+        this.isERC20 = account.type === 1;
+        console.log("iscontract:", this.isContract);
+        console.log("erc20:", this.isERC20);
         if (this.address === "0x0000000000000000000000000000000000000000") {
           if (new BigNumber(account.mtrgBalance).isLessThan(0)) {
             account.mtrgBalance = "0";
@@ -128,11 +131,11 @@ export default {
             key: "Decimals",
             value: account.tokenDecimals || 18,
           });
-          if (account.circulation) {
+          if (account.totalSupply) {
             this.summary.push({
-              key: "Circulation",
+              key: "Total Supply",
               type: "amount",
-              value: account.circulation,
+              value: account.totalSupply,
               token: account.tokenSymbol,
               decimals: account.tokenDecimals,
             });

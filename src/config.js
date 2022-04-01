@@ -4,7 +4,7 @@ export const DEPLOY_DOMAIN = {
 };
 
 export const API_BASE = {
-  main: "https://api.meter.io:8000/api/",
+  main: "http://localhost:3000/api/",
   test: "https://api.meter.io:4000/api/",
 };
 
