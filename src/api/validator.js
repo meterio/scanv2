@@ -7,11 +7,11 @@ const validateTypeUrl = {
 };
 
 export default {
-  getValidateTypeList(network, page, limit, type, searchName) {
+  getValidateTypeList(network, page, limit, type, searchName, sortBy, sortDesc) {
     return get(
       network,
       validateTypeUrl[type] +
-        `?page=${page}&limit=${limit}&search=${searchName}`
+      `?page=${page}&limit=${limit}&search=${searchName}&sortBy=${sortBy}&sortDesc=${sortDesc}`
     );
   },
   getValidateReward(network, page, limit) {

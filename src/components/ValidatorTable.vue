@@ -42,11 +42,10 @@
         v-else
         hover
         class="data-table"
-        :sort-by.sync="sortBy"
-        :sort-desc.sync="sortDesc"
         :items="validator_data.items"
         :fields="validator_data.fields"
         show-empty
+        @sort-changed="sortingChanged"
       >
         <template slot="empty">
           <div class="text-center pt15 text-grey" style="color: #5c6f8c">
@@ -137,7 +136,7 @@ export default {
   name: "ValidatorTable",
   data() {
     return {
-      sortBy: "votingPowerStr",
+      sortBy: "votingPower",
       sortDesc: true,
       page_size: 15,
       loading: true,
@@ -163,6 +162,13 @@ export default {
     },
   },
   methods: {
+    sortingChanged({ sortBy, sortDesc }) {
+      this.sortBy = sortBy;
+      this.sortDesc = sortDesc;
+
+      this.loading = true;
+      this.loadData();
+    },
     init() {
       this.loadData();
     },
@@ -190,17 +196,19 @@ export default {
           this.current_page,
           this.page_size,
           this.current_tab,
-          this.validate_right_search
+          this.validate_right_search,
+          this.sortBy,
+          this.sortDesc ? "desc" : "asc"
         );
         this.loading = false;
         this.validate_table_total = res.totalRows;
         if (this.current_tab === "Delegates") {
           this.validator_data.fields = [
             { key: "addressWithName", label: "Address" },
-            { key: "votingPower", label: "Total Votes" },
-            { key: "commission%", label: "Commission Rate" },
+            { key: "votingPower", label: "Total Votes", sortable: true },
+            { key: "commission%", label: "Commission Rate", sortable: true },
             // { key: "shares%", label: "Pool Share%" },
-            { key: "totalPoints", label: "Penalty Points" },
+            { key: "totalPoints", label: "Penalty Points", sortable: true },
           ];
           this.validator_data.items = res.delegates.map((d) => ({
             ...d,
@@ -217,9 +225,9 @@ export default {
         if (this.current_tab === "Candidates") {
           this.validator_data.fields = [
             { key: "addressWithName", label: "Address" },
-            { key: "totalVotes", label: "Total Votes" },
-            { key: "commission%", label: "Commission Rate" },
-            { key: "totalPoints", label: "Penalty Points" },
+            { key: "totalVotes", label: "Total Votes", sortable: true },
+            { key: "commission%", label: "Commission Rate", sortable: true },
+            { key: "totalPoints", label: "Penalty Points", sortable: true },
           ];
           this.validator_data.items = res.candidates.map((c) => ({
             ...c,
@@ -236,9 +244,9 @@ export default {
         if (this.current_tab === "Jailed") {
           this.validator_data.fields = [
             { key: "addressWithName", label: "Address" },
-            { key: "totalPoints", label: "Penalty Points" },
-            { key: "jailedTime", label: "Jailed Time" },
-            { key: "bailAmount", label: "Bail Amount" },
+            { key: "totalPoints", label: "Penalty Points", sortable: true },
+            { key: "jailedTime", label: "Jailed Time", sortable: true },
+            { key: "bailAmount", label: "Bail Amount", sortable: true },
           ];
           this.validator_data.items = res.jailed.map((j) => ({
             ...j,
