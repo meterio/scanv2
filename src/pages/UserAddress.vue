@@ -425,13 +425,13 @@ export default {
         page,
         limit
       );
-      const { transfers, totalRows } = res;
-      const items = transfers.map((t) => ({
+      const { txs, totalRows } = res;
+      const items = txs.map((t) => ({
         txhashWithStatus: {
           hash: t.txHash,
           status: true,
         },
-        methodName: "transfer",
+        methodName: t.method,
         blocknum: t.block.number,
         from: t.from,
         to: t.to,

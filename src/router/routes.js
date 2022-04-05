@@ -14,6 +14,7 @@ import BlockListPage from "@/pages/BlockList.vue";
 import TxListPage from "@/pages/TxList.vue";
 import EpochListPage from "@/pages/EpochList.vue";
 import EpochDetailPage from "@/pages/EpochDetail.vue";
+import EpochStatsPage from "@/pages/EpochStats.vue";
 import TopMTRAccountsPage from "@/pages/TopMTRAccounts.vue";
 import TopMTRGAccountsPage from "@/pages/TopMTRGAccounts.vue";
 import BucketPage from "@/pages/Bucket.vue";
@@ -110,6 +111,13 @@ export const routes = [
     name: "epochDetail",
     component: EpochDetailPage,
     meta: { title: `${DOMAIN_TITLE} | Epoch` },
+  },
+  {
+    path: "/epochs/:epoch/stats",
+    name: "epochStats",
+    component: EpochStatsPage,
+    meta: { title: `${DOMAIN_TITLE} | Epoch Stats` },
+ 
   },
   {
     path: "/txs",
