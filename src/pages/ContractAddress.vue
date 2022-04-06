@@ -1,47 +1,36 @@
 <template lang="pug">
 .detail-page
-  data-summary(
-    :title="title",
-    :data="addressInfo.summary",
-    wide,
-    isContract,
-    :verifyStatus="verifyStatus"
-  )
+  data-summary(:title='title', :data='addressInfo.summary', wide, isContract, :verifyStatus='verifyStatus')
 
   b-container.summary
     .mt-2pert.px-5
     data-table-v3.mt-2pert.px-0(
-      :isTableData="isTableData",
-      :loadItems="loadItems",
-      :fields="fields",
-      :pagination="pagination",
-      :key="loadTarget"
+      :isTableData='isTableData',
+      :loadItems='loadItems',
+      :fields='fields',
+      :pagination='pagination',
+      :key='loadTarget'
     )
-      div(slot="header")
-        nav-tabs.px-0(
-          :tabs="tabs",
-          :value="tabValue",
-          :verifyStatus="verifyStatus",
-          @changeTab="navTabChange"
-        )
-      div(slot="otherData")
+      div(slot='header')
+        nav-tabs.px-0(:tabs='tabs', :value='tabValue', :verifyStatus='verifyStatus', @changeTab='navTabChange')
+      div(slot='otherData')
         <div class="loading" v-if="filesLoading">
           <div class="text-center text-primary my-2">
             b-spinner.align-middle.mr-2
             strong Loading...
           </div>
         </div>
-        contract-detail(v-else, :files="files", :address="addressInfo.address")
+        contract-detail(v-else, :files='files', :address='addressInfo.address')
 </template>
 
 <script>
-import DataTableV3 from "@/components/DataTableV3.vue";
-import NavTabs from "@/components/NavTabs.vue";
-import DataSummary from "@/components/DataSummary.vue";
-import ContractDetail from "./ContractDetail.vue";
-import Loading from "@/components/Loading.vue";
+import DataTableV3 from '@/components/DataTableV3.vue';
+import NavTabs from '@/components/NavTabs.vue';
+import DataSummary from '@/components/DataSummary.vue';
+import ContractDetail from './ContractDetail.vue';
+import Loading from '@/components/Loading.vue';
 export default {
-  name: "ContractAddress",
+  name: 'ContractAddress',
   components: {
     DataTableV3,
     NavTabs,
@@ -56,7 +45,7 @@ export default {
         return {
           isContract: true,
           isERC20: false,
-          address: "0x",
+          address: '0x',
           summary: [],
         };
       },
@@ -84,33 +73,39 @@ export default {
     },
     fields() {
       switch (this.loadTarget) {
-        case "txs":
+        case 'txs':
           return this.txs.fields;
-        case "holders":
+        case 'transfers':
+          return this.transfers.fields;
+        case 'holders':
           return this.holders.fields;
       }
       return this.txs.fields;
     },
     pagination() {
       switch (this.loadTarget) {
-        case "txs":
+        case 'txs':
           return this.txs.pagination;
-        case "holders":
+        case 'transfers':
+          return this.transfers.pagination;
+        case 'holders':
           return this.holders.pagination;
       }
       return this.txs.pagination;
     },
     loadItems() {
       switch (this.loadTarget) {
-        case "txs":
+        case 'txs':
           return this.loadTxs;
-        case "holders":
+        case 'transfers':
+          return this.loadTransfers;
+        case 'holders':
           return this.loadHolders;
       }
       return this.loadTxs;
     },
     isTableData() {
-      if (this.loadTarget === "contract") {
+      if (this.loadTarget === 'contract') {
         return false;
       }
 
@@ -122,37 +117,50 @@ export default {
       filesLoading: true,
       verifyStatus: null,
       files: [],
-      contract_tabs: [{ name: "Transactions" }, { name: "Contract" }],
-      token_tabs: [
-        { name: "Transfers" },
-        { name: "Holders" },
-        { name: "Contract" },
-      ],
+      contract_tabs: [{ name: 'Transactions' }, { name: 'Contract' }],
+      token_tabs: [{ name: 'Transfers' }, { name: 'Holders' }, { name: 'Contract' }],
       tabValue: 0,
-      loadTarget: "txs",
+      loadTarget: 'transfers',
       holders: {
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 20 },
         fields: [
-          { key: "fullAddress", label: "Holder Address" },
-          { key: "balance", label: "Amount" },
-          { key: "percentage", label: "Percentage" },
+          { key: 'rank', label: 'Rank' },
+          { key: 'fullAddress', label: 'Address' },
+          { key: 'balance', label: 'Balance' },
+          // { key: 'percentage', label: 'Percentage' },
         ],
       },
       txs: {
         pagination: {
           show: true,
-          align: "center",
+          align: 'center',
           perPage: 20,
         },
         fields: [
-          { key: "txhashWithStatus", label: "Hash" },
-          { key: "methodName", label: "Method" },
-          { key: "blocknum", label: "Block" },
-          { key: "timestamp", label: "Time" },
-          { key: "from", label: "From" },
-          { key: "direct", label: "" },
-          { key: "to", label: "To" },
-          { key: "amount", label: "Amount" },
+          { key: 'txhashWithStatus', label: 'Hash' },
+          { key: 'methodName', label: 'Method' },
+          { key: 'blocknum', label: 'Block' },
+          { key: 'timestamp', label: 'Time' },
+          { key: 'from', label: 'From' },
+          { key: 'direct', label: '' },
+          { key: 'to', label: 'To' },
+          { key: 'amount', label: 'Amount' },
+        ],
+        items: [],
+      },
+      transfers: {
+        pagination: {
+          show: true,
+          align: 'center',
+          perPage: 20,
+        },
+        fields: [
+          { key: 'txhashWithStatus', label: 'Hash' },
+          { key: 'blocknum', label: 'Block' },
+          { key: 'timestamp', label: 'Time' },
+          { key: 'from', label: 'From' },
+          { key: 'to', label: 'To' },
+          { key: 'amount', label: 'Amount' },
         ],
         items: [],
       },
@@ -174,12 +182,12 @@ export default {
         address: this.address,
       };
       const filesRes = await this.$api.verify.files(this.network, data);
-      let verifyStatus = "not find";
+      let verifyStatus = 'not find';
       if (filesRes.data) {
-        if (filesRes.data.status === "partial") {
-          verifyStatus = "partial";
+        if (filesRes.data.status === 'partial') {
+          verifyStatus = 'partial';
         } else {
-          verifyStatus = "perfect";
+          verifyStatus = 'perfect';
         }
         this.files = filesRes.data.files;
       }
@@ -187,86 +195,84 @@ export default {
       this.filesLoading = false;
     },
     navTabChange(val) {
+      console.log('nav tab change to :', this.navTabChange);
       this.tabValue = val;
 
       this.getLoadTarget(val);
     },
     getLoadTarget(val) {
+      console.log('IS ERC20: ', this.isERC20);
       if (this.isERC20) {
         switch (val) {
           case 0:
-            this.loadTarget = "txs";
+            console.log('SELECT TRANSFER');
+            this.loadTarget = 'transfers';
             break;
           case 1:
-            this.loadTarget = "holders";
+            this.loadTarget = 'holders';
             break;
           case 2:
-            this.loadTarget = "contract";
+            this.loadTarget = 'contract';
             break;
           default:
-            this.loadTarget = "txs";
+            this.loadTarget = 'transfers';
         }
       } else {
         switch (val) {
           case 0:
-            this.loadTarget = "txs";
+            this.loadTarget = 'txs';
             break;
           case 1:
-            this.loadTarget = "contract";
+            this.loadTarget = 'contract';
             break;
           default:
-            this.loadTarget = "txs";
+            this.loadTarget = 'txs';
         }
       }
     },
     async loadHolders(network, page, limit) {
       const { address } = this.$route.params;
-      const res = await this.$api.account.getHolders(
-        network,
-        address,
-        page,
-        limit
-      );
+      const res = await this.$api.account.getHolders(network, address, page, limit);
       const { holders, token } = res;
-      const items = holders.map((h) => {
+      const pageNum = page ? Number(page) : 1;
+      const limitNum = limit ? Number(limit) : 10;
+      const items = holders.map((h, index) => {
         return {
           ...h,
+          rank: index + 1 + (pageNum - 1) * limitNum,
           fullAddress: h.address,
           balance: {
-            type: "amount",
+            type: 'amount',
             amount: h.balance,
             precision: 6,
             decimals: token.decimals || 18,
-            token: h.symbol,
-          },
-          percentage: {
-            type: "percentage",
-            amount: h.percentage,
+            token: token.symbol,
           },
         };
       });
       return { items, totalRows: token.holdersCount };
     },
     async loadTxs(network, page, limit) {
+      console.log('LOAD TXS');
       const { address } = this.$route.params;
       const res = await this.$api.account.getTxs(network, address, page, limit);
       const { txs, totalRows } = res;
       const items = txs.map((t) => {
-        let direct = "";
+        let direct = '';
         const fromAddr = t.from;
         const toAddr = t.to;
         const amount = t.mtr || t.mtrg;
         const token = 0;
 
         if (fromAddr === toAddr) {
-          direct = "Self";
+          direct = 'Self';
         } else if (fromAddr === address.toLowerCase()) {
-          direct = "Out";
+          direct = 'Out';
         } else {
-          direct = "In";
+          direct = 'In';
         }
 
-        console.log("direct = ", direct);
+        // console.log('direct = ', direct);
 
         return {
           txhashWithStatus: {
@@ -277,11 +283,11 @@ export default {
           blocknum: t.block.number,
           from: fromAddr,
           direct,
-          to: toAddr || "nobody",
+          to: toAddr || 'nobody',
           amount: {
-            type: "amount",
+            type: 'amount',
             amount: amount || t.totalClauseAmount,
-            token: token < 0 ? t.token : token == 0 ? "MTR" : "MTRG",
+            token: token < 0 ? t.token : token == 0 ? 'MTR' : 'MTRG',
             precision: 8,
           },
           timestamp: t.block.timestamp,
@@ -290,33 +296,33 @@ export default {
       console.log(items);
       return { items, totalRows };
     },
-    async loadTxs20(network, page, limit) {
+
+    async loadTransfers(network, page, limit) {
+      console.log('LOAD TRANSFERS');
       const { address } = this.$route.params;
-      const res = await this.$api.account.getTxs20(
-        network,
-        address,
-        page,
-        limit
-      );
-      const { transfers, totalRows } = res;
-      const items = transfers.map((t) => ({
-        txhashWithStatus: {
-          hash: t.txHash,
-          status: t.reverted,
-        },
-        blocknum: t.block.number,
-        from: t.from === this.addressInfo.address ? t.from : t.tokenAddress,
-        to: t.to === this.addressInfo.address ? t.to : t.tokenAddress,
-        direct: t.from === this.addressInfo.address ? "Out" : "In",
-        amount: {
-          type: "amount",
-          amount: t.amount,
-          token: t.symbol || "ERC20",
-          precision: 8,
-          decimals: t.decimals || 18,
-        },
-        timestamp: t.block.timestamp,
-      }));
+      const res = await this.$api.account.getTransfers(network, address, page, limit);
+      const { transfers, totalRows, contract } = res;
+      const items = transfers.map((t) => {
+        return {
+          txhashWithStatus: {
+            hash: t.txHash,
+            status: false,
+          },
+          methodName: t.method,
+          blocknum: t.block.number,
+          from: t.from,
+          to: t.to,
+          amount: {
+            type: 'amount',
+            amount: t.amount,
+            token: contract.symbol,
+            decimals: contract.decimals,
+            precision: 8,
+          },
+          timestamp: t.block.timestamp,
+        };
+      });
+      console.log(items);
       return { items, totalRows };
     },
   },

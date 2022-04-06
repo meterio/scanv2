@@ -19,6 +19,18 @@ export default {
       `accounts/${address}/erc20txs?page=${page}&limit=${limit}`
     );
   },
+  getTxs721(network, address, page, limit = 8) {
+    return get(
+      network,
+      `accounts/${address}/erc721txs?page=${page}&limit=${limit}`
+    );
+  },
+  getTxs1155(network, address, page, limit = 8) {
+    return get(
+      network,
+      `accounts/${address}/erc1155txs?page=${page}&limit=${limit}`
+    );
+  },
   getBuckets(network, address, page, limit = 8) {
     return get(
       network,

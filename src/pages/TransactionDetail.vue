@@ -4,12 +4,7 @@
 
     <DataTableV2 :fields="fields" :items="items" :pagination="pagination">
       <template slot="header">
-        <NavTabs
-          class="px-0"
-          :tabs="tabs"
-          :value="tabValue"
-          @changeTab="navTabChange"
-        ></NavTabs>
+        <NavTabs class="px-0" :tabs="tabs" :value="tabValue" @changeTab="navTabChange"></NavTabs>
       </template>
       <template v-slot:cell(to)="data">
         <div class="dt-row">
@@ -37,12 +32,8 @@
           @click="row.toggleDetails"
           class="mr-2 float-right"
         >
-          <span v-if="!row.detailsShowing">
-            <b-icon icon="chevron-double-down"></b-icon> Show Decoded
-          </span>
-          <span v-else>
-            <b-icon icon="chevron-double-up"></b-icon> Hide Decoded
-          </span>
+          <span v-if="!row.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Show Decoded </span>
+          <span v-else> <b-icon icon="chevron-double-up"></b-icon> Hide Decoded </span>
         </b-button>
       </template>
 
@@ -58,26 +49,26 @@
 </template>
 
 <script>
-import DataTableV2 from "@/components/DataTableV2.vue";
-import NavTabs from "@/components/NavTabs.vue";
-import DataSummary from "@/components/DataSummary.vue";
-import { ScriptEngine } from "@meterio/devkit/dist/scriptEngine";
-import VueJsonPretty from "vue-json-pretty";
-import "vue-json-pretty/lib/styles.css";
-import { bigNum } from "@/utils";
-import { abi } from "@meterio/devkit";
-import BigNumber from "bignumber.js";
-import { ethers } from "ethers";
+import DataTableV2 from '@/components/DataTableV2.vue';
+import NavTabs from '@/components/NavTabs.vue';
+import DataSummary from '@/components/DataSummary.vue';
+import { ScriptEngine } from '@meterio/devkit/dist/scriptEngine';
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
+import { bigNum } from '@/utils';
+import { abi } from '@meterio/devkit';
+import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
 
 const TransferABI = new abi.Event({
   anonymous: false,
   inputs: [
-    { indexed: true, name: "_from", type: "address" },
-    { indexed: true, name: "_to", type: "address" },
-    { indexed: false, name: "_value", type: "uint256" },
+    { indexed: true, name: '_from', type: 'address' },
+    { indexed: true, name: '_to', type: 'address' },
+    { indexed: false, name: '_value', type: 'uint256' },
   ],
-  name: "Transfer",
-  type: "event",
+  name: 'Transfer',
+  type: 'event',
 });
 
 export default {
@@ -89,37 +80,37 @@ export default {
   },
   data() {
     return {
-      tabs: [{ name: "Clauses" }, { name: "Transfers" }, { name: "Events" }],
+      tabs: [{ name: 'Clauses' }, { name: 'Transfers' }, { name: 'Events' }],
       tabValue: 0,
-      summaryTitle: "Transaction",
+      summaryTitle: 'Transaction',
       summary: [],
       tx: {},
       clauses: {
         fields: [
-          { key: "index", label: "Index" },
-          { key: "to", label: "To" },
-          { key: "amount", label: "Amount" },
-          { key: "data", label: "Data" },
+          { key: 'index', label: 'Index' },
+          { key: 'to', label: 'To' },
+          { key: 'amount', label: 'Amount' },
+          { key: 'data', label: 'Data' },
         ],
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 20 },
         items: [],
       },
       transfers: {
         fields: [
-          { key: "from", label: "Sender" },
-          { key: "to", label: "Recipient" },
-          { key: "amountStr", label: "Amount" },
+          { key: 'from', label: 'Sender' },
+          { key: 'to', label: 'Recipient' },
+          { key: 'amountStr', label: 'Amount' },
         ],
         items: [],
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 20 },
       },
       events: {
         fields: [
-          { key: "address", label: "Contract Address" },
-          { key: "details", label: "Details" },
+          { key: 'address', label: 'Contract Address' },
+          { key: 'details', label: 'Details' },
         ],
         items: [],
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 20 },
       },
     };
   },
@@ -174,27 +165,27 @@ export default {
       const { tx, summary, tokens } = res;
       if (!!summary) {
         this.summary = [
-          { key: "Hash", value: summary.hash },
-          { key: "Origin", value: summary.origin, type: "address-link" },
-          { key: "Fee", value: summary.paid, type: "amount", token: "MTR" },
+          { key: 'Hash', value: summary.hash },
+          { key: 'Origin', value: summary.origin, type: 'address-link' },
+          { key: 'Fee', value: summary.paid, type: 'amount', token: 'MTR' },
           // { key: "BlockRef", value: summary.blockRef },
-          { key: "Expiration", value: summary.expiration },
+          { key: 'Expiration', value: summary.expiration },
           {
-            key: "Result",
-            value: summary.reverted ? "reverted" : "success",
-            type: "status",
+            key: 'Result',
+            value: summary.reverted ? 'reverted' : 'success',
+            type: 'status',
           },
-          { key: "Clause Count", value: summary.clauseCount },
+          { key: 'Clause Count', value: summary.clauseCount },
           {
-            key: "Block",
+            key: 'Block',
             block: summary.block.number,
             value: this.fromNow(summary.block.timestamp),
-            type: "block-link-with-note",
+            type: 'block-link-with-note',
           },
         ];
         if (summary.reverted) {
           this.summary.push({
-            key: "VM Error",
+            key: 'VM Error',
             value: summary.vmError.reason,
           });
         }
@@ -209,7 +200,7 @@ export default {
         let index = 1;
         clauses = tx.clauses.map((c) => {
           let decoded = undefined;
-          let hint = "";
+          let hint = '';
 
           try {
             const se = ScriptEngine;
@@ -225,22 +216,12 @@ export default {
                   const coder = new ethers.utils.AbiCoder();
                   const inputsType = abi.inputs.map((item) => item.type);
                   // console.log('inputsType', inputsType)
-                  const method =
-                    abi.name +
-                    "(" +
-                    abi.inputs
-                      .map((item) => item.name + " " + item.type)
-                      .join(",") +
-                    ")";
-                  const result = coder.decode(
-                    inputsType,
-                    ethers.utils.hexDataSlice(c.data, 4)
-                  );
+                  const method = abi.name + '(' + abi.inputs.map((item) => item.name + ' ' + item.type).join(',') + ')';
+                  const result = coder.decode(inputsType, ethers.utils.hexDataSlice(c.data, 4));
                   // console.log('result: ', result)
                   const formatRes = {};
                   for (let index in abi.inputs) {
-                    formatRes[abi.inputs[index].name] =
-                      result[index].toString();
+                    formatRes[abi.inputs[index].name] = result[index].toString();
                   }
                   decoded = {
                     method,
@@ -257,7 +238,7 @@ export default {
             ...c,
             data: hint ? `${c.data} (${hint})` : c.data,
             amount: {
-              type: "amount",
+              type: 'amount',
               amount: bigNum(c.value),
               token: c.token,
               precision: 6,
@@ -273,17 +254,26 @@ export default {
       console.log(`clauses cost ${end - start}`);
 
       start = new Date();
+      let transfers = [];
+      let events = [];
+      for (const o of tx.outputs) {
+        for (const tr of o.transfers) {
+          transfers.push({
+            from: tr.sender,
+            to: tr.recipient,
+            amountStr: {
+              type: 'amount',
+              amount: bigNum(tr.amount),
+              token: tr.token == 0 ? 'MTR' : 'MTRG',
+              precision: 8,
+            },
+          });
+        }
+        for (const e of o.events) {
+        }
+      }
       this.transfers.items = tx.transfers.map((tr) => {
-        return {
-          from: tr.sender,
-          to: tr.recipient,
-          amountStr: {
-            type: "amount",
-            amount: bigNum(tr.amount),
-            token: tr.token == 0 ? "MTR" : "MTRG",
-            precision: 8,
-          },
-        };
+        return;
       });
       end = new Date();
       console.log(`transfers cost ${end - start}`);
@@ -293,39 +283,39 @@ export default {
         let decoded = undefined;
         if (e.topics.length && e.knownEvent.abi) {
           const abi = JSON.parse(e.knownEvent.abi);
-          console.log("event abi", abi);
+          console.log('event abi', abi);
           const coder = new ethers.utils.AbiCoder();
           const inputsType = abi.inputs.map((item) => item.type);
           // console.log('inputsType', inputsType)
           const event =
             abi.name +
-            "(" +
+            '(' +
             abi.inputs
               .map((item) => {
                 let params = item.name;
                 if (item.indexed) {
-                  params += " indexed";
+                  params += ' indexed';
                 }
-                params += " " + item.type;
+                params += ' ' + item.type;
                 return params;
               })
-              .join(",") +
-            ")";
+              .join(',') +
+            ')';
 
           const topicStr = e.topics.map((t, i) => {
             if (i === 0) {
-              return "";
+              return '';
             } else {
               return t.substr(2); //remove 0x
             }
           });
-          let eventData = "";
+          let eventData = '';
           if (e.data) {
             eventData = e.data.substr(2);
           }
-          const data = "0x" + topicStr.join("") + eventData;
+          const data = '0x' + topicStr.join('') + eventData;
           const result = coder.decode(inputsType, data);
-          console.log("result: ", result);
+          console.log('result: ', result);
           const formatRes = {};
           for (let index in abi.inputs) {
             formatRes[abi.inputs[index].name] = result[index].toString();
@@ -362,7 +352,7 @@ export default {
             if (!token && address in knownTokens) {
               token = knownTokens[address];
             }
-            let sym = "ERC20";
+            let sym = 'ERC20';
             let decimals = 18;
             if (token) {
               sym = token.symbol;
@@ -370,10 +360,7 @@ export default {
             }
             transferHighlights.push({
               address,
-              from:
-                decoded._from === "0x0000000000000000000000000000000000000000"
-                  ? address
-                  : decoded._from,
+              from: decoded._from === '0x0000000000000000000000000000000000000000' ? address : decoded._from,
               to: decoded._to,
               amount: new BigNumber(decoded._value).toFixed(),
               token: sym,
@@ -387,9 +374,9 @@ export default {
 
       if (transferHighlights.length > 0) {
         this.summary.push({
-          key: "Token Transfers",
+          key: 'Token Transfers',
           value: transferHighlights,
-          type: "transfer-highlight",
+          type: 'transfer-highlight',
         });
       }
     },
