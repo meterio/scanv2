@@ -37,7 +37,7 @@ export default {
       type: Object,
       default() {
         return {
-          isContract: true,
+          isContract: false,
           isERC20: false,
           address: "0x",
           summary: [],
@@ -121,14 +121,13 @@ export default {
       address_tabs: [
         // { name: "Transfers" },
         { name: "Transactions" },
-        { name: "ERC20 Tokens" },
-        { name: "ERC20 Transactions" },
+        { name: "Tokens" },
+        { name: "ERC20 Txns" },
         { name: "Auction Bids" },
         { name: "Proposed Blocks" },
         { name: "Buckets" },
       ],
       tabValue: 0,
-      isContract: false,
       isToken: false,
       address: "0x",
       summary: [],
@@ -227,46 +226,27 @@ export default {
       this.getLoadTarget(val);
     },
     getLoadTarget(val) {
-      if (!this.isContract) {
-        switch (val) {
-          // case 0:
-          // this.loadTarget = "transfers";
-          // break;
-          case 0:
-            this.loadTarget = "txs";
-            break;
-          case 1:
-            this.loadTarget = "tokens";
-            break;
-          case 2:
-            this.loadTarget = "erc20Txs";
-            break;
-          case 3:
-            this.loadTarget = "bids";
-            break;
-          case 4:
-            this.loadTarget = "proposedBlocks";
-            break;
-          case 5:
-            this.loadTarget = "buckets";
-            break;
-          default:
-            this.loadTarget = "txs";
-        }
-      } else {
-        switch (val) {
-          // case 0:
-          // this.loadTarget = "transfers";
-          // break;
-          case 0:
-            this.loadTarget = "txs";
-            break;
-          case 1:
-            this.loadTarget = "holders";
-            break;
-          default:
-            this.loadTarget = "txs";
-        }
+      switch (val) {
+        case 0:
+          this.loadTarget = "txs";
+          break;
+        case 1:
+          this.loadTarget = "tokens";
+          break;
+        case 2:
+          this.loadTarget = "erc20Txs";
+          break;
+        case 3:
+          this.loadTarget = "bids";
+          break;
+        case 4:
+          this.loadTarget = "proposedBlocks";
+          break;
+        case 5:
+          this.loadTarget = "buckets";
+          break;
+        default:
+          this.loadTarget = "txs";
       }
     },
     async loadBuckets(network, page, limit) {

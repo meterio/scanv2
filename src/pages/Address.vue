@@ -34,11 +34,6 @@ export default {
       };
     },
   },
-  watch: {
-    isContract(val, old) {
-      console.log(val, old);
-    },
-  },
   methods: {
     init() {
       this.loadAddress();

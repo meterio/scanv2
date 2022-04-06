@@ -63,21 +63,27 @@ export default {
     },
   },
   computed: {
+    isERC20() {
+      return this.addressInfo.isERC20;
+    },
+    address() {
+      return this.addressInfo.address;
+    },
     title() {
-      const { isERC20, address } = this.addressInfo;
-      if (isERC20) {
-        return `Token: ${address}`;
+      if (this.isERC20) {
+        return `Token: ${this.address}`;
       } else {
-        return `Contract: ${address}`;
+        return `Contract: ${this.address}`;
       }
     },
     tabs() {
+      if (this.isERC20) {
+        return this.token_tabs;
+      }
       return this.contract_tabs;
     },
     fields() {
       switch (this.loadTarget) {
-        // case "transfers":
-        // return this.transfers.fields;
         case "txs":
           return this.txs.fields;
         case "holders":
@@ -87,8 +93,6 @@ export default {
     },
     pagination() {
       switch (this.loadTarget) {
-        // case "transfers":
-        // return this.transfers.pagination;
         case "txs":
           return this.txs.pagination;
         case "holders":
@@ -98,8 +102,6 @@ export default {
     },
     loadItems() {
       switch (this.loadTarget) {
-        // case "transfers":
-        // return this.loadTransfers;
         case "txs":
           return this.loadTxs;
         case "holders":
@@ -120,9 +122,9 @@ export default {
       filesLoading: true,
       verifyStatus: null,
       files: [],
-      contract_tabs: [
-        // { name: "Transfers" },
-        { name: "Transactions" },
+      contract_tabs: [{ name: "Transactions" }, { name: "Contract" }],
+      token_tabs: [
+        { name: "Transfers" },
         { name: "Holders" },
         { name: "Contract" },
       ],
@@ -160,7 +162,7 @@ export default {
     this.getVerifyStatus();
   },
   watch: {
-    "addressInfo.address"() {
+    address() {
       this.navTabChange(0);
       this.getVerifyStatus();
     },
@@ -169,7 +171,7 @@ export default {
     async getVerifyStatus() {
       this.filesLoading = true;
       const data = {
-        address: this.addressInfo.address,
+        address: this.address,
       };
       const filesRes = await this.$api.verify.files(this.network, data);
       let verifyStatus = "not find";
@@ -190,21 +192,31 @@ export default {
       this.getLoadTarget(val);
     },
     getLoadTarget(val) {
-      switch (val) {
-        // case 0:
-        // this.loadTarget = "transfers";
-        // break;
-        case 0:
-          this.loadTarget = "txs";
-          break;
-        case 1:
-          this.loadTarget = "holders";
-          break;
-        case 2:
-          this.loadTarget = "contract";
-          break;
-        default:
-          this.loadTarget = "txs";
+      if (this.isERC20) {
+        switch (val) {
+          case 0:
+            this.loadTarget = "txs";
+            break;
+          case 1:
+            this.loadTarget = "holders";
+            break;
+          case 2:
+            this.loadTarget = "contract";
+            break;
+          default:
+            this.loadTarget = "txs";
+        }
+      } else {
+        switch (val) {
+          case 0:
+            this.loadTarget = "txs";
+            break;
+          case 1:
+            this.loadTarget = "contract";
+            break;
+          default:
+            this.loadTarget = "txs";
+        }
       }
     },
     async loadHolders(network, page, limit) {
@@ -234,59 +246,6 @@ export default {
         };
       });
       return { items, totalRows: token.holdersCount };
-    },
-
-    async loadTransfers(network, page, limit) {
-      const { address } = this.$route.params;
-      const res = await this.$api.account.getTransfers(
-        network,
-        address,
-        page,
-        limit
-      );
-      const { transfers, totalRows } = res;
-      const items = transfers.map((t) => {
-        let direct = "";
-        if (t.from.toLowerCase() === t.to.toLowerCase()) {
-          direct = "Self";
-        } else {
-          direct =
-            t.to.toLowerCase() === this.addressInfo.address.toLowerCase()
-              ? "In"
-              : "Out";
-        }
-        let decimals = 18;
-        let from = t.from;
-        let to = t.to;
-        if (t.erc20 && t.erc20.address) {
-          decimals = t.erc20.decimals || 18;
-          if (from === "0x0000000000000000000000000000000000000000") {
-            from = t.tokenAddress;
-          }
-          if (to === "0x0000000000000000000000000000000000000000") {
-            to = t.tokenAddress;
-          }
-        }
-        return {
-          from: from,
-          direct,
-          to: to,
-          amount: {
-            type: "amount",
-            amount: t.amount,
-            token: t.token,
-            precision: 8,
-            decimals,
-          },
-          txhashWithStatus: {
-            hash: t.txHash,
-            status: t.reverted,
-          },
-          blockNum: t.block.number,
-          timestamp: t.block.timestamp,
-        };
-      });
-      return { items, totalRows };
     },
     async loadTxs(network, page, limit) {
       const { address } = this.$route.params;

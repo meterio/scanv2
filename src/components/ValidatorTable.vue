@@ -42,6 +42,8 @@
         v-else
         hover
         class="data-table"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
         :items="validator_data.items"
         :fields="validator_data.fields"
         show-empty
