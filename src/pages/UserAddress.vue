@@ -1,23 +1,31 @@
 <template lang="pug">
 .detail-page
-  data-summary(:title='title', :data='addressInfo.summary')
+  data-summary(:title="title", :data="addressInfo.summary")
 
   b-container.summary
     #b-card.mt-2pert.px-5
       #pie-chart.px-0
 
-    data-table-v2.mt-2pert.px-0(:loadItems='loadItems', :fields='fields', :pagination='pagination', :key='loadTarget')
-      div(slot='header')
-        nav-tabs.px-0(:tabs='tabs', :value='tabValue', @changeTab='navTabChange')
+    data-table-v2.mt-2pert.px-0(
+      :loadItems="loadItems",
+      :fields="fields",
+      :pagination="pagination",
+      :key="loadTarget"
+    )
+      div(slot="header")
+        nav-tabs.px-0(
+          :tabs="tabs",
+          :value="tabValue",
+          @changeTab="navTabChange"
+        )
 </template>
 
 <script>
-import DataTableV2 from '@/components/DataTableV2.vue';
-import NavTabs from '@/components/NavTabs.vue';
-import DataSummary from '@/components/DataSummary.vue';
-import BigNumber from 'bignumber.js';
+import DataTableV2 from "@/components/DataTableV2.vue";
+import NavTabs from "@/components/NavTabs.vue";
+import DataSummary from "@/components/DataSummary.vue";
 export default {
-  name: 'UserAddress',
+  name: "UserAddress",
   components: {
     DataTableV2,
     NavTabs,
@@ -30,7 +38,7 @@ export default {
         return {
           isContract: false,
           isERC20: false,
-          address: '0x',
+          address: "0x",
           summary: [],
         };
       },
@@ -47,21 +55,21 @@ export default {
       switch (this.loadTarget) {
         // case "transfers":
         // return this.transfers.fields;
-        case 'txs':
+        case "txs":
           return this.txs.fields;
-        case 'erc20Txs':
+        case "erc20Txs":
           return this.erc20txs.fields;
-        case 'erc721Txs':
+        case "erc721Txs":
           return this.erc721txs.fields;
-        case 'bids':
+        case "bids":
           return this.bids.fields;
-        case 'proposedBlocks':
+        case "proposedBlocks":
           return this.proposedBlocks.fields;
-        case 'buckets':
+        case "buckets":
           return this.buckets.fields;
-        case 'holders':
+        case "holders":
           return this.holders.fields;
-        case 'tokens':
+        case "tokens":
           return this.tokens.fields;
       }
       return this.txs.fields;
@@ -70,21 +78,21 @@ export default {
       switch (this.loadTarget) {
         // case "transfers":
         // return this.transfers.pagination;
-        case 'txs':
+        case "txs":
           return this.txs.pagination;
-        case 'erc20Txs':
+        case "erc20Txs":
           return this.erc20txs.pagination;
-        case 'erc721Txs':
+        case "erc721Txs":
           return this.erc721txs.pagination;
-        case 'bids':
+        case "bids":
           this.bids.pagination;
-        case 'proposedBlocks':
+        case "proposedBlocks":
           return this.proposedBlocks.pagination;
-        case 'buckets':
+        case "buckets":
           return this.buckets.pagination;
-        case 'holders':
+        case "holders":
           return this.holders.pagination;
-        case 'tokens':
+        case "tokens":
           return this.tokens.pagination;
       }
       return this.txs.pagination;
@@ -93,21 +101,21 @@ export default {
       switch (this.loadTarget) {
         // case "transfers":
         // return this.loadTransfers;
-        case 'txs':
+        case "txs":
           return this.loadTxs;
-        case 'erc20Txs':
+        case "erc20Txs":
           return this.loadTxs20;
-        case 'erc721Txs':
+        case "erc721Txs":
           return this.loadTxs721;
-        case 'bids':
+        case "bids":
           return this.loadBids;
-        case 'proposedBlocks':
+        case "proposedBlocks":
           return this.loadProposed;
-        case 'buckets':
+        case "buckets":
           return this.loadBuckets;
-        case 'holders':
+        case "holders":
           return this.loadHolders;
-        case 'tokens':
+        case "tokens":
           return this.loadTokens;
       }
       return this.loadTxs;
@@ -117,135 +125,135 @@ export default {
     return {
       address_tabs: [
         // { name: "Transfers" },
-        { name: 'Transactions' },
-        { name: 'Tokens' },
-        { name: 'ERC20 Txns' },
-        { name: 'ERC721 Txns' },
-        { name: 'Auction Bids' },
-        { name: 'Proposed Blocks' },
-        { name: 'Buckets' },
+        { name: "Transactions" },
+        { name: "Tokens" },
+        { name: "ERC20 Txns" },
+        { name: "ERC721 Txns" },
+        { name: "Auction Bids" },
+        { name: "Proposed Blocks" },
+        { name: "Buckets" },
       ],
       tabValue: 0,
       isToken: false,
-      address: '0x',
+      address: "0x",
       summary: [],
       account: {},
-      loadTarget: 'txs',
+      loadTarget: "txs",
       holders: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: "center", perPage: 20 },
         fields: [
-          { key: 'fullAddress', label: 'Holder Address' },
-          { key: 'balance', label: 'Amount' },
-          { key: 'percentage', label: 'Percentage' },
+          { key: "fullAddress", label: "Holder Address" },
+          { key: "balance", label: "Amount" },
+          { key: "percentage", label: "Percentage" },
         ],
       },
       transfers: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: "center", perPage: 20 },
         fields: [
-          { key: 'from', label: 'From' },
-          { key: 'direct', label: '' },
-          { key: 'to', label: 'To' },
-          { key: 'amount', label: 'Amount' },
-          { key: 'txhashWithStatus', label: 'Transaction' },
-          { key: 'blockNum', label: 'Block' },
-          { key: 'timestamp', label: 'Time' },
+          { key: "from", label: "From" },
+          { key: "direct", label: "" },
+          { key: "to", label: "To" },
+          { key: "amount", label: "Amount" },
+          { key: "txhashWithStatus", label: "Transaction" },
+          { key: "blockNum", label: "Block" },
+          { key: "timestamp", label: "Time" },
         ],
       },
       proposedBlocks: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: "center", perPage: 20 },
         fields: [
-          { key: 'blockNum', label: 'Height' },
-          { key: 'blockhash', label: 'Block Hash' },
-          { key: 'txCount', label: 'Txs' },
-          { key: 'actualRewardStr', label: 'Reward' },
-          { key: 'timestamp', label: 'Time' },
+          { key: "blockNum", label: "Height" },
+          { key: "blockhash", label: "Block Hash" },
+          { key: "txCount", label: "Txs" },
+          { key: "actualRewardStr", label: "Reward" },
+          { key: "timestamp", label: "Time" },
         ],
       },
       bids: {
         pagination: {
           show: true,
-          align: 'center',
+          align: "center",
           perPage: 20,
         },
         fields: [
-          { key: 'blockNum', label: 'Block' },
-          { key: 'txHash', label: 'Tx' },
-          { key: 'type', label: 'Type' },
-          { key: 'amountStr', label: 'Amount' },
-          { key: 'hammerPriceStr', label: 'Hammer Price' },
-          { key: 'lotAmountStr', label: 'Lot Amount' },
-          { key: 'timestamp', label: 'Time' },
+          { key: "blockNum", label: "Block" },
+          { key: "txHash", label: "Tx" },
+          { key: "type", label: "Type" },
+          { key: "amountStr", label: "Amount" },
+          { key: "hammerPriceStr", label: "Hammer Price" },
+          { key: "lotAmountStr", label: "Lot Amount" },
+          { key: "timestamp", label: "Time" },
         ],
       },
       txs: {
         pagination: {
           show: true,
-          align: 'center',
+          align: "center",
           perPage: 20,
         },
         fields: [
-          { key: 'txhashWithStatus', label: 'Hash' },
-          { key: 'methodName', label: 'Method' },
-          { key: 'blocknum', label: 'Block' },
-          { key: 'timestamp', label: 'Time' },
-          { key: 'from', label: 'From' },
-          { key: 'direct', label: '' },
-          { key: 'to', label: 'To' },
-          { key: 'amount', label: 'Amount' },
+          { key: "txhashWithStatus", label: "Hash" },
+          { key: "methodName", label: "Method" },
+          { key: "blocknum", label: "Block" },
+          { key: "timestamp", label: "Time" },
+          { key: "from", label: "From" },
+          { key: "direct", label: "" },
+          { key: "to", label: "To" },
+          { key: "amount", label: "Amount" },
         ],
         items: [],
       },
       erc20txs: {
         pagination: {
           show: true,
-          align: 'center',
+          align: "center",
           perPage: 20,
         },
         fields: [
-          { key: 'txhashWithStatus', label: 'Hash' },
-          { key: 'blocknum', label: 'Block' },
-          { key: 'timestamp', label: 'Time' },
-          { key: 'from', label: 'From' },
-          { key: 'direct', label: '' },
-          { key: 'to', label: 'To' },
-          { key: 'amount', label: 'Amount' },
+          { key: "txhashWithStatus", label: "Hash" },
+          { key: "blocknum", label: "Block" },
+          { key: "timestamp", label: "Time" },
+          { key: "from", label: "From" },
+          { key: "direct", label: "" },
+          { key: "to", label: "To" },
+          { key: "amount", label: "Amount" },
         ],
         items: [],
       },
       erc721txs: {
         pagination: {
           show: true,
-          align: 'center',
+          align: "center",
           perPage: 20,
         },
         fields: [
-          { key: 'txhashWithStatus', label: 'Hash' },
-          { key: 'blocknum', label: 'Block' },
-          { key: 'timestamp', label: 'Time' },
-          { key: 'from', label: 'From' },
-          { key: 'direct', label: '' },
-          { key: 'to', label: 'To' },
-          { key: 'amount', label: 'Amount' },
+          { key: "txhashWithStatus", label: "Hash" },
+          { key: "blocknum", label: "Block" },
+          { key: "timestamp", label: "Time" },
+          { key: "from", label: "From" },
+          { key: "direct", label: "" },
+          { key: "to", label: "To" },
+          { key: "amount", label: "Amount" },
         ],
         items: [],
       },
       buckets: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: "center", perPage: 20 },
         fields: [
-          { key: 'bucketid', label: 'ID' },
-          { key: 'address', label: 'Candidate Address' },
-          { key: 'totalVotes', label: 'Votes' },
-          { key: 'timestamp', label: 'Time' },
-          { key: 'status', label: 'Status' },
+          { key: "bucketid", label: "ID" },
+          { key: "address", label: "Candidate Address" },
+          { key: "totalVotes", label: "Votes" },
+          { key: "timestamp", label: "Time" },
+          { key: "status", label: "Status" },
         ],
       },
       tokens: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: "center", perPage: 20 },
         fields: [
-          { key: 'tokenType', label: 'Type' },
-          { key: 'fullAddress', label: 'Token Address' },
-          { key: 'balance', label: 'Balance' },
-          { key: 'blocknum', label: 'Last Updated on Block' },
+          { key: "tokenType", label: "Type" },
+          { key: "fullAddress", label: "Token Address" },
+          { key: "balance", label: "Balance" },
+          { key: "blocknum", label: "Last Updated on Block" },
         ],
       },
     };
@@ -261,46 +269,51 @@ export default {
     getLoadTarget(val) {
       switch (val) {
         case 0:
-          this.loadTarget = 'txs';
+          this.loadTarget = "txs";
           break;
         case 1:
-          this.loadTarget = 'tokens';
+          this.loadTarget = "tokens";
           break;
         case 2:
-          this.loadTarget = 'erc20Txs';
+          this.loadTarget = "erc20Txs";
           break;
         case 3:
-          this.loadTarget = 'erc721Txs';
+          this.loadTarget = "erc721Txs";
           break;
         case 4:
-          this.loadTarget = 'bids';
+          this.loadTarget = "bids";
           break;
         case 5:
-          this.loadTarget = 'proposedBlocks';
+          this.loadTarget = "proposedBlocks";
           break;
         case 6:
-          this.loadTarget = 'buckets';
+          this.loadTarget = "buckets";
           break;
         default:
-          this.loadTarget = 'txs';
+          this.loadTarget = "txs";
       }
     },
     async loadBuckets(network, page, limit) {
       const { address } = this.$route.params;
-      const res = await this.$api.account.getBuckets(network, address, page, limit);
+      const res = await this.$api.account.getBuckets(
+        network,
+        address,
+        page,
+        limit
+      );
       const { buckets, totalRows } = res;
       const items = buckets.map((b) => {
         return {
           bucketid: b.id,
           address: b.candidate,
           totalVotes: {
-            type: 'amount',
+            type: "amount",
             amount: b.totalVotes,
             precision: 6,
-            token: 'MTRG',
+            token: "MTRG",
           },
           timestamp: b.createTime,
-          status: b.unbounded ? 'Unbounded' : 'Created',
+          status: b.unbounded ? "Unbounded" : "Created",
         };
       });
       return { items, totalRows };
@@ -308,21 +321,26 @@ export default {
 
     async loadHolders(network, page, limit) {
       const { address } = this.$route.params;
-      const res = await this.$api.account.getHolders(network, address, page, limit);
+      const res = await this.$api.account.getHolders(
+        network,
+        address,
+        page,
+        limit
+      );
       const { holders, token } = res;
       const items = holders.map((h) => {
         return {
           ...h,
           fullAddress: h.address,
           balance: {
-            type: 'amount',
+            type: "amount",
             amount: h.balance,
             precision: 6,
             decimals: token.decimals || 18,
             token: h.symbol,
           },
           percentage: {
-            type: 'percentage',
+            type: "percentage",
             amount: h.percentage,
           },
         };
@@ -335,36 +353,42 @@ export default {
       const res = await this.$api.account.getTxs(network, address, page, limit);
       const { txs, totalRows } = res;
       const items = txs.map((t) => {
-        let direct = '';
+        let direct = "";
         const fromAddr = t.from;
         const toAddr = t.to;
         const amount = t.mtr || t.mtrg;
         const token = 0;
 
         if (fromAddr === toAddr) {
-          direct = 'Self';
+          direct = "Self";
         } else if (fromAddr === address.toLowerCase()) {
-          direct = 'Out';
+          direct = "Out";
         } else {
-          direct = 'In';
+          direct = "In";
         }
 
-        console.log('direct = ', direct);
+        console.log("direct = ", direct);
 
+        let methodName = t.method;
+        if (String(t.method).includes("(")) {
+          const index = String(t.method).indexOf("(");
+          methodName = String(t.method).substring(0, index);
+        }
+        console.log("methodName", methodName);
         return {
           txhashWithStatus: {
             hash: t.txHash,
             status: t.reverted,
           },
-          methodName: t.method,
+          methodName,
           blocknum: t.block.number,
           from: fromAddr,
           direct,
-          to: toAddr || 'nobody',
+          to: toAddr || "nobody",
           amount: {
-            type: 'amount',
+            type: "amount",
             amount: amount || t.totalClauseAmount,
-            token: token < 0 ? t.token : token == 0 ? 'MTR' : 'MTRG',
+            token: token < 0 ? t.token : token == 0 ? "MTR" : "MTRG",
             precision: 8,
           },
           timestamp: t.block.timestamp,
@@ -375,7 +399,12 @@ export default {
     },
     async loadTxs20(network, page, limit) {
       const { address } = this.$route.params;
-      const res = await this.$api.account.getTxs20(network, address, page, limit);
+      const res = await this.$api.account.getTxs20(
+        network,
+        address,
+        page,
+        limit
+      );
       const { txs, totalRows } = res;
       const items = txs.map((t) => ({
         txhashWithStatus: {
@@ -385,11 +414,11 @@ export default {
         blocknum: t.block.number,
         from: t.from,
         to: t.to,
-        direct: t.from === this.address ? 'Out' : 'In',
+        direct: t.from === this.address ? "Out" : "In",
         amount: {
-          type: 'amount',
+          type: "amount",
           amount: t.amount,
-          token: t.symbol || 'ERC20',
+          token: t.symbol || "ERC20",
           precision: 8,
           decimals: t.decimals || 18,
         },
@@ -399,7 +428,12 @@ export default {
     },
     async loadTxs721(network, page, limit) {
       const { address } = this.$route.params;
-      const res = await this.$api.account.getTxs721(network, address, page, limit);
+      const res = await this.$api.account.getTxs721(
+        network,
+        address,
+        page,
+        limit
+      );
       const { txs, totalRows } = res;
       const items = txs.map((t) => ({
         txhashWithStatus: {
@@ -409,11 +443,11 @@ export default {
         blocknum: t.block.number,
         from: t.from,
         to: t.to,
-        direct: t.from === this.address ? 'Out' : 'In',
+        direct: t.from === this.address ? "Out" : "In",
         amount: {
-          type: 'amount',
+          type: "amount",
           amount: t.amount,
-          token: t.symbol || 'ERC721',
+          token: t.symbol || "ERC721",
           precision: 8,
           decimals: t.decimals || 18,
         },
@@ -424,7 +458,12 @@ export default {
     async loadProposed(network, page, limit) {
       this.load = true;
       const { address } = this.$route.params;
-      const { proposed, totalRows } = await this.$api.account.getProposed(network, address, page, limit);
+      const { proposed, totalRows } = await this.$api.account.getProposed(
+        network,
+        address,
+        page,
+        limit
+      );
 
       const items = proposed.map((b) => {
         return {
@@ -432,10 +471,10 @@ export default {
           blockNum: b.number,
           blockhash: b.hash,
           actualRewardStr: {
-            type: 'amount',
+            type: "amount",
             amount: b.actualReward,
             precision: -1,
-            token: 'MTR',
+            token: "MTR",
           },
         };
       });
@@ -444,33 +483,38 @@ export default {
     async loadBids(network, page, limit) {
       this.load = true;
       const { address } = this.$route.params;
-      const { bids, totalRows } = await this.$api.account.getBids(network, address, page, limit);
+      const { bids, totalRows } = await this.$api.account.getBids(
+        network,
+        address,
+        page,
+        limit
+      );
 
       const items = bids.map((b) => {
         return {
           ...b,
           amountStr: {
-            type: 'amount',
+            type: "amount",
             amount: b.amount,
             precision: 8,
-            token: 'MTR',
+            token: "MTR",
           },
           hammerPriceStr: b.pending
-            ? '-'
+            ? "-"
             : {
-                type: 'amount',
+                type: "amount",
                 amount: b.hammerPrice,
                 precision: 4,
-                token: 'MTR',
+                token: "MTR",
               },
           lotAmountStr:
             b.pending || !b.lotAmount
-              ? '-'
+              ? "-"
               : {
-                  type: 'amount',
+                  type: "amount",
                   amount: b.lotAmount,
                   precision: 8,
-                  token: 'MTRG',
+                  token: "MTRG",
                 },
         };
       });
@@ -479,14 +523,19 @@ export default {
     async loadTokens(network, page, limit) {
       this.load = true;
       const { address } = this.$route.params;
-      const { tokens, totalRows } = await this.$api.account.getTokens(network, address, page, limit);
+      const { tokens, totalRows } = await this.$api.account.getTokens(
+        network,
+        address,
+        page,
+        limit
+      );
       const items = tokens.map((t) => {
         return {
           ...t,
           fullAddress: t.tokenAddress,
           blocknum: t.lastUpdate.number,
           balance: {
-            type: 'amount',
+            type: "amount",
             amount: t.balance,
             token: t.tokenSymbol,
             precision: 8,

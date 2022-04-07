@@ -16,11 +16,7 @@
       </div>
       <b-form v-else @submit="onSubmit" @reset="onReset">
         <b-form-group label="Choose the Solidity Contract Code:">
-          <b-form-file
-            multiple
-            v-model="form.sourceCodeFiles"
-            required
-          >
+          <b-form-file multiple v-model="form.sourceCodeFiles" required>
             <template slot="file-name" slot-scope="{ names }">
               <b-badge variant="dark">{{ names[0] }}</b-badge>
               <b-badge v-if="names.length > 1" variant="dark" class="ml-1">
@@ -35,10 +31,11 @@
 
         <section class="text-center">
           <b-button type="submit" variant="primary">Verify</b-button>
-          <b-button class="ml-1" type="reset" variant="secondary">Reset</b-button>
+          <b-button class="ml-1" type="reset" variant="secondary"
+            >Reset</b-button
+          >
         </section>
       </b-form>
-      <!-- <b-button @click="test" class="ml-1" type="reset" variant="secondary">TEST</b-button> -->
     </section>
   </b-container>
 </template>
@@ -67,7 +64,7 @@ export default {
   async created() {
     const { address } = this.$route.params;
     if (!address) {
-      return this.$router.push('/')
+      return this.$router.push("/");
     }
     this.form.address = address;
   },
@@ -77,14 +74,14 @@ export default {
       this.isError.status = false;
       this.loading = true;
       const files = [this.form.metadataFile];
-      this.form.sourceCodeFiles.forEach(item => files.push(item))
+      this.form.sourceCodeFiles.forEach((item) => files.push(item));
       const data = {
         address: this.form.address,
         files,
       };
       const res = await this.$api.verify.verifyFormData(this.network, data);
       console.log("verify res", res);
-      
+
       if (res.error) {
         this.loading = false;
         this.isError = {
@@ -101,29 +98,6 @@ export default {
         }
       }
     },
-    async test() {
-      const events = [];
-      const methods = [
-        {
-          signature: '0x00000001',
-          name: 'test-name-1',
-          abi: 'test-abi-1'
-        },
-        {
-          signature: '0x00000002',
-          name: 'test-name-2',
-          abi: 'test-abi-2'
-        },
-        {
-          signature: '0x00000003',
-          name: 'test-name-3',
-          abi: 'test-abi-3'
-        }
-      ];
-
-      const saveKnowMethodAndEventRes = await this.$api.known.saveKnowMethodAndEvent(this.network, events, methods);
-      console.log('saveKnowMethodAndEventRes', saveKnowMethodAndEventRes);
-    },
     async saveKnowMethodAndEvent() {
       let file = this.form.metadataFile;
       let reader = new FileReader();
@@ -132,27 +106,32 @@ export default {
         const events = [];
         const methods = [];
         for (const a of result.output.abi) {
-          if (a.type === 'function') {
+          if (a.type === "function") {
             const fun = new abi.Function(a);
             methods.push({
               signature: fun.signature,
               contractAddress: this.form.address.toLowerCase(),
               name: fun.canonicalName,
-              abi: JSON.stringify(a)
-            })
+              abi: JSON.stringify(a),
+            });
           }
-          if (a.type === 'event') {
+          if (a.type === "event") {
             const eve = new abi.Event(a);
             events.push({
               signature: eve.signature,
               contractAddress: this.form.address.toLowerCase(),
               name: eve.canonicalName,
-              abi: JSON.stringify(a)
-            })
+              abi: JSON.stringify(a),
+            });
           }
         }
-        const saveKnowMethodAndEventRes = await this.$api.known.saveKnowMethodAndEvent(this.network, events, methods);
-        console.log('saveKnowMethodAndEventRes', saveKnowMethodAndEventRes);
+        const saveKnowMethodAndEventRes =
+          await this.$api.known.saveKnowMethodAndEvent(
+            this.network,
+            events,
+            methods
+          );
+        console.log("saveKnowMethodAndEventRes", saveKnowMethodAndEventRes);
 
         this.loading = false;
 

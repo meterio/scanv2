@@ -1,16 +1,16 @@
 <template lang="pug">
 div
-  .text-center.text-primary(v-if='isContract === null')
+  .text-center.text-primary(v-if="isContract === null")
     b-spinner.my-5
-  ContractAddress(v-else-if='isContract', :address-info='addressInfo')
-  UserAddress(v-else, :address-info='addressInfo')
+  ContractAddress(v-else-if="isContract", :address-info="addressInfo")
+  UserAddress(v-else, :address-info="addressInfo")
 </template>
 
 <script>
-import UserAddress from './UserAddress.vue';
-import ContractAddress from './ContractAddress.vue';
+import UserAddress from "./UserAddress.vue";
+import ContractAddress from "./ContractAddress.vue";
 export default {
-  name: 'Address',
+  name: "Address",
   components: {
     UserAddress,
     ContractAddress,
@@ -19,9 +19,11 @@ export default {
     return {
       isContract: null,
       isERC20: false,
-      address: '0x',
+      address: "0x",
       account: {},
       summary: [],
+      verified: false, // only for contract
+      files: [], // only for contract
     };
   },
   computed: {
@@ -31,6 +33,8 @@ export default {
         isERC20: this.isERC20,
         address: this.address,
         summary: this.summary,
+        verified: this.verified,
+        files: this.files,
       };
     },
   },
@@ -44,44 +48,47 @@ export default {
         this.address = address;
         this.summary = [];
 
-        const res = await this.$api.account.getAccountDetail(this.network, address);
+        const res = await this.$api.account.getAccountDetail(
+          this.network,
+          address
+        );
 
         const { account } = res;
-        console.log('account:', account);
+        console.log("account:", account);
         this.isContract = account.type !== undefined;
-        this.isERC20 = account.type === 'ERC20';
-        console.log('iscontract:', this.isContract);
-        console.log('erc20:', this.isERC20);
-        if (this.address === '0x0000000000000000000000000000000000000000') {
+        this.isERC20 = account.type === "ERC20";
+        console.log("iscontract:", this.isContract);
+        console.log("erc20:", this.isERC20);
+        if (this.address === "0x0000000000000000000000000000000000000000") {
           if (new BigNumber(account.mtrgBalance).isLessThan(0)) {
-            account.mtrgBalance = '0';
+            account.mtrgBalance = "0";
           }
           if (new BigNumber(account.mtrgBounded).isLessThan(0)) {
-            account.mtrgBounded = '0';
+            account.mtrgBounded = "0";
           }
           if (new BigNumber(account.mtrBalance).isLessThan(0)) {
-            account.mtrBalance = '0';
+            account.mtrBalance = "0";
           }
           if (new BigNumber(account.mtrBounded).isLessThan(0)) {
-            account.mtrBounded = '0';
+            account.mtrBounded = "0";
           }
         }
         this.summary = this.summary.concat([
           // { key: "Address", value: account.address },
           {
-            key: 'Balance',
+            key: "Balance",
             mtrg: account.mtrgBalance,
             mtr: account.mtrBalance,
-            mtrToken: 'MTR',
-            mtrgToken: 'MTRG',
-            type: 'balance',
+            mtrToken: "MTR",
+            mtrgToken: "MTRG",
+            type: "balance",
             precision: -1,
           },
           {
-            key: 'Staked',
+            key: "Staked",
             value: account.mtrgBounded,
-            type: 'amount',
-            token: 'MTRG',
+            type: "amount",
+            token: "MTRG",
             precision: -1,
           },
         ]);
@@ -90,40 +97,42 @@ export default {
         // }
         if (account.firstSeen && account.firstSeen.number > 0) {
           this.summary.push({
-            key: 'First Seen',
-            type: 'block-link-with-note',
+            key: "First Seen",
+            type: "block-link-with-note",
             value: this.fromNow(account.firstSeen.timestamp),
             block: account.firstSeen.number,
           });
         }
         if (account.lastUpdate && account.lastUpdate.number > 0) {
           this.summary.push({
-            key: 'Last Updated',
-            type: 'block-link-with-note',
+            key: "Last Updated",
+            type: "block-link-with-note",
             value: this.fromNow(account.lastUpdate.timestamp),
             block: account.lastUpdate.number,
           });
         }
         if (account.hasCode) {
-          this.summary.push({ key: 'Type', value: 'Contract' });
+          this.summary.push({ key: "Type", value: "Contract" });
         }
         if (account.tokenName && account.tokenSymbol) {
           this.summary.push({
-            key: 'ERC20 Token',
-            value: `${account.tokenName || 'Unnamed Token'} (${account.tokenSymbol || 'ERC20'})`,
+            key: "ERC20 Token",
+            value: `${account.tokenName || "Unnamed Token"} (${
+              account.tokenSymbol || "ERC20"
+            })`,
           });
         }
         if (account.tokenSymbol) {
           this.summary.push({
-            key: 'Decimals',
+            key: "Decimals",
             value: account.tokenDecimals || 18,
           });
         }
         if (account.totalSupply) {
           if (account.totalSupply) {
             this.summary.push({
-              key: 'Total Supply',
-              type: 'amount',
+              key: "Total Supply",
+              type: "amount",
               value: account.totalSupply,
               token: account.tokenSymbol,
               decimals: account.tokenDecimals,
@@ -132,29 +141,30 @@ export default {
         }
         if (account.holdersCount) {
           this.summary.push({
-            key: 'Holders Count',
+            key: "Holders Count",
             value: account.holdersCount,
           });
         }
 
         if (account.transfersCount) {
           this.summary.push({
-            key: 'Transfers Count',
+            key: "Transfers Count",
             value: account.transfersCount,
           });
         }
 
-        if (account.isContract) {
+        if (this.isContract) {
+          this.verified = account.verified ? "perfect" : "null";
+          this.files = account.files;
           this.summary.push({
-            key: 'owner',
+            key: "owner",
             value: account.master,
           });
           this.summary.push({
-            key: 'creationTxHash',
+            key: "creationTxHash",
             value: account.creationTxHash,
           });
         }
-        this.account = account;
       } catch (e) {
         console.log(e);
       }

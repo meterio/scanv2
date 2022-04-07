@@ -1,6 +1,6 @@
 <template>
-  <b-badge pill class="badge-status" :variant="status">
-    <b-icon :icon="resultIcon(status)"></b-icon>
+  <b-badge pill class="badge-status" :variant="computedStatus">
+    <b-icon :icon="computedIcon"></b-icon>
     <span>{{ status }}</span>
   </b-badge>
 </template>
@@ -9,17 +9,25 @@
 export default {
   nanme: "StatusTag",
   props: ["status"],
-  methods: {
-    resultIcon: function (result) {
-      if (result === "success") {
-        return "check";
+  computed: {
+    computedStatus() {
+      if (String(this.status).includes('success')) {
+        return 'success'
+      } else if (String(this.status).includes('reverted')) {
+        return 'reverted'
+      } else {
+        return ''
       }
-
-      if (result === "reverted") {
-        return "x";
-      }
-      return null;
     },
+    computedIcon() {
+      if (this.computedStatus === 'success') {
+        return 'check'
+      } else if (this.computedStatus === 'reverted') {
+        return 'x'
+      } else {
+        return null
+      }
+    }
   },
 };
 </script>

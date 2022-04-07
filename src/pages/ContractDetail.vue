@@ -1,6 +1,17 @@
 <template>
   <div class="my-2">
-    <div v-if="!files.length" class="text-center">NO DATA</div>
+    <div v-if="!files.length" class="text-center">
+      <router-link
+        :to="{
+          name: 'verify',
+          params: {
+            address,
+          },
+        }"
+        >VERIFY</router-link
+      >
+      <span> contract source code.</span>
+    </div>
     <b-tabs v-else content-class="mt-3">
       <b-tab title="Code" active>
         <code-text-area
