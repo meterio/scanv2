@@ -1,11 +1,6 @@
 <template>
-  <div>
-    <b-link
-      :id="id"
-      class="link"
-      :to="{ name: 'address', params: { address: address } }"
-      >{{ text }}</b-link
-    >
+  <span>
+    <b-link :id="id" class="link" :to="{ name: 'address', params: { address: address } }">{{ text }}</b-link>
     <b-popover triggers="hover" :target="id">
       {{ tip }}
       <b-button @click="copyToClipBoard" variant="light" pill size="sm">
@@ -13,21 +8,21 @@
       </b-button>
       <span>{{ hint }}</span>
     </b-popover>
-  </div>
+  </span>
 </template>
 
 <script>
-import { randomHex } from "@/utils";
+import { randomHex } from '@/utils';
 export default {
-  name: "AddressLink",
+  name: 'AddressLink',
   props: {
     address: {
       type: String,
-      default: "0x",
+      default: '0x',
     },
     name: {
       type: String,
-      default: "",
+      default: '',
     },
     short: {
       type: Boolean,
@@ -36,7 +31,7 @@ export default {
   },
   data() {
     return {
-      hint: "",
+      hint: '',
       timer: null,
     };
   },
@@ -46,7 +41,7 @@ export default {
     },
     tip() {
       if (this.text.toLowerCase() === this.address.toLowerCase()) {
-        return "";
+        return '';
       }
       return this.address;
     },
@@ -67,14 +62,14 @@ export default {
   methods: {
     async copyToClipBoard() {
       await navigator.clipboard.writeText(this.address);
-      this.hint = "copied";
+      this.hint = 'copied';
       if (this.timer) {
         clearTimeout(this.timer);
       }
       this.timer = setTimeout(this.clearHint, 500);
     },
     clearHint() {
-      this.hint = "";
+      this.hint = '';
     },
   },
 };

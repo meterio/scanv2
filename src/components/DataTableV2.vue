@@ -21,15 +21,10 @@
           </div>
         </template>
         <template slot="empty">
-          <div class="text-center pt15 text-grey" style="color: #5c6f8c">
-            No data available.
-          </div>
+          <div class="text-center pt15 text-grey" style="color: #5c6f8c">No data available.</div>
         </template>
 
-        <template
-          v-for="slotName in Object.keys($scopedSlots)"
-          v-slot:[slotName]="slotScope"
-        >
+        <template v-for="slotName in Object.keys($scopedSlots)" v-slot:[slotName]="slotScope">
           <slot :name="slotName" v-bind="slotScope"></slot>
         </template>
 
@@ -99,10 +94,7 @@
 
         <template v-slot:cell(txhashWithStatus)="data">
           <div class="dt-row">
-            <span
-              :style="{ display: !!data.value.status ? 'inline' : 'none' }"
-              class="danger-icon"
-            >
+            <span :style="{ display: !!data.value.status ? 'inline' : 'none' }" class="danger-icon">
               <b-icon icon="exclamation-circle-fill" variant="danger"></b-icon>
             </span>
             <router-link
@@ -216,10 +208,7 @@
         <!-- Auction column template-->
         <template v-slot:cell(auctionid)="data">
           <div class="dt-row">
-            <router-link
-              :to="{ name: 'auctionDetail', params: { auctionID: data.value } }"
-              >Bids</router-link
-            >
+            <router-link :to="{ name: 'auctionDetail', params: { auctionID: data.value } }">Bids</router-link>
           </div>
         </template>
 
@@ -240,34 +229,37 @@
         <!-- Mining Reward -->
         <template v-slot:cell(powReward)="data">
           <div class="dt-row">
-            <router-link
-              :to="{ name: 'powRewards', params: { epoch: data.value } }"
-            >
-              Rewards
-            </router-link>
+            <router-link :to="{ name: 'powRewards', params: { epoch: data.value } }"> Rewards </router-link>
           </div>
         </template>
 
         <!-- Pos Reward template -->
         <template v-slot:cell(posReward)="data">
           <div class="dt-row">
-            <router-link
-              :to="{ name: 'posRewards', params: { epoch: data.value } }"
-              >Rewards</router-link
-            >
+            <router-link :to="{ name: 'posRewards', params: { epoch: data.value } }">Rewards</router-link>
           </div>
         </template>
 
-        <!-- Pos Reward template -->
-        <template v-slot:cell(details)="data">
+        <!-- Clause template -->
+        <template v-slot:cell(clause)="data">
           <div class="dt-row breakable">
-            <div v-for="(topic, index) in data.value.topics" :key="index">
-              <span class="mr-1">topic {{ index }}:</span>
-              <span>{{ topic }}</span>
+            <div class="address-row"><span>To: </span><address-link :address="data.value.to" /></div>
+            <div class="amount-row" v-if="data.value.amount">
+              Value:
+              <amount-tag
+                v-if="data.value.amount.type == 'amount'"
+                :amount="data.value.amount.amount"
+                :token="data.value.amount.token"
+                :precision="data.value.amount.precision"
+                :decimals="data.value.amount.decimals || 18"
+              />
             </div>
-            <div class="mt-3">
-              <span class="mr-1">data:</span>
-              <span>{{ data.value.data }}</span>
+            <div class="title-row" v-if="data.value.abiStr">Func: {{ data.value.abiStr }}</div>
+            <div class="title-row" v-if="data.value.selector > 0">MethodID: {{ data.value.selector }}</div>
+
+            <div v-for="(data, index) in data.value.datas" :key="index" class="topic-row">
+              <span class="index">{{ index }}</span>
+              <span>{{ data }}</span>
             </div>
           </div>
           <b-button
@@ -277,12 +269,39 @@
             @click="data.toggleDetails"
             class="mr-2 float-right"
           >
-            <span v-if="!data.detailsShowing">
-              <b-icon icon="chevron-double-down"></b-icon> Show Decoded
-            </span>
-            <span v-else>
-              <b-icon icon="chevron-double-up"></b-icon> Hide Decoded
-            </span>
+            <span v-if="!data.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Show Decoded </span>
+            <span v-else> <b-icon icon="chevron-double-up"></b-icon> Hide Decoded </span>
+          </b-button>
+        </template>
+
+        <!-- Event template -->
+        <template v-slot:cell(event)="data">
+          <div class="dt-row breakable">
+            <div class="address-row"><span>Address: </span><address-link :address="data.value.address" /></div>
+            <div class="title-row" v-if="data.value.abiStr">Event: {{ data.value.abiStr }}</div>
+            <div class="title-row" v-if="data.value.topics.length > 0">Topics:</div>
+            <div v-for="(topic, index) in data.value.topics" :key="index" class="topic-row">
+              <span class="index">{{ index }}</span>
+              <span>{{ topic }}</span>
+            </div>
+
+            <div class="mt-3">
+              <h6 class="title-row" v-if="data.value.datas.length > 0">Data:</h6>
+              <div v-for="(data, index) in data.value.datas" :key="index" class="data-row">
+                <span class="index">{{ index }}</span>
+                <span>{{ data }}</span>
+              </div>
+            </div>
+          </div>
+          <b-button
+            v-if="data.item.decoded"
+            size="sm"
+            variant="outline-secondary"
+            @click="data.toggleDetails"
+            class="mr-2 float-right"
+          >
+            <span v-if="!data.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Show Decoded </span>
+            <span v-else> <b-icon icon="chevron-double-up"></b-icon> Hide Decoded </span>
           </b-button>
         </template>
 
@@ -313,19 +332,14 @@
               }"
               >#{{ data.value.block }}</router-link
             >
-            <label v-if="data.value.type == 'percentage'"
-              >{{ Math.round(data.value.amount * 1000) / 10 }}%</label
-            >
+            <label v-if="data.value.type == 'percentage'">{{ Math.round(data.value.amount * 1000) / 10 }}%</label>
 
             <span v-if="!data.value.type">{{ data.value }}</span>
           </div>
         </template>
       </b-table>
 
-      <div
-        v-if="pagination.show && totalRows > pagination.perPage"
-        class="data-pagination"
-      >
+      <div v-if="pagination.show && totalRows > pagination.perPage" class="data-pagination">
         <b-pagination
           :align="pagination.align"
           v-model="currentPage"
@@ -339,12 +353,12 @@
 </template>
 
 <script>
-import DirectTag from "./DirectTag.vue";
-import AmountTag from "./AmountTag.vue";
-import AddressLink from "./AddressLink.vue";
+import DirectTag from './DirectTag.vue';
+import AmountTag from './AmountTag.vue';
+import AddressLink from './AddressLink.vue';
 export default {
   components: { DirectTag, AddressLink, AmountTag },
-  name: "DataTable",
+  name: 'DataTable',
   props: {
     sortBy: { type: String },
     sortDesc: { type: Boolean },
@@ -353,7 +367,7 @@ export default {
     },
     minHeight: {
       type: String,
-      default: "auto",
+      default: 'auto',
     },
     items: {
       type: Array,
@@ -372,7 +386,7 @@ export default {
       default: function () {
         return {
           show: false,
-          align: "right",
+          align: 'right',
         };
       },
     },
@@ -422,10 +436,7 @@ export default {
         this.loading = true;
         const start = (this.currentPage - 1) * this.pagination.perPage;
         let end = 0;
-        if (
-          this.passedItems.length >=
-          this.currentPage * this.pagination.perPage
-        ) {
+        if (this.passedItems.length >= this.currentPage * this.pagination.perPage) {
           end = this.currentPage * this.pagination.perPage;
         } else {
           end = this.passedItems.length;
@@ -445,11 +456,7 @@ export default {
       try {
         if (this.loadItems) {
           this.loading = true;
-          const res = await this.loadItems(
-            this.network,
-            this.currentPage,
-            this.pagination.perPage
-          );
+          const res = await this.loadItems(this.network, this.currentPage, this.pagination.perPage);
           const { items, totalRows } = res;
           this.itemsLocal = items;
           this.totalRows = totalRows;
@@ -488,7 +495,7 @@ export default {
   padding-left: 0;
   padding-right: 0;
   font-size: 14px;
-  tr td[role="cell"] {
+  tr td[role='cell'] {
     padding: 0.1rem;
   }
 
@@ -517,6 +524,30 @@ export default {
 
   .data-pagination {
     margin-top: 15px;
+  }
+
+  .index {
+    color: #77838f;
+    background: rgba(119, 131, 143, 0.1);
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin-right: 6px;
+  }
+  .topic-row,
+  .data-row,
+  .address-row,
+  .amount-row {
+    span {
+      font-size: 0.9rem;
+    }
+    margin-top: 3px;
+    margin-bottom: 5px;
+  }
+  .title-row {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 }
 </style>

@@ -22,7 +22,8 @@ import "./mixins";
 
 import "./scss/style.scss";
 // import "./assets/fonts/bebasneue.css";
-import "./assets/fonts/nunito/nunito.css";
+// import "./assets/fonts/nunito/nunito.css";
+import "./assets/fonts/roboto-mono/roboto-mono.css";
 
 // 将api挂载到vue的原型上
 Vue.prototype.$api = api;

@@ -4,12 +4,7 @@
 
     <DataTableV2 :fields="fields" :items="items" :pagination="pagination">
       <template slot="header">
-        <NavTabs
-          class="px-0"
-          :tabs="tabs"
-          :value="tabValue"
-          @changeTab="navTabChange"
-        ></NavTabs>
+        <NavTabs class="px-0" :tabs="tabs" :value="tabValue" @changeTab="navTabChange"></NavTabs>
       </template>
       <template v-slot:cell(to)="data">
         <div class="dt-row">
@@ -37,12 +32,8 @@
           @click="row.toggleDetails"
           class="mr-2 float-right"
         >
-          <span v-if="!row.detailsShowing">
-            <b-icon icon="chevron-double-down"></b-icon> Show Decoded
-          </span>
-          <span v-else>
-            <b-icon icon="chevron-double-up"></b-icon> Hide Decoded
-          </span>
+          <span v-if="!row.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Show Decoded </span>
+          <span v-else> <b-icon icon="chevron-double-up"></b-icon> Hide Decoded </span>
         </b-button>
       </template>
 
@@ -58,26 +49,26 @@
 </template>
 
 <script>
-import DataTableV2 from "@/components/DataTableV2.vue";
-import NavTabs from "@/components/NavTabs.vue";
-import DataSummary from "@/components/DataSummary.vue";
-import { ScriptEngine } from "@meterio/devkit/dist/scriptEngine";
-import VueJsonPretty from "vue-json-pretty";
-import "vue-json-pretty/lib/styles.css";
-import { bigNum } from "@/utils";
-import { abi } from "@meterio/devkit";
-import BigNumber from "bignumber.js";
-import { ethers } from "ethers";
+import DataTableV2 from '@/components/DataTableV2.vue';
+import NavTabs from '@/components/NavTabs.vue';
+import DataSummary from '@/components/DataSummary.vue';
+import { ScriptEngine } from '@meterio/devkit/dist/scriptEngine';
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
+import { bigNum } from '@/utils';
+import { abi } from '@meterio/devkit';
+import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
 
 const TransferABI = new abi.Event({
   anonymous: false,
   inputs: [
-    { indexed: true, name: "_from", type: "address" },
-    { indexed: true, name: "_to", type: "address" },
-    { indexed: false, name: "_value", type: "uint256" },
+    { indexed: true, name: '_from', type: 'address' },
+    { indexed: true, name: '_to', type: 'address' },
+    { indexed: false, name: '_value', type: 'uint256' },
   ],
-  name: "Transfer",
-  type: "event",
+  name: 'Transfer',
+  type: 'event',
 });
 
 export default {
@@ -89,36 +80,34 @@ export default {
   },
   data() {
     return {
-      txHash: "",
-      tabs: [{ name: "Clauses" }, { name: "Transfers" }, { name: "Events" }],
+      txHash: '',
+      tabs: [{ name: 'Clauses' }, { name: 'Transfers' }, { name: 'Events' }],
       tabValue: 0,
-      summaryTitle: "Transaction",
+      summaryTitle: 'Transaction',
       summary: [],
       clauses: {
         fields: [
-          { key: "index", label: "Index" },
-          { key: "to", label: "To" },
-          { key: "amount", label: "Amount" },
-          { key: "data", label: "Data" },
+          { key: 'index', label: 'Index' },
+          { key: 'clause', label: 'Clause' },
         ],
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 20 },
         items: [],
       },
       transfers: {
         fields: [
-          { key: "from", label: "Sender" },
-          { key: "to", label: "Recipient" },
-          { key: "amountStr", label: "Amount" },
+          { key: 'from', label: 'Sender' },
+          { key: 'to', label: 'Recipient' },
+          { key: 'amountStr', label: 'Amount' },
         ],
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 20 },
         items: [],
       },
       events: {
         fields: [
-          { key: "address", label: "Contract Address" },
-          { key: "details", label: "Details" },
+          { key: 'index', label: 'Index' },
+          { key: 'event', label: 'Log' },
         ],
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 20 },
         items: [],
       },
     };
@@ -196,71 +185,115 @@ export default {
       this.loadData();
     },
     async getSummary() {
-      const res = await this.$api.transaction.getTxDetail(
-        this.network,
-        this.txHash
-      );
-      const { summary } = res;
-      if (!!summary) {
+      const res = await this.$api.transaction.getTxDetail(this.network, this.txHash);
+      const { tx } = res;
+      if (!!tx) {
         this.summary = [
-          { key: "Hash", value: summary.hash },
-          { key: "Origin", value: summary.origin, type: "address-link" },
-          { key: "Fee", value: summary.paid, type: "amount", token: "MTR" },
-          // { key: "BlockRef", value: summary.blockRef },
-          { key: "Expiration", value: summary.expiration },
+          { key: 'Hash', value: tx.hash },
           {
-            key: "Result",
-            value: summary.reverted
-              ? `reverted(${summary.vmError.error})`
-              : "success",
-            type: "status",
+            key: 'Status',
+            value: tx.reverted ? `reverted ( ${tx.vmError.error} )` : 'success',
+            type: 'status',
           },
-          { key: "Clause Count", value: summary.clauseCount },
           {
-            key: "Block",
-            block: summary.block.number,
-            value: this.fromNow(summary.block.timestamp),
-            type: "block-link-with-note",
+            key: 'Block',
+            block: tx.block.number,
+            value: this.fromNow(tx.block.timestamp),
+            type: 'block-link-with-note',
           },
+
+          { key: 'Origin', value: tx.origin, type: 'address-link' },
+          { key: 'Fee', value: tx.paid, type: 'amount', token: 'MTR' },
+          { key: 'BlockRef', value: tx.blockRef },
+          { key: 'Expiration', value: tx.expiration },
+          { key: 'GasPriceCoef', value: tx.gasPriceCoef },
+          { key: 'Gas Used/Limit', value: `${tx.gasUsed} / ${tx.gas}` },
+          { key: 'Nonce', value: new BigNumber(tx.nonce).toFixed() },
+
+          { key: 'Clause Count', value: tx.clauseCount },
         ];
-        if (summary.reverted) {
-          this.summary.push({
-            key: "VM Error",
-            value: summary.vmError.reason || summary.vmError.error,
-          });
-        }
       }
     },
     async loadClauses() {
-      const { clauses } = await this.$api.transaction.getClauses(
-        this.network,
-        this.txHash
-      );
+      const { clauses } = await this.$api.transaction.getClauses(this.network, this.txHash);
       this.clauses.items = clauses.map((clause, index) => {
+        const isSE = ScriptEngine.IsScriptEngineData(clause.data);
+        let selector = undefined;
+        let datas = [];
+        let abiStr = undefined;
+        let decoded = undefined;
+        if (isSE) {
+          decoded = ScriptEngine.decodeScriptData(clause.data);
+          abiStr = decoded.action;
+          let temp = clause.data.substring(2);
+          while (temp.length >= 64) {
+            datas.push('0x' + temp.substring(0, 64));
+            temp = temp.substring(64);
+          }
+          if (temp.length > 0) {
+            datas.push('0x' + temp);
+          }
+        } else {
+          if (clause.data.length < 10) {
+            datas.push(clause.data);
+          } else {
+            selector = clause.data.substring(0, 10);
+            let temp = clause.data.substring(10);
+            while (temp.length >= 64) {
+              datas.push('0x' + temp.substring(0, 64));
+              temp = temp.substring(64);
+            }
+            if (temp.length > 0) {
+              datas.push('0x' + temp);
+            }
+          }
+
+          const { abi, name, data, value } = clause;
+          if (abi) {
+            const iface = new ethers.utils.Interface([abi]);
+            const d = iface.parseTransaction({ data, value });
+            console.log(d);
+            decoded = {};
+            let params = [];
+            for (const [index, input] of abi.inputs.entries()) {
+              params.push(`${input.type} ${input.name}`);
+              const val = d.args[index];
+              if (ethers.utils.BigNumber.isBigNumber(val)) {
+                decoded[input.name] = val.toString();
+              } else {
+                decoded[input.name] = val;
+              }
+            }
+            abiStr = `${d.name}( ${params.join(', ')} )`;
+          }
+        }
         return {
-          data: clause.data,
-          to: clause.to,
-          amount: {
-            type: "amount",
-            amount: bigNum(clause.value),
-            token: clause.token,
-            precision: 6,
+          clause: {
+            data: clause.data,
+            to: clause.to,
+            amount: {
+              type: 'amount',
+              amount: bigNum(clause.value),
+              token: clause.token,
+              precision: 6,
+            },
+            abiStr,
+            selector,
+            datas,
           },
+          decoded,
           index: index + 1,
         };
       });
     },
     async loadTransfers() {
-      const { transfers } = await this.$api.transaction.getTransfers(
-        this.network,
-        this.txHash
-      );
+      const { transfers } = await this.$api.transaction.getTransfers(this.network, this.txHash);
       this.transfers.items = transfers.map((transfer) => {
         return {
           from: transfer.sender,
           to: transfer.recipient,
           amountStr: {
-            type: "amount",
+            type: 'amount',
             amount: bigNum(transfer.amount),
             token: transfer.token.toString(),
             precision: 8,
@@ -269,45 +302,54 @@ export default {
       });
     },
     async loadEvents() {
-      const { events } = await this.$api.transaction.getEvents(
-        this.network,
-        this.txHash
-      );
-      this.events.items = events.map((event) => {
+      const { events } = await this.$api.transaction.getEvents(this.network, this.txHash);
+
+      let abiStr = undefined;
+      this.events.items = events.map((event, i) => {
+        const { name, topics, data } = event;
         let decoded = undefined;
-        if (event.name) {
-          const abi = JSON.parse(event.abi);
-          const coder = new ethers.utils.AbiCoder();
-          const inputsType = abi.inputs.map((item) => item.type);
-          const topicStr = event.topics.map((t, i) => {
-            if (i === 0) {
-              return "";
-            } else {
-              return t.substr(2); //remove 0x
-            }
-          });
-          let eventData = "";
-          if (event.data) {
-            eventData = event.data.substr(2);
+        if (event.abi) {
+          let abi = event.abi;
+          abi.inputs = abi.inputs.map((i) => ({ ...i, indexed: false }));
+          const topicsCount = event.topics.length - 1;
+          for (let i = 0; i < topicsCount; i++) {
+            abi.inputs[i].indexed = true;
           }
-          const data = "0x" + topicStr.join("") + eventData;
-          const result = coder.decode(inputsType, data);
-          console.log("decode result: ", result);
-          const formatRes = {};
-          for (let index in abi.inputs) {
-            formatRes[abi.inputs[index].name] = result[index].toString();
+
+          const iface = new ethers.utils.Interface([abi]);
+          const log = iface.parseLog(event);
+          console.log(log);
+
+          decoded = {};
+          let params = [];
+          for (const input of abi.inputs) {
+            params.push(`${input.indexed ? 'indexed' : ''} ${input.type} ${input.name}`);
+            decoded[input.name] = log.values[input.name].toString();
           }
-          decoded = {
-            event: event.name,
-            ...formatRes,
-          };
+          abiStr = `${log.name} ( ${params.join(', ')} )`;
         }
+        let datas = [];
+        if (data && data != '0x') {
+          let temp = data.substring(2);
+          while (temp.length >= 64) {
+            datas.push('0x' + temp.substring(0, 64));
+            temp = temp.substring(64);
+          }
+          if (temp.length > 0) {
+            datas.push('0x' + temp);
+          }
+        }
+        console.log(datas);
 
         return {
-          address: event.address,
-          details: {
-            topics: event.topics,
-            data: event.data,
+          index: i,
+          event: {
+            address: event.address,
+            topics,
+            data,
+            datas,
+            abi,
+            abiStr,
           },
           decoded,
         };
