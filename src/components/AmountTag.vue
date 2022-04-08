@@ -1,8 +1,8 @@
 <template>
   <span v-b-tooltip.hover :title="text">
-    <span class="integer">{{ integer }}</span>
+    <span>{{ integer }}</span>
     <span v-if="shortMantissa" class="text-secondary">{{ shortMantissa }}</span>
-    <span v-if="token" :class="badgeClass">{{ token }}</span>
+    <span v-if="token" class="badge1 ml-1">{{ token }}</span>
   </span>
 </template>
 
@@ -71,29 +71,21 @@ export default {
     },
   },
   computed: {
-    badgeClass() {
-      if (this.token === "MTR") {
-        return "badge badge-light ml-1";
-      }
-      if (this.token === "MTRG") {
-        return "badge badge-light badge-mtrg ml-1";
-      }
-      return "badge badge-black ml-1";
-    },
+    // badgeClass() {
+    //   if (this.token === "MTR") {
+    //     return "badge badge-light ml-1";
+    //   }
+    //   if (this.token === "MTRG") {
+    //     return "badge badge-light badge-mtrg ml-1";
+    //   }
+    //   return "badge badge-black ml-1";
+    // },
   },
 };
 </script>
 
 <style scoped lang="scss">
-.integer {
-  font-weight: bold;
-}
-.badge {
-  font-weight: bold;
-  font-size: 11px !important;
-}
-.badge-light {
-  background: darken(#f8f9fa, 2%);
-  // border: 1px solid #e2e3e5;
+.badge1 {
+  font-size: 80% !important;
 }
 </style>

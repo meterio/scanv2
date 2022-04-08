@@ -141,14 +141,16 @@ export default {
         }
         if (account.holdersCount) {
           this.summary.push({
-            key: "Holders Count",
+            key: "Holders",
+            type: "holders",
             value: account.holdersCount,
           });
         }
 
         if (account.transfersCount) {
           this.summary.push({
-            key: "Transfers Count",
+            key: "Transfers",
+            type: "transfers",
             value: account.transfersCount,
           });
         }

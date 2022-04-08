@@ -52,11 +52,10 @@
 import DataTableV2 from '@/components/DataTableV2.vue';
 import NavTabs from '@/components/NavTabs.vue';
 import DataSummary from '@/components/DataSummary.vue';
-import { ScriptEngine } from '@meterio/devkit/dist/scriptEngine';
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 import { bigNum } from '@/utils';
-import { abi } from '@meterio/devkit';
+import { abi, ScriptEngine } from '@meterio/devkit';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 
@@ -95,6 +94,7 @@ export default {
       },
       transfers: {
         fields: [
+          { key : 'index', label: 'Index' },
           { key: 'from', label: 'Sender' },
           { key: 'to', label: 'Recipient' },
           { key: 'amountStr', label: 'Amount' },
@@ -190,6 +190,7 @@ export default {
       if (!!tx) {
         this.summary = [
           { key: 'Hash', value: tx.hash },
+          { key: 'ChainTag', value: tx.chainTag },
           {
             key: 'Status',
             value: tx.reverted ? `reverted ( ${tx.vmError.error} )` : 'success',
@@ -212,6 +213,45 @@ export default {
 
           { key: 'Clause Count', value: tx.clauseCount },
         ];
+
+          let transferHighlights = [];
+          const knownTokens = this.$store.state.dom.knownTokens;
+          for (const ev of tx.events) {
+            const { topics, address, data } = ev;
+            if (topics && topics.length > 1) {
+              const topic0 = topics[0];
+
+              if (topic0 === TransferABI.signature) {
+                const decoded = TransferABI.decode(data, topics);
+                let token;
+                if (address in knownTokens) {
+                  token = knownTokens[address];
+                }
+                let sym = 'ERC20';
+                let decimals = 18;
+                if (token) {
+                  sym = token.symbol;
+                  decimals = token.decimals;
+                }
+                transferHighlights.push({
+                  address,
+                  from: decoded._from === '0x0000000000000000000000000000000000000000' ? address : decoded._from,
+                  to: decoded._to,
+                  amount: new BigNumber(decoded._value).toFixed(),
+                  token: sym,
+                  decimals,
+                });
+              }
+            }
+          }
+
+          if (transferHighlights.length > 0) {
+            this.summary.push({
+              key: 'Token Transfers',
+              value: transferHighlights,
+              type: 'transfer-highlight',
+            });
+          }
       }
     },
     async loadClauses() {
@@ -288,7 +328,7 @@ export default {
     },
     async loadTransfers() {
       const { transfers } = await this.$api.transaction.getTransfers(this.network, this.txHash);
-      this.transfers.items = transfers.map((transfer) => {
+      this.transfers.items = transfers.map((transfer, index) => {
         return {
           from: transfer.sender,
           to: transfer.recipient,
@@ -298,6 +338,7 @@ export default {
             token: transfer.token.toString(),
             precision: 8,
           },
+          index: index + 1
         };
       });
     },

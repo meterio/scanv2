@@ -46,6 +46,7 @@ export default {
             precision: 4,
           },
           fullAddress: a.address,
+          mtrRank: a.mtrRank
         };
       });
       return { items, totalRows };

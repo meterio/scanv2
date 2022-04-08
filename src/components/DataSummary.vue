@@ -157,6 +157,16 @@
               <span v-if="item.type === 'status'">
                 <StatusTag :status="item.value"></StatusTag>
               </span>
+
+              <!-- holders -->
+              <span v-if="item.type === 'holders'">
+                {{ item.value | formatNumber }}
+              </span>
+
+              <!-- transfers -->
+              <span v-if="item.type === 'transfers'">
+                {{ item.value | formatNumber }}
+              </span>
             </b-col>
           </b-row>
         </b-col>
@@ -211,6 +221,8 @@
 import StatusTag from "@/components/StatusTag.vue";
 import AmountTag from "@/components/AmountTag.vue";
 import AddressLink from "@/components/AddressLink.vue";
+
+import { formatNum } from "@/utils";
 
 export default {
   components: { StatusTag, AddressLink, AmountTag },
@@ -281,6 +293,11 @@ export default {
       return "0x";
     },
   },
+  filters: {
+    formatNumber(val) {
+      return formatNum(val);
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -296,6 +313,7 @@ export default {
     padding: 8px 0;
   }
   .label {
+    font-size: 90%;
     color: #5c6f8c;
   }
 

@@ -374,7 +374,6 @@ export default {
           const index = String(t.method).indexOf("(");
           methodName = String(t.method).substring(0, index);
         }
-        console.log("methodName", methodName);
         return {
           txhashWithStatus: {
             hash: t.txHash,

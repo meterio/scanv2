@@ -47,6 +47,7 @@ export default {
             token: "MTRG",
           },
           fullAddress: a.address,
+          mtrgRank: a.mtrgRank
         };
       });
       return { items, totalRows };

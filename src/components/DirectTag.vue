@@ -1,6 +1,6 @@
 <template>
   <b-badge pill class="badge-status" :variant="status">
-    <span>{{ direct }}</span>
+    <span :title="direct">{{ computedTag }}</span>
   </b-badge>
 </template>
 
@@ -18,6 +18,13 @@ export default {
         return "grey";
       }
     },
+    computedTag() {
+      if (String(this.direct).length > 10) {
+        return String(this.direct).substring(0, 10) + '..';
+      } else {
+        return this.direct;
+      }
+    }
   },
 };
 </script>

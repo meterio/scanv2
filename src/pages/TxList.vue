@@ -41,9 +41,14 @@ export default {
         limit
       );
       const items = txs.map((tx) => {
+        let methodName = tx.method;
+        if (String(tx.method).includes("(")) {
+          const index = String(tx.method).indexOf("(");
+          methodName = String(tx.method).substring(0, index);
+        }
         return {
           txhash: tx.txHash,
-          methodName: tx.method,
+          methodName,
           blocknum: tx.block.number,
           from: tx.from,
           to: tx.to,

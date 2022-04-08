@@ -239,7 +239,6 @@ export default {
 .navbar-expand-lg .navbar-nav .nav-link {
   padding-right: 0.6rem !important;
   padding-left: 0.6rem !important;
-  font-weight: bold !important;
 }
 .m-bar {
   a {
