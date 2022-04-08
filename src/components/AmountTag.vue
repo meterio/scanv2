@@ -7,17 +7,17 @@
 </template>
 
 <script>
-import { fromWei } from "@/utils";
+import { fromWei } from '@/utils';
 export default {
-  name: "AmountTag",
+  name: 'AmountTag',
   props: {
     amount: {
       type: [String, Number],
-      default: "0",
+      default: '0',
     },
     token: {
       type: String,
-      default: "MTR",
+      default: 'MTR',
     },
     precision: {
       type: Number,
@@ -30,10 +30,10 @@ export default {
   },
   data() {
     return {
-      integer: "0",
-      mantissa: "",
-      shortMantissa: "",
-      text: "",
+      integer: '0',
+      mantissa: '',
+      shortMantissa: '',
+      text: '',
     };
   },
   created() {
@@ -49,24 +49,24 @@ export default {
   },
   methods: {
     init() {
-      const items = fromWei(this.amount, -1, "", this.decimals).split(".");
+      const items = fromWei(this.amount, -1, '', this.decimals).split('.');
       if (items.length == 1) {
         this.integer = items[0];
-        this.mantissa = "";
-        this.shortMantissa = "";
+        this.mantissa = '';
+        this.shortMantissa = '';
       } else {
-        this.integer = items[0] + ".";
+        this.integer = items[0] + '.';
         this.mantissa = items[1];
         if (this.precision < 0) {
           this.shortMantissa = items[1];
-          this.text = "";
+          this.text = '';
           return;
         } else if (items[1].length <= this.precision) {
           this.shortMantissa = items[1];
         } else {
-          this.shortMantissa = items[1].slice(0, this.precision) + "..";
+          this.shortMantissa = items[1].slice(0, this.precision) + '..';
         }
-        this.text = items.join(".");
+        this.text = items.join('.');
       }
     },
   },
@@ -87,5 +87,8 @@ export default {
 <style scoped lang="scss">
 .badge1 {
   font-size: 80% !important;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: rgba(1, 1, 1, 0.05);
 }
 </style>

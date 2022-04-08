@@ -530,22 +530,30 @@ export default {
     color: #77838f;
     background: rgba(119, 131, 143, 0.1);
     border-radius: 4px;
-    padding: 2px 4px;
-    margin-right: 6px;
+    padding: 2px 6px;
+    margin-right: 10px;
   }
+  .topic-row,
+  .data-row {
+    font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace !important;
+    span {
+      font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace !important;
+    }
+  }
+
   .topic-row,
   .data-row,
   .address-row,
   .amount-row {
     span {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     margin-top: 3px;
     margin-bottom: 5px;
   }
+
   .title-row {
-    font-size: 0.9rem;
-    font-weight: bold;
+    font-size: 0.85rem;
     margin-top: 5px;
     margin-bottom: 5px;
   }

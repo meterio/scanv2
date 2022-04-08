@@ -6,16 +6,16 @@
 
 <script>
 export default {
-  nanme: "DirectTag",
-  props: ["direct"],
+  nanme: 'DirectTag',
+  props: ['direct'],
   computed: {
     status() {
-      if (this.direct.toLowerCase() === "in") {
-        return "success";
-      } else if (this.direct.toLowerCase() === "out") {
-        return "warning";
+      if (this.direct.toLowerCase() === 'in') {
+        return 'in'; // 'success';
+      } else if (this.direct.toLowerCase() === 'out') {
+        return 'out'; //'warning';
       } else {
-        return "grey";
+        return 'grey';
       }
     },
     computedTag() {
@@ -24,16 +24,17 @@ export default {
       } else {
         return this.direct;
       }
-    }
+    },
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" >
 // badge
 .badge-status {
-  padding: 0.3rem 0.6rem !important;
+  padding: 0.3rem 0.1rem !important;
   font-size: 90% !important;
+  font-weight: normal !important;
 
   svg {
     margin-right: 0.2rem;
@@ -47,6 +48,14 @@ export default {
   &.badge-grey {
     color: #626c76;
     background-color: rgba(119, 131, 143, 0.12);
+  }
+  &.badge-in {
+    color: #00c9a7;
+    background: rgba(0, 201, 167, 0.1);
+  }
+  &.badge-out {
+    color: #f5ae67;
+    background: rgba(201, 167, 0, 0.1);
   }
 
   &.badge-warning {

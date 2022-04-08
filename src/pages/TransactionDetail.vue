@@ -94,7 +94,7 @@ export default {
       },
       transfers: {
         fields: [
-          { key : 'index', label: 'Index' },
+          { key: 'index', label: 'Index' },
           { key: 'from', label: 'Sender' },
           { key: 'to', label: 'Recipient' },
           { key: 'amountStr', label: 'Amount' },
@@ -188,9 +188,13 @@ export default {
       const res = await this.$api.transaction.getTxDetail(this.network, this.txHash);
       const { tx } = res;
       if (!!tx) {
+        this.tabs = [
+          { name: tx.clauseCount > 0 ? `Clauses (${tx.clauseCount})` : 'Clauses' },
+          { name: tx.transferCount > 0 ? `Transfers (${tx.transferCount})` : 'Transfers' },
+          { name: tx.eventCount > 0 ? `Events (${tx.eventCount})` : 'Events' },
+        ];
         this.summary = [
           { key: 'Hash', value: tx.hash },
-          { key: 'ChainTag', value: tx.chainTag },
           {
             key: 'Status',
             value: tx.reverted ? `reverted ( ${tx.vmError.error} )` : 'success',
@@ -200,58 +204,62 @@ export default {
             key: 'Block',
             block: tx.block.number,
             value: this.fromNow(tx.block.timestamp),
+            time: this.formatTime(tx.block.timestamp),
             type: 'block-link-with-note',
           },
-
+          { key: 'ChainTag', value: tx.chainTag },
           { key: 'Origin', value: tx.origin, type: 'address-link' },
           { key: 'Fee', value: tx.paid, type: 'amount', token: 'MTR' },
-          { key: 'BlockRef', value: tx.blockRef },
+          {
+            key: 'BlockRef',
+            value: tx.blockRef,
+            type: 'blockRef',
+            ref: new BigNumber(tx.blockRef.substring(0, 10)).toFixed(),
+          },
           { key: 'Expiration', value: tx.expiration },
           { key: 'GasPriceCoef', value: tx.gasPriceCoef },
           { key: 'Gas Used/Limit', value: `${tx.gasUsed} / ${tx.gas}` },
           { key: 'Nonce', value: new BigNumber(tx.nonce).toFixed() },
-
-          { key: 'Clause Count', value: tx.clauseCount },
         ];
 
-          let transferHighlights = [];
-          const knownTokens = this.$store.state.dom.knownTokens;
-          for (const ev of tx.events) {
-            const { topics, address, data } = ev;
-            if (topics && topics.length > 1) {
-              const topic0 = topics[0];
+        let transferHighlights = [];
+        const knownTokens = this.$store.state.dom.knownTokens;
+        for (const ev of tx.events) {
+          const { topics, address, data } = ev;
+          if (topics && topics.length > 1) {
+            const topic0 = topics[0];
 
-              if (topic0 === TransferABI.signature) {
-                const decoded = TransferABI.decode(data, topics);
-                let token;
-                if (address in knownTokens) {
-                  token = knownTokens[address];
-                }
-                let sym = 'ERC20';
-                let decimals = 18;
-                if (token) {
-                  sym = token.symbol;
-                  decimals = token.decimals;
-                }
-                transferHighlights.push({
-                  address,
-                  from: decoded._from === '0x0000000000000000000000000000000000000000' ? address : decoded._from,
-                  to: decoded._to,
-                  amount: new BigNumber(decoded._value).toFixed(),
-                  token: sym,
-                  decimals,
-                });
+            if (topic0 === TransferABI.signature) {
+              const decoded = TransferABI.decode(data, topics);
+              let token;
+              if (address in knownTokens) {
+                token = knownTokens[address];
               }
+              let sym = 'ERC20';
+              let decimals = 18;
+              if (token) {
+                sym = token.symbol;
+                decimals = token.decimals;
+              }
+              transferHighlights.push({
+                address,
+                from: decoded._from === '0x0000000000000000000000000000000000000000' ? address : decoded._from,
+                to: decoded._to,
+                amount: new BigNumber(decoded._value).toFixed(),
+                token: sym,
+                decimals,
+              });
             }
           }
+        }
 
-          if (transferHighlights.length > 0) {
-            this.summary.push({
-              key: 'Token Transfers',
-              value: transferHighlights,
-              type: 'transfer-highlight',
-            });
-          }
+        if (transferHighlights.length > 0) {
+          this.summary.push({
+            key: 'Token Transfers',
+            value: transferHighlights,
+            type: 'transfer-highlight',
+          });
+        }
       }
     },
     async loadClauses() {
@@ -262,30 +270,15 @@ export default {
         let datas = [];
         let abiStr = undefined;
         let decoded = undefined;
+        let tail = clause.data ? clause.data.substring(2) : '';
         if (isSE) {
           decoded = ScriptEngine.decodeScriptData(clause.data);
+          delete decoded['payload'];
           abiStr = decoded.action;
-          let temp = clause.data.substring(2);
-          while (temp.length >= 64) {
-            datas.push('0x' + temp.substring(0, 64));
-            temp = temp.substring(64);
-          }
-          if (temp.length > 0) {
-            datas.push('0x' + temp);
-          }
         } else {
-          if (clause.data.length < 10) {
-            datas.push(clause.data);
-          } else {
+          if (clause.data && clause.data.length >= 10) {
             selector = clause.data.substring(0, 10);
-            let temp = clause.data.substring(10);
-            while (temp.length >= 64) {
-              datas.push('0x' + temp.substring(0, 64));
-              temp = temp.substring(64);
-            }
-            if (temp.length > 0) {
-              datas.push('0x' + temp);
-            }
+            tail = clause.data.substring(10);
           }
 
           const { abi, name, data, value } = clause;
@@ -307,6 +300,14 @@ export default {
             abiStr = `${d.name}( ${params.join(', ')} )`;
           }
         }
+
+        while (tail.length >= 64) {
+          datas.push('0x' + tail.substring(0, 64));
+          tail = tail.substring(64);
+        }
+        if (tail.length > 0) {
+          datas.push('0x' + tail);
+        }
         return {
           clause: {
             data: clause.data,
@@ -315,7 +316,6 @@ export default {
               type: 'amount',
               amount: bigNum(clause.value),
               token: clause.token,
-              precision: 6,
             },
             abiStr,
             selector,
@@ -338,7 +338,7 @@ export default {
             token: transfer.token.toString(),
             precision: 8,
           },
-          index: index + 1
+          index: index + 1,
         };
       });
     },
@@ -640,5 +640,8 @@ export default {
   .vjs-value {
     font-size: 12px !important;
   }
+}
+.nav-item {
+  margin-right: 15px;
 }
 </style>

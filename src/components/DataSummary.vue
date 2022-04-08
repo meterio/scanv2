@@ -29,7 +29,7 @@
                   }"
                   >#{{ item.block }}</router-link
                 >
-                <span class="value"> ({{ item.value }})</span>
+                <span class="value" :title="item.time"> ({{ item.value }})</span>
               </span>
 
               <!-- block-link -->
@@ -51,10 +51,7 @@
                   >#{{ item.start }}</b-link
                 >
                 <span class="mx-1">-</span>
-                <b-link
-                  href="#"
-                  v-if="item.end"
-                  :to="{ name: 'blockDetail', params: { revision: item.end } }"
+                <b-link href="#" v-if="item.end" :to="{ name: 'blockDetail', params: { revision: item.end } }"
                   >#{{ item.end }}</b-link
                 >
                 <span v-else>active</span>
@@ -62,26 +59,16 @@
 
               <!-- epoch-range -->
               <div v-if="item.type === 'epoch-range'">
-                <b-link
-                  href="#"
-                  :to="{ name: 'epochDetail', params: { epoch: item.start } }"
-                  >{{ item.start }}</b-link
-                >
+                <b-link href="#" :to="{ name: 'epochDetail', params: { epoch: item.start } }">{{ item.start }}</b-link>
                 <span class="mx-1">-</span>
-                <b-link
-                  href="#"
-                  v-if="item.end"
-                  :to="{ name: 'epochDetail', params: { epoch: item.end } }"
+                <b-link href="#" v-if="item.end" :to="{ name: 'epochDetail', params: { epoch: item.end } }"
                   >{{ item.end }}
                 </b-link>
                 <span v-else>{{ item.start + 24 }}</span>
               </div>
 
               <!-- address-link -->
-              <address-link
-                :address="item.value"
-                v-if="item.type === 'address-link'"
-              />
+              <address-link :address="item.value" v-if="item.type === 'address-link'" />
 
               <!-- address-or-name-link -->
               <router-link
@@ -105,6 +92,16 @@
               <!-- duration -->
               <span v-if="item.type === 'duration'">
                 <span>{{ formatDuration(item.value) }}</span>
+              </span>
+
+              <!-- blockRef -->
+              <span v-if="item.type === 'blockRef'">
+                <span>{{ item.value }}</span>
+                <span class="ml-2"
+                  ><b-link href="#" :to="{ name: 'blockDetail', params: { revision: item.ref } }"
+                    >#{{ item.ref }}</b-link
+                  ></span
+                >
               </span>
               <!-- balance -->
               <span v-if="item.type === 'balance'">
@@ -135,11 +132,7 @@
 
               <!-- status -->
               <span v-if="item.type === 'transfer-highlight'">
-                <div
-                  class="d-flex justify-content-start"
-                  :key="index"
-                  v-for="(row, index) in item.value.slice(0, 10)"
-                >
+                <div class="d-flex justify-content-start" :key="index" v-for="(row, index) in item.value.slice(0, 10)">
                   <address-link class="mr-3" short :address="row.from" />
                   <span class="mr-3">to</span>
                   <address-link class="mr-3" short :address="row.to" />
@@ -218,15 +211,15 @@
 </template>
 
 <script>
-import StatusTag from "@/components/StatusTag.vue";
-import AmountTag from "@/components/AmountTag.vue";
-import AddressLink from "@/components/AddressLink.vue";
+import StatusTag from '@/components/StatusTag.vue';
+import AmountTag from '@/components/AmountTag.vue';
+import AddressLink from '@/components/AddressLink.vue';
 
-import { formatNum } from "@/utils";
+import { formatNum } from '@/utils';
 
 export default {
   components: { StatusTag, AddressLink, AmountTag },
-  name: "DataList",
+  name: 'DataList',
   props: {
     title: {
       type: String,
@@ -247,7 +240,7 @@ export default {
     },
     verifyStatus: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   data() {
@@ -264,13 +257,13 @@ export default {
       return this.wide ? 9 : 10;
     },
     contractAddress() {
-      return this.title.split(":")[1].trim();
+      return this.title.split(':')[1].trim();
     },
     computedData() {
-      console.log("data summary", this.data);
+      console.log('data summary', this.data);
       const temp = [];
       for (const obj of this.data) {
-        if (obj.key !== "owner" && obj.key !== "creationTxHash") {
+        if (obj.key !== 'owner' && obj.key !== 'creationTxHash') {
           temp.push(obj);
         }
       }
@@ -278,26 +271,26 @@ export default {
     },
     computedOwner() {
       for (const obj of this.data) {
-        if (obj.key === "owner") {
+        if (obj.key === 'owner') {
           return obj.value;
         }
       }
-      return "0x";
+      return '0x';
     },
     computedCreationTxHash() {
       for (const obj of this.data) {
-        if (obj.key === "creationTxHash") {
+        if (obj.key === 'creationTxHash') {
           return obj.value;
         }
       }
-      return "0x";
+      return '0x';
     },
   },
   filters: {
     formatNumber(val) {
       return formatNum(val);
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

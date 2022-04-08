@@ -7,36 +7,37 @@
 
 <script>
 export default {
-  nanme: "StatusTag",
-  props: ["status"],
+  nanme: 'StatusTag',
+  props: ['status'],
   computed: {
     computedStatus() {
       if (String(this.status).includes('success')) {
-        return 'success'
+        return 'success';
       } else if (String(this.status).includes('reverted')) {
-        return 'reverted'
+        return 'reverted';
       } else {
-        return ''
+        return '';
       }
     },
     computedIcon() {
       if (this.computedStatus === 'success') {
-        return 'check'
+        return 'check';
       } else if (this.computedStatus === 'reverted') {
-        return 'x'
+        return 'x';
       } else {
-        return null
+        return null;
       }
-    }
+    },
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" >
 // badge
 .badge-status {
-  padding: 0.4rem 0.8rem !important;
+  padding: 0.3rem 0.5rem !important;
   font-size: 90% !important;
+  font-weight: normal;
 
   svg {
     margin-right: 0.2rem;
