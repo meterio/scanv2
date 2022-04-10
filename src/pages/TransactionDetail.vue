@@ -266,38 +266,12 @@ export default {
       const { clauses } = await this.$api.transaction.getClauses(this.network, this.txHash);
       this.clauses.items = clauses.map((clause, index) => {
         const isSE = ScriptEngine.IsScriptEngineData(clause.data);
-        let selector = undefined;
         let datas = [];
-        let abiStr = undefined;
-        let decoded = undefined;
         let tail = clause.data ? clause.data.substring(2) : '';
-        if (isSE) {
-          decoded = ScriptEngine.decodeScriptData(clause.data);
-          delete decoded['payload'];
-          abiStr = decoded.action;
-        } else {
+        const { selector, decoded, abi } = clause;
+        if (!isSE) {
           if (clause.data && clause.data.length >= 10) {
-            selector = clause.data.substring(0, 10);
             tail = clause.data.substring(10);
-          }
-
-          const { abi, name, data, value } = clause;
-          if (abi) {
-            const iface = new ethers.utils.Interface([abi]);
-            const d = iface.parseTransaction({ data, value });
-            console.log(d);
-            decoded = {};
-            let params = [];
-            for (const [index, input] of abi.inputs.entries()) {
-              params.push(`${input.type} ${input.name}`);
-              const val = d.args[index];
-              if (ethers.utils.BigNumber.isBigNumber(val)) {
-                decoded[input.name] = val.toString();
-              } else {
-                decoded[input.name] = val;
-              }
-            }
-            abiStr = `${d.name}( ${params.join(', ')} )`;
           }
         }
 
@@ -317,7 +291,7 @@ export default {
               amount: bigNum(clause.value),
               token: clause.token,
             },
-            abiStr,
+            abi,
             selector,
             datas,
           },
@@ -345,30 +319,8 @@ export default {
     async loadEvents() {
       const { events } = await this.$api.transaction.getEvents(this.network, this.txHash);
 
-      let abiStr = undefined;
       this.events.items = events.map((event, i) => {
-        const { name, topics, data } = event;
-        let decoded = undefined;
-        if (event.abi) {
-          let abi = event.abi;
-          abi.inputs = abi.inputs.map((i) => ({ ...i, indexed: false }));
-          const topicsCount = event.topics.length - 1;
-          for (let i = 0; i < topicsCount; i++) {
-            abi.inputs[i].indexed = true;
-          }
-
-          const iface = new ethers.utils.Interface([abi]);
-          const log = iface.parseLog(event);
-          console.log(log);
-
-          decoded = {};
-          let params = [];
-          for (const input of abi.inputs) {
-            params.push(`${input.indexed ? 'indexed' : ''} ${input.type} ${input.name}`);
-            decoded[input.name] = log.values[input.name].toString();
-          }
-          abiStr = `${log.name} ( ${params.join(', ')} )`;
-        }
+        const { name, topics, data, decoded, abi } = event;
         let datas = [];
         if (data && data != '0x') {
           let temp = data.substring(2);
@@ -390,7 +342,6 @@ export default {
             data,
             datas,
             abi,
-            abiStr,
           },
           decoded,
         };

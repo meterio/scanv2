@@ -254,7 +254,7 @@
                 :decimals="data.value.amount.decimals || 18"
               />
             </div>
-            <div class="title-row" v-if="data.value.abiStr">Func: {{ data.value.abiStr }}</div>
+            <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
             <div class="title-row" v-if="data.value.selector > 0">MethodID: {{ data.value.selector }}</div>
 
             <div v-for="(data, index) in data.value.datas" :key="index" class="topic-row">
@@ -278,7 +278,7 @@
         <template v-slot:cell(event)="data">
           <div class="dt-row breakable">
             <div class="address-row"><span>Address: </span><address-link :address="data.value.address" /></div>
-            <div class="title-row" v-if="data.value.abiStr">Event: {{ data.value.abiStr }}</div>
+            <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
             <div class="title-row" v-if="data.value.topics.length > 0">Topics:</div>
             <div v-for="(topic, index) in data.value.topics" :key="index" class="topic-row">
               <span class="index">{{ index }}</span>
