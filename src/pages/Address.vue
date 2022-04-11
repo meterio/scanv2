@@ -2,8 +2,8 @@
 div
   .text-center.text-primary(v-if="isContract === null")
     b-spinner.my-5
-  ContractAddress(v-else-if="isContract", :address-info="addressInfo")
-  UserAddress(v-else, :address-info="addressInfo")
+  ContractAddress(v-else-if="isContract", :address-info="addressInfo" :contract-data-count="contractDataCount")
+  UserAddress(v-else, :address-info="addressInfo" :user-data-count="userDataCount")
 </template>
 
 <script>
@@ -18,19 +18,33 @@ export default {
   data() {
     return {
       isContract: null,
-      isERC20: false,
+      tokenType: '',
       address: "0x",
       account: {},
       summary: [],
       verified: false, // only for contract
       files: [], // only for contract
+      contractDataCount: {
+        txCount: 0,
+        transfersCount: 0,
+        holdersCount: 0
+      },
+      userDataCount: {
+        txCount: 0,
+        tokenCount: 0,
+        erc20TxCount: 0,
+        erc721TxCount: 0,
+        bidCount: 0,
+        proposedCount: 0,
+        bucketCount: 0
+      }
     };
   },
   computed: {
     addressInfo() {
       return {
         isContract: this.isContract,
-        isERC20: this.isERC20,
+        tokenType: this.tokenType,
         address: this.address,
         summary: this.summary,
         verified: this.verified,
@@ -56,9 +70,9 @@ export default {
         const { account } = res;
         console.log("account:", account);
         this.isContract = account.type !== undefined;
-        this.isERC20 = account.type === "ERC20";
+        this.tokenType = account.type;
         console.log("iscontract:", this.isContract);
-        console.log("erc20:", this.isERC20);
+        console.log("token type:", this.tokenType);
         if (this.address === "0x0000000000000000000000000000000000000000") {
           if (new BigNumber(account.mtrgBalance).isLessThan(0)) {
             account.mtrgBalance = "0";
@@ -116,7 +130,7 @@ export default {
         }
         if (account.tokenName && account.tokenSymbol) {
           this.summary.push({
-            key: "ERC20 Token",
+            key: `${this.tokenType} Token`,
             value: `${account.tokenName || "Unnamed Token"} (${
               account.tokenSymbol || "ERC20"
             })`,
@@ -166,6 +180,21 @@ export default {
             key: "creationTxHash",
             value: account.creationTxHash,
           });
+          this.contractDataCount = {
+            txCount: account.txCount,
+            transfersCount: account.transfersCount,
+            holdersCount: account.holdersCount
+          }
+        } else {
+          this.userDataCount = {
+            txCount: account.txCount,
+            tokenCount: account.tokenCount,
+            erc20TxCount: account.erc20TxCount,
+            erc721TxCount: account.erc721TxCount,
+            bidCount: account.bidCount,
+            proposedCount: account.proposedCount,
+            bucketCount: account.bucketCount
+          }
         }
       } catch (e) {
         console.log(e);
