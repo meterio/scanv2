@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       isContract: null,
-      isERC20: false,
+      tokenType: '',
       address: "0x",
       account: {},
       summary: [],
@@ -44,7 +44,7 @@ export default {
     addressInfo() {
       return {
         isContract: this.isContract,
-        isERC20: this.isERC20,
+        tokenType: this.tokenType,
         address: this.address,
         summary: this.summary,
         verified: this.verified,
@@ -70,9 +70,9 @@ export default {
         const { account } = res;
         console.log("account:", account);
         this.isContract = account.type !== undefined;
-        this.isERC20 = account.type === "ERC20";
+        this.tokenType = account.type;
         console.log("iscontract:", this.isContract);
-        console.log("erc20:", this.isERC20);
+        console.log("token type:", this.tokenType);
         if (this.address === "0x0000000000000000000000000000000000000000") {
           if (new BigNumber(account.mtrgBalance).isLessThan(0)) {
             account.mtrgBalance = "0";
@@ -130,7 +130,7 @@ export default {
         }
         if (account.tokenName && account.tokenSymbol) {
           this.summary.push({
-            key: "ERC20 Token",
+            key: `${this.tokenType} Token`,
             value: `${account.tokenName || "Unnamed Token"} (${
               account.tokenSymbol || "ERC20"
             })`,

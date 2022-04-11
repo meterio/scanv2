@@ -285,8 +285,8 @@
               <span>{{ topic }}</span>
             </div>
 
-            <div class="mt-3">
-              <h6 class="title-row" v-if="data.value.datas.length > 0">Data:</h6>
+            <div v-if="data.value.datas && data.value.datas.length" class="mt-3">
+              <h6 class="title-row">Data:</h6>
               <div v-for="(data, index) in data.value.datas" :key="index" class="data-row">
                 <span class="index">{{ index }}</span>
                 <span>{{ data }}</span>

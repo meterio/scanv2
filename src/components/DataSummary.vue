@@ -136,14 +136,30 @@
                   <address-link class="mr-3" short :address="row.from" />
                   <span class="mr-3">to</span>
                   <address-link class="mr-3" short :address="row.to" />
-                  <AmountTag
-                    :amount="row.amount"
-                    :token="row.token"
-                    :precision="row.decimals"
-                    :decimals="row.decimals"
-                  />
+                  <template v-if="row.type === 'ERC20'">
+                    <AmountTag
+                      :amount="row.amount"
+                      :token="row.symbol"
+                      :precision="row.decimals"
+                      :decimals="row.decimals"
+                    />
+                  </template>
+                  <template v-else>
+                    <div>
+                      <div v-for="(id, indx) in row.ids" :key="id">
+                        <span class="mr-3">[{{ id }}]</span>
+                        <span>
+                          <AmountTag
+                            :amount="row.values[indx]"
+                            :token="row.symbol"
+                            :precision="0"
+                            :decimals="0"
+                          />
+                        </span>
+                      </div>
+                    </div>
+                  </template>
                 </div>
-                <div v-if="item.value.length > 10">...</div>
               </span>
 
               <!-- status -->

@@ -55,7 +55,7 @@ export default {
       default() {
         return {
           isContract: true,
-          isERC20: false,
+          tokenType: '',
           address: "0x",
           summary: [],
         };
@@ -67,8 +67,11 @@ export default {
     }
   },
   computed: {
-    isERC20() {
-      return this.addressInfo.isERC20;
+    isToken() {
+      if (['ERC20', 'ERC721', 'ERC1155'].includes(this.addressInfo.tokenType)) {
+        return true
+      }
+      return false
     },
     address() {
       return this.addressInfo.address;
@@ -80,14 +83,14 @@ export default {
       return this.addressInfo.files;
     },
     title() {
-      if (this.isERC20) {
+      if (this.isToken) {
         return `Token: ${this.address}`;
       } else {
         return `Contract: ${this.address}`;
       }
     },
     tabs() {
-      if (this.isERC20) {
+      if (this.isToken) {
         return [
           { name: this.contractDataCount.transfersCount > 0 ? `Transfers(${this.contractDataCount.transfersCount})` : 'Transfers' },
           { name: this.contractDataCount.holdersCount > 0 ? `Holders(${this.contractDataCount.holdersCount})` : 'Holders' },
@@ -222,10 +225,9 @@ export default {
       this.getLoadTarget(val);
     },
     getLoadTarget(val) {
-      if (this.isERC20) {
+      if (this.isToken) {
         switch (val) {
           case 0:
-            console.log("SELECT TRANSFER");
             this.loadTarget = "transfers";
             break;
           case 1:
