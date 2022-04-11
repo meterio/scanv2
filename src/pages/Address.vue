@@ -2,8 +2,8 @@
 div
   .text-center.text-primary(v-if="isContract === null")
     b-spinner.my-5
-  ContractAddress(v-else-if="isContract", :address-info="addressInfo")
-  UserAddress(v-else, :address-info="addressInfo")
+  ContractAddress(v-else-if="isContract", :address-info="addressInfo" :contract-data-count="contractDataCount")
+  UserAddress(v-else, :address-info="addressInfo" :user-data-count="userDataCount")
 </template>
 
 <script>
@@ -24,6 +24,20 @@ export default {
       summary: [],
       verified: false, // only for contract
       files: [], // only for contract
+      contractDataCount: {
+        txCount: 0,
+        transfersCount: 0,
+        holdersCount: 0
+      },
+      userDataCount: {
+        txCount: 0,
+        tokenCount: 0,
+        erc20TxCount: 0,
+        erc721TxCount: 0,
+        bidCount: 0,
+        proposedCount: 0,
+        bucketCount: 0
+      }
     };
   },
   computed: {
@@ -166,6 +180,21 @@ export default {
             key: "creationTxHash",
             value: account.creationTxHash,
           });
+          this.contractDataCount = {
+            txCount: account.txCount,
+            transfersCount: account.transfersCount,
+            holdersCount: account.holdersCount
+          }
+        } else {
+          this.userDataCount = {
+            txCount: account.txCount,
+            tokenCount: account.tokenCount,
+            erc20TxCount: account.erc20TxCount,
+            erc721TxCount: account.erc721TxCount,
+            bidCount: account.bidCount,
+            proposedCount: account.proposedCount,
+            bucketCount: account.bucketCount
+          }
         }
       } catch (e) {
         console.log(e);

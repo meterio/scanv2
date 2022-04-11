@@ -43,18 +43,28 @@ export default {
         };
       },
     },
+    userDataCount: {
+      type: Object,
+      required: true
+    }
   },
   computed: {
     title() {
-      return `Address: ${this.addressInfo.address}`;
+      return `Address: ${this.address}`;
     },
     tabs() {
-      return this.address_tabs;
+      return [
+        { name: this.userDataCount.txCount > 0 ? `Transactions(${this.userDataCount.txCount})` : 'Transactions' },
+        { name: this.userDataCount.tokenCount > 0 ? `Tokens(${this.userDataCount.tokenCount})` : 'Tokens' },
+        { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txns(${this.userDataCount.erc20TxCount})` : 'ERC20 Txns' },
+        { name: this.userDataCount.erc721TxCount > 0 ? `ERC721 Txns(${this.userDataCount.erc721TxCount})` : 'ERC721 Txns' },
+        { name: this.userDataCount.bidCount > 0 ? `Auction Bids(${this.userDataCount.bidCount})` : 'Auction Bids' },
+        { name: this.userDataCount.proposedCount > 0 ? `Proposed Blocks(${this.userDataCount.proposedCount})` : 'Proposed Blocks' },
+        { name: this.userDataCount.bucketCount > 0 ? `Buckets(${this.userDataCount.bucketCount})` : 'Buckets' },
+      ];
     },
     fields() {
       switch (this.loadTarget) {
-        // case "transfers":
-        // return this.transfers.fields;
         case "txs":
           return this.txs.fields;
         case "erc20Txs":
@@ -76,8 +86,6 @@ export default {
     },
     pagination() {
       switch (this.loadTarget) {
-        // case "transfers":
-        // return this.transfers.pagination;
         case "txs":
           return this.txs.pagination;
         case "erc20Txs":
@@ -99,8 +107,6 @@ export default {
     },
     loadItems() {
       switch (this.loadTarget) {
-        // case "transfers":
-        // return this.loadTransfers;
         case "txs":
           return this.loadTxs;
         case "erc20Txs":
@@ -123,16 +129,6 @@ export default {
   },
   data() {
     return {
-      address_tabs: [
-        // { name: "Transfers" },
-        { name: "Transactions" },
-        { name: "Tokens" },
-        { name: "ERC20 Txns" },
-        { name: "ERC721 Txns" },
-        { name: "Auction Bids" },
-        { name: "Proposed Blocks" },
-        { name: "Buckets" },
-      ],
       tabValue: 0,
       isToken: false,
       address: "0x",

@@ -396,6 +396,8 @@ export default {
         };
       });
     },
+    // old clauses transfers events
+    //#region
     // async init1() {
     //   const { hash } = this.$route.params;
     //   let start = new Date();
@@ -623,6 +625,7 @@ export default {
     //     });
     //   }
     // },
+    //#endregion
   },
 };
 </script>

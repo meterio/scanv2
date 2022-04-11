@@ -61,6 +61,10 @@ export default {
         };
       },
     },
+    contractDataCount: {
+      type: Object,
+      required: true,
+    }
   },
   computed: {
     isERC20() {
@@ -84,9 +88,16 @@ export default {
     },
     tabs() {
       if (this.isERC20) {
-        return this.token_tabs;
+        return [
+          { name: this.contractDataCount.transfersCount > 0 ? `Transfers(${this.contractDataCount.transfersCount})` : 'Transfers' },
+          { name: this.contractDataCount.holdersCount > 0 ? `Holders(${this.contractDataCount.holdersCount})` : 'Holders' },
+          { name: "Contract" },
+        ];
       }
-      return this.contract_tabs;
+      return [
+        { name: this.contractDataCount.txCount > 0 ? `Transactions(${this.contractDataCount.txCount})` : 'Transactions' },
+        { name: "Contract" }
+      ];
     },
     fields() {
       switch (this.loadTarget) {
@@ -134,12 +145,6 @@ export default {
       filesLoading: false,
       // verifyStatus: null,
       // files: [],
-      contract_tabs: [{ name: "Transactions" }, { name: "Contract" }],
-      token_tabs: [
-        { name: "Transfers" },
-        { name: "Holders" },
-        { name: "Contract" },
-      ],
       tabValue: 0,
       loadTarget: "transfers",
       holders: {
