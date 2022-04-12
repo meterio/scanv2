@@ -104,9 +104,13 @@ export default {
       let items = [];
       if (res.block.txSummaries) {
         items = res.block.txSummaries.map((tx) => {
+          let method = tx.method;
+          if (method === "0xffffffff") {
+            method = 'scriptEngine'
+          }
           return {
             hash: tx.hash,
-            method: tx.method,
+            method,
             amount: {
               type: "amount",
               amount: tx.totalClauseAmount,
