@@ -55,7 +55,7 @@ export default {
         pagination: { show: true, align: "center", perPage: 10 },
         fields: [
           { key: "hash", label: "Hash" },
-          { key: "type", label: "Type" },
+          { key: "method", label: "Method" },
           { key: "amount", label: "Amount" },
           { key: "fee", label: "Fee" },
           { key: "clauseCount", label: "nClause" },
@@ -106,7 +106,7 @@ export default {
         items = res.block.txSummaries.map((tx) => {
           return {
             hash: tx.hash,
-            type: tx.type,
+            method: tx.method,
             amount: {
               type: "amount",
               amount: tx.totalClauseAmount,

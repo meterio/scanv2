@@ -225,7 +225,14 @@ export default {
         if (tx.tokenTransfers && tx.tokenTransfers.length > 0) {
           this.summary.push({
             key: 'Token Transfers',
-            value: tx.tokenTransfers,
+            value: tx.tokenTransfers.map(t => {
+              return {
+                ...t,
+                type: 'ERC721',
+                ids: [721],
+                values: [1]
+              }
+            }),
             type: 'transfer-highlight',
           });
         }
@@ -234,7 +241,7 @@ export default {
     async loadClauses() {
       const { clauses } = await this.$api.transaction.getClauses(this.network, this.txHash);
       this.clauses.items = clauses.map((clause, index) => {
-        const { abi, selector, to, token, data, datas, value, decoded } = clause;
+        const { abi, methodId, to, token, data, datas, value, decoded } = clause;
 
         return {
           clause: {
@@ -246,7 +253,7 @@ export default {
               token: token,
             },
             abi,
-            selector,
+            methodId,
             datas,
           },
           decoded,

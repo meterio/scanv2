@@ -48,6 +48,7 @@ axios.interceptors.response.use(
   },
   // 服务器状态码不是200的情况
   (error) => {
+    return error;
     // if (error.response.status) {
     //   switch (error.response.status) {
     //     // 401: 未登录
@@ -121,13 +122,15 @@ export function get(network, url, params) {
       .then((res) => {
         // get data success
         console.log(res)
-        if (res.data) {
+        if (res && res.data) {
           resolve(res.data);
+        } else {
+          resolve(res)
         }
       })
       .catch((err) => {
         console.log(err);
-        reject(err.data);
+        reject(err);
       });
   });
 }

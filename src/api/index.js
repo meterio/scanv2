@@ -11,6 +11,7 @@ import epoch from "./epoch";
 import known from "./known";
 import verify from "./verify";
 import token from "./token";
+import contract from "./contract";
 
 export default {
   block,
@@ -26,4 +27,5 @@ export default {
   known,
   verify,
   token,
+  contract,
 };

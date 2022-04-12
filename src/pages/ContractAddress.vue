@@ -5,7 +5,8 @@
     :data="addressInfo.summary",
     wide,
     isContract,
-    :verifyStatus="verified"
+    :verified="verified"
+    :verifiedDesc="verifiedDesc"
   )
 
   b-container.summary
@@ -21,7 +22,7 @@
         nav-tabs.px-0(
           :tabs="tabs",
           :value="tabValue",
-          :verifyStatus="verified",
+          :verified="verified",
           @changeTab="navTabChange"
         )
       div(slot="otherData")
@@ -79,8 +80,8 @@ export default {
     verified() {
       return this.addressInfo.verified;
     },
-    files() {
-      return this.addressInfo.files;
+    verifiedDesc() {
+      return this.addressInfo.verifiedDesc;
     },
     title() {
       if (this.isToken) {
@@ -146,8 +147,7 @@ export default {
   data() {
     return {
       filesLoading: false,
-      // verifyStatus: null,
-      // files: [],
+      files: [],
       tabValue: 0,
       loadTarget: "transfers",
       holders: {
@@ -156,7 +156,6 @@ export default {
           { key: "rank", label: "Rank" },
           { key: "fullAddress", label: "Address" },
           { key: "balance", label: "Balance" },
-          // { key: 'percentage', label: 'Percentage' },
         ],
       },
       txs: {
@@ -197,26 +196,19 @@ export default {
   },
   watch: {
     address() {
-      this.navTabChange(0);
+      this.getContractFiles();
     },
   },
+  created() {
+    this.getLoadTarget();
+    this.getContractFiles();
+  },
   methods: {
-    async getVerifyStatus() {
+    async getContractFiles() {
       this.filesLoading = true;
-      const data = {
-        address: this.address,
-      };
-      const filesRes = await this.$api.verify.files(this.network, data);
-      let verifyStatus = "not find";
-      if (filesRes.data) {
-        if (filesRes.data.status === "partial") {
-          verifyStatus = "partial";
-        } else {
-          verifyStatus = "perfect";
-        }
-        this.files = filesRes.data.files;
-      }
-      this.verifyStatus = verifyStatus;
+      const { files } = await this.$api.contract.getContractFiles(this.network, this.address);
+      this.files = files;
+
       this.filesLoading = false;
     },
     navTabChange(val) {

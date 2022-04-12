@@ -23,9 +23,9 @@ export default {
       type: Number,
       default: 0,
     },
-    verifyStatus: {
-      type: String,
-      default: "",
+    verified: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -64,10 +64,7 @@ export default {
       });
     },
     isShowCheck(name) {
-      return (
-        name === "Contract" &&
-        (this.verifyStatus === "perfect" || this.verifyStatus === "partial")
-      );
+      return name === "Contract" && this.verified;
     },
   },
 };

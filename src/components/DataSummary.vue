@@ -147,15 +147,7 @@
                   <template v-else>
                     <div>
                       <div v-for="(id, indx) in row.ids" :key="id">
-                        <span class="mr-3">[{{ id }}]</span>
-                        <span>
-                          <AmountTag
-                            :amount="row.values[indx]"
-                            :token="row.symbol"
-                            :precision="0"
-                            :decimals="0"
-                          />
-                        </span>
+                        <span class="mr-3">{{ `For ${row.type} Token ID [${id}] ${row.values[indx]} ${row.symbol}` }}</span>
                       </div>
                     </div>
                   </template>
@@ -209,11 +201,8 @@
               <span class="label">Verification:</span>
             </b-col>
             <b-col sm="12" :md="contentCols">
-              <template v-if="verifyStatus === 'perfect'">
-                <span>Contract Source Code and Metadata Fully Verified</span>
-              </template>
-              <template v-else-if="verifyStatus === 'partial'">
-                <span>Contract Source Code Verified</span>
+              <template v-if="verified">
+                <span>{{ computedVerifiedDesc }}</span>
               </template>
               <template v-else>
                 <span>Not verified yet.</span>
@@ -254,10 +243,14 @@ export default {
       type: Boolean,
       default: false,
     },
-    verifyStatus: {
-      type: String,
-      default: '',
+    verified: {
+      type: Boolean,
+      default: false,
     },
+    verifiedDesc: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {};
@@ -301,6 +294,13 @@ export default {
       }
       return '0x';
     },
+    computedVerifiedDesc() {
+      if (this.verifiedDesc === 'perfect' || this.verifiedDesc === 'full') {
+        return 'Contract Source Code and Metadata Fully Verified'
+      } else {
+        return 'Contract Source Code Verified'
+      }
+    }
   },
   filters: {
     formatNumber(val) {

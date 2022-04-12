@@ -23,7 +23,7 @@ export default {
       account: {},
       summary: [],
       verified: false, // only for contract
-      files: [], // only for contract
+      verifiedDesc: '', // only for contract
       contractDataCount: {
         txCount: 0,
         transfersCount: 0,
@@ -48,7 +48,7 @@ export default {
         address: this.address,
         summary: this.summary,
         verified: this.verified,
-        files: this.files,
+        verifiedDesc: this.verifiedDesc,
       };
     },
   },
@@ -170,8 +170,8 @@ export default {
         }
 
         if (this.isContract) {
-          this.verified = account.verified ? "perfect" : "null";
-          this.files = account.files;
+          this.verified = account.verified;
+          this.verifiedDesc = account.status;
           this.summary.push({
             key: "owner",
             value: account.master,

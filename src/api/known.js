@@ -1,4 +1,4 @@
-import { get, post } from "@/utils/http";
+import { get } from "@/utils/http";
 
 export default {
   getAddresses(network) {
@@ -7,10 +7,7 @@ export default {
   getTokens(network) {
     return get(network, `knowns/token`);
   },
-  saveKnowMethodAndEvent(network, events, methods) {
-    return post(network, `knowns/saveMethodAndEvent`, { events, methods });
-  },
-  getAllMethodAndEvent(network) {
-    return get(network, `knowns/getAllMethodAndEvent`);
-  },
+  emitImportApi(network, address) {
+    return get(network, `knowns/import/${address}`)
+  }
 };

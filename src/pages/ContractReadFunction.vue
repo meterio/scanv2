@@ -152,7 +152,7 @@ export default {
           }
 
           this.readLoading = false;
-        } catch (err) {
+        } catch (e) {
           this.readLoading = false;
           alert(
             `${e.message} ${e.data && e.data.error && e.data.error.message}`

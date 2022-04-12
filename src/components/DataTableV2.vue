@@ -255,7 +255,7 @@
               />
             </div>
             <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
-            <div class="title-row" v-if="data.value.selector > 0">MethodID: {{ data.value.selector }}</div>
+            <div class="title-row" v-if="data.value.methodId > 0">MethodID: {{ data.value.methodId }}</div>
 
             <div v-for="(data, index) in data.value.datas" :key="index" class="topic-row">
               <span class="index">{{ index }}</span>

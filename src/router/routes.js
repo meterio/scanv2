@@ -162,7 +162,7 @@ export const routes = [
     meta: { title: `${DOMAIN_TITLE} | Stat` },
   },
   {
-    path: "/verify",
+    path: "/verify/:address",
     name: "verify",
     component: VerifyPage,
     meta: { title: `${DOMAIN_TITLE} | verify` },

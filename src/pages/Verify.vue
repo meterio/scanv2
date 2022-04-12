@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import { abi } from "@meterio/devkit";
 
 export default {
   name: "Verify",
@@ -63,9 +62,6 @@ export default {
   },
   async created() {
     const { address } = this.$route.params;
-    if (!address) {
-      return this.$router.push("/");
-    }
     this.form.address = address;
   },
   methods: {
@@ -91,53 +87,26 @@ export default {
       } else {
         if (
           res.data.result[0].status === "perfect" ||
-          res.data.result[0].status === "partial"
+          res.data.result[0].status === "partial" ||
+          res.data.result[0].status === "full"
         ) {
           // success
-          await this.saveKnowMethodAndEvent();
+          await this.emitImportApi()
         }
       }
     },
-    async saveKnowMethodAndEvent() {
-      let file = this.form.metadataFile;
-      let reader = new FileReader();
-      reader.onload = async (res) => {
-        const result = JSON.parse(res.target.result);
-        const events = [];
-        const methods = [];
-        for (const a of result.output.abi) {
-          if (a.type === "function") {
-            const fun = new abi.Function(a);
-            methods.push({
-              signature: fun.signature,
-              contractAddress: this.form.address.toLowerCase(),
-              name: fun.canonicalName,
-              abi: JSON.stringify(a),
-            });
-          }
-          if (a.type === "event") {
-            const eve = new abi.Event(a);
-            events.push({
-              signature: eve.signature,
-              contractAddress: this.form.address.toLowerCase(),
-              name: eve.canonicalName,
-              abi: JSON.stringify(a),
-            });
-          }
-        }
-        const saveKnowMethodAndEventRes =
-          await this.$api.known.saveKnowMethodAndEvent(
-            this.network,
-            events,
-            methods
-          );
-        console.log("saveKnowMethodAndEventRes", saveKnowMethodAndEventRes);
-
+    async emitImportApi() {
+      const res = await this.$api.known.emitImportApi(this.network, this.form.address);
+      this.loading = false;
+      if (res && res.verified) {
         this.loading = false;
-
         this.$router.go(-1);
-      };
-      reader.readAsText(file);
+      } else {
+        this.isError = {
+          status: true,
+          msg: res.message,
+        };
+      }
     },
     onReset(e) {
       e.preventDefault();
