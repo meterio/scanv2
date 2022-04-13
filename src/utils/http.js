@@ -2,8 +2,7 @@
  * 请求拦截、相应拦截、错误统一处理
  */
 import axios from "axios";
-import QS from "qs";
-import { API_BASE } from "@/config";
+import { getCurrentChain } from "@/config";
 
 // 环境的切换
 // if (process.env.NODE_ENV == "development") {
@@ -110,11 +109,9 @@ axios.interceptors.response.use(
  * @param {Object} params [请求时携带的参数]
  */
 export function get(network, url, params) {
-  if (!(network in API_BASE)) {
-    throw Error(`Invalid network: ${network} for ${url}`);
-  }
-  const base = API_BASE[network];
-  console.log(`network:${network} GET: ${base}${url} ${params ? params : ""}`);
+  const chain = getCurrentChain(network);
+  const base = chain.apiBase;
+  console.log(`network:${chain.name} GET: ${base}${url} ${params ? params : ""}`);
   axios.defaults.baseURL = base;
   return new Promise((resolve, reject) => {
     axios
@@ -140,11 +137,9 @@ export function get(network, url, params) {
  * @param {Object} params [请求时携带的参数]
  */
 export function post(network, url, params) {
-  if (!(network in API_BASE)) {
-    throw Error(`Invalid network: ${network} for ${url}`);
-  }
-  const base = API_BASE[network];
-  console.log(`network:${network} post: ${base}${url} ${params ? params : ""}`);
+  const chain = getCurrentChain(network);
+  const base = chain.apiBase;
+  console.log(`network:${chain.name} post: ${base}${url} ${params ? params : ""}`);
   console.log("params: ", params);
   axios.defaults.baseURL = base;
   return new Promise((resolve, reject) => {

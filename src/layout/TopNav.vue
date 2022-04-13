@@ -5,11 +5,11 @@
     </b-modal>
     <b-navbar toggleable="lg" type="light" variant="light" class="px-4 py-2">
       <b-navbar-brand href="/" class="mr-5">
-        <b-img src="@/assets/newlogo.png" height="40" />
+        <b-img :src="computedLogo" height="40" />
 
-        <span class="ml-1" style="font-size: 19px; font-weight: bold"
-          >Meter</span
-        >
+        <span class="ml-1" style="font-size: 19px; font-weight: bold">{{
+          currentChain.title
+        }}</span>
         <!-- Upgrade Badge -->
         <!--<b-badge
           class="ml-2"
@@ -93,16 +93,17 @@
           >
 
           <b-dropdown
-            :text="searchPrefix"
+            :text="currentNetwork"
             size="sm"
             variant="outline-primary"
             class="mx-2"
+            right
           >
-            <b-dropdown-item @click="changeNetwork('main')"
-              >Mainnet</b-dropdown-item
-            >
-            <b-dropdown-item @click="changeNetwork('test')"
-              >Testnet</b-dropdown-item
+            <b-dropdown-item
+              v-for="item in chainList"
+              :key="item.chainId"
+              @click="changeNetwork(item.chainId)"
+              >{{ item.name }}</b-dropdown-item
             >
           </b-dropdown>
         </b-navbar-nav>
@@ -112,7 +113,7 @@
 </template>
 
 <script>
-import { DEPLOY_DOMAIN } from "@/config";
+import { getCurrentChain, chainList } from "@/config";
 
 export default {
   name: "TopNav",
@@ -123,10 +124,17 @@ export default {
     };
   },
   computed: {
-    searchPrefix() {
-      return `${this.network
-        .substring(0, 1)
-        .toUpperCase()}${this.network.substring(1)}net`;
+    computedLogo() {
+      return require(`@/assets/${this.currentChain.symbol.toLowerCase()}.png`);
+    },
+    currentNetwork() {
+      return this.currentChain.name;
+    },
+    chainList() {
+      return chainList;
+    },
+    currentChain() {
+      return getCurrentChain(this.network);
     },
     homeActive() {
       return this.$route.path === "" || this.$route.path === "/";
@@ -167,19 +175,12 @@ export default {
     },
     changeNetwork(newNetwork) {
       const { network } = this.$store.state.dom;
-      if (process.env.NODE_ENV === "development") {
-        if (network !== newNetwork) {
+      if (network !== newNetwork) {
+        if (process.env.NODE_ENV === "development") {
           this.$store.commit("dom/SET_NETWORK", newNetwork);
         }
-      }
-      if (process.env.NODE_ENV === "production") {
-        if (network !== newNetwork) {
-          if (!(newNetwork in DEPLOY_DOMAIN)) {
-            console.log("Invalid network: ", newNetwork);
-            return;
-          }
-          console.log(`switch to ${domain}`);
-          const domain = DEPLOY_DOMAIN[newNetwork][0];
+        if (process.env.NODE_ENV === "production") {
+          const domain = this.currentChain.deployDomain;
           window.location.href = `https://${domain}` + this.$route.path;
         }
       }

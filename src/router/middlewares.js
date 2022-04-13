@@ -1,5 +1,6 @@
 import $store from "../store";
 import { AuthService } from "@/services/auth.service";
+import { getCurrentChain } from "../config";
 /**
  * Current user state initialization
  * @WARN Must be always first in middleware chain
@@ -33,9 +34,12 @@ export function checkAccessMiddleware(to, from, next) {
 }
 
 export function setPageTitleMiddleware(to, from, next) {
+  const { network } = $store.state.dom
+  const chain = getCurrentChain(network)
+
   const pageTitle = to.matched.find(item => item.meta.title);
 
-  if (pageTitle) window.document.title = pageTitle.meta.title;
+  if (pageTitle) window.document.title = chain.title + ' | ' + pageTitle.meta.title;
   next();
 }
 

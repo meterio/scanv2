@@ -1,7 +1,6 @@
 /**
  * anything that relates to DOM
  */
-import { DEPLOY_DOMAIN } from "@/config";
 export default {
   namespaced: true,
   state: {
@@ -14,12 +13,7 @@ export default {
     widthTablet: 1024,
     knownAddresses: {},
     knownTokens: {},
-    network:
-      process.env.NODE_ENV === "development"
-        ? "test"
-        : DEPLOY_DOMAIN["main"].includes(window.location.hostname)
-          ? "main"
-          : "test",
+    network: 82,
   },
 
   mutations: {
@@ -27,9 +21,8 @@ export default {
       state.windowWidth = value;
     },
     SET_NETWORK(state, value) {
-      if (value === "main" || value === "test") {
-        state.network = value;
-      }
+      console.log('set network', value)
+      state.network = value;
     },
     SET_KNOWN_ADDRESSES(state, valMap) {
       state.knownAddresses = valMap;

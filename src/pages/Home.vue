@@ -3,7 +3,7 @@
   //- search-banner
   .search-banner
     .container
-      h1.title Meter Blockchain Explorer
+      h1.title {{ currentNetwork.title }} Blockchain Explorer
       search.mt25(
         :btnType="2",
         placeholder="Search Transation/Blocks/Address",
@@ -27,9 +27,11 @@ import Search from "@/components/Search.vue";
 import DataDashboard from "@/components/DataDashboard.vue";
 import RecentBlocks from "@/components/RecentBlocks.vue";
 import RecentTxs from "@/components/RecentTxs.vue";
-import { fromWei, formatNum } from "@/utils";
+import { formatNum } from "@/utils";
 import BigNumber from "bignumber.js";
 import { mapState } from "vuex";
+
+import { getCurrentChain } from "@/config";
 
 export default {
   name: "Home",
@@ -44,6 +46,9 @@ export default {
     ...mapState({
       home_block_height: (state) => state.home_block_height,
     }),
+    currentNetwork() {
+      return getCurrentChain(this.network);
+    },
   },
 
   data() {
@@ -72,7 +77,7 @@ export default {
       const res = await this.$api.metric.getAll(this.network);
       this.loading = false;
       const { mtr, mtrg, pos, pow, staking, committee } = res;
-      console.log('mtrg', mtrg)
+      console.log("mtrg", mtrg);
 
       const stakingRatio = new BigNumber(staking.totalStaked)
         .dividedBy(1e18)
@@ -136,8 +141,8 @@ export default {
 
       if (this.running) {
         setTimeout(() => {
-          this.init()
-        }, 60 * 30 * 1000);  // 30 min
+          this.init();
+        }, 60 * 30 * 1000); // 30 min
       }
     },
     async searchKeyWords(key) {
@@ -160,11 +165,11 @@ export default {
         console.error(e);
         this.modal_show = true;
       }
-    }
+    },
   },
   beforeDestroy() {
     this.running = false;
-  }
+  },
 };
 </script>
 

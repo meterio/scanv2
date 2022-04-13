@@ -24,159 +24,158 @@ import VerifyPage from "@/pages/Verify.vue";
 import TokenAddress from "@/pages/tokenAddress.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
-import { DOMAIN_TITLE } from "../.env";
 
 export const routes = [
   {
     path: "/al/:address",
     name: "address-link",
     component: AddressLinkPage,
-    meta: { title: `${DOMAIN_TITLE} | Explorer` },
+    meta: { title: `Explorer` },
   },
   {
     path: "/",
     name: "home",
     component: HomePage,
-    meta: { title: `${DOMAIN_TITLE} | Explorer` },
+    meta: { title: `Explorer` },
   },
   {
     path: "/auction",
     name: "auction",
     component: AuctionPage,
-    meta: { title: `${DOMAIN_TITLE} | Auctions` },
+    meta: { title: `Auctions` },
   },
   {
     path: "/auction/:auctionID",
     name: "auctionDetail",
     component: AuctionDetailPage,
-    meta: { title: `${DOMAIN_TITLE} | Auction ` },
+    meta: { title: `Auction ` },
   },
   {
     path: "/pow",
     name: "pow",
     component: PowPage,
-    meta: { title: `${DOMAIN_TITLE} | PoW` },
+    meta: { title: `PoW` },
   },
   {
     path: "/pow/rewards/:epoch",
     name: "powRewards",
     component: PowRewardsPage,
-    meta: { title: `${DOMAIN_TITLE} | Mining Rewards` },
+    meta: { title: `Mining Rewards` },
   },
 
   {
     path: "/pos",
     name: "pos",
     component: PosPage,
-    meta: { title: `${DOMAIN_TITLE} | PoS` },
+    meta: { title: `PoS` },
   },
   {
     path: "/pos/rewards/:epoch",
     name: "posRewards",
     component: PosRewardsPage,
-    meta: { title: `${DOMAIN_TITLE} | Epoch Reward` },
+    meta: { title: `Epoch Reward` },
   },
   {
     path: "/validator/:address",
     name: "validatorDetail",
     component: ValidatorDetailpage,
-    meta: { title: `${DOMAIN_TITLE} | Validator` },
+    meta: { title: `Validator` },
   },
   {
     path: "/address/:address",
     name: "address",
     component: AddressPage,
-    meta: { title: `${DOMAIN_TITLE} | Address` },
+    meta: { title: `Address` },
   },
   {
     path: "/block/:revision",
     name: "blockDetail",
     component: BlockDetailpage,
-    meta: { title: `${DOMAIN_TITLE} | Block` },
+    meta: { title: `Block` },
   },
   {
     path: "/blocks",
     name: "blockList",
     component: BlockListPage,
-    meta: { title: `${DOMAIN_TITLE} | Blocks` },
+    meta: { title: `Blocks` },
   },
   {
     path: "/epochs",
     name: "epochList",
     component: EpochListPage,
-    meta: { title: `${DOMAIN_TITLE} | Epochs` },
+    meta: { title: `Epochs` },
   },
   {
     path: "/epochs/:epoch",
     name: "epochDetail",
     component: EpochDetailPage,
-    meta: { title: `${DOMAIN_TITLE} | Epoch` },
+    meta: { title: `Epoch` },
   },
   {
     path: "/epochs/:epoch/stats",
     name: "epochStats",
     component: EpochStatsPage,
-    meta: { title: `${DOMAIN_TITLE} | Epoch Stats` },
- 
+    meta: { title: `Epoch Stats` },
+
   },
   {
     path: "/txs",
     name: "txList",
     component: TxListPage,
-    meta: { title: `${DOMAIN_TITLE} | Txs` },
+    meta: { title: `Txs` },
   },
   {
     path: "/tx/:hash",
     name: "txDetail",
     component: TransactionDetailPage,
-    meta: { title: `${DOMAIN_TITLE} | Transaction` },
+    meta: { title: `Transaction` },
   },
   {
     path: "/accounts/mtr",
     name: "topMTR",
     component: TopMTRAccountsPage,
-    meta: { title: `${DOMAIN_TITLE} | Top MTR Accounts` },
+    meta: { title: `Top MTR Accounts` },
   },
   {
     path: "/accounts/mtrg",
     name: "topMTRG",
     component: TopMTRGAccountsPage,
-    meta: { title: `${DOMAIN_TITLE} | Top MTRG Accounts` },
+    meta: { title: `Top MTRG Accounts` },
   },
   {
     path: "/buckets/:id",
     name: "bucket",
     component: BucketPage,
-    meta: { title: `${DOMAIN_TITLE} | Bucket` },
+    meta: { title: `Bucket` },
   },
   {
     path: "/stats",
     name: "stats",
     component: StatPage,
-    meta: { title: `${DOMAIN_TITLE} | Stat` },
+    meta: { title: `Stat` },
   },
   {
     path: "/stats/:address",
     name: "statDetail",
     component: StatPage,
-    meta: { title: `${DOMAIN_TITLE} | Stat` },
+    meta: { title: `Stat` },
   },
   {
     path: "/verify/:address",
     name: "verify",
     component: VerifyPage,
-    meta: { title: `${DOMAIN_TITLE} | verify` },
+    meta: { title: `verify` },
   },
   {
     path: "/token/:address",
     name: "tokenInfo",
     component: TokenAddress,
-    meta: { title: `${DOMAIN_TITLE} | token` },
+    meta: { title: `token` },
   },
 
   {
     path: "*",
     component: notFoundPage,
-    meta: { title: `${DOMAIN_TITLE} | Not Found` },
+    meta: { title: `Not Found` },
   },
 ];
