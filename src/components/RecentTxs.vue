@@ -5,7 +5,7 @@
         <Loading v-if="loading" />
 
         <ul v-if="!loading" class="block-list">
-          <li class="block-detail" :key="tx.txHash" v-for="tx in recent_txs">
+          <li class="block-detail" :key="tx.txHash + index" v-for="(tx, index) in recent_txs">
             <div class="height-view">
               <div class="block-icon"></div>
 

@@ -83,7 +83,7 @@ export default {
             },
             expected_final_price: {
               type: "amount",
-              amount: actualPrice,
+              amount: new BigNumber(actualPrice).toFixed(),
               token: "MTR",
               precision: 4,
             },

@@ -225,14 +225,7 @@ export default {
         if (tx.tokenTransfers && tx.tokenTransfers.length > 0) {
           this.summary.push({
             key: 'Token Transfers',
-            value: tx.tokenTransfers.map(t => {
-              return {
-                ...t,
-                type: 'ERC721',
-                ids: [721],
-                values: [1]
-              }
-            }),
+            value: tx.tokenTransfers,
             type: 'transfer-highlight',
           });
         }
