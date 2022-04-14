@@ -26,7 +26,7 @@
             <b-col cols="8" class="pt-3">
               <label
                 >Total Votes: {{ delegated_chart_legend.total }}
-                <span>MTRG</span></label
+                <span>{{ gTokenSymbol }}</span></label
               >
 
               <b-row>
@@ -35,7 +35,7 @@
                   <span class="percent">
                     <amount-tag
                       :amount="delegated_chart_legend.self"
-                      token="MTRG"
+                      :token="gTokenSymbol"
                       :precision="precision"
                     />
                     ({{ delegated_chart_legend.selfRatio }})</span
@@ -48,7 +48,7 @@
                   <span class="percent">
                     <amount-tag
                       :amount="delegated_chart_legend.others"
-                      token="MTRG"
+                      :token="gTokenSymbol"
                       :precision="precision"
                     />
                     ({{ delegated_chart_legend.othersRatio }})</span
@@ -212,6 +212,14 @@ export default {
       },
     };
   },
+  computed: {
+    tokenSymbol() {
+      return this.currentChain.symbol;
+    },
+    gTokenSymbol() {
+      return this.currentChain.gSymbol;
+    },
+  },
   methods: {
     async init() {
       this.loadInfo();
@@ -299,7 +307,7 @@ export default {
         amount: {
           type: "amount",
           amount: d.amount,
-          token: "MTRG",
+          token: this.gTokenSymbol,
           precision: 4,
         },
       }));
@@ -334,7 +342,7 @@ export default {
           reward: {
             type: "amount",
             amount: b.actualReward,
-            token: "MTR",
+            token: this.tokenSymbol,
             precision: 8,
           },
         };

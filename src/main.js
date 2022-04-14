@@ -21,6 +21,7 @@ import "./mixins";
 // import globalEventBus from "./plugins/globalEventBus";
 
 import "./scss/style.scss";
+import { getCurrentChain } from "./config";
 // import "./assets/fonts/bebasneue.css";
 // import "./assets/fonts/nunito/nunito.css";
 // import "./assets/fonts/roboto-mono/roboto-mono.css";
@@ -42,6 +43,9 @@ var mixin = {
   computed: {
     network() {
       return this.$store.state.dom.network;
+    },
+    currentChain() {
+      return getCurrentChain(this.network);
     }
   },
   beforeMount() {

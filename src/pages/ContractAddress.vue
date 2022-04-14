@@ -306,7 +306,7 @@ export default {
           amount: {
             type: "amount",
             amount: amount || t.totalClauseAmount,
-            token: token < 0 ? t.token : token == 0 ? "MTR" : "MTRG",
+            token: token < 0 ? t.token : token == 0 ? this.currentChain.symbol : this.currentChain.gSymbol,
             precision: 8,
           },
           timestamp: t.block.timestamp,

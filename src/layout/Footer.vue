@@ -30,7 +30,7 @@
                 <li>
                   <router-link :to="{ name: 'pos' }">PoS chain</router-link>
                 </li>
-                <li>
+                <li v-if="currentChain.pow">
                   <router-link :to="{ name: 'pow' }">PoW chain</router-link>
                 </li>
               </ul>
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+
 export default {
   name: "Footer",
   data() {

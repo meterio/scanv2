@@ -1,7 +1,7 @@
 <template lang="pug">
 .detail-page
   data-table-v2.mt-2pert.px-0(
-    title="Top MTRG Accounts",
+    :title="title",
     :fields="accounts.fields",
     :pagination="accounts.pagination",
     :loadItems="loadTopMTRG"
@@ -24,12 +24,16 @@ export default {
         fields: [
           { key: "mtrgRank", label: "Rank" },
           { key: "fullAddress", label: "Address" },
-          { key: "totalMTRG", label: "MTRG Balance" },
+          { key: "totalMTRG", label: "Balance" },
         ],
       },
     };
   },
-
+  computed: {
+    title() {
+      return `Top ${this.currentChain.gSymbol} Accounts`
+    }
+  },
   methods: {
     async loadTopMTRG(network, page, limit) {
       console.log("load data");
@@ -44,7 +48,7 @@ export default {
             type: "amount",
             amount: new BigNumber(a.mtrgBalance).plus(a.mtrgBounded).toFixed(),
             precision: 4,
-            token: "MTRG",
+            token: this.currentChain.gSymbol,
           },
           fullAddress: a.address,
           mtrgRank: a.mtrgRank

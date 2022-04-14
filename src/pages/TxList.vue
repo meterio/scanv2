@@ -56,7 +56,7 @@ export default {
             type: "amount",
             amount: tx.mtr || tx.mtrg,
             precision: 6,
-            token: tx.mtrg !== "" ? "MTRG" : "MTR",
+            token: tx.mtrg !== "" ? this.currentChain.gSymbol : this.currentChain.symbol,
           },
           timestamp: tx.block.timestamp,
         };

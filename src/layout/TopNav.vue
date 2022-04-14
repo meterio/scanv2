@@ -66,7 +66,7 @@
             :class="blockActive ? 'top-dropdown active' : ''"
           >
             <b-dropdown-item :to="{ name: 'pos' }">PoS</b-dropdown-item>
-            <b-dropdown-item :to="{ name: 'pow' }">PoW</b-dropdown-item>
+            <b-dropdown-item v-if="currentChain.pow" :to="{ name: 'pow' }">PoW</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item :to="{ name: 'txList' }">View Txs</b-dropdown-item>
             <b-dropdown-item :to="{ name: 'blockList' }"
@@ -77,14 +77,14 @@
             >
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item :to="{ name: 'topMTR' }"
-              >Top MTR Accounts</b-dropdown-item
+              >Top {{ currentChain.symbol }} Accounts</b-dropdown-item
             >
             <b-dropdown-item :to="{ name: 'topMTRG' }"
-              >Top MTRG Accounts</b-dropdown-item
+              >Top {{ currentChain.gSymbol }} Accounts</b-dropdown-item
             >
           </b-nav-item-dropdown>
 
-          <b-nav-item
+          <b-nav-item v-if="currentChain.pow"
             ><router-link
               :to="{ name: 'auction', network: $route.params.network }"
               :class="auctionActive ? 'active' : ''"
@@ -181,7 +181,7 @@ export default {
         }
         if (process.env.NODE_ENV === "production") {
           const domain = this.currentChain.deployDomain;
-          window.location.href = `https://${domain}` + this.$route.path;
+          window.location.href = `https://${domain}`;
         }
       }
     },

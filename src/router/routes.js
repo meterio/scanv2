@@ -25,6 +25,10 @@ import TokenAddress from "@/pages/tokenAddress.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
 
+import { getCurrentChain } from "@/config";
+const { VUE_APP_CHAIN_ID } = process.env;
+const cChain = getCurrentChain(Number(VUE_APP_CHAIN_ID));
+
 export const routes = [
   {
     path: "/al/:address",
@@ -131,16 +135,16 @@ export const routes = [
     meta: { title: `Transaction` },
   },
   {
-    path: "/accounts/mtr",
+    path: `/accounts/${cChain.symbol.toLowerCase()}`,
     name: "topMTR",
     component: TopMTRAccountsPage,
-    meta: { title: `Top MTR Accounts` },
+    meta: { title: `Top ${cChain.symbol} Accounts` },
   },
   {
-    path: "/accounts/mtrg",
+    path: `/accounts/${cChain.gSymbol.toLowerCase()}`,
     name: "topMTRG",
     component: TopMTRGAccountsPage,
-    meta: { title: `Top MTRG Accounts` },
+    meta: { title: `Top ${cChain.gSymbol} Accounts` },
   },
   {
     path: "/buckets/:id",

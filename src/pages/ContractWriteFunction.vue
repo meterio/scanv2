@@ -70,7 +70,6 @@
 
 <script>
 import Loading from "@/components/Loading";
-import { getCurrentChain } from "@/config";
 import AddNumberModal from "@/components/AddNumberModal";
 export default {
   name: "ContractWriteFunction",
@@ -112,9 +111,6 @@ export default {
     };
   },
   computed: {
-    currentNetwork() {
-      return getCurrentChain(this.network);
-    },
     computedFunName() {
       return this.abi.name;
     },
@@ -134,7 +130,7 @@ export default {
       return this.abi.stateMutability === "payable";
     },
     computedPayablePlaceholder() {
-      return `payable amount (${this.currentNetwork.symbol})`;
+      return `payable amount (${this.currentChain.symbol})`;
     },
   },
   methods: {

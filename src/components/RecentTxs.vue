@@ -98,9 +98,9 @@ export default {
             console.log("tx", tx);
             let totalAmount = "";
             if (tx.mtr && new BigNumber(tx.mtr).isGreaterThan(0)) {
-              totalAmount = fromWei(tx.mtr, 4, "MTR");
+              totalAmount = fromWei(tx.mtr, 4, this.currentChain.symbol);
             } else {
-              totalAmount = fromWei(tx.mtrg, 4, "MTRG");
+              totalAmount = fromWei(tx.mtrg, 4, this.currentChain.gSymbol);
             }
 
             return { ...tx, totalAmount };

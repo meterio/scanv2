@@ -58,7 +58,6 @@ import ContractReadFunction from "./ContractReadFunction.vue";
 import ContractWriteFunction from "./ContractWriteFunction.vue";
 import CodeTextArea from "@/components/CodeTextArea.vue";
 import { ethers } from "ethers";
-import { getCurrentChain } from "@/config";
 
 export default {
   name: "Contract",
@@ -91,11 +90,8 @@ export default {
     };
   },
   computed: {
-    currentChainId() {
-      return getCurrentChain(this.network).chainId;
-    },
     variantBtn() {
-      if (this.account && this.chainId == this.currentChainId) {
+      if (this.account && this.chainId == this.currentChain.chainId) {
         return "primary";
       } else {
         return "danger";
@@ -114,7 +110,7 @@ export default {
     },
     computedBtnText() {
       if (this.account) {
-        if (this.chainId != this.currentChainId) {
+        if (this.chainId != this.currentChain.chainId) {
           return `Wrong Network`;
         }
         return this.account.substr(0, 4) + "..." + this.account.substr(-2);
@@ -124,7 +120,7 @@ export default {
     },
     openable() {
       return (
-        this.contract && this.account && this.chainId == this.currentChainId
+        this.contract && this.account && this.chainId == this.currentChain.chainId
       );
     },
   },

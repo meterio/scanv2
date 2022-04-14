@@ -209,7 +209,7 @@ export default {
           },
           { key: 'ChainTag', value: tx.chainTag },
           { key: 'Origin', value: tx.origin, type: 'address-link' },
-          { key: 'Fee', value: tx.paid, type: 'amount', token: 'MTR' },
+          { key: 'Fee', value: tx.paid, type: 'amount', token: this.currentChain.symbol },
           {
             key: 'BlockRef',
             value: tx.blockRef,

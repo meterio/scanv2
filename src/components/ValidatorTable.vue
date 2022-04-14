@@ -217,7 +217,7 @@ export default {
             votingPower: {
               type: "amount",
               amount: d.votingPower,
-              token: "MTRG",
+              token: this.currentChain.gSymbol,
               precision: 2,
             },
             addressWithName: { address: d.address, name: d.name },
@@ -236,7 +236,7 @@ export default {
             totalVotes: {
               type: "amount",
               amount: c.totalVotes,
-              token: "MTRG",
+              token: this.currentChain.gSymbol,
               precision: 2,
             },
             addressWithName: { address: c.address, name: c.name },

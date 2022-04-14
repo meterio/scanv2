@@ -73,7 +73,7 @@ export default {
             type: "amount",
             amount: r.totalReward,
             precision: 6,
-            token: "MTR",
+            token: this.currentChain.symbol,
           },
           posReward: r.epoch,
         };
@@ -96,21 +96,34 @@ export default {
               label: "Validators",
             },
             {
-              content: fromWei(staking.totalStaked, 0) + " MTRG",
+              content: fromWei(staking.totalStaked, 0) + " " + this.currentChain.symbol,
               label: "Total Staked",
             },
-          ],
-          [
+          ]
+        ];
+
+        if (this.currentChain.priceEnable) {
+          this.pos_data.push([
             { content: pos.best, label: "PoS Chain Height" },
-            { content: "$ " + mtrg.price, label: "MTRG Price" },
+            { content: "$ " + mtrg.price, label: `${this.currentChain.gSymbol} Price` },
             {
               content: `${committee.healthy} Healthy / ${
                 committee.invalid + committee.down
               } Invalid`,
               label: "Active Committee",
             },
-          ],
-        ];
+          ])
+        } else {
+          this.pos_data.push([
+            { content: pos.best, label: "PoS Chain Height" },
+            {
+              content: `${committee.healthy} Healthy / ${
+                committee.invalid + committee.down
+              } Invalid`,
+              label: "Active Committee",
+            },
+          ])
+        }
       } catch (e) {
         console.error(e);
       }

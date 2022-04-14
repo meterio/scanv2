@@ -3,7 +3,7 @@
   //- search-banner
   .search-banner
     .container
-      h1.title {{ currentNetwork.title }} Blockchain Explorer
+      h1.title {{ currentChain.title }} Blockchain Explorer
       search.mt25(
         :btnType="2",
         placeholder="Search Transation/Blocks/Address",
@@ -31,8 +31,6 @@ import { formatNum } from "@/utils";
 import BigNumber from "bignumber.js";
 import { mapState } from "vuex";
 
-import { getCurrentChain } from "@/config";
-
 export default {
   name: "Home",
 
@@ -46,9 +44,6 @@ export default {
     ...mapState({
       home_block_height: (state) => state.home_block_height,
     }),
-    currentNetwork() {
-      return getCurrentChain(this.network);
-    },
   },
 
   data() {
@@ -83,25 +78,6 @@ export default {
         .dividedBy(1e18)
         .dividedBy(40e6);
       this.data = [
-        [
-          {
-            label: "MTRG Price",
-            content: "$ " + mtrg.price,
-            change: mtrg.priceChange,
-          },
-          {
-            label: "MTR Price",
-            content: "$ " + mtr.price,
-            change: mtr.priceChange,
-          },
-        ],
-        [
-          {
-            label: "MTRG Circulation",
-            content: formatNum(mtrg.circulation, 0),
-          },
-          { label: "MTR Circulation", content: formatNum(mtr.circulation, 0) },
-        ],
         [
           { label: "Block Height", content: pos.best },
           { label: "Epoch", content: pos.epoch },
@@ -138,6 +114,28 @@ export default {
           },
         ],
       ];
+
+      if (this.currentChain.priceEnable) {
+        this.data.unshift([
+          {
+            label: `${this.currentChain.gSymbol} Price`,
+            content: "$ " + mtrg.price,
+            change: mtrg.priceChange,
+          },
+          {
+            label: `${this.currentChain.symbol} Price`,
+            content: "$ " + mtr.price,
+            change: mtr.priceChange,
+          },
+        ],
+        [
+          {
+            label: `${this.currentChain.gSymbol} Circulation`,
+            content: formatNum(mtrg.circulation, 0),
+          },
+          { label: `${this.currentChain.symbol} Circulation`, content: formatNum(mtr.circulation, 0) },
+        ],)
+      }
 
       if (this.running) {
         setTimeout(() => {

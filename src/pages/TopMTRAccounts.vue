@@ -1,7 +1,7 @@
 <template lang="pug">
 .detail-page
   data-table-v2.mt-2pert.px-0(
-    title="Top MTR Accounts",
+    :title="title",
     :fields="accounts.fields",
     :pagination="accounts.pagination",
     :loadItems="loadTopMTR"
@@ -24,12 +24,16 @@ export default {
         fields: [
           { key: "mtrRank", label: "Rank" },
           { key: "fullAddress", label: "Address" },
-          { key: "totalMTR", label: "MTR Balance" },
+          { key: "totalMTR", label: "Balance" },
         ],
       },
     };
   },
-
+  computed: {
+    title() {
+      return `Top ${this.currentChain.symbol} Accounts`
+    }
+  },
   methods: {
     async loadTopMTR(network, page, limit) {
       const { accounts, totalRows } = await this.$api.account.getTopMTR(
@@ -42,7 +46,7 @@ export default {
           totalMTR: {
             type: "amount",
             amount: new BigNumber(a.mtrBalance).plus(a.mtrBounded).toFixed(),
-            token: "MTR",
+            token: this.currentChain.symbol,
             precision: 4,
           },
           fullAddress: a.address,

@@ -126,6 +126,9 @@ export default {
       }
       return this.loadTxs;
     },
+    tokenSymbol() {
+      return this.currentChain.symbol;
+    },
   },
   data() {
     return {
@@ -306,7 +309,7 @@ export default {
             type: "amount",
             amount: b.totalVotes,
             precision: 6,
-            token: "MTRG",
+            token: this.currentChain.gSymbol,
           },
           timestamp: b.createTime,
           status: b.unbounded ? "Unbounded" : "Created",
@@ -383,7 +386,7 @@ export default {
           amount: {
             type: "amount",
             amount: amount || t.totalClauseAmount,
-            token: token < 0 ? t.token : token == 0 ? "MTR" : "MTRG",
+            token: token < 0 ? t.token : token == 0 ? this.currentChain.symbol : this.currentChain.gSymbol,
             precision: 8,
           },
           timestamp: t.block.timestamp,
@@ -469,7 +472,7 @@ export default {
             type: "amount",
             amount: b.actualReward,
             precision: -1,
-            token: "MTR",
+            token: this.tokenSymbol,
           },
         };
       });
@@ -492,7 +495,7 @@ export default {
             type: "amount",
             amount: b.amount,
             precision: 8,
-            token: "MTR",
+            token: this.tokenSymbol,
           },
           hammerPriceStr: b.pending
             ? "-"
@@ -500,7 +503,7 @@ export default {
                 type: "amount",
                 amount: b.hammerPrice,
                 precision: 4,
-                token: "MTR",
+                token: this.tokenSymbol,
               },
           lotAmountStr:
             b.pending || !b.lotAmount
@@ -509,7 +512,7 @@ export default {
                   type: "amount",
                   amount: b.lotAmount,
                   precision: 8,
-                  token: "MTRG",
+                  token: this.tokenSymbol,
                 },
         };
       });

@@ -95,7 +95,7 @@ export default {
             value: b.actualReward,
             type: "amount",
             precision: -1,
-            token: "MTR",
+            token: this.currentChain.symbol,
           },
           { key: "Txs Count", value: b.txCount },
           { key: "Time", value: b.timestamp, type: "timestamp" },
@@ -120,7 +120,7 @@ export default {
             fee: {
               type: "amount",
               amount: tx.paid,
-              token: "MTR",
+              token: this.currentChain.symbol,
               precision: 8,
             },
             result: tx.reverted ? "reverted" : "success",
