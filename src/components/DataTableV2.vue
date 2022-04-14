@@ -322,6 +322,8 @@
               :token="data.value.token"
               :precision="data.value.precision"
               :decimals="data.value.decimals || 18"
+              :tokenId="data.value.tokenId"
+              :tokenType="data.value.tokenType"
             />
             <router-link
               v-if="data.value.type == 'block'"

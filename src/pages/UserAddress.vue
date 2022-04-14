@@ -524,20 +524,41 @@ export default {
         page,
         limit
       );
-      const items = tokens.map((t) => {
-        return {
-          ...t,
-          fullAddress: t.tokenAddress,
-          blocknum: t.lastUpdate.number,
-          balance: {
-            type: "amount",
-            amount: t.balance,
-            token: t.tokenSymbol,
-            precision: 8,
-            decimals: t.tokenDecimals,
-          },
-        };
-      });
+      const items = [];
+      for (const t of tokens) {
+        if (t.tokenType === 'ERC20') {
+          items.push({
+            ...t,
+            fullAddress: t.tokenAddress,
+            blocknum: t.lastUpdate.number,
+            balance: {
+              type: "amount",
+              amount: t.balance,
+              token: t.tokenSymbol,
+              precision: 8,
+              decimals: t.tokenDecimals,
+            },
+          })
+        }
+        if (t.tokenType === 'ERC721') {
+          for (const n of t.nftBalances) {
+            items.push({
+              ...t,
+              fullAddress: t.tokenAddress,
+              blocknum: t.lastUpdate.number,
+              balance: {
+                type: "amount",
+                tokenType: t.tokenType,
+                tokenId: n.tokenId,
+                amount: t.balance,
+                token: t.tokenSymbol,
+                precision: 8,
+                decimals: t.tokenDecimals,
+              },
+            })
+          }
+        }
+      }
       return { items, totalRows };
     },
   },

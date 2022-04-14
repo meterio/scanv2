@@ -1,8 +1,14 @@
 <template>
   <span v-b-tooltip.hover :title="text">
-    <span>{{ integer }}</span>
-    <span v-if="shortMantissa" class="text-secondary">{{ shortMantissa }}</span>
-    <span v-if="token" class="badge1 ml-1">{{ token }}</span>
+    <template v-if="tokenType === 'ERC20'">
+      <span>{{ integer }}</span>
+      <span v-if="shortMantissa" class="text-secondary">{{ shortMantissa }}</span>
+      <span v-if="token" class="badge1 ml-1">{{ token }}</span>
+    </template>
+    <template v-else-if="tokenType === 'ERC721'">
+      <span :title="tokenId">[{{ computedTokenId }}]</span>
+      <span v-if="token" class="badge1 ml-1">{{ token }}</span>
+    </template>
   </span>
 </template>
 
@@ -27,6 +33,14 @@ export default {
       type: Number,
       default: 18,
     },
+    tokenType: {
+      type: String,
+      default: 'ERC20',
+    },
+    tokenId: {
+      type: String,
+      default: '',
+    }
   },
   data() {
     return {
@@ -71,6 +85,13 @@ export default {
     },
   },
   computed: {
+    computedTokenId() {
+      if (this.tokenId && this.tokenId.length > 4) {
+        return this.tokenId.substring(0, 4) + '..';
+      } else {
+        return this.tokenId;
+      }
+    }
     // badgeClass() {
     //   if (this.token === "MTR") {
     //     return "badge badge-light ml-1";
