@@ -23,6 +23,7 @@ export default {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "mtrRank", label: "Rank" },
+          { key: "name", label: "Name" },
           { key: "fullAddress", label: "Address" },
           { key: "totalMTR", label: "Balance" },
         ],
@@ -50,7 +51,8 @@ export default {
             precision: 4,
           },
           fullAddress: a.address,
-          mtrRank: a.mtrRank
+          mtrRank: a.mtrRank,
+          name: a.name || '-',
         };
       });
       return { items, totalRows };

@@ -543,7 +543,7 @@ export default {
             },
           })
         }
-        if (t.tokenType === 'ERC721') {
+        if (t.tokenType === 'ERC721' || t.tokenType === 'ERC1155') {
           for (const n of t.nftBalances) {
             items.push({
               ...t,

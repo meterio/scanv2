@@ -23,6 +23,7 @@ export default {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "mtrgRank", label: "Rank" },
+          { key: "name", label: "Name" },
           { key: "fullAddress", label: "Address" },
           { key: "totalMTRG", label: "Balance" },
         ],
@@ -51,7 +52,8 @@ export default {
             token: this.currentChain.gSymbol,
           },
           fullAddress: a.address,
-          mtrgRank: a.mtrgRank
+          mtrgRank: a.mtrgRank,
+          name: a.name || '-',
         };
       });
       return { items, totalRows };

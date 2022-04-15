@@ -9,6 +9,7 @@ export const chainList = [
     sourcifyApiBase: "https://sourcify.dev/server",
     deployDomain: "scan.meter.io",
     pow: true,
+    priceEnable: true,
   },
   {
     name: "Meter testnet",
@@ -20,6 +21,7 @@ export const chainList = [
     sourcifyApiBase: "https://sourcify.dev/server",
     deployDomain: "scan-warringstakes.meter.io",
     pow: true,
+    priceEnable: true,
   },
   {
     name: "Verse testnet",
@@ -31,6 +33,7 @@ export const chainList = [
     sourcifyApiBase: "https://sourcify.dev/server",
     deployDomain: "explorer.stp.network",
     pow: false,
+    priceEnable: false
   },
 ];
 

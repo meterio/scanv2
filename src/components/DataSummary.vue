@@ -144,7 +144,14 @@
                       :decimals="row.decimals"
                     />
                   </template>
-                  <template v-else>
+                  <template v-else-if="row.type === 'ERC721'">
+                    <div>
+                      <div v-for="id in row.ids" :key="id">
+                        <span class="mr-3">{{ `For ${row.type} Token ID [${id}] ${row.symbol}` }}</span>
+                      </div>
+                    </div>
+                  </template>
+                  <template v-else-if="row.type === 'ERC1155'">
                     <div>
                       <div v-for="(id, indx) in row.ids" :key="id">
                         <span class="mr-3">{{ `For ${row.type} Token ID [${id}] ${row.values[indx]} ${row.symbol}` }}</span>

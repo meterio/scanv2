@@ -5,7 +5,7 @@
       <span v-if="shortMantissa" class="text-secondary">{{ shortMantissa }}</span>
       <span v-if="token" class="badge1 ml-1">{{ token }}</span>
     </template>
-    <template v-else-if="tokenType === 'ERC721'">
+    <template v-else-if="tokenType === 'ERC721' || tokenType === 'ERC1155'">
       <span :title="tokenId">[{{ computedTokenId }}]</span>
       <span v-if="token" class="badge1 ml-1">{{ token }}</span>
     </template>

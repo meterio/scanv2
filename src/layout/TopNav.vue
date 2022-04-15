@@ -133,9 +133,6 @@ export default {
     chainList() {
       return chainList;
     },
-    currentChain() {
-      return getCurrentChain(this.network);
-    },
     homeActive() {
       return this.$route.path === "" || this.$route.path === "/";
     },
@@ -180,7 +177,8 @@ export default {
           this.$store.commit("dom/SET_NETWORK", newNetwork);
         }
         if (process.env.NODE_ENV === "production") {
-          const domain = this.currentChain.deployDomain;
+          const newChain = getCurrentChain(newNetwork);
+          const domain = newChain.deployDomain;
           window.location.href = `https://${domain}`;
         }
       }
