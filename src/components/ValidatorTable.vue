@@ -48,6 +48,7 @@
         :fields="validator_data.fields"
         show-empty
         @sort-changed="sortingChanged"
+        no-local-sorting
       >
         <template slot="empty">
           <div class="text-center pt15 text-grey" style="color: #5c6f8c">
