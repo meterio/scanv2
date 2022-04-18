@@ -145,14 +145,14 @@
                     />
                   </template>
                   <template v-else-if="row.type === 'ERC721'">
-                    <div>
+                    <div class="small-font-size">
                       <div v-for="id in row.ids" :key="id">
                         <span class="mr-3">{{ `For ${row.type} Token ID [${id}] ${row.symbol}` }}</span>
                       </div>
                     </div>
                   </template>
                   <template v-else-if="row.type === 'ERC1155'">
-                    <div>
+                    <div class="small-font-size">
                       <div v-for="(id, indx) in row.ids" :key="id">
                         <span class="mr-3">{{ `For ${row.type} Token ID [${id}] ${row.values[indx]} ${row.symbol}` }}</span>
                       </div>
@@ -337,6 +337,10 @@ export default {
     opacity: 0.55;
     font-size: 14px;
     font-weight: bold;
+  }
+
+  .small-font-size {
+    font-size: 90%;
   }
 }
 </style>
