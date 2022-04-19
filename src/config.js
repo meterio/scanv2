@@ -1,46 +1,46 @@
 export const chainList = [
   {
-    name: "Meter Mainnet",
-    title: "Meter",
+    name: 'Meter Mainnet',
+    title: 'Meter',
     chainId: 82,
-    symbol: "MTR",
-    gSymbol: "MTRG",
-    apiBase: "https://api.meter.io:12001/api/",
-    sourcifyApiBase: "https://sourcify.dev/server",
-    deployDomain: "scan.meter.io",
+    symbol: 'MTR',
+    gSymbol: 'MTRG',
+    apiBase: 'https://api.meter.io:12001/api/',
+    sourcifyApiBase: 'https://sourcify.dev/server',
+    deployDomain: 'scan.meter.io',
     pow: true,
-    priceEnable: true,
+    priceEnable: true
   },
   {
-    name: "Meter Testnet",
+    name: 'Meter Testnet',
     chainId: 83,
-    title: "Meter",
-    symbol: "MTR",
-    gSymbol: "MTRG",
-    apiBase: "https://api.meter.io:12001/api/",
-    sourcifyApiBase: "https://sourcify.dev/server",
-    deployDomain: "scan-warringstakes.meter.io",
+    title: 'Meter',
+    symbol: 'MTR',
+    gSymbol: 'MTRG',
+    apiBase: 'http://api.meter.io:12001/api/',
+    sourcifyApiBase: 'https://sourcify.dev/server',
+    deployDomain: 'scan-warringstakes.meter.io',
     pow: true,
-    priceEnable: true,
+    priceEnable: true
   },
   {
-    name: "Verse Testnet",
+    name: 'Verse Testnet',
     chainId: 72,
-    title: "Verse",
-    symbol: "STPT",
-    gSymbol: "STPD",
-    apiBase: "https://api.meter.io:12001/api/",
-    sourcifyApiBase: "https://sourcify.dev/server",
-    deployDomain: "explorer.stp.network",
+    title: 'Verse',
+    symbol: 'STPT',
+    gSymbol: 'STPD',
+    apiBase: 'https://api.meter.io:12001/api/',
+    sourcifyApiBase: 'https://sourcify.dev/server',
+    deployDomain: 'explorer.stp.network',
     pow: false,
     priceEnable: false
-  },
+  }
 ];
 
-export const getCurrentChain = (chainId) => {
+export const getCurrentChain = chainId => {
   const chain = chainList.find(c => c.chainId === chainId);
   if (!chain) {
     return alert('invalid chainId: ', chainId);
   }
   return chain;
-}
+};
