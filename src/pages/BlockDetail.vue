@@ -39,6 +39,7 @@
 import DataTableV2 from "@/components/DataTableV2.vue";
 import StatusTag from "@/components/StatusTag.vue";
 import DataSummary from "@/components/DataSummary.vue";
+import BigNumber from 'bignumber.js';
 export default {
   name: "BlockDetail",
   components: {
@@ -104,16 +105,18 @@ export default {
       let items = [];
       if (res.block.txSummaries) {
         items = res.block.txSummaries.map((tx) => {
-          let method = tx.method;
-          if (method === "0xffffffff") {
-            method = 'scriptEngine'
+          let totalClauseAmount = new BigNumber(0);
+          if (tx.clauses) {
+            for (const c of tx.clauses) {
+              totalClauseAmount = totalClauseAmount.plus(c.value);
+            }
           }
           return {
             hash: tx.hash,
-            method,
+            method: tx.selector,
             amount: {
               type: "amount",
-              amount: tx.totalClauseAmount,
+              amount: totalClauseAmount.toFixed(),
               token: tx.token,
               precision: 8,
             },

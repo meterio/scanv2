@@ -12,7 +12,7 @@ export const chainList = [
     priceEnable: true,
   },
   {
-    name: "Meter testnet",
+    name: "Meter Testnet",
     chainId: 83,
     title: "Meter",
     symbol: "MTR",
@@ -24,7 +24,7 @@ export const chainList = [
     priceEnable: true,
   },
   {
-    name: "Verse testnet",
+    name: "Verse Testnet",
     chainId: 72,
     title: "Verse",
     symbol: "STPT",

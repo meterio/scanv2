@@ -355,8 +355,13 @@ export default {
         let direct = "";
         const fromAddr = t.from;
         const toAddr = t.to;
-        const amount = t.mtr || t.mtrg;
-        const token = 0;
+        let amount = t.mtr;
+
+        let token = this.currentChain.symbol;
+        if (t.mtrg !== '0') {
+          amount = t.mtrg;
+          token = this.currentChain.gSymbol;
+        }
 
         if (fromAddr === toAddr) {
           direct = "Self";
@@ -385,8 +390,8 @@ export default {
           to: toAddr || "nobody",
           amount: {
             type: "amount",
-            amount: amount || t.totalClauseAmount,
-            token: token < 0 ? t.token : token == 0 ? this.currentChain.symbol : this.currentChain.gSymbol,
+            amount: amount,
+            token: token,
             precision: 8,
           },
           timestamp: t.block.timestamp,
