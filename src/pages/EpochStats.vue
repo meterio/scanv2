@@ -1,16 +1,26 @@
 <template>
-  <div class="detail-page">
-    <span v-for="(summary, round) in this.stats" :key="round">
-      <span :id="'round-' + round" :title="memberAt(round).name" :class="summary.status == 1 ? 'success' : 'fail'">
-        {{ summary.status }}
+  <b-container>
+    <div class="detail-page">
+      <span v-for="(summary, round) in this.stats" :key="round">
+        <span
+          width="40"
+          height="40"
+          :id="'round-' + round"
+          :title="memberAt(round).name"
+          :class="summary.status == 1 ? 'success' : 'fail'"
+          >&nbsp;
+          {{ summary.status == 1 ? 'B' : 'F' }}
+        </span>
+        <b-tooltip :target="'round-' + round">
+          <div>Round: {{ round }}</div>
+          <div v-if="summary.status == 1">Block: {{ summary.b }}</div>
+          <div v-else>Status: timeout</div>
+          <div v-if="summary.status == 1">Proposer: {{ memberAt(round).name }}</div>
+          <div v-else>Expected: {{ memberAt(round).name }}</div>
+        </b-tooltip>
       </span>
-      <b-tooltip :target="'round-' + round">
-        <div>Round: {{ round }}</div>
-        <div>Expected: {{ memberAt(round).name }}</div>
-        <div>Block: {{ summary.b }}</div>
-      </b-tooltip>
-    </span>
-  </div>
+    </div>
+  </b-container>
 </template>
 
 <script>
@@ -50,10 +60,18 @@ export default {
   font-size: 15px;
 }
 .success {
-  background: green;
+  background: rgba(36, 174, 143, 0.08);
+  color: #01aa78;
+  border: 1px solid white;
+  margin: 3px 3px 3px 1px;
+  padding: 1px 2px 1px 5px;
 }
 .fail {
-  background: red;
+  background: rgb(255, 73, 95, 0.08);
+  color: #ff495f;
+  border: 1px solid #ff495f;
+  margin: 3px 3px 3px 1px;
+  padding: 1px 2px 1px 5px;
 }
 .normal {
   background: gray;
