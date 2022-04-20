@@ -94,6 +94,14 @@
                 <span>{{ formatDuration(item.value) }}</span>
               </span>
 
+              <!--epochStats-->
+              <span v-if="item.type === 'epoch-with-stats'">
+                <span>{{ item.value }}</span>
+                <span class="pl-2">(</span>
+                <b-link :to="{ name: 'epochStats', params: { epoch: item.value } }">Stats</b-link>
+                <span>)</span>
+              </span>
+
               <!-- blockRef -->
               <span v-if="item.type === 'blockRef'">
                 <span>{{ item.value }}</span>
@@ -154,7 +162,9 @@
                   <template v-else-if="row.type === 'ERC1155'">
                     <div class="small-font-size">
                       <div v-for="(id, indx) in row.ids" :key="id">
-                        <span class="mr-3">{{ `For ${row.type} Token ID [${id}] ${row.values[indx]} ${row.symbol}` }}</span>
+                        <span class="mr-3">{{
+                          `For ${row.type} Token ID [${id}] ${row.values[indx]} ${row.symbol}`
+                        }}</span>
                       </div>
                     </div>
                   </template>
@@ -256,8 +266,8 @@ export default {
     },
     verifiedDesc: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {};
@@ -303,11 +313,11 @@ export default {
     },
     computedVerifiedDesc() {
       if (this.verifiedDesc === 'perfect' || this.verifiedDesc === 'full') {
-        return 'Contract Source Code and Metadata Fully Verified'
+        return 'Contract Source Code and Metadata Fully Verified';
       } else {
-        return 'Contract Source Code Verified'
+        return 'Contract Source Code Verified';
       }
-    }
+    },
   },
   filters: {
     formatNumber(val) {

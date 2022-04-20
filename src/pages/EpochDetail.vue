@@ -13,29 +13,29 @@
 </template>
 
 <script>
-import DataTableV2 from "@/components/DataTableV2.vue";
-import DataSummary from "@/components/DataSummary.vue";
-import { shortHash } from "@/utils";
+import DataTableV2 from '@/components/DataTableV2.vue';
+import DataSummary from '@/components/DataSummary.vue';
+import { shortHash } from '@/utils';
 
 export default {
-  name: "EpochDetail",
+  name: 'EpochDetail',
   components: {
     DataSummary,
     DataTableV2,
   },
   data() {
     return {
-      summaryTitle: "",
+      summaryTitle: '',
       summary: [],
       members: {
         fields: [
-          { key: "index", label: "Index" },
-          { key: "name", label: "Name" },
-          { key: "fullAddress", label: "Address" },
-          { key: "netAddr", label: "IP Address" },
-          { key: "shortPubKey", label: "Public Key" },
+          { key: 'index', label: 'Index' },
+          { key: 'name', label: 'Name' },
+          { key: 'fullAddress', label: 'Address' },
+          { key: 'netAddr', label: 'IP Address' },
+          { key: 'shortPubKey', label: 'Public Key' },
         ],
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 20 },
       },
     };
   },
@@ -44,23 +44,27 @@ export default {
     const res = await this.$api.epoch.getEpoch(this.network, epoch);
     this.loading = false;
     const { summary, powBlocks } = res;
-    this.summaryTitle = "Epoch Detail";
+    this.summaryTitle = 'Epoch Detail';
 
     if (!!summary) {
-      this.summary = [
-        { key: "Epoch", value: summary.epoch },
-        { key: "Start Block", value: summary.startKBlock, type: "block-link" },
-        { key: "Start Time", value: summary.startTime, type: "timestamp" },
-        { key: "End KBlock", value: summary.endKBlock, type: "block-link" },
-        { key: "End Time", value: summary.endTime, type: "timestamp" },
+      if (summary.endKBlock) {
+        this.summary = [{ key: 'Epoch', value: summary.epoch, type: 'epoch-with-stats' }];
+      } else {
+        this.summary = [{ key: 'Epoch', value: summary.epoch }];
+      }
+      this.summary = this.summary.concat([
+        { key: 'Start Block', value: summary.startKBlock, type: 'block-link' },
+        { key: 'Start Time', value: summary.startTime, type: 'timestamp' },
+        { key: 'End KBlock', value: summary.endKBlock, type: 'block-link' },
+        { key: 'End Time', value: summary.endTime, type: 'timestamp' },
         {
-          key: "Duration",
+          key: 'Duration',
           value: summary.duration * 1000,
-          type: "duration",
+          type: 'duration',
         },
-        { key: "Committee Size", value: summary.committeeSize },
-        { key: "Pow Blocks Count", value: powBlocks ? powBlocks.length : 0 },
-      ];
+        { key: 'Committee Size', value: summary.committeeSize },
+        { key: 'Pow Blocks Count', value: powBlocks ? powBlocks.length : 0 },
+      ]);
     }
   },
   methods: {
