@@ -121,20 +121,20 @@ export default {
         const { hashrates, diffs } = await this.$api.metric.getChart(
           this.network
         );
-        const network = this.network;
+        const network = this.currentChain.name.includes('Mainnet') ? 'mainnet' : 'testnet';
         this.line_data = {
           labels: [],
           values: [],
           diffs: [],
         };
-        const data = hashrates[`${network.toLowerCase()}net`];
+        const data = hashrates[network];
         const me = this;
         data.map((itm) => {
           const time_str = me.formatLineTime(itm[0]);
           me.line_data.labels.push(time_str);
           me.line_data.values.push(itm[1]);
         });
-        const diff_data = diffs[`${network.toLowerCase()}net`];
+        const diff_data = diffs[network];
         diff_data.map((itm) => {
           me.line_data.diffs.push(itm[1]);
         });
