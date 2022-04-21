@@ -1,6 +1,6 @@
 <template>
   <div class="my-2">
-    <div v-if="!files.length" class="text-center">
+    <div v-if="!verified" class="text-center">
       <router-link
         :to="{
           name: 'verify',
@@ -12,7 +12,7 @@
       >
       <span> contract source code.</span>
     </div>
-    <b-tabs v-else content-class="mt-3">
+    <b-tabs v-else-if="computedFiles.length" content-class="mt-3">
       <b-tab title="Code" active>
         <code-text-area
           v-for="(item, index) in computedFiles"
@@ -49,6 +49,7 @@
         />
       </b-tab>
     </b-tabs>
+    <span v-else class="d-flex justify-content-center">No Code.</span>
   </div>
 </template>
 
@@ -67,6 +68,10 @@ export default {
     CodeTextArea,
   },
   props: {
+    verified: {
+      type: Boolean,
+      default: false,
+    },
     files: {
       type: Array,
       default() {

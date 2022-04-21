@@ -10,7 +10,7 @@
         <!-- <b-link class="link" :to="{ name: 'epochStats', params: { epoch: Number(epoch) + 1 } }"> &gt;&gt; </b-link> -->
       </section>
       <section class="d-flex justify-content-between flex-wrap">
-        <span class="epoch-detail p-1 rounded" v-for="(value, key, indx) in detail" :key="indx">
+        <span class="p-1 rounded" v-for="(value, key, indx) in detail" :key="indx">
           {{ key }}: {{ value }}
         </span>
       </section>
@@ -90,9 +90,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.epoch-detail {
-  // background-color: rgba(0, 0, 0, 0.125);
-}
 .epoch-loading {
   height: 200px;
 }

@@ -32,7 +32,7 @@
             strong Loading...
           </div>
         </div>
-        contract-detail(v-else, :files="files", :address="addressInfo.address")
+        contract-detail(v-else, :verified="verified" :files="files", :address="addressInfo.address")
 </template>
 
 <script>
