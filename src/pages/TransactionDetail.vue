@@ -197,7 +197,7 @@ export default {
           { key: 'Hash', value: tx.hash },
           {
             key: 'Status',
-            value: tx.reverted ? `reverted ( ${tx.vmError.error} )` : 'success',
+            value: tx.reverted ? `${tx.vmError.error}: ${tx.vmError.reason}` : 'success',
             type: 'status',
           },
           {
