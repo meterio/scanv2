@@ -33,7 +33,7 @@ export const chainList = [
     apiBase: 'http://18.142.50.83:3000/api/',
     sourcifyApiBase: 'https://sourcify.dev/server',
     // deployDomain: 'explorer.stp.network',
-    deployDomain: 'http://18.142.50.83',
+    deployDomain: '18.142.50.83',
     pow: false,
     priceEnable: false
   }
