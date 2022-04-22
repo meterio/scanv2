@@ -15,13 +15,13 @@
 </template>
 
 <script>
-import DataDashboard from "@/components/DataDashboard.vue";
-import ValidatorTable from "@/components/ValidatorTable.vue";
-import DataTableV2 from "@/components/DataTableV2.vue";
-import { fromWei } from "@/utils";
+import DataDashboard from '@/components/DataDashboard.vue';
+import ValidatorTable from '@/components/ValidatorTable.vue';
+import DataTableV2 from '@/components/DataTableV2.vue';
+import { fromWei } from '@/utils';
 
 export default {
-  name: "Validator",
+  name: 'Validator',
   components: {
     DataDashboard,
     ValidatorTable,
@@ -36,18 +36,18 @@ export default {
       epoch_reward: {
         pagination: {
           show: true,
-          align: "center",
+          align: 'center',
           perPage: 8,
         },
 
         fields: [
-          { key: "epoch", label: "Epoch" },
-          { key: "blockNum", label: "Block" },
-          { key: "amount", label: "Total Rewards" },
-          { key: "timestamp", label: "Time" },
-          { key: "autobidCount", label: "nAutobid" },
-          { key: "transferCount", label: "nTransfer" },
-          { key: "posReward", label: "More" },
+          { key: 'epoch', label: 'Epoch' },
+          { key: 'blockNum', label: 'Block' },
+          { key: 'amount', label: 'Total Rewards' },
+          { key: 'timestamp', label: 'Time' },
+          { key: 'autobidCount', label: 'nAutobid' },
+          { key: 'transferCount', label: 'nTransfer' },
+          { key: 'posReward', label: 'More' },
         ],
       },
     };
@@ -60,17 +60,13 @@ export default {
     },
     async loadEpochRewards(network, page, limit) {
       this.load = true;
-      const res = await this.$api.validator.getValidateReward(
-        network,
-        page,
-        limit
-      );
+      const res = await this.$api.validator.getValidateReward(network, page, limit);
       const { rewards, totalRows } = res;
       const items = rewards.map((r) => {
         return {
           ...r,
           amount: {
-            type: "amount",
+            type: 'amount',
             amount: r.totalReward,
             precision: 6,
             token: this.currentChain.symbol,
@@ -93,36 +89,32 @@ export default {
           [
             {
               content: staking.candidates,
-              label: "Validators",
+              label: 'Validators',
             },
             {
-              content: fromWei(staking.totalStaked, 0) + " " + this.currentChain.symbol,
-              label: "Total Staked",
+              content: fromWei(staking.totalStaked, 0) + ' ' + this.currentChain.symbol,
+              label: 'Total Staked',
             },
-          ]
+          ],
         ];
 
         if (this.currentChain.priceEnable) {
           this.pos_data.push([
-            { content: pos.best, label: "PoS Chain Height" },
-            { content: "$ " + mtrg.price, label: `${this.currentChain.gSymbol} Price` },
+            { content: pos.best, label: 'PoS Chain Height' },
+            { content: '$ ' + mtrg.price, label: `${this.currentChain.gSymbol} Price` },
             {
-              content: `${committee.healthy} Healthy / ${
-                committee.invalid + committee.down
-              } Invalid`,
-              label: "Active Committee",
+              content: `${committee.healthy} Healthy / ${committee.invalid} Invalid`,
+              label: 'Active Committee',
             },
-          ])
+          ]);
         } else {
           this.pos_data.push([
-            { content: pos.best, label: "PoS Chain Height" },
+            { content: pos.best, label: 'PoS Chain Height' },
             {
-              content: `${committee.healthy} Healthy / ${
-                committee.invalid + committee.down
-              } Invalid`,
-              label: "Active Committee",
+              content: `${committee.healthy} Healthy / ${committee.invalid} Invalid`,
+              label: 'Active Committee',
             },
-          ])
+          ]);
         }
       } catch (e) {
         console.error(e);

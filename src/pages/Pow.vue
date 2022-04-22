@@ -3,11 +3,7 @@
     <!-- block statistic -->
     <DataDashboard v-bind:rows="pow_data"></DataDashboard>
 
-    <HashRateChart
-      class="px-0"
-      :dataCollection="line_data"
-      v-if="line_load"
-    ></HashRateChart>
+    <HashRateChart class="px-0" :dataCollection="line_data" v-if="line_load"></HashRateChart>
 
     <DataTableV2
       :title="mining_reward.title"
@@ -21,13 +17,13 @@
 </template>
 
 <script>
-import DataDashboard from "@/components/DataDashboard.vue";
-import HashRateChart from "@/components/HashRateChart.vue";
-import DataTableV2 from "@/components/DataTableV2.vue";
-import { formatNum, fromNow, bigNum, bigNumDiv } from "@/utils";
+import DataDashboard from '@/components/DataDashboard.vue';
+import HashRateChart from '@/components/HashRateChart.vue';
+import DataTableV2 from '@/components/DataTableV2.vue';
+import { formatNum, fromNow, bigNum, bigNumDiv, formatHashrate } from '@/utils';
 
 export default {
-  name: "Mining",
+  name: 'Mining',
   components: {
     DataDashboard,
     HashRateChart,
@@ -39,18 +35,18 @@ export default {
       pow_data: [],
       line_data: {},
       mining_reward: {
-        title: "PoW Mining Rewards",
+        title: 'PoW Mining Rewards',
         pagination: {
           show: true,
-          align: "center",
+          align: 'center',
           perPage: 8,
         },
         fields: [
-          { key: "blockNum", label: "Kblock (PoS)" },
-          { key: "pow_range", label: "PoW Height Range" },
-          { key: "amount", label: "Amount" },
-          { key: "time", label: "Time" },
-          { key: "powReward", label: "More" },
+          { key: 'blockNum', label: 'Kblock (PoS)' },
+          { key: 'pow_range', label: 'PoW Height Range' },
+          { key: 'amount', label: 'Amount' },
+          { key: 'time', label: 'Time' },
+          { key: 'powReward', label: 'More' },
         ],
       },
     };
@@ -66,25 +62,25 @@ export default {
         const { mtr, pow } = res;
         this.pow_data = [
           [
-            { content: pow.best, label: "PoW Chain Height" },
-            { content: "$ " + mtr.price, label: "MTR Price" },
+            { content: pow.best, label: 'PoW Chain Height' },
+            { content: '$ ' + mtr.price, label: 'MTR Price' },
             {
               content: formatNum(mtr.circulation, 0),
-              label: "MTR Circulations",
+              label: 'MTR Circulations',
             },
           ],
           [
             {
-              content: `${bigNum(bigNumDiv(pow.hashrate, 1000000), 0)} MH/s`,
-              label: "Network Hash Rate",
+              content: `${formatHashrate(pow.hashrate)}`,
+              label: 'Network Hash Rate',
             },
             {
-              content: bigNum(pow.rewardPerDay, 3) + " MTR",
-              label: "Reward (TH/s*Day)",
+              content: bigNum(pow.rewardPerDay, 3) + ' MTR',
+              label: 'Reward (TH/s*Day)',
             },
             {
-              content: "$ " + bigNum(pow.costParity, 3),
-              label: "MTR Cost Parity",
+              content: '$ ' + bigNum(pow.costParity, 3),
+              label: 'MTR Cost Parity',
             },
           ],
         ];
@@ -92,20 +88,16 @@ export default {
     },
 
     async loadRewards(network, page, limit) {
-      const { rewards, totalRows } = await this.$api.pow.getRewards(
-        network,
-        page,
-        limit
-      );
+      const { rewards, totalRows } = await this.$api.pow.getRewards(network, page, limit);
 
       const items = rewards.map((r) => {
         return {
           blockNum: r.posBlock,
           pow_range: `${r.powStart} - ${r.powEnd}`,
           amount: {
-            type: "amount",
+            type: 'amount',
             amount: r.totalAmount,
-            token: "MTR",
+            token: 'MTR',
             precision: -1,
           },
           time: fromNow(r.timestamp * 1000),
@@ -118,9 +110,7 @@ export default {
     async getPowChart() {
       try {
         this.line_load = false;
-        const { hashrates, diffs } = await this.$api.metric.getChart(
-          this.network
-        );
+        const { hashrates, diffs } = await this.$api.metric.getChart(this.network);
         const network = this.currentChain.name.includes('Mainnet') ? 'mainnet' : 'testnet';
         this.line_data = {
           labels: [],
@@ -147,9 +137,7 @@ export default {
     formatLineTime(time) {
       const b = new Date(time * 1000);
       const m = b.getMonth() + 1;
-      return `${
-        b.getDate() < 10 ? "0" + b.getDate() : b.getDate().toString()
-      }/${m < 10 ? "0" + m : m.toString()}`;
+      return `${b.getDate() < 10 ? '0' + b.getDate() : b.getDate().toString()}/${m < 10 ? '0' + m : m.toString()}`;
     },
   },
 };
