@@ -140,7 +140,7 @@
 
               <!-- status -->
               <span v-if="item.type === 'transfer-highlight'">
-                <div class="d-flex justify-content-start" :key="index" v-for="(row, index) in item.value.slice(0, 10)">
+                <div class="d-flex justify-content-start" :key="index" v-for="(row, index) in computedTransfer">
                   <address-link class="mr-3" short :address="row.from" />
                   <span class="mr-3">to</span>
                   <address-link class="mr-3" short :address="row.to" />
@@ -168,6 +168,11 @@
                       </div>
                     </div>
                   </template>
+                </div>
+                <div v-if="!isShowAllTransfers">
+                  <span @click="showMoreTransfers">
+                    <b-icon icon="chevron-double-down"></b-icon>
+                  </span>
                 </div>
               </span>
 
@@ -270,7 +275,16 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      isShowAllTransfers: false,
+    };
+  },
+  watch: {
+    'data'() {
+      const t = this.data.find(d => d.type === 'transfer-highlight')
+      console.log('t', t)
+      t && t.value.length > 10 ? this.isShowAllTransfers = false : this.isShowAllTransfers = true;
+    }
   },
   computed: {
     loading() {
@@ -284,6 +298,23 @@ export default {
     },
     contractAddress() {
       return this.title.split(':')[1].trim();
+    },
+    computedTransfer() {
+      const temp = []
+
+      for (const obj of this.data) {
+        if (obj.type === 'transfer-highlight') {
+          temp.push(...obj.value);
+          break;
+        }
+      }
+
+      if (temp.length > 10) {
+        if (!this.isShowAllTransfers) {
+          return temp.slice(0, 10);
+        }
+      }
+      return temp;
     },
     computedData() {
       console.log('data summary', this.data);
@@ -324,6 +355,11 @@ export default {
       return formatNum(val);
     },
   },
+  methods: {
+    showMoreTransfers() {
+      this.isShowAllTransfers = true;
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

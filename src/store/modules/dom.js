@@ -1,3 +1,4 @@
+const { VUE_APP_CHAIN_ID } = process.env;
 /**
  * anything that relates to DOM
  */
@@ -13,7 +14,7 @@ export default {
     widthTablet: 1024,
     knownAddresses: {},
     knownTokens: {},
-    network: 82,
+    network: Number(VUE_APP_CHAIN_ID),
   },
 
   mutations: {
