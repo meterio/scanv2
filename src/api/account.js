@@ -65,4 +65,16 @@ export default {
       `accounts/${address}/tokens?page=${page}&limit=${limit}`
     );
   },
+  getErc20Tokens(network, address, page, limit = 8) {
+    return get(
+      network,
+      `accounts/${address}/erc20tokens?page=${page}&limit=${limit}`
+    )
+  },
+  getNFTTokens(network, address, page, limit = 8) {
+    return get(
+      network,
+      `accounts/${address}/nfttokens?page=${page}&limit=${limit}`
+    )
+  }
 };

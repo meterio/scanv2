@@ -55,8 +55,9 @@ export default {
     tabs() {
       return [
         { name: this.userDataCount.txCount > 0 ? `Transactions(${this.userDataCount.txCount})` : 'Transactions' },
-        { name: this.userDataCount.tokenCount > 0 ? `Tokens(${this.userDataCount.tokenCount})` : 'Tokens' },
+        { name: this.userDataCount.erc20TokenCount > 0 ? `ERC20 Tokens(${this.userDataCount.erc20TokenCount})` : 'ERC20 Tokens' },
         { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txns(${this.userDataCount.erc20TxCount})` : 'ERC20 Txns' },
+        { name: this.userDataCount.nftTokenCount > 0 ? `NFT(${this.userDataCount.nftTokenCount})` : 'NFT' },
         { name: this.userDataCount.erc721TxCount > 0 ? `ERC721 Txns(${this.userDataCount.erc721TxCount})` : 'ERC721 Txns' },
         { name: this.userDataCount.bidCount > 0 ? `Auction Bids(${this.userDataCount.bidCount})` : 'Auction Bids' },
         { name: this.userDataCount.proposedCount > 0 ? `Proposed Blocks(${this.userDataCount.proposedCount})` : 'Proposed Blocks' },
@@ -79,8 +80,10 @@ export default {
           return this.buckets.fields;
         case "holders":
           return this.holders.fields;
-        case "tokens":
-          return this.tokens.fields;
+        case "erc20Tokens":
+          return this.erc20Tokens.fields;
+        case "NFT":
+          return this.nft.fields;
       }
       return this.txs.fields;
     },
@@ -100,8 +103,10 @@ export default {
           return this.buckets.pagination;
         case "holders":
           return this.holders.pagination;
-        case "tokens":
-          return this.tokens.pagination;
+        case "erc20Tokens":
+          return this.erc20Tokens.pagination;
+        case "NFT":
+          return this.nft.pagination;
       }
       return this.txs.pagination;
     },
@@ -121,8 +126,10 @@ export default {
           return this.loadBuckets;
         case "holders":
           return this.loadHolders;
-        case "tokens":
-          return this.loadTokens;
+        case "erc20Tokens":
+          return this.loadErc20Tokens;
+        case "NFT":
+          return this.loadNFTTokens;
       }
       return this.loadTxs;
     },
@@ -246,7 +253,16 @@ export default {
           { key: "status", label: "Status" },
         ],
       },
-      tokens: {
+      erc20Tokens: {
+        pagination: { show: true, align: "center", perPage: 20 },
+        fields: [
+          { key: "tokenType", label: "Type" },
+          { key: "fullAddress", label: "Token Address" },
+          { key: "balance", label: "Balance" },
+          { key: "blocknum", label: "Last Updated on Block" },
+        ],
+      },
+      nft: {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "tokenType", label: "Type" },
@@ -271,21 +287,24 @@ export default {
           this.loadTarget = "txs";
           break;
         case 1:
-          this.loadTarget = "tokens";
+          this.loadTarget = "erc20Tokens";
           break;
         case 2:
           this.loadTarget = "erc20Txs";
           break;
         case 3:
-          this.loadTarget = "erc721Txs";
+          this.loadTarget = "NFT";
           break;
         case 4:
-          this.loadTarget = "bids";
+          this.loadTarget = "erc721Txs";
           break;
         case 5:
-          this.loadTarget = "proposedBlocks";
+          this.loadTarget = "bids";
           break;
         case 6:
+          this.loadTarget = "proposedBlocks";
+          break;
+        case 7:
           this.loadTarget = "buckets";
           break;
         default:
@@ -523,10 +542,10 @@ export default {
       });
       return { items, totalRows };
     },
-    async loadTokens(network, page, limit) {
+    async loadErc20Tokens(network, page, limit) {
       this.load = true;
       const { address } = this.$route.params;
-      const { tokens, totalRows } = await this.$api.account.getTokens(
+      const { tokens, totalRows } = await this.$api.account.getErc20Tokens(
         network,
         address,
         page,
@@ -534,37 +553,47 @@ export default {
       );
       const items = [];
       for (const t of tokens) {
-        if (t.tokenType === 'ERC20') {
+        items.push({
+          ...t,
+          fullAddress: t.tokenAddress,
+          blocknum: t.lastUpdate.number,
+          balance: {
+            type: "amount",
+            amount: t.balance,
+            token: t.tokenSymbol,
+            precision: 8,
+            decimals: t.tokenDecimals,
+          },
+        })
+      }
+      return { items, totalRows };
+    },
+    async loadNFTTokens(network, page, limit) {
+      this.load = true;
+      const { address } = this.$route.params;
+      const { tokens, totalRows } = await this.$api.account.getNFTTokens(
+        network,
+        address,
+        page,
+        limit
+      );
+      const items = [];
+      for (const t of tokens) {
+        for (const n of t.nftBalances) {
           items.push({
             ...t,
             fullAddress: t.tokenAddress,
             blocknum: t.lastUpdate.number,
             balance: {
               type: "amount",
+              tokenType: t.tokenType,
+              tokenId: n.tokenId,
               amount: t.balance,
               token: t.tokenSymbol,
               precision: 8,
               decimals: t.tokenDecimals,
             },
           })
-        }
-        if (t.tokenType === 'ERC721' || t.tokenType === 'ERC1155') {
-          for (const n of t.nftBalances) {
-            items.push({
-              ...t,
-              fullAddress: t.tokenAddress,
-              blocknum: t.lastUpdate.number,
-              balance: {
-                type: "amount",
-                tokenType: t.tokenType,
-                tokenId: n.tokenId,
-                amount: t.balance,
-                token: t.tokenSymbol,
-                precision: 8,
-                decimals: t.tokenDecimals,
-              },
-            })
-          }
         }
       }
       return { items, totalRows };

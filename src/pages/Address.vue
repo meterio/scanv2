@@ -188,7 +188,8 @@ export default {
         } else {
           this.userDataCount = {
             txCount: account.txCount,
-            tokenCount: account.tokenCount,
+            erc20TokenCount: account.tokenCount - account.nftTokenCount,
+            nftTokenCount: account.nftTokenCount,
             erc20TxCount: account.erc20TxCount,
             erc721TxCount: account.erc721TxCount,
             bidCount: account.bidCount,
