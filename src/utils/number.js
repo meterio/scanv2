@@ -62,10 +62,10 @@ export const bigNum = (a, precision = undefined) => {
 export const formatHashrate = hr => {
   let numStr = '';
   if (typeof hr === 'number') {
-    numStr = hr.toFixed(0);
+    numStr = new BigNumber(hr).toFixed(0);
   }
   if (typeof hr === 'string') {
-    numStr = hr.split('.')[0];
+    numStr = new BigNumber(hr).toFixed(0);
   }
 
   if (numStr.length > 15) {
