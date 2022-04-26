@@ -185,7 +185,7 @@ export default {
     },
     async searchKeyWords() {
       try {
-        const key = this.searchKey.replace(/\r?\n|\r/g, "");
+        const key = this.searchKey.replace(/\r?\n|\r|\s/g, "");
         this.searchKey = key;
         const res = await this.$api.search.searchKeyWord(
           this.network,

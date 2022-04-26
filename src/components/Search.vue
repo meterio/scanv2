@@ -58,7 +58,7 @@ export default {
   beforeMount() {},
   methods: {
     btnClick() {
-      const key = this.searchWord.replace(/\r?\n|\r/g, "");
+      const key = this.searchWord.replace(/\r?\n|\r|\s/g, "");
       this.$emit("click", key);
     },
     keydown(evt) {
