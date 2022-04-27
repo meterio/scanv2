@@ -252,7 +252,7 @@ export default {
         page,
         limit
       );
-      const { holders, token } = res;
+      const { holders, token, totalRows } = res;
       const pageNum = page ? Number(page) : 1;
       const limitNum = limit ? Number(limit) : 10;
       const items = holders.map((h, index) => {
@@ -269,7 +269,7 @@ export default {
           },
         };
       });
-      return { items, totalRows: token.holdersCount };
+      return { items, totalRows };
     },
     async loadTxs(network, page, limit) {
       console.log("LOAD TXS");
