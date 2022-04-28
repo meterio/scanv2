@@ -182,6 +182,16 @@ export default {
       return fromNow(value);
     },
     switchTab(tab) {
+      switch (tab) {
+        case 'Delegates':
+          this.sortBy = 'votingPower';
+          break;
+        case 'Candidates':
+          this.sortBy = 'totalVotes';
+          break;
+        case 'Jailed':
+          this.sortBy = 'totalPoints';
+      }
       this.current_tab = tab;
       this.current_page = 1;
       this.loading = true;
