@@ -63,8 +63,11 @@ export default {
           type: 'duration',
         },
         { key: 'Committee Size', value: summary.committeeSize },
-        { key: 'Pow Blocks Count', value: powBlocks ? powBlocks.length : 0 },
       ]);
+
+      if (this.currentChain.pow) {
+        this.summary.push({ key: 'Pow Blocks Count', value: powBlocks ? powBlocks.length : 0 });
+      }
     }
   },
   methods: {

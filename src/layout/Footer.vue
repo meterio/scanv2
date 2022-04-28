@@ -35,7 +35,7 @@
                 </li>
               </ul>
               <ul class="footer-menu">
-                <li>
+                <li v-if="currentChain.pow">
                   <router-link :to="{ name: 'auction' }">Auction</router-link>
                 </li>
                 <li>

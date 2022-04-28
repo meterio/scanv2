@@ -2,7 +2,7 @@
 .detail-page
   data-table-v2.mt-2pert.px-0(
     title="Epochs",
-    :fields="epochs.fields",
+    :fields="epochs_fields",
     :pagination="epochs.pagination",
     :loadItems="loadEpochs"
   )
@@ -33,7 +33,21 @@ export default {
       },
     };
   },
-
+  computed: {
+    epochs_fields() {
+      if (this.currentChain.pow) {
+        return this.epochs.fields;
+      }
+      return [
+        { key: "epoch", label: "Epoch" },
+        { key: "startKBlock", label: "Start Block" },
+        { key: "endKBlock", label: "End KBlock" },
+        { key: "startTime", label: "Start Time" },
+        { key: "duration", label: "Duration" },
+        { key: "committeeSize", label: "nCommittee" },
+      ]
+    }
+  },
   methods: {
     async loadEpochs(network, page, limit) {
       const res = await this.$api.epoch.getRecentEpochs(network, page, limit);

@@ -5,7 +5,7 @@
     <ValidatorTable class="px-0"></ValidatorTable>
     <DataTableV2
       title="PoS Epoch Rewards"
-      :fields="epoch_reward.fields"
+      :fields="epoch_reward_fields"
       :pagination="epoch_reward.pagination"
       :loadItems="loadEpochRewards"
       class="px-0"
@@ -52,8 +52,21 @@ export default {
       },
     };
   },
-
-  beforeMount() {},
+  computed: {
+    epoch_reward_fields() {
+      if (this.currentChain.pow) {
+        return this.epoch_reward.fields;
+      }
+      return [
+        { key: 'epoch', label: 'Epoch' },
+        { key: 'blockNum', label: 'Block' },
+        { key: 'amount', label: 'Total Rewards' },
+        { key: 'timestamp', label: 'Time' },
+        { key: 'transferCount', label: 'nTransfer' },
+        { key: 'posReward', label: 'More' },
+      ]
+    }
+  },
   methods: {
     init() {
       this.loadPostData();

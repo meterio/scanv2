@@ -32,8 +32,8 @@ export const chainList = [
     gSymbol: 'STPD',
     apiBase: 'http://18.142.50.83:3000/api/',
     sourcifyApiBase: 'https://sourcify.dev/server',
-    // deployDomain: 'explorer.stp.network',
-    deployDomain: '18.142.50.83',
+    deployDomain: 'explorer.stp.network',
+    // deployDomain: '18.142.50.83',
     pow: false,
     priceEnable: false
   }
