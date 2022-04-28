@@ -30,10 +30,9 @@ export const chainList = [
     title: 'Verse',
     symbol: 'STPT',
     gSymbol: 'STPD',
-    apiBase: 'http://18.142.50.83:3000/api/',
+    apiBase: 'https://api0-testnet.stp.network/api/',
     sourcifyApiBase: 'https://sourcify.dev/server',
-    deployDomain: 'explorer.stp.network',
-    // deployDomain: '18.142.50.83',
+    deployDomain: 'testexplorer.stp.network',
     pow: false,
     priceEnable: false
   }
