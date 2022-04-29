@@ -283,7 +283,7 @@
         <!-- NFT -->
         <template v-slot:cell(nft)="data">
           <div class="dt-row breakable">
-            <div v-if="data.value.address" class="address-row"><span>Address: </span><address-link :address="data.value.address" /></div>
+            <div v-if="data.value.account" class="address-row"><span>Account: </span><address-link :address="data.value.account" /></div>
 
             <section v-if="data.value.nftBalances">
               <span v-for="(n, index) in data.value.nftBalances" :key="index" class="topic-row text-nowrap index">

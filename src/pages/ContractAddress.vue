@@ -169,12 +169,12 @@ export default {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "rank", label: "Rank" },
-          { key: "fullAddress", label: "Address" },
+          // { key: "fullAddress", label: "Address" },
           { key: "balance", label: "Balance" },
         ],
         fields2: [
           { key: "rank", label: "Rank" },
-          { key: "fullAddress", label: "Address" },
+          // { key: "fullAddress", label: "Address" },
           { key: "nft", label: "Token ID" },
         ]
       },
@@ -287,7 +287,7 @@ export default {
         const res = {
           ...h,
           rank: index + 1 + (pageNum - 1) * limitNum,
-          fullAddress: h.address,
+          // fullAddress: h.address,
         };
 
         if (this.isERC20) {
@@ -300,7 +300,8 @@ export default {
           }
         } else {
           res.nft = {
-            nftBalances: h.nftBalances
+            nftBalances: h.nftBalances,
+            account: h.address,
           }
         }
 

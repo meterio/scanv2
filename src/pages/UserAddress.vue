@@ -266,7 +266,7 @@ export default {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "type", label: "Type" },
-          { key: "name", label: "Name" },
+          // { key: "name", label: "Name" },
           { key: "nft", label: "Token ID"}
           // { key: "fullAddress", label: "Token Address" },
           // { key: "balance", label: "Balance" },
@@ -583,8 +583,8 @@ export default {
       for (const t of tokens) {
         items.push({
           type: t.tokenType,
-          name: t.tokenName,
           nft: {
+            name: t.tokenName,
             address: t.tokenAddress,
             nftBalances: t.nftBalances,
           }
