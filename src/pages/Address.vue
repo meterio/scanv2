@@ -136,13 +136,13 @@ export default {
             })`,
           });
         }
-        if (account.tokenSymbol) {
+        if (account.tokenSymbol && account.type === 'ERC20') {
           this.summary.push({
             key: "Decimals",
             value: account.tokenDecimals || 18,
           });
         }
-        if (account.totalSupply) {
+        if (account.totalSupply && account.type === 'ERC20') {
           if (account.totalSupply) {
             this.summary.push({
               key: "Total Supply",

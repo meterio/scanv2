@@ -57,6 +57,14 @@
                 <span v-else>active</span>
               </div>
 
+              <!-- epoch-link -->
+              <b-link
+                href="#"
+                :to="{ name: 'epochDetail', params: { epoch: item.value } }"
+                v-if="item.type === 'epoch-link'"
+                >#{{ item.value }}</b-link
+              >
+
               <!-- epoch-range -->
               <div v-if="item.type === 'epoch-range'">
                 <b-link href="#" :to="{ name: 'epochDetail', params: { epoch: item.start } }">{{ item.start }}</b-link>

@@ -265,10 +265,12 @@ export default {
       nft: {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
-          { key: "tokenType", label: "Type" },
-          { key: "fullAddress", label: "Token Address" },
-          { key: "balance", label: "Balance" },
-          { key: "blocknum", label: "Last Updated on Block" },
+          { key: "type", label: "Type" },
+          { key: "name", label: "Name" },
+          { key: "nft", label: "Token ID"}
+          // { key: "fullAddress", label: "Token Address" },
+          // { key: "balance", label: "Balance" },
+          // { key: "blocknum", label: "Last Updated on Block" },
         ],
       },
     };
@@ -579,23 +581,32 @@ export default {
       );
       const items = [];
       for (const t of tokens) {
-        for (const n of t.nftBalances) {
-          items.push({
-            ...t,
-            fullAddress: t.tokenAddress,
-            blocknum: t.lastUpdate.number,
-            balance: {
-              type: "amount",
-              tokenType: t.tokenType,
-              tokenId: n.tokenId,
-              amount: t.balance,
-              token: t.tokenSymbol,
-              precision: 8,
-              decimals: t.tokenDecimals,
-            },
-          })
-        }
+        items.push({
+          type: t.tokenType,
+          name: t.tokenName,
+          nft: {
+            address: t.tokenAddress,
+            nftBalances: t.nftBalances,
+          }
+        })
+        // for (const n of t.nftBalances) {
+        //   items.push({
+        //     ...t,
+        //     fullAddress: t.tokenAddress,
+        //     blocknum: t.lastUpdate.number,
+        //     balance: {
+        //       type: "amount",
+        //       tokenType: t.tokenType,
+        //       tokenId: n.tokenId,
+        //       amount: t.balance,
+        //       token: t.tokenSymbol,
+        //       precision: 8,
+        //       decimals: t.tokenDecimals,
+        //     },
+        //   })
+        // }
       }
+      console.log('items', items)
       return { items, totalRows };
     },
   },

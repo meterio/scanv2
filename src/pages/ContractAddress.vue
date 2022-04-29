@@ -70,9 +70,12 @@ export default {
   computed: {
     isToken() {
       if (['ERC20', 'ERC721', 'ERC1155'].includes(this.addressInfo.tokenType)) {
-        return true
+        return true;
       }
-      return false
+      return false;
+    },
+    isERC20() {
+      return this.addressInfo.tokenType === 'ERC20';
     },
     address() {
       return this.addressInfo.address;
@@ -104,15 +107,27 @@ export default {
       ];
     },
     fields() {
-      switch (this.loadTarget) {
-        case "txs":
-          return this.txs.fields;
-        case "transfers":
-          return this.transfers.fields;
-        case "holders":
-          return this.holders.fields;
+      if (this.isERC20) {
+        switch (this.loadTarget) {
+          case "txs":
+            return this.txs.fields;
+          case "transfers":
+            return this.transfers.fields
+          case "holders":
+            return this.holders.fields;
+        }
+        return this.txs.fields;
+      } else {
+        switch (this.loadTarget) {
+          case "txs":
+            return this.txs.fields;
+          case "transfers":
+            return this.transfers.fields2;
+          case "holders":
+            return this.holders.fields2;
+        }
+        return this.txs.fields;
       }
-      return this.txs.fields;
     },
     pagination() {
       switch (this.loadTarget) {
@@ -157,6 +172,11 @@ export default {
           { key: "fullAddress", label: "Address" },
           { key: "balance", label: "Balance" },
         ],
+        fields2: [
+          { key: "rank", label: "Rank" },
+          { key: "fullAddress", label: "Address" },
+          { key: "nft", label: "Token ID" },
+        ]
       },
       txs: {
         pagination: {
@@ -189,6 +209,14 @@ export default {
           { key: "from", label: "From" },
           { key: "to", label: "To" },
           { key: "amount", label: "Amount" },
+        ],
+        fields2: [
+          { key: "txhashWithStatus", label: "Hash" },
+          { key: "blocknum", label: "Block" },
+          { key: "timestamp", label: "Time" },
+          { key: "from", label: "From" },
+          { key: "to", label: "To" },
+          { key: "nft", label: "Token ID" },
         ],
         items: [],
       },
@@ -256,18 +284,27 @@ export default {
       const pageNum = page ? Number(page) : 1;
       const limitNum = limit ? Number(limit) : 10;
       const items = holders.map((h, index) => {
-        return {
+        const res = {
           ...h,
           rank: index + 1 + (pageNum - 1) * limitNum,
           fullAddress: h.address,
-          balance: {
+        };
+
+        if (this.isERC20) {
+          res.balance = {
             type: "amount",
             amount: h.balance,
             precision: 6,
             decimals: token.decimals || 18,
             token: token.symbol,
-          },
-        };
+          }
+        } else {
+          res.nft = {
+            nftBalances: h.nftBalances
+          }
+        }
+
+        return res;
       });
       return { items, totalRows };
     },
@@ -332,7 +369,7 @@ export default {
       );
       const { transfers, totalRows, contract } = res;
       const items = transfers.map((t) => {
-        return {
+        const res = {
           txhashWithStatus: {
             hash: t.txHash,
             status: false,
@@ -341,15 +378,22 @@ export default {
           blocknum: t.block.number,
           from: t.from,
           to: t.to,
-          amount: {
+          timestamp: t.block.timestamp,
+        };
+        if (this.isERC20) {
+          res.amount = {
             type: "amount",
             amount: t.amount,
             token: contract.symbol,
             decimals: contract.decimals,
             precision: 8,
-          },
-          timestamp: t.block.timestamp,
-        };
+          }
+        } else {
+          res.nft = {
+            nftBalances: t.nftTransfers
+          }
+        }
+        return res;
       });
       console.log(items);
       return { items, totalRows };

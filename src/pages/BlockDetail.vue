@@ -78,7 +78,7 @@ export default {
           { key: "Hash", value: b.hash },
           { key: "Number", value: b.number },
           { key: "Block Type", value: b.blockType === 1 ? "KBlock" : "MBlock" },
-          { key: "Epoch", value: b.epoch },
+          { key: "Epoch", value: b.epoch, type: "epoch-link" },
           {
             key: "KBlock Height",
             value: b.lastKBlockHeight,

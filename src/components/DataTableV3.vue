@@ -280,6 +280,20 @@
           </div>
         </template>
 
+        <!-- NFT -->
+        <template v-slot:cell(nft)="data">
+          <div class="dt-row breakable">
+            <div v-if="data.value.address" class="address-row"><span>Address: </span><address-link :address="data.value.address" /></div>
+
+            <section v-if="data.value.nftBalances">
+              <span v-for="(n, index) in data.value.nftBalances" :key="index" class="topic-row text-nowrap index">
+                <span v-if="n.value > 1">{{ n.value }} of </span>
+                <span>[{{ n.tokenId }}]</span>
+              </span>
+            </section>
+          </div>
+        </template>
+
         <!-- default template -->
         <template v-slot:cell()="data">
           <div class="dt-row">
