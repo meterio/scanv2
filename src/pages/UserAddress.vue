@@ -58,7 +58,7 @@ export default {
         { name: this.userDataCount.erc20TokenCount > 0 ? `ERC20 Tokens(${this.userDataCount.erc20TokenCount})` : 'ERC20 Tokens' },
         { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txns(${this.userDataCount.erc20TxCount})` : 'ERC20 Txns' },
         { name: this.userDataCount.nftTokenCount > 0 ? `NFT(${this.userDataCount.nftTokenCount})` : 'NFT' },
-        { name: this.userDataCount.erc721TxCount > 0 ? `ERC721 Txns(${this.userDataCount.erc721TxCount})` : 'ERC721 Txns' },
+        { name: this.userDataCount.nftTxCount > 0 ? `NFT Txns(${this.userDataCount.nftTxCount})` : 'NFT Txns' },
         { name: this.userDataCount.bidCount > 0 ? `Auction Bids(${this.userDataCount.bidCount})` : 'Auction Bids' },
         { name: this.userDataCount.proposedCount > 0 ? `Proposed Blocks(${this.userDataCount.proposedCount})` : 'Proposed Blocks' },
         { name: this.userDataCount.bucketCount > 0 ? `Buckets(${this.userDataCount.bucketCount})` : 'Buckets' },
@@ -70,8 +70,8 @@ export default {
           return this.txs.fields;
         case "erc20Txs":
           return this.erc20txs.fields;
-        case "erc721Txs":
-          return this.erc721txs.fields;
+        case "nftTxs":
+          return this.nftTxs.fields;
         case "bids":
           return this.bids.fields;
         case "proposedBlocks":
@@ -82,8 +82,8 @@ export default {
           return this.holders.fields;
         case "erc20Tokens":
           return this.erc20Tokens.fields;
-        case "NFT":
-          return this.nft.fields;
+        case "nftTokens":
+          return this.nftTokens.fields;
       }
       return this.txs.fields;
     },
@@ -93,8 +93,8 @@ export default {
           return this.txs.pagination;
         case "erc20Txs":
           return this.erc20txs.pagination;
-        case "erc721Txs":
-          return this.erc721txs.pagination;
+        case "nftTxs":
+          return this.nftTxs.pagination;
         case "bids":
           this.bids.pagination;
         case "proposedBlocks":
@@ -105,8 +105,8 @@ export default {
           return this.holders.pagination;
         case "erc20Tokens":
           return this.erc20Tokens.pagination;
-        case "NFT":
-          return this.nft.pagination;
+        case "nftTokens":
+          return this.nftTokens.pagination;
       }
       return this.txs.pagination;
     },
@@ -116,8 +116,8 @@ export default {
           return this.loadTxs;
         case "erc20Txs":
           return this.loadTxs20;
-        case "erc721Txs":
-          return this.loadTxs721;
+        case "nftTxs":
+          return this.loadNFTTxs;
         case "bids":
           return this.loadBids;
         case "proposedBlocks":
@@ -128,7 +128,7 @@ export default {
           return this.loadHolders;
         case "erc20Tokens":
           return this.loadErc20Tokens;
-        case "NFT":
+        case "nftTokens":
           return this.loadNFTTokens;
       }
       return this.loadTxs;
@@ -226,7 +226,7 @@ export default {
         ],
         items: [],
       },
-      erc721txs: {
+      nftTxs: {
         pagination: {
           show: true,
           align: "center",
@@ -239,7 +239,7 @@ export default {
           { key: "from", label: "From" },
           { key: "direct", label: "" },
           { key: "to", label: "To" },
-          { key: "amount", label: "Amount" },
+          { key: "nft", label: "Token ID" },
         ],
         items: [],
       },
@@ -262,12 +262,12 @@ export default {
           { key: "blocknum", label: "Last Updated on Block" },
         ],
       },
-      nft: {
+      nftTokens: {
         pagination: { show: true, align: "center", perPage: 20 },
         fields: [
           { key: "type", label: "Type" },
           // { key: "name", label: "Name" },
-          { key: "nft", label: "Token ID"}
+          { key: "nft", label: "Token ID" }
           // { key: "fullAddress", label: "Token Address" },
           // { key: "balance", label: "Balance" },
           // { key: "blocknum", label: "Last Updated on Block" },
@@ -295,10 +295,10 @@ export default {
           this.loadTarget = "erc20Txs";
           break;
         case 3:
-          this.loadTarget = "NFT";
+          this.loadTarget = "nftTokens";
           break;
         case 4:
-          this.loadTarget = "erc721Txs";
+          this.loadTarget = "nftTxs";
           break;
         case 5:
           this.loadTarget = "bids";
@@ -450,9 +450,9 @@ export default {
       }));
       return { items, totalRows };
     },
-    async loadTxs721(network, page, limit) {
+    async loadNFTTxs(network, page, limit) {
       const { address } = this.$route.params;
-      const res = await this.$api.account.getTxs721(
+      const res = await this.$api.account.getNFTTxs(
         network,
         address,
         page,
@@ -468,12 +468,8 @@ export default {
         from: t.from,
         to: t.to,
         direct: t.from === this.address ? "Out" : "In",
-        amount: {
-          type: "amount",
-          amount: t.amount,
-          token: t.symbol || "ERC721",
-          precision: 8,
-          decimals: t.decimals || 18,
+        nft: {
+          nftBalances: t.nftTransfers,
         },
         timestamp: t.block.timestamp,
       }));
@@ -526,20 +522,20 @@ export default {
           hammerPriceStr: b.pending
             ? "-"
             : {
-                type: "amount",
-                amount: b.hammerPrice,
-                precision: 4,
-                token: this.tokenSymbol,
-              },
+              type: "amount",
+              amount: b.hammerPrice,
+              precision: 4,
+              token: this.tokenSymbol,
+            },
           lotAmountStr:
             b.pending || !b.lotAmount
               ? "-"
               : {
-                  type: "amount",
-                  amount: b.lotAmount,
-                  precision: 8,
-                  token: this.tokenSymbol,
-                },
+                type: "amount",
+                amount: b.lotAmount,
+                precision: 8,
+                token: this.tokenSymbol,
+              },
         };
       });
       return { items, totalRows };
@@ -627,6 +623,7 @@ export default {
   .label {
     color: #5c6f8c;
   }
+
   .mt-2pert {
     margin-top: 2.6%;
   }

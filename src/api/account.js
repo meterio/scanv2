@@ -76,5 +76,11 @@ export default {
       network,
       `accounts/${address}/nfttokens?page=${page}&limit=${limit}`
     )
+  },
+  getNFTTxs(network, address, page, limit = 8) {
+    return get(
+      network,
+      `accounts/${address}/nfttxs?page=${page}&limit=${limit}`
+    );
   }
 };

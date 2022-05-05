@@ -131,9 +131,8 @@ export default {
         if (account.tokenName && account.tokenSymbol) {
           this.summary.push({
             key: `${this.tokenType} Token`,
-            value: `${account.tokenName || "Unnamed Token"} (${
-              account.tokenSymbol || "ERC20"
-            })`,
+            value: `${account.tokenName || "Unnamed Token"} (${account.tokenSymbol || "ERC20"
+              })`,
           });
         }
         if (account.tokenSymbol && account.type === 'ERC20') {
@@ -191,7 +190,7 @@ export default {
             erc20TokenCount: account.erc20TokenCount,
             nftTokenCount: account.nftTokenCount,
             erc20TxCount: account.erc20TxCount,
-            erc721TxCount: account.erc721TxCount,
+            nftTxCount: account.nftTxCount,
             bidCount: account.bidCount,
             proposedCount: account.proposedCount,
             bucketCount: account.bucketCount
