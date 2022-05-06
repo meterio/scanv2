@@ -3,13 +3,8 @@
     <DataDashboard :rows="pos_data"></DataDashboard>
 
     <ValidatorTable class="px-0"></ValidatorTable>
-    <DataTableV2
-      title="PoS Epoch Rewards"
-      :fields="epoch_reward_fields"
-      :pagination="epoch_reward.pagination"
-      :loadItems="loadEpochRewards"
-      class="px-0"
-    >
+    <DataTableV2 title="PoS Epoch Rewards" :fields="epoch_reward_fields" :pagination="epoch_reward.pagination"
+      :loadItems="loadEpochRewards" class="px-0">
     </DataTableV2>
   </div>
 </template>
@@ -105,7 +100,7 @@ export default {
               label: 'Validators',
             },
             {
-              content: fromWei(staking.totalStaked, 0) + ' ' + this.currentChain.symbol,
+              content: fromWei(staking.totalStaked, 0) + ' ' + this.currentChain.gSymbol,
               label: 'Total Staked',
             },
           ],
