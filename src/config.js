@@ -10,7 +10,8 @@ export const chainList = [
     sourcifyApiBase: 'https://sourcify.dev/server',
     deployDomain: 'scan.meter.io',
     pow: true,
-    priceEnable: true
+    priceEnable: true,
+    nftImageUrlBase: 'https://meter-nft-image.s3.ap-northeast-1.amazonaws.com/'
   },
   {
     name: 'Meter Testnet',
@@ -22,7 +23,8 @@ export const chainList = [
     sourcifyApiBase: 'https://sourcify.dev/server',
     deployDomain: 'scan-warringstakes.meter.io',
     pow: true,
-    priceEnable: true
+    priceEnable: true,
+    nftImageUrlBase: 'https://meter-nft-image.s3.ap-northeast-1.amazonaws.com/'
   },
   {
     name: 'Verse Testnet',
@@ -34,7 +36,8 @@ export const chainList = [
     sourcifyApiBase: 'https://sourcify.dev/server',
     deployDomain: 'testexplorer.stp.network',
     pow: false,
-    priceEnable: false
+    priceEnable: false,
+    nftImageUrlBase: 'https://meter-nft-image.s3.ap-northeast-1.amazonaws.com/'
   }
 ];
 

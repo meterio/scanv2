@@ -22,6 +22,7 @@ import AddressLinkPage from "@/pages/AddressLinkPage.vue";
 import StatPage from "@/pages/Stat.vue";
 import VerifyPage from "@/pages/Verify.vue";
 import TokenAddress from "@/pages/tokenAddress.vue";
+import NFTDetail from "@/pages/NFTDetail.vue";
 
 import notFoundPage from "../pages/NotFound.vue";
 
@@ -175,6 +176,13 @@ export const routes = [
     name: "tokenInfo",
     component: TokenAddress,
     meta: { title: `token` },
+  },
+  {
+    path: "/nftDetail/:address/:tokenId",
+    name: "nftDetail",
+    component: NFTDetail,
+    props: true,
+    meta: { title: `nftDetail` }
   },
 
   {

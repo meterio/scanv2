@@ -14,7 +14,7 @@
           <strong>Loading...</strong>
         </div>
       </div>
-      <b-form-group label="Add Files">
+      <!-- <b-form-group label="Add Files">
         <b-form-file multiple v-model="files"
           placeholder="Add the Solidity source files and metadata of all contracts you want to verify"
           @input="sourceCodeChange">
@@ -29,7 +29,7 @@
       <section>
         <VerifyValidate v-for="item in contracts" :key="item.verificationId" :data="item" />
       </section>
-      <!-- <b-list-group>
+      <b-list-group>
         <b-list-group-item v-for="item in contracts" :key="item.verificationId">
           <div class="d-flex align-items-center justify-content-between">
 
@@ -39,7 +39,7 @@
           </div>
         </b-list-group-item>
       </b-list-group> -->
-      <!-- <b-form v-else @submit="onSubmit" @reset="onReset">
+      <b-form v-else @submit="onSubmit" @reset="onReset">
         <b-form-group label="Choose the Solidity Contract Code:">
           <b-form-file multiple v-model="form.sourceCodeFiles" required>
             <template slot="file-name" slot-scope="{ names }">
@@ -56,22 +56,20 @@
 
         <section class="text-center">
           <b-button type="submit" variant="primary">Verify</b-button>
-          <b-button class="ml-1" type="reset" variant="secondary"
-            >Reset</b-button
-          >
+          <b-button class="ml-1" type="reset" variant="secondary">Reset</b-button>
         </section>
-      </b-form> -->
+      </b-form>
     </section>
   </b-container>
 </template>
 
 <script>
-import VerifyValidate from "./verifyValidate.vue";
+// import VerifyValidate from "./verifyValidate.vue";
 
 export default {
   name: "Verify",
   components: {
-    VerifyValidate
+    // VerifyValidate
   },
   data() {
     return {

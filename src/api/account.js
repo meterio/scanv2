@@ -82,5 +82,11 @@ export default {
       network,
       `accounts/${address}/nfttxs?page=${page}&limit=${limit}`
     );
+  },
+  getNFTTxsByTokenAddrTokenId(network, address, id, page, limit = 8) {
+    return get(
+      network,
+      `accounts/${address}/${id}/nfttxs?page=${page}&limit=${limit}`
+    );
   }
 };

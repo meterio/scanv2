@@ -585,22 +585,6 @@ export default {
             nftBalances: t.nftBalances,
           }
         })
-        // for (const n of t.nftBalances) {
-        //   items.push({
-        //     ...t,
-        //     fullAddress: t.tokenAddress,
-        //     blocknum: t.lastUpdate.number,
-        //     balance: {
-        //       type: "amount",
-        //       tokenType: t.tokenType,
-        //       tokenId: n.tokenId,
-        //       amount: t.balance,
-        //       token: t.tokenSymbol,
-        //       precision: 8,
-        //       decimals: t.tokenDecimals,
-        //     },
-        //   })
-        // }
       }
       console.log('items', items)
       return { items, totalRows };
