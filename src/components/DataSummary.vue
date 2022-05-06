@@ -165,7 +165,7 @@
 
               <!-- nft token image -->
               <span v-if="item.type === 'token-image'">
-                <img :src="item.value" width="50" height="50" alt="">
+                <img :src="item.value" width="100" height="100" alt="">
               </span>
             </b-col>
           </b-row>

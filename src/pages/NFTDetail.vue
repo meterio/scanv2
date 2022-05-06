@@ -140,6 +140,7 @@ export default {
         to: t.to,
         direct: t.from === this.address ? "Out" : "In",
         nft: {
+          nolink: true,
           nftBalances: t.nftTransfers,
         },
         timestamp: t.block.timestamp,

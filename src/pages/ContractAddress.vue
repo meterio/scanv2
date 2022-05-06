@@ -300,6 +300,7 @@ export default {
           }
         } else {
           res.nft = {
+            address: h.tokenAddress,
             nftBalances: h.nftBalances,
             account: h.address,
           }
@@ -391,6 +392,7 @@ export default {
           }
         } else {
           res.nft = {
+            address: t.tokenAddress,
             nftBalances: t.nftTransfers
           }
         }
@@ -417,9 +419,11 @@ export default {
   .label {
     color: #5c6f8c;
   }
+
   .mt-2pert {
     margin-top: 2.6%;
   }
+
   .loading {
     opacity: 0.55;
     font-size: 14px;
