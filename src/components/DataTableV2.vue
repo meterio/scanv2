@@ -268,7 +268,7 @@
         <template v-slot:cell(nft)="data">
           <div class="dt-row breakable">
             <div v-if="data.value.name" class="address-row"><span>Name: </span>{{ data.value.name }}</div>
-            <div v-if="data.value.address" class="address-row"><span>Address: </span>
+            <div v-if="data.value.address && data.value.showAddress" class="address-row"><span>Address: </span>
               <address-link :address="data.value.address" />
             </div>
 

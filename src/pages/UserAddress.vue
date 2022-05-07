@@ -469,6 +469,7 @@ export default {
         to: t.to,
         direct: t.from === this.address ? "Out" : "In",
         nft: {
+          address: t.tokenAddress,
           nftBalances: t.nftTransfers,
         },
         timestamp: t.block.timestamp,
@@ -582,6 +583,7 @@ export default {
           nft: {
             name: t.tokenName,
             address: t.tokenAddress,
+            showAddress: true,
             nftBalances: t.nftBalances,
           }
         })
