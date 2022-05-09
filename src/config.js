@@ -6,7 +6,7 @@ export const chainList = [
     symbol: 'MTR',
     gSymbol: 'MTRG',
     // apiBase: 'http://builder.meter.io:3000/api/',
-    apiBase: 'https://api.meter.io:12001/api/',
+    apiBase: 'https://api.meter.io:8000/api/',
     sourcifyApiBase: 'https://sourcify.dev/server',
     deployDomain: 'scan.meter.io',
     pow: true,

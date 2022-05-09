@@ -47,12 +47,8 @@ export default {
     this.summaryTitle = 'Epoch Detail';
 
     if (!!summary) {
-      if (summary.endKBlock) {
-        this.summary = [{ key: 'Epoch', value: summary.epoch, type: 'epoch-with-stats' }];
-      } else {
-        this.summary = [{ key: 'Epoch', value: summary.epoch }];
-      }
-      this.summary = this.summary.concat([
+      this.summary = [
+        { key: 'Epoch', value: summary.epoch, type: 'epoch-with-stats' },
         { key: 'Start Block', value: summary.startKBlock, type: 'block-link' },
         { key: 'Start Time', value: summary.startTime, type: 'timestamp' },
         { key: 'End KBlock', value: summary.endKBlock, type: 'block-link' },
@@ -63,7 +59,7 @@ export default {
           type: 'duration',
         },
         { key: 'Committee Size', value: summary.committeeSize },
-      ]);
+      ];
 
       if (this.currentChain.pow) {
         this.summary.push({ key: 'Pow Blocks Count', value: powBlocks ? powBlocks.length : 0 });
