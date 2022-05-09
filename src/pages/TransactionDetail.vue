@@ -8,14 +8,10 @@
       </template>
       <template v-slot:cell(to)="data">
         <div class="dt-row">
-          <router-link
-            class="link"
-            :to="{
-              name: 'address',
-              params: { address: data.value },
-            }"
-            >{{ data.value }}</router-link
-          >
+          <router-link class="link" :to="{
+            name: 'address',
+            params: { address: data.value },
+          }">{{ data.value }}</router-link>
         </div>
       </template>
 
@@ -25,15 +21,14 @@
         </div>
 
         <div v-if="row.row_hovered"></div>
-        <b-button
-          v-if="row.item.decoded"
-          size="sm"
-          variant="outline-secondary"
-          @click="row.toggleDetails"
-          class="mr-2 float-right"
-        >
-          <span v-if="!row.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Show Decoded </span>
-          <span v-else> <b-icon icon="chevron-double-up"></b-icon> Hide Decoded </span>
+        <b-button v-if="row.item.decoded" size="sm" variant="outline-secondary" @click="row.toggleDetails"
+          class="mr-2 float-right">
+          <span v-if="!row.detailsShowing">
+            <b-icon icon="chevron-double-down"></b-icon> Show Decoded
+          </span>
+          <span v-else>
+            <b-icon icon="chevron-double-up"></b-icon> Hide Decoded
+          </span>
         </b-button>
       </template>
 
@@ -248,6 +243,7 @@ export default {
             abi,
             methodId,
             datas,
+            isDecoded: !!decoded,
           },
           decoded,
           index: index + 1,
@@ -297,16 +293,20 @@ export default {
 .card-title {
   font-size: 15px;
 }
+
 .vjs-tree {
   font-size: 12px !important;
   word-break: break-all !important;
+
   .vjs-key {
     font-size: 12px !important;
   }
+
   .vjs-value {
     font-size: 12px !important;
   }
 }
+
 .nav-item {
   margin-right: 15px;
 }

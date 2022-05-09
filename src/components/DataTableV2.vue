@@ -209,10 +209,13 @@
             <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
             <div class="title-row" v-if="data.value.methodId > 0">MethodID: {{ data.value.methodId }}</div>
 
-            <div v-for="(data, index) in data.value.datas" :key="index" class="topic-row">
-              <span class="index">{{ index }}</span>
-              <span>{{ data }}</span>
-            </div>
+            <template v-if="data.value.isDecoded">
+              <div v-for="(data, index) in data.value.datas" :key="index" class="topic-row">
+                <span class="index">{{ index }}</span>
+                <span>{{ data }}</span>
+              </div>
+            </template>
+            <div v-else>{{ data.value.data }}</div>
           </div>
           <b-button v-if="data.item.decoded" size="sm" variant="outline-secondary" @click="data.toggleDetails"
             class="mr-2 float-right">
