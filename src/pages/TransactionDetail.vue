@@ -224,6 +224,10 @@ export default {
             type: 'transfer-highlight',
           });
         }
+
+        if (!!tx.contractAddress) {
+          this.summary.splice(5, 0, { key: 'To', value: tx.contractAddress, type: 'contract-created-link' },)
+        }
       }
     },
     async loadClauses() {

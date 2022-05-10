@@ -63,6 +63,13 @@
               <!-- address-link -->
               <address-link :address="item.value" v-if="item.type === 'address-link'" />
 
+              <!-- contract-created-link -->
+              <div v-if="item.type === 'contract-created-link'">
+                <span>[Contract </span>
+                <address-link :address="item.value" />
+                <span> Created]</span>
+              </div>
+
               <!-- address-or-name-link -->
               <router-link :to="{
                 name: 'address',

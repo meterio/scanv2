@@ -196,7 +196,7 @@
 
         <!-- Clause template -->
         <template v-slot:cell(clause)="data">
-          <div class="dt-row breakable">
+          <div class="breakable">
             <div class="address-row"><span>To: </span>
               <address-link :address="data.value.to" />
             </div>
@@ -215,7 +215,9 @@
                 <span>{{ data }}</span>
               </div>
             </template>
-            <div v-else>{{ data.value.data }}</div>
+            <div v-else>
+              <b-form-textarea readonly rows="3" max-rows="16" :value="data.value.data"></b-form-textarea>
+            </div>
           </div>
           <b-button v-if="data.item.decoded" size="sm" variant="outline-secondary" @click="data.toggleDetails"
             class="mr-2 float-right">
