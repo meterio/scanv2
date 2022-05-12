@@ -172,7 +172,7 @@
 
               <!-- nft token image -->
               <span v-if="item.type === 'token-image'">
-                <img :src="item.value" width="100" height="100" alt="">
+              <b-img-lazy thumbnail fluid :src="item.value" blank-color="#777" width="100" />
               </span>
             </b-col>
           </b-row>
