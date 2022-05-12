@@ -168,6 +168,7 @@ export const routes = [
   {
     path: "/verify/:address",
     name: "verify",
+    props: true,
     component: VerifyPage,
     meta: { title: `verify` },
   },
