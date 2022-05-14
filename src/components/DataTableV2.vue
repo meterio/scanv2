@@ -2,8 +2,18 @@
   <b-container class="table-container data-table-container">
     <b-card :title="title">
       <slot name="header"></slot>
-      <b-table hover class="data-table" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="itemsLocal"
-        :fields="fields" :busy.sync="loading" show-empty :style="{ minHeight: minHeight }" stacked="lg">
+      <b-table
+        hover
+        class="data-table"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
+        :items="itemsLocal"
+        :fields="fields"
+        :busy.sync="loading"
+        show-empty
+        :style="{ minHeight: minHeight }"
+        stacked="lg"
+      >
         <template #table-busy>
           <div class="text-center text-primary my-2">
             <b-spinner class="align-middle mr-2"></b-spinner>
@@ -21,10 +31,14 @@
         <!-- Epoch column template -->
         <template v-slot:cell(epoch)="data">
           <div class="dt-row">
-            <router-link class="link" :to="{
-              name: 'epochDetail',
-              params: { epoch: data.value },
-            }">{{ data.value }}</router-link>
+            <router-link
+              class="link"
+              :to="{
+                name: 'epochDetail',
+                params: { epoch: data.value },
+              }"
+              >{{ data.value }}</router-link
+            >
           </div>
         </template>
 
@@ -67,10 +81,14 @@
         <!-- Txhash column template -->
         <template v-slot:cell(txhash)="data">
           <div class="dt-row">
-            <router-link class="link" :to="{
-              name: 'txDetail',
-              params: { hash: data.value },
-            }">{{ shortHash(data.value) }}</router-link>
+            <router-link
+              class="link"
+              :to="{
+                name: 'txDetail',
+                params: { hash: data.value },
+              }"
+              >{{ shortHash(data.value) }}</router-link
+            >
           </div>
         </template>
 
@@ -79,20 +97,28 @@
             <span :style="{ display: !!data.value.status ? 'inline' : 'none' }" class="danger-icon">
               <b-icon icon="exclamation-circle-fill" variant="danger"></b-icon>
             </span>
-            <router-link class="link" :to="{
-              name: 'txDetail',
-              params: { hash: data.value.hash },
-            }">{{ shortHash(data.value.hash) }}</router-link>
+            <router-link
+              class="link"
+              :to="{
+                name: 'txDetail',
+                params: { hash: data.value.hash },
+              }"
+              >{{ shortHash(data.value.hash) }}</router-link
+            >
           </div>
         </template>
 
         <!-- Bucketid column template -->
         <template v-slot:cell(bucketid)="data">
           <div class="dt-row">
-            <router-link class="link" :to="{
-              name: 'bucket',
-              params: { id: data.value },
-            }">{{ shortHash(data.value) }}</router-link>
+            <router-link
+              class="link"
+              :to="{
+                name: 'bucket',
+                params: { id: data.value },
+              }"
+              >{{ shortHash(data.value) }}</router-link
+            >
           </div>
         </template>
 
@@ -129,37 +155,53 @@
         <!-- Block column template-->
         <template v-slot:cell(blocknum)="data">
           <div class="dt-row">
-            <router-link class="link" :to="{
-              name: 'blockDetail',
-              params: { revision: data.value },
-            }">#{{ data.value }}</router-link>
+            <router-link
+              class="link"
+              :to="{
+                name: 'blockDetail',
+                params: { revision: data.value },
+              }"
+              >#{{ data.value }}</router-link
+            >
           </div>
         </template>
         <template v-slot:cell(endKBlock)="data">
           <div class="dt-row" v-if="data.value >= 0">
-            <router-link class="link" :to="{
-              name: 'blockDetail',
-              params: { revision: data.value },
-            }">#{{ data.value }}</router-link>
+            <router-link
+              class="link"
+              :to="{
+                name: 'blockDetail',
+                params: { revision: data.value },
+              }"
+              >#{{ data.value }}</router-link
+            >
           </div>
           <div class="dt-row" v-else>-</div>
         </template>
         <template v-slot:cell(startKBlock)="data">
           <div class="dt-row">
-            <router-link class="link" :to="{
-              name: 'blockDetail',
-              params: { revision: data.value },
-            }">#{{ data.value }}</router-link>
+            <router-link
+              class="link"
+              :to="{
+                name: 'blockDetail',
+                params: { revision: data.value },
+              }"
+              >#{{ data.value }}</router-link
+            >
           </div>
         </template>
 
         <!-- Block hash column template -->
         <template v-slot:cell(blockhash)="data">
           <div class="dt-row">
-            <router-link class="link" :to="{
-              name: 'blockDetail',
-              params: { revision: data.value },
-            }">{{ shortHash(data.value) }}</router-link>
+            <router-link
+              class="link"
+              :to="{
+                name: 'blockDetail',
+                params: { revision: data.value },
+              }"
+              >{{ shortHash(data.value) }}</router-link
+            >
           </div>
         </template>
 
@@ -172,10 +214,14 @@
 
         <template v-slot:cell(auctionDetail)="data">
           <div class="dt-row">
-            <router-link v-if="data.value.bidCount && data.value.bidCount > 0" :to="{
-              name: 'auctionDetail',
-              params: { auctionID: data.value.id },
-            }">{{ data.value.bidCount }}</router-link>
+            <router-link
+              v-if="data.value.bidCount && data.value.bidCount > 0"
+              :to="{
+                name: 'auctionDetail',
+                params: { auctionID: data.value.id },
+              }"
+              >{{ data.value.bidCount }}</router-link
+            >
             <span v-else>{{ data.value.bidCount || 0 }}</span>
           </div>
         </template>
@@ -197,14 +243,19 @@
         <!-- Clause template -->
         <template v-slot:cell(clause)="data">
           <div class="breakable">
-            <div class="address-row"><span>To: </span>
+            <div class="address-row">
+              <span>To: </span>
               <address-link :address="data.value.to" />
             </div>
             <div class="amount-row" v-if="data.value.amount">
               Value:
-              <amount-tag v-if="data.value.amount.type == 'amount'" :amount="data.value.amount.amount"
-                :token="data.value.amount.token" :precision="data.value.amount.precision"
-                :decimals="data.value.amount.decimals || 18" />
+              <amount-tag
+                v-if="data.value.amount.type == 'amount'"
+                :amount="data.value.amount.amount"
+                :token="data.value.amount.token"
+                :precision="data.value.amount.precision"
+                :decimals="data.value.amount.decimals || 18"
+              />
             </div>
             <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
             <div class="title-row" v-if="data.value.methodId > 0">MethodID: {{ data.value.methodId }}</div>
@@ -219,21 +270,23 @@
               <b-form-textarea readonly rows="3" max-rows="16" :value="data.value.data"></b-form-textarea>
             </div>
           </div>
-          <b-button v-if="data.item.decoded" size="sm" variant="outline-secondary" @click="data.toggleDetails"
-            class="mr-2 float-right">
-            <span v-if="!data.detailsShowing">
-              <b-icon icon="chevron-double-down"></b-icon> Show Decoded
-            </span>
-            <span v-else>
-              <b-icon icon="chevron-double-up"></b-icon> Hide Decoded
-            </span>
+          <b-button
+            v-if="data.item.decoded"
+            size="sm"
+            variant="outline-secondary"
+            @click="data.toggleDetails"
+            class="mr-2 float-right"
+          >
+            <span v-if="!data.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Show Decoded </span>
+            <span v-else> <b-icon icon="chevron-double-up"></b-icon> Hide Decoded </span>
           </b-button>
         </template>
 
         <!-- Event template -->
         <template v-slot:cell(event)="data">
           <div class="dt-row breakable">
-            <div class="address-row"><span>Address: </span>
+            <div class="address-row">
+              <span>Address: </span>
               <address-link :address="data.value.address" />
             </div>
             <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
@@ -251,14 +304,15 @@
               </div>
             </div>
           </div>
-          <b-button v-if="data.item.decoded" size="sm" variant="outline-secondary" @click="data.toggleDetails"
-            class="mr-2 float-right">
-            <span v-if="!data.detailsShowing">
-              <b-icon icon="chevron-double-down"></b-icon> Show Decoded
-            </span>
-            <span v-else>
-              <b-icon icon="chevron-double-up"></b-icon> Hide Decoded
-            </span>
+          <b-button
+            v-if="data.item.decoded"
+            size="sm"
+            variant="outline-secondary"
+            @click="data.toggleDetails"
+            class="mr-2 float-right"
+          >
+            <span v-if="!data.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Show Decoded </span>
+            <span v-else> <b-icon icon="chevron-double-up"></b-icon> Hide Decoded </span>
           </b-button>
         </template>
 
@@ -273,7 +327,8 @@
         <template v-slot:cell(nft)="data">
           <div class="dt-row breakable">
             <div v-if="data.value.name" class="address-row"><span>Name: </span>{{ data.value.name }}</div>
-            <div v-if="data.value.address && data.value.showAddress" class="address-row"><span>Address: </span>
+            <div v-if="data.value.address && data.value.showAddress" class="address-row">
+              <span>Address: </span>
               <address-link :address="data.value.address" />
             </div>
 
@@ -283,10 +338,13 @@
                 <span v-if="data.value.nolink">[{{ n.tokenId }}]</span>
                 <span v-else>
                   <span>[</span>
-                  <router-link :to="{
-                    name: 'nftDetail',
-                    params: { address: data.value.address, tokenId: n.tokenId },
-                  }">{{ n.tokenId }}</router-link>
+                  <router-link
+                    :to="{
+                      name: 'nftDetail',
+                      params: { address: data.value.address, tokenId: n.tokenId },
+                    }"
+                    >{{ n.tokenId }}</router-link
+                  >
                   <span>]</span>
                 </span>
               </span>
@@ -298,13 +356,24 @@
         <template v-slot:cell()="data">
           <div class="dt-row">
             <!-- amount tag -->
-            <amount-tag v-if="data.value.type == 'amount'" :amount="data.value.amount" :token="data.value.token"
-              :precision="data.value.precision" :decimals="data.value.decimals || 18" :tokenId="data.value.tokenId"
-              :tokenType="data.value.tokenType" />
-            <router-link v-if="data.value.type == 'block'" class="link" :to="{
-              name: 'blockDetail',
-              params: { revision: data.value.block },
-            }">#{{ data.value.block }}</router-link>
+            <amount-tag
+              v-if="data.value.type == 'amount'"
+              :amount="data.value.amount"
+              :token="data.value.token"
+              :precision="data.value.precision"
+              :decimals="data.value.decimals || 18"
+              :tokenId="data.value.tokenId"
+              :tokenType="data.value.tokenType"
+            />
+            <router-link
+              v-if="data.value.type == 'block'"
+              class="link"
+              :to="{
+                name: 'blockDetail',
+                params: { revision: data.value.block },
+              }"
+              >#{{ data.value.block }}</router-link
+            >
             <label v-if="data.value.type == 'percentage'">{{ Math.round(data.value.amount * 1000) / 10 }}%</label>
 
             <span v-if="!data.value.type">{{ data.value }}</span>
@@ -313,8 +382,13 @@
       </b-table>
 
       <div v-if="pagination.show && totalRows > pagination.perPage" class="data-pagination">
-        <b-pagination :align="pagination.align" v-model="currentPage" :total-rows="totalRows"
-          :per-page="pagination.perPage" @change="pageChange"></b-pagination>
+        <b-pagination
+          :align="pagination.align"
+          v-model="currentPage"
+          :total-rows="totalRows"
+          :per-page="pagination.perPage"
+          @change="pageChange"
+        ></b-pagination>
       </div>
     </b-card>
   </b-container>
@@ -522,7 +596,6 @@ export default {
       font-size: 0.85rem;
     }
 
-    margin-top: 3px;
     margin-bottom: 5px;
   }
 
