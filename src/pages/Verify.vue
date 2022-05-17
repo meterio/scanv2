@@ -36,6 +36,7 @@
       </b-form-group>
       
       <section class="text-center">
+        <b-button class="mr-1" variant="light" @click="goBack">Back</b-button>
         <b-button :disabled="loading" @click="verify" variant="primary">
           <b-spinner v-if="loading" small></b-spinner>
           <span class="ml-1">Verify</span>
@@ -139,6 +140,9 @@ export default {
         };
       }
     },
+    goBack() {
+      this.$router.go(-1)
+    }
   },
 };
 </script>
