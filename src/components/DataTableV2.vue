@@ -266,9 +266,10 @@
                 <span>{{ data }}</span>
               </div>
             </template>
-            <div v-else>
+            <div v-else-if="data.value.data !== '0x'">
               <b-form-textarea readonly rows="3" max-rows="16" :value="data.value.data"></b-form-textarea>
             </div>
+            <div v-else>{{ data.value.data }}</div>
           </div>
           <b-button
             v-if="data.item.decoded"
