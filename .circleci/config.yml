@@ -44,7 +44,7 @@ jobs:
             command: npm install
       - run: 
             name: testnet build
-            command: npm run build
+            command: VUE_APP_CHAIN_ID=83 npm run build
       - run:
           name: s3 sync
           command: aws s3 sync ./dist/ s3://scan-testnet/ --delete --acl public-read
