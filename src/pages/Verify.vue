@@ -9,7 +9,7 @@
     <section class="form-container">
       <b-form-group label="Add Files">
         <b-form-file multiple v-model="files"
-          placeholder="Add the Solidity source files and metadata of all contracts you want to verify"
+          placeholder="Meter uses sourcify.dev for contract verifications.  Add the solidity source and metadata files or a zip file "
         >
           <template slot="file-name" slot-scope="{ names }">
             <b-badge variant="dark">{{ names[0] }}</b-badge>
