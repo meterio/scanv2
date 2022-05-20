@@ -42,9 +42,10 @@ export const chainList = [
 ];
 
 export const getCurrentChain = chainId => {
+  console.log('chainId', chainId)
   const chain = chainList.find(c => c.chainId === chainId);
   if (!chain) {
-    return alert('invalid chainId: ', chainId);
+    return alert(`invalid chainId: ${chainId}`);
   }
   return chain;
 };

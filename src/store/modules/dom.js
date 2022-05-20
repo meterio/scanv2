@@ -14,7 +14,7 @@ export default {
     widthTablet: 1024,
     knownAddresses: {},
     knownTokens: {},
-    network: Number(VUE_APP_CHAIN_ID),
+    network: !!VUE_APP_CHAIN_ID ? Number(VUE_APP_CHAIN_ID) : 82,
   },
 
   mutations: {

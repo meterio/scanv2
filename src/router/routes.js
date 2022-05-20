@@ -28,7 +28,7 @@ import notFoundPage from "../pages/NotFound.vue";
 
 import { getCurrentChain } from "@/config";
 const { VUE_APP_CHAIN_ID } = process.env;
-const cChain = getCurrentChain(Number(VUE_APP_CHAIN_ID));
+const cChain = getCurrentChain(!!VUE_APP_CHAIN_ID ? Number(VUE_APP_CHAIN_ID) : 82);
 
 export const routes = [
   {
