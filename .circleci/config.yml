@@ -17,12 +17,12 @@ jobs:
           command: sudo ./aws/install
       # look for existing cache and restore if found
       - restore_cache:
-          key: v1-deps-{{ checksum "package.json" }}
+          key: scanv2-deps-{{ checksum "package.json" }}
       - run:
           name: install npm dependencies
           command: npm install
       - save_cache:
-          key: v1-deps-{{ checksum "package.json" }}
+          key: scanv2-deps-{{ checksum "package.json" }}
           paths:
             - node_modules
       - run:
@@ -48,12 +48,12 @@ jobs:
           name: install awscli v2
           command: sudo ./aws/install
       - restore_cache:
-          key: v1-deps-{{ checksum "package.json" }}
+          key: scanv2-deps-{{ checksum "package.json" }}
       - run:
           name: install npm dependencies
           command: npm install
       - save_cache:
-          key: v1-deps-{{ checksum "package.json" }}
+          key: scanv2-deps-{{ checksum "package.json" }}
           paths:
             - node_modules
       - run:
