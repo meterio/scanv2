@@ -4,35 +4,31 @@
   .search-banner
     .container
       h1.title {{ currentChain.title }} Blockchain Explorer
-      search.mt25(
-        :btnType="2",
-        placeholder="Search Transation/Blocks/Address",
-        @click="searchKeyWords"
-      )
+      search.mt25(:btnType='2', placeholder='Search Transation/Blocks/Address', @click='searchKeyWords')
     //- block statistic
-  data-dashboard.mt35(v-bind:rows="data", v-if="data.length > 0")
+  data-dashboard.mt35(v-bind:rows='data', v-if='data.length > 0')
     //- node statistic
   b-container.px-0
     b-row
-      b-col(cols="12", lg="6")
+      b-col(cols='12', lg='6')
         recent-blocks
-      b-col(cols="12", lg="6")
+      b-col(cols='12', lg='6')
         recent-txs
-  b-modal(v-model="modal_show", hide-footer, hide-header)
+  b-modal(v-model='modal_show', hide-footer, hide-header)
     .text-center Search No More Data
 </template>
 
 <script>
-import Search from "@/components/Search.vue";
-import DataDashboard from "@/components/DataDashboard.vue";
-import RecentBlocks from "@/components/RecentBlocks.vue";
-import RecentTxs from "@/components/RecentTxs.vue";
-import { formatNum } from "@/utils";
-import BigNumber from "bignumber.js";
-import { mapState } from "vuex";
+import Search from '@/components/Search.vue';
+import DataDashboard from '@/components/DataDashboard.vue';
+import RecentBlocks from '@/components/RecentBlocks.vue';
+import RecentTxs from '@/components/RecentTxs.vue';
+import { formatNum } from '@/utils';
+import BigNumber from 'bignumber.js';
+import { mapState } from 'vuex';
 
 export default {
-  name: "Home",
+  name: 'Home',
 
   components: {
     Search,
@@ -51,16 +47,16 @@ export default {
       running: false,
       modal_show: false,
       // top nav tabs
-      nav_tabs: ["PoS", "PoW"],
+      nav_tabs: ['PoS', 'PoW'],
       // fake data
-      msg: "Welcome to Index!!!",
+      msg: 'Welcome to Index!!!',
       data: [],
     };
   },
   watch: {
     home_block_height(newVal) {
       if (this.data && this.data[2] && this.data[2][0]) {
-        this.data[2][0]["content"] = newVal;
+        this.data[2][0]['content'] = newVal;
       }
     },
   },
@@ -72,26 +68,24 @@ export default {
       const res = await this.$api.metric.getAll(this.network);
       this.loading = false;
       const { mtr, mtrg, pos, pow, staking, committee } = res;
-      console.log("mtrg", mtrg);
+      console.log('mtrg', mtrg);
 
-      const stakingRatio = new BigNumber(staking.totalStaked)
-        .dividedBy(1e18)
-        .dividedBy(40e6);
+      const stakingRatio = new BigNumber(staking.totalStaked).dividedBy(1e18).dividedBy(40e6);
       this.data = [
         [
-          { label: "Block Height", content: pos.best },
-          { label: "Epoch", content: pos.epoch },
-          { label: "Transactions", content: pos.txsCount },
-          { label: "Avg Block Time", content: pos.avgBlockTime + " sec" },
+          { label: 'Block Height', content: pos.best },
+          { label: 'Epoch', content: pos.epoch },
+          { label: 'Transactions', content: pos.txsCount },
+          { label: 'Avg Block Time', content: pos.avgBlockTime + ' sec' },
         ],
         [
           {
-            label: "Healthy / Total Nodes",
+            label: 'Healthy / Total Nodes',
             content: `${staking.healthyNodes} / ${staking.candidates}`,
           },
           {
-            label: "Staking Ratio",
-            content: stakingRatio.times(100).toFixed(2) + "%",
+            label: 'Staking Ratio',
+            content: stakingRatio.times(100).toFixed(2) + '%',
             // content:
             //   new BigNumber(staking.totalCirculationStaked)
             //     .dividedBy(1e18)
@@ -99,42 +93,44 @@ export default {
             //     .times(100)
             //     .toFixed(2) + "%",
           },
-          // { label: "MTRG Annual Inflation", content: pos.inflation },
+          { label: 'Annual Network Inflation', content: pos.inflation },
+          // {
+          //   label: "Avg Staking APY",
+          //   content:
+          //     new BigNumber(0.05)
+          //       .dividedBy(stakingRatio)
+          //       .times(100)
+          //       .toFixed(2) + "%",
+          // },
           {
-            label: "Avg Staking APY",
-            content:
-              new BigNumber(0.05)
-                .dividedBy(stakingRatio)
-                .times(100)
-                .toFixed(2) + "%",
-          },
-          {
-            label: "Address Count",
+            label: 'Address Count',
             content: pos.addressCount,
           },
         ],
       ];
 
       if (this.currentChain.priceEnable) {
-        this.data.unshift([
-          {
-            label: `${this.currentChain.gSymbol} Price`,
-            content: "$ " + mtrg.price,
-            change: mtrg.priceChange,
-          },
-          {
-            label: `${this.currentChain.symbol} Price`,
-            content: "$ " + mtr.price,
-            change: mtr.priceChange,
-          },
-        ],
-        [
-          {
-            label: `${this.currentChain.gSymbol} Circulation`,
-            content: formatNum(mtrg.circulation, 0),
-          },
-          { label: `${this.currentChain.symbol} Circulation`, content: formatNum(mtr.circulation, 0) },
-        ],)
+        this.data.unshift(
+          [
+            {
+              label: `${this.currentChain.gSymbol} Price`,
+              content: '$ ' + mtrg.price,
+              change: mtrg.priceChange,
+            },
+            {
+              label: `${this.currentChain.symbol} Price`,
+              content: '$ ' + mtr.price,
+              change: mtr.priceChange,
+            },
+          ],
+          [
+            {
+              label: `${this.currentChain.gSymbol} Circulation`,
+              content: formatNum(mtrg.circulation, 0),
+            },
+            { label: `${this.currentChain.symbol} Circulation`, content: formatNum(mtr.circulation, 0) },
+          ]
+        );
       }
 
       if (this.running) {
@@ -145,17 +141,14 @@ export default {
     },
     async searchKeyWords(key) {
       try {
-        const str = key.replace(/\r?\n|\r/g, "");
-        const { type } = await this.$api.search.searchKeyWord(
-          this.network,
-          str
-        );
-        if (type === "tx") {
-          this.$router.push("/tx/" + key);
-        } else if (type == "block") {
-          this.$router.push("/block/" + key);
-        } else if (type == "address") {
-          this.$router.push("/address/" + key);
+        const str = key.replace(/\r?\n|\r/g, '');
+        const { type } = await this.$api.search.searchKeyWord(this.network, str);
+        if (type === 'tx') {
+          this.$router.push('/tx/' + key);
+        } else if (type == 'block') {
+          this.$router.push('/block/' + key);
+        } else if (type == 'address') {
+          this.$router.push('/address/' + key);
         } else {
           this.modal_show = true;
         }
