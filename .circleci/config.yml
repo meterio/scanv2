@@ -14,9 +14,16 @@ jobs:
       - run:
           name: install awscli v2
           command: sudo ./aws/install
+      # look for existing cache and restore if found
+      - restore_cache:
+          key: v1-deps-{{ checksum "package.json" }}
       - run:
           name: install npm dependencies
           command: npm install
+      - save_cache:
+          key: v1-deps-{{ checksum "package.json" }}
+          paths:
+            - node_modules
       - run:
           name: production build
           command: NODE_ENV=production VUE_APP_CHAIN_ID=82 npm run build
@@ -38,9 +45,15 @@ jobs:
       - run:
           name: install awscli v2
           command: sudo ./aws/install
+      - restore_cache:
+          key: v1-deps-{{ checksum "package.json" }}
       - run:
           name: install npm dependencies
           command: npm install
+      - save_cache:
+          key: v1-deps-{{ checksum "package.json" }}
+          paths:
+            - node_modules
       - run:
           name: testnet build
           command: VUE_APP_CHAIN_ID=83 npm run build
