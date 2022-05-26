@@ -7,6 +7,18 @@ block explorer project for meter network, inspired by [Etherscan](https://ethers
 yarn install
 ```
 
+### env
+
+```shell
+cp .env.example .env
+```
+
+### Support ChainList
+
+```shell
+cp src/config-example.json src/config.json
+```
+
 ### Compiles and hot-reloads for development
 ```
 yarn serve
