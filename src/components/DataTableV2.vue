@@ -258,7 +258,13 @@
               />
             </div>
             <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
-            <div class="title-row" v-if="data.value.methodId > 0">MethodID: {{ data.value.methodId }}</div>
+            <div class="title-row d-flex justify-content-between">
+              <span v-if="data.value.methodId > 0">MethodID: {{ data.value.methodId }}</span>
+              <b-button variant="light" size="sm" class="mr-2" @click="copyData(data.value.data)">
+                <b-icon icon="clipboard"></b-icon>
+                <span class="ml-1">{{ copied ? 'copied' : 'copy data' }}</span>
+              </b-button>
+            </div>
 
             <template v-if="data.value.isDecoded">
               <div v-for="(data, index) in data.value.datas" :key="index" class="topic-row">
@@ -443,6 +449,7 @@ export default {
       totalRows: 0,
       currentPage: 1,
       loading: true,
+      copied: false,
     };
   },
   created() {
@@ -521,6 +528,13 @@ export default {
 
       this.$router.replace({ query: { ...this.$route.query, p: val } });
     },
+    async copyData(data) {
+      await navigator.clipboard.writeText(data);
+      this.copied = true
+      setTimeout(() => {
+        this.copied = false
+      }, 1000);
+    }
   },
 };
 </script>
