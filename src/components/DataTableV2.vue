@@ -260,10 +260,7 @@
             <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
             <div class="title-row d-flex justify-content-between">
               <span v-if="data.value.methodId > 0">MethodID: {{ data.value.methodId }}</span>
-              <b-button variant="light" size="sm" class="mr-2" @click="copyData(data.value.data)">
-                <b-icon icon="clipboard"></b-icon>
-                <span class="ml-1">{{ copied ? 'copied' : 'copy data' }}</span>
-              </b-button>
+              <copy-data :data="data.value.data" />
             </div>
 
             <template v-if="data.value.isDecoded">
@@ -405,8 +402,9 @@
 import DirectTag from './DirectTag.vue';
 import AmountTag from './AmountTag.vue';
 import AddressLink from './AddressLink.vue';
+import CopyData from './CopyData.vue';
 export default {
-  components: { DirectTag, AddressLink, AmountTag },
+  components: { DirectTag, AddressLink, AmountTag, CopyData },
   name: 'DataTable',
   props: {
     sortBy: { type: String },
@@ -528,13 +526,6 @@ export default {
 
       this.$router.replace({ query: { ...this.$route.query, p: val } });
     },
-    async copyData(data) {
-      await navigator.clipboard.writeText(data);
-      this.copied = true
-      setTimeout(() => {
-        this.copied = false
-      }, 1000);
-    }
   },
 };
 </script>
