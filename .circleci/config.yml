@@ -26,6 +26,9 @@ jobs:
           paths:
             - node_modules
       - run:
+          name: copy config.json
+          command: cp src/config-example.json src/config.json
+      - run:
           name: production build
           command: NODE_ENV=production VUE_APP_CHAIN_ID=82 npm run build
       - run:
@@ -56,6 +59,9 @@ jobs:
           key: scanv2-deps-{{ checksum "package.json" }}
           paths:
             - node_modules
+      - run:
+          name: copy config.json
+          command: cp src/config-example.json src/config.json
       - run:
           name: testnet build
           command: VUE_APP_CHAIN_ID=83 npm run build
