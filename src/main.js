@@ -132,6 +132,12 @@ new Vue({
   name: "Root",
   router,
   store,
+  beforeCreate() {
+    const pathname = location.pathname
+    if (pathname.match('//')) {
+      location.pathname = pathname.replace('//', '/')
+    }
+  },
   async mounted() {
     // set known tokens
     let knownTokens = {};
