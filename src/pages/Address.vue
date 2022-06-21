@@ -182,7 +182,8 @@ export default {
           this.contractDataCount = {
             txCount: account.txCount,
             transfersCount: account.transfersCount,
-            holdersCount: account.holdersCount
+            holdersCount: account.holdersCount,
+            erc20TokenCount: account.erc20TokenCount,
           }
         } else {
           this.userDataCount = {

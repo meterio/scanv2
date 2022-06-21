@@ -98,11 +98,13 @@ export default {
         return [
           { name: this.contractDataCount.transfersCount > 0 ? `Transfers(${this.contractDataCount.transfersCount})` : 'Transfers' },
           { name: this.contractDataCount.holdersCount > 0 ? `Holders(${this.contractDataCount.holdersCount})` : 'Holders' },
+          { name: this.contractDataCount.erc20TokenCount > 0 ? `ERC20 Tokens(${this.contractDataCount.erc20TokenCount})` : 'ERC20 Tokens' },
           { name: "Contract" },
         ];
       }
       return [
         { name: this.contractDataCount.txCount > 0 ? `Transactions(${this.contractDataCount.txCount})` : 'Transactions' },
+        { name: this.contractDataCount.erc20TokenCount > 0 ? `ERC20 Tokens(${this.contractDataCount.erc20TokenCount})` : 'ERC20 Tokens' },
         { name: "Contract" }
       ];
     },
@@ -115,6 +117,8 @@ export default {
             return this.transfers.fields
           case "holders":
             return this.holders.fields;
+          case "erc20Tokens":
+            return this.erc20Tokens.fields;
         }
         return this.txs.fields;
       } else {
@@ -125,6 +129,8 @@ export default {
             return this.transfers.fields2;
           case "holders":
             return this.holders.fields2;
+          case "erc20Tokens":
+            return this.erc20Tokens.fields;
         }
         return this.txs.fields;
       }
@@ -137,6 +143,8 @@ export default {
           return this.transfers.pagination;
         case "holders":
           return this.holders.pagination;
+        case "erc20Tokens":
+          return this.erc20Tokens.pagination;
       }
       return this.txs.pagination;
     },
@@ -148,6 +156,8 @@ export default {
           return this.loadTransfers;
         case "holders":
           return this.loadHolders;
+        case "erc20Tokens":
+          return this.loadErc20Tokens;
       }
       return this.loadTxs;
     },
@@ -220,6 +230,15 @@ export default {
         ],
         items: [],
       },
+      erc20Tokens: {
+        pagination: { show: true, align: "center", perPage: 20 },
+        fields: [
+          { key: "tokenType", label: "Type" },
+          { key: "fullAddress", label: "Token Address" },
+          { key: "balance", label: "Balance" },
+          { key: "blocknum", label: "Last Updated on Block" },
+        ],
+      },
     };
   },
   watch: {
@@ -254,6 +273,9 @@ export default {
             this.loadTarget = "holders";
             break;
           case 2:
+            this.loadTarget = "erc20Tokens";
+            break;
+          case 3:
             this.loadTarget = "contract";
             break;
           default:
@@ -265,12 +287,41 @@ export default {
             this.loadTarget = "txs";
             break;
           case 1:
+            this.loadTarget = "erc20Tokens";
+            break;
+          case 2:
             this.loadTarget = "contract";
             break;
           default:
             this.loadTarget = "txs";
         }
       }
+    },
+    async loadErc20Tokens(network, page, limit) {
+      this.load = true;
+      const { address } = this.$route.params;
+      const { tokens, totalRows } = await this.$api.account.getErc20Tokens(
+        network,
+        address,
+        page,
+        limit
+      );
+      const items = [];
+      for (const t of tokens) {
+        items.push({
+          ...t,
+          fullAddress: t.tokenAddress,
+          blocknum: t.lastUpdate.number,
+          balance: {
+            type: "amount",
+            amount: t.balance,
+            token: t.tokenSymbol,
+            precision: 8,
+            decimals: t.tokenDecimals,
+          },
+        })
+      }
+      return { items, totalRows };
     },
     async loadHolders(network, page, limit) {
       const { address } = this.$route.params;
