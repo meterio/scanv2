@@ -1,16 +1,22 @@
 <template>
   <div class="my-2">
     <div v-if="!verified" class="text-center">
-      <router-link
-        :to="{
-          name: 'verify',
-          params: {
-            address,
-          },
-        }"
-        >VERIFY</router-link
-      >
-      <span> contract source code.</span>
+      <section>
+        <router-link
+          :to="{
+            name: 'verify',
+            params: {
+              address,
+            },
+          }"
+          >VERIFY</router-link
+        >
+        <span> contract source code.</span>
+      </section>
+      <section v-if="bytecode">
+        <copy-data class="my-2" :data="bytecode" />
+        <b-form-textarea readonly rows="3" max-rows="16" :value="bytecode"></b-form-textarea>
+      </section>
     </div>
     <b-tabs v-else-if="computedFiles.length" content-class="mt-3">
       <b-tab title="Code" active>
@@ -58,6 +64,7 @@ import detectEthereumProvider from "@metamask/detect-provider";
 import ContractReadFunction from "./ContractReadFunction.vue";
 import ContractWriteFunction from "./ContractWriteFunction.vue";
 import CodeTextArea from "@/components/CodeTextArea.vue";
+import CopyData from "../components/CopyData.vue";
 import { ethers } from "ethers";
 
 export default {
@@ -66,6 +73,7 @@ export default {
     ContractReadFunction,
     ContractWriteFunction,
     CodeTextArea,
+    CopyData
   },
   props: {
     verified: {
@@ -92,6 +100,7 @@ export default {
       abi: null,
       readAbi: [],
       writeAbi: [],
+      bytecode: '',
     };
   },
   computed: {
@@ -134,6 +143,10 @@ export default {
 
     const provider = await detectEthereumProvider();
     this.provider = provider;
+
+    if (!this.verified) {
+      this.getContractBytecode();
+    }
   },
   watch: {
     async chainId(newVal, oldVal) {
@@ -150,6 +163,11 @@ export default {
     },
   },
   methods: {
+    async getContractBytecode() {
+      const data = await this.$api.contract.getContractBytecode(this.network, this.address);
+      // console.log(data.contract.code);
+      this.bytecode = data.contract.code;
+    },
     initAbi() {
       if (!this.files.length) {
         return;
