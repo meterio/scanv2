@@ -38,9 +38,11 @@
         <b-nav-form>
           <b-input-group class="search-group" v-if="!homeActive">
             <b-form-input
+              list="domain-list1"
               v-model="searchKey"
-              placeholder="Search by address/tx/block"
+              placeholder="Search by address/tx/block/name"
               @keydown="keydown"
+              debounce="500"
             ></b-form-input>
             <b-input-group-append>
               <b-button variant="primary" @click="searchKeyWords">
@@ -49,6 +51,9 @@
             </b-input-group-append>
           </b-input-group>
         </b-nav-form>
+        <datalist id="domain-list1">
+          <option v-for="name in domainnames" :key="name">{{ name }}</option>
+        </datalist>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="m-bar ml-auto">
@@ -121,6 +126,7 @@ export default {
     return {
       modal_show: false,
       searchKey: "",
+      domainnames: [],
     };
   },
   computed: {
@@ -160,6 +166,36 @@ export default {
       return x;
     },
   },
+  watch: {
+    async searchKey(newVal, oldVal) {
+      const _newVal = newVal.trim()
+      if (String(_newVal).startsWith('0x')) {
+        return
+      }
+      if (_newVal.length < 3) {
+        return
+      }
+      if (!isNaN(Number(_newVal))) {
+        return
+      }
+
+      for (const d of this.domainnames) {
+        if (String(d).includes(_newVal)) {
+          return
+        }
+      }
+
+      const { type, data } = await this.$api.search.searchKeyWord(this.network, _newVal);
+
+      if (type === 'address') {
+        const temp = []
+        for (const d of data) {
+          temp.push(`${d.name}(${d.address})`)
+          this.domainnames = temp
+        }
+      }
+    }
+  },
   methods: {
     keydown(evt) {
       if (evt) {
@@ -187,6 +223,12 @@ export default {
       try {
         const key = this.searchKey.replace(/\r?\n|\r|\s/g, "");
         this.searchKey = key;
+        const arr = key.match(/\([^\)]+\)/g);
+        if (arr) {
+          const address = arr[0].substring(1, arr[0].length - 1);
+          this.$router.push('/address/' + address);
+          return;
+        }
         const res = await this.$api.search.searchKeyWord(
           this.network,
           this.searchKey

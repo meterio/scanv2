@@ -2,9 +2,11 @@
   <div class="search">
     <b-input-group class="search-group">
       <b-form-input
+        list="domain-list"
         :placeholder="placeholder"
         v-model="searchWord"
         @keydown="keydown"
+        debounce="500"
       ></b-form-input>
       <b-input-group-append>
         <b-button
@@ -33,10 +35,14 @@
         >
       </b-input-group-append>
     </b-input-group>
+    <datalist id="domain-list">
+      <option v-for="name in domainnames" :key="name">{{ name }}</option>
+    </datalist>
   </div>
 </template>
 
 <script>
+
 export default {
   props: {
     btnType: {
@@ -46,19 +52,50 @@ export default {
     },
     placeholder: {
       type: String,
-      default: "Search by address/tx/block",
+      default: "Search by address/tx/block/name",
     },
   },
   name: "Search",
   data() {
     return {
       searchWord: "",
+      domainnames: [],
     };
+  },
+  watch: {
+    async searchWord(newVal, oldVal) {
+      const _newVal = newVal.trim()
+      if (String(_newVal).startsWith('0x')) {
+        return
+      }
+      if (_newVal.length < 3) {
+        return
+      }
+      if (!isNaN(Number(_newVal))) {
+        return
+      }
+
+      for (const d of this.domainnames) {
+        if (String(d).includes(_newVal)) {
+          return
+        }
+      }
+
+      const { type, data } = await this.$api.search.searchKeyWord(this.network, _newVal);
+
+      if (type === 'address') {
+        const temp = []
+        for (const d of data) {
+          temp.push(`${d.name}(${d.address})`)
+          this.domainnames = temp
+        }
+      }
+    }
   },
   beforeMount() {},
   methods: {
     btnClick() {
-      const key = this.searchWord.replace(/\r?\n|\r|\s/g, "");
+      const key = this.searchWord.trim();
       this.$emit("click", key);
     },
     keydown(evt) {

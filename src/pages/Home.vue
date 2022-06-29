@@ -142,6 +142,12 @@ export default {
     async searchKeyWords(key) {
       try {
         const str = key.replace(/\r?\n|\r/g, '');
+        const arr = str.match(/\([^\)]+\)/g);
+        if (arr) {
+          const address = arr[0].substring(1, arr[0].length - 1);
+          this.$router.push('/address/' + address);
+          return;
+        }
         const { type } = await this.$api.search.searchKeyWord(this.network, str);
         if (type === 'tx') {
           this.$router.push('/tx/' + key);
