@@ -58,6 +58,7 @@ export default {
   },
   data() {
     return {
+      verifyCount: 0,
       loading: false,
       isError: {
         status: false,
@@ -99,13 +100,21 @@ export default {
       if (this.chosenContract.length) {
         data.chosenContract = this.chosenContract[0]
       }
+
+      this.verifyCount ++
+
       const res = await this.$api.verify.verifyFormData(this.network, data);
+
       if (res.error) {
+        if (this.verifyCount < 2) {
+          this.verify()
+          return
+        }
         this.loading = false
         if (res.msg.contractsToChoose) {
           this.contracts = res.msg.contractsToChoose
         }
-        return this.isError = {
+        this.isError = {
           status: true,
           msg: res.msg.error || res.msg,
         };
@@ -120,6 +129,8 @@ export default {
           await this.emitImportApi()
         }
       }
+
+      this.verifyCount = 0
     },
     reset() {
       this.files = []

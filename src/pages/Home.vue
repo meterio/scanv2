@@ -4,7 +4,7 @@
   .search-banner
     .container
       h1.title {{ currentChain.title }} Blockchain Explorer
-      search.mt25(:btnType='2', placeholder='Search Transation/Blocks/Address', @click='searchKeyWords')
+      search.mt25(:btnType='2', placeholder='Search Transation/Blocks/Address/Name', @click='searchKeyWords')
     //- block statistic
   data-dashboard.mt35(v-bind:rows='data', v-if='data.length > 0')
     //- node statistic
