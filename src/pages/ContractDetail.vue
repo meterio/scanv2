@@ -18,43 +18,51 @@
         <b-form-textarea readonly rows="3" max-rows="16" :value="bytecode"></b-form-textarea>
       </section>
     </div>
-    <b-tabs v-else-if="computedFiles.length" content-class="mt-3">
-      <b-tab title="Code" active>
-        <code-text-area
-          v-for="(item, index) in computedFiles"
-          :key="item.path"
-          :code="item"
-          :index="index + 1"
-          :total="computedFiles.length"
-        />
-      </b-tab>
-      <b-tab title="Read">
-        <b-button @click="connect" :variant="variantBtn" pill size="sm">
-          {{ computedBtnText }}
-        </b-button>
-        <ContractReadFunction
-          v-for="(item, index) in readAbi"
-          :key="index"
-          :abi="item"
-          :contract="contract"
-          :open="openable"
-          :index="index + 1"
-        />
-      </b-tab>
-      <b-tab title="Write">
-        <b-button @click="connect" :variant="variantBtn" pill size="sm">
-          {{ computedBtnText }}
-        </b-button>
-        <ContractWriteFunction
-          v-for="(item, index) in writeAbi"
-          :key="index"
-          :abi="item"
-          :contract="contract"
-          :open="openable"
-          :index="index + 1"
-        />
-      </b-tab>
-    </b-tabs>
+    <div v-else-if="computedFiles.length">
+      <section class="d-flex flex-wrap justify-content-between my-2">
+        <div v-for="item in computedVerifyParams" :key="item.name" class="border rounded px-4 py-2 text-nowrap">
+          <span class="verify-params-name">{{ item.name }}</span>
+          <span>{{ item.value }}</span>
+        </div>
+      </section>
+      <b-tabs content-class="mt-3">
+        <b-tab title="Code" active>
+          <code-text-area
+            v-for="(item, index) in computedFiles"
+            :key="item.path"
+            :code="item"
+            :index="index + 1"
+            :total="computedFiles.length"
+          />
+        </b-tab>
+        <b-tab title="Read">
+          <b-button @click="connect" :variant="variantBtn" pill size="sm">
+            {{ computedBtnText }}
+          </b-button>
+          <ContractReadFunction
+            v-for="(item, index) in readAbi"
+            :key="index"
+            :abi="item"
+            :contract="contract"
+            :open="openable"
+            :index="index + 1"
+          />
+        </b-tab>
+        <b-tab title="Write">
+          <b-button @click="connect" :variant="variantBtn" pill size="sm">
+            {{ computedBtnText }}
+          </b-button>
+          <ContractWriteFunction
+            v-for="(item, index) in writeAbi"
+            :key="index"
+            :abi="item"
+            :contract="contract"
+            :open="openable"
+            :index="index + 1"
+          />
+        </b-tab>
+      </b-tabs>
+    </div>
     <span v-else class="d-flex justify-content-center">No Code.</span>
   </div>
 </template>
@@ -121,6 +129,36 @@ export default {
         }
       }
       return files;
+    },
+    computedVerifyParams() {
+      const params = []
+      try {
+        const metadata = this.files.find(f => f.name === 'metadata.json')
+        const jsonData = JSON.parse(metadata.content)
+        const compilerVersion = jsonData.compiler.version
+        const settings = jsonData.settings
+        const contractName = Object.values(settings.compilationTarget)[0]
+        const optimizationEnable = settings.optimizer.enabled ? `Yes with ${settings.optimizer.runs} runs` : ''
+        const evmVersion = settings.evmVersion
+
+        params.push({
+          name: 'Contract Name: ',
+          value: contractName
+        }, {
+          name: 'Optimization Enabled: ',
+          value: optimizationEnable
+        }, {
+          name: 'Compiler Version: ',
+          value: compilerVersion
+        }, {
+          name: 'EVM Version: ',
+          value: evmVersion
+        })
+      } catch(e) {
+        console.log('get verify params error', e.message)
+      }
+
+      return params
     },
     computedBtnText() {
       if (this.account) {
@@ -239,5 +277,9 @@ export default {
   opacity: 0.55;
   font-size: 14px;
   font-weight: bold;
+}
+.verify-params-name {
+  color: '#77838f';
+  font-size: .8rem;
 }
 </style>
