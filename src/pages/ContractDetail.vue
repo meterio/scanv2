@@ -138,7 +138,9 @@ export default {
         const compilerVersion = jsonData.compiler.version
         const settings = jsonData.settings
         const contractName = Object.values(settings.compilationTarget)[0]
-        const optimizationEnable = settings.optimizer.enabled ? `Yes with ${settings.optimizer.runs} runs` : ''
+        const optimizationEnable = settings.optimizer.enabled
+          ? `Yes with ${settings.optimizer.runs} runs`
+          : `No with ${settings.optimizer.runs} runs`
         const evmVersion = settings.evmVersion
 
         params.push({
