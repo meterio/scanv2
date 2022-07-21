@@ -218,7 +218,7 @@ export default {
       const abi = JSON.parse(metadata.content).output.abi;
       for (const f of abi) {
         if (f.type === "function") {
-          if (f.stateMutability === "view") {
+          if (f.stateMutability === "view" || f.stateMutability === 'pure') {
             readAbi.push(f);
           } else {
             writeAbi.push(f);
