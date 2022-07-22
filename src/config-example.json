@@ -10,7 +10,7 @@
     "deployDomain": "scan.meter.io",
     "pow": true,
     "priceEnable": true,
-    "nftImageUrlBase": "https://meter-nft-image.s3.ap-northeast-1.amazonaws.com/"
+    "nftImageUrlBase": "https://nft-image.meter.io/"
   },
   {
     "name": "Meter Testnet",
@@ -23,7 +23,7 @@
     "deployDomain": "scan-warringstakes.meter.io",
     "pow": true,
     "priceEnable": true,
-    "nftImageUrlBase": "https://meter-nft-image.s3.ap-northeast-1.amazonaws.com/"
+    "nftImageUrlBase": "https://nft-image.meter.io/"
   },
   {
     "name": "Verse Testnet",
@@ -36,6 +36,6 @@
     "deployDomain": "testexplorer.stp.network",
     "pow": false,
     "priceEnable": false,
-    "nftImageUrlBase": "https://meter-nft-image.s3.ap-northeast-1.amazonaws.com/"
+    "nftImageUrlBase": "https://nft-image.meter.io/"
   }
 ]
