@@ -18,7 +18,7 @@
     "title": "Meter",
     "symbol": "MTR",
     "gSymbol": "MTRG",
-    "apiBase": "https://api.meter.io:13001/api/",
+    "apiBase": "https://api.meter.io:4000/api/",
     "sourcifyApiBase": "https://sourcify.dev/server",
     "deployDomain": "scan-warringstakes.meter.io",
     "pow": true,
