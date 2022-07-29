@@ -146,13 +146,11 @@ export default {
   border-radius: 5px;
 }
 .delay-20s {
-  border: 1px solid #f1c40f;
-  color: #f1c40f;
-  border-radius: 5px;
+  color: #f39c12;
+  text-decoration: underline;
 }
 .delay-5s {
-  border: 1px solid #01aa78;
-  border-radius: 5px;
+  text-decoration: underline;
 }
 .normal {
   background: gray;
