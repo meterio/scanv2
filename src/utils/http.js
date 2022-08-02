@@ -1,8 +1,8 @@
 /**axios封装
  * 请求拦截、相应拦截、错误统一处理
  */
-import axios from "axios";
-import { getCurrentChain } from "@/config";
+import axios from 'axios';
+import { getCurrentChain } from '@/config';
 
 // 环境的切换
 // if (process.env.NODE_ENV == "development") {
@@ -19,8 +19,7 @@ import { getCurrentChain } from "@/config";
 axios.defaults.timeout = 10000;
 
 // post请求头
-axios.defaults.headers.post["Content-Type"] =
-  "application/x-www-form-urlencoded;charset=UTF-8";
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
 // 请求拦截器
 // axios.interceptors.request.use(
@@ -38,7 +37,7 @@ axios.defaults.headers.post["Content-Type"] =
 
 // 响应拦截器
 axios.interceptors.response.use(
-  (response) => {
+  response => {
     if (response.status === 200) {
       return Promise.resolve(response);
     } else {
@@ -46,7 +45,7 @@ axios.interceptors.response.use(
     }
   },
   // 服务器状态码不是200的情况
-  (error) => {
+  error => {
     return error;
     // if (error.response.status) {
     //   switch (error.response.status) {
@@ -111,21 +110,21 @@ axios.interceptors.response.use(
 export function get(network, url, params) {
   const chain = getCurrentChain(network);
   const base = chain.apiBase;
-  console.log(`network:${chain.name} GET: ${base}${url} ${params ? params : ""}`);
+  console.log(`network:${chain.name} GET: ${base}${url} ${params ? params : ''}`);
   axios.defaults.baseURL = base;
   return new Promise((resolve, reject) => {
     axios
       .get(url, { params })
-      .then((res) => {
+      .then(res => {
         // get data success
-        console.log(res)
+        console.log(res);
         if (res && res.data) {
           resolve(res.data);
         } else {
-          resolve(res)
+          resolve(res);
         }
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         reject(err);
       });
@@ -139,14 +138,14 @@ export function get(network, url, params) {
 export function post(network, url, params) {
   const chain = getCurrentChain(network);
   const base = chain.apiBase;
-  console.log(`network:${chain.name} post: ${base}${url} ${params ? params : ""}`);
-  console.log("params: ", params);
+  console.log(`network:${chain.name} post: ${base}${url} ${params ? params : ''}`);
+  console.log('params: ', params);
   axios.defaults.baseURL = base;
   return new Promise((resolve, reject) => {
     axios
       .post(url, params)
-      .then((res) => {
-        console.log("res", res);
+      .then(res => {
+        // console.log("res", res);
         // get data success
         if (res && res.data) {
           resolve(res.data);
@@ -154,8 +153,8 @@ export function post(network, url, params) {
           resolve(res);
         }
       })
-      .catch((err) => {
-        console.log("err", err);
+      .catch(err => {
+        console.log('err', err);
         if (err && err.data) {
           reject(err.data);
         } else {
@@ -169,16 +168,16 @@ export function post(network, url, params) {
  * This get set default baseURL empty
  */
 export function commonGet(url, params) {
-  axios.defaults.baseURL = "";
+  axios.defaults.baseURL = '';
   return new Promise((resolve, reject) => {
     axios
       .get(url, {
-        params: { ...params },
+        params: { ...params }
       })
-      .then((res) => {
+      .then(res => {
         resolve(res.data);
       })
-      .catch((err) => {
+      .catch(err => {
         reject(err.data);
       });
   });

@@ -20,42 +20,57 @@
 
               <!-- block-link-with-note -->
               <span v-if="item.type == 'block-link-with-note'">
-                <router-link :to="{
-                  name: 'blockDetail',
-                  params: {
-                    revision: item.block,
-                  },
-                }">#{{ item.block }}</router-link>
+                <router-link
+                  :to="{
+                    name: 'blockDetail',
+                    params: {
+                      revision: item.block,
+                    },
+                  }"
+                  >#{{ item.block }}</router-link
+                >
                 <span class="value" :title="item.time"> ({{ item.value }})</span>
               </span>
 
               <!-- block-link -->
-              <b-link href="#" :to="{ name: 'blockDetail', params: { revision: item.value } }"
-                v-if="item.type === 'block-link'">#{{ item.value }}</b-link>
+              <b-link
+                href="#"
+                :to="{ name: 'blockDetail', params: { revision: item.value } }"
+                v-if="item.type === 'block-link'"
+                >#{{ item.value }}</b-link
+              >
 
               <!-- block-range -->
               <div v-if="item.type === 'block-range'">
-                <b-link href="#" :to="{
-                  name: 'blockDetail',
-                  params: { revision: item.start },
-                }">#{{ item.start }}</b-link>
+                <b-link
+                  href="#"
+                  :to="{
+                    name: 'blockDetail',
+                    params: { revision: item.start },
+                  }"
+                  >#{{ item.start }}</b-link
+                >
                 <span class="mx-1">-</span>
-                <b-link href="#" v-if="item.end" :to="{ name: 'blockDetail', params: { revision: item.end } }">#{{
-                    item.end
-                }}</b-link>
+                <b-link href="#" v-if="item.end" :to="{ name: 'blockDetail', params: { revision: item.end } }"
+                  >#{{ item.end }}</b-link
+                >
                 <span v-else>active</span>
               </div>
 
               <!-- epoch-link -->
-              <b-link href="#" :to="{ name: 'epochDetail', params: { epoch: item.value } }"
-                v-if="item.type === 'epoch-link'">#{{ item.value }}</b-link>
+              <b-link
+                href="#"
+                :to="{ name: 'epochDetail', params: { epoch: item.value } }"
+                v-if="item.type === 'epoch-link'"
+                >#{{ item.value }}</b-link
+              >
 
               <!-- epoch-range -->
               <div v-if="item.type === 'epoch-range'">
                 <b-link href="#" :to="{ name: 'epochDetail', params: { epoch: item.start } }">{{ item.start }}</b-link>
                 <span class="mx-1">-</span>
-                <b-link href="#" v-if="item.end" :to="{ name: 'epochDetail', params: { epoch: item.end } }">{{ item.end
-                }}
+                <b-link href="#" v-if="item.end" :to="{ name: 'epochDetail', params: { epoch: item.end } }"
+                  >{{ item.end }}
                 </b-link>
                 <span v-else>{{ item.start + 24 }}</span>
               </div>
@@ -71,10 +86,14 @@
               </div>
 
               <!-- address-or-name-link -->
-              <router-link :to="{
-                name: 'address',
-                params: { address: item.value.address },
-              }" v-if="item.type === 'address-or-name-link' && !!item.value.name">{{ item.value.name }}</router-link>
+              <router-link
+                :to="{
+                  name: 'address',
+                  params: { address: item.value.address },
+                }"
+                v-if="item.type === 'address-or-name-link' && !!item.value.name"
+                >{{ item.value.name }}</router-link
+              >
 
               <!-- timestamp -->
               <span v-if="item.type === 'timestamp'">
@@ -102,23 +121,36 @@
               <span v-if="item.type === 'blockRef'">
                 <span>{{ item.value }}</span>
                 <span class="ml-2">
-                  <b-link href="#" :to="{ name: 'blockDetail', params: { revision: item.ref } }">#{{ item.ref }}
+                  <b-link href="#" :to="{ name: 'blockDetail', params: { revision: item.ref } }"
+                    >#{{ item.ref }}
                   </b-link>
                 </span>
               </span>
               <!-- balance -->
               <span v-if="item.type === 'balance'">
-                <AmountTag :amount="item.mtr" :token="item.mtrToken" :precision="item.precision"
-                  :decimals="item.decimals"></AmountTag>
+                <AmountTag
+                  :amount="item.mtr"
+                  :token="item.mtrToken"
+                  :precision="item.precision"
+                  :decimals="item.decimals"
+                ></AmountTag>
                 <br />
-                <AmountTag :amount="item.mtrg" :token="item.mtrgToken" :precision="item.precision"
-                  :decimals="item.decimals"></AmountTag>
+                <AmountTag
+                  :amount="item.mtrg"
+                  :token="item.mtrgToken"
+                  :precision="item.precision"
+                  :decimals="item.decimals"
+                ></AmountTag>
               </span>
 
               <!-- amount -->
               <span v-if="item.type === 'amount'">
-                <AmountTag :amount="item.value" :token="item.token" :precision="item.precision"
-                  :decimals="item.decimals"></AmountTag>
+                <AmountTag
+                  :amount="item.value"
+                  :token="item.token"
+                  :precision="item.precision"
+                  :decimals="item.decimals"
+                ></AmountTag>
               </span>
 
               <!-- status -->
@@ -128,8 +160,12 @@
                   <span class="mr-3">to</span>
                   <address-link class="mr-3" short :address="row.to" />
                   <template v-if="row.type === 'ERC20'">
-                    <AmountTag :amount="row.amount" :token="row.symbol" :precision="row.decimals"
-                      :decimals="row.decimals" />
+                    <AmountTag
+                      :amount="row.amount"
+                      :token="row.symbol"
+                      :precision="row.decimals"
+                      :decimals="row.decimals"
+                    />
                   </template>
                   <template v-else-if="row.type === 'ERC721'">
                     <div class="small-font-size">
@@ -142,7 +178,7 @@
                     <div class="small-font-size">
                       <div v-for="(id, indx) in row.ids" :key="id">
                         <span class="mr-3">{{
-                            `For ${row.type} Token ID [${id}] ${row.values[indx]} ${row.symbol}`
+                          `For ${row.type} Token ID [${id}] ${row.values[indx]} ${row.symbol}`
                         }}</span>
                       </div>
                     </div>
@@ -172,7 +208,7 @@
 
               <!-- nft token image -->
               <span v-if="item.type === 'token-image'">
-              <b-img-lazy thumbnail fluid :src="item.value" blank-color="#777" width="100" />
+                <b-img-lazy thumbnail fluid :src="item.value" blank-color="#777" width="100" />
               </span>
             </b-col>
           </b-row>
@@ -191,12 +227,15 @@
               <span class="label">Creation Tx:</span>
             </b-col>
             <b-col sm="12" :md="contentCols">
-              <router-link :to="{
-                name: 'txDetail',
-                params: {
-                  hash: computedCreationTxHash,
-                },
-              }">{{ shortHash(computedCreationTxHash) }}</router-link>
+              <router-link
+                :to="{
+                  name: 'txDetail',
+                  params: {
+                    hash: computedCreationTxHash,
+                  },
+                }"
+                >{{ shortHash(computedCreationTxHash) }}</router-link
+              >
             </b-col>
           </b-row>
           <b-row>
@@ -261,11 +300,10 @@ export default {
     };
   },
   watch: {
-    'data'() {
-      const t = this.data.find(d => d.type === 'transfer-highlight')
-      console.log('t', t)
-      t && t.value.length > 10 ? this.isShowAllTransfers = false : this.isShowAllTransfers = true;
-    }
+    data() {
+      const t = this.data.find((d) => d.type === 'transfer-highlight');
+      t && t.value.length > 10 ? (this.isShowAllTransfers = false) : (this.isShowAllTransfers = true);
+    },
   },
   computed: {
     loading() {
@@ -281,7 +319,7 @@ export default {
       return this.title.split(':')[1].trim();
     },
     computedTransfer() {
-      const temp = []
+      const temp = [];
 
       for (const obj of this.data) {
         if (obj.type === 'transfer-highlight') {
@@ -339,8 +377,8 @@ export default {
   methods: {
     showMoreTransfers() {
       this.isShowAllTransfers = true;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

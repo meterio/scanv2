@@ -1,16 +1,16 @@
 <template lang="pug">
 div
-  .text-center.text-primary(v-if="isContract === null")
+  .text-center.text-primary(v-if='isContract === null')
     b-spinner.my-5
-  ContractAddress(v-else-if="isContract", :address-info="addressInfo" :contract-data-count="contractDataCount")
-  UserAddress(v-else, :address-info="addressInfo" :user-data-count="userDataCount")
+  ContractAddress(v-else-if='isContract', :address-info='addressInfo', :contract-data-count='contractDataCount')
+  UserAddress(v-else, :address-info='addressInfo', :user-data-count='userDataCount')
 </template>
 
 <script>
-import UserAddress from "./UserAddress.vue";
-import ContractAddress from "./ContractAddress.vue";
+import UserAddress from './UserAddress.vue';
+import ContractAddress from './ContractAddress.vue';
 export default {
-  name: "Address",
+  name: 'Address',
   components: {
     UserAddress,
     ContractAddress,
@@ -19,7 +19,7 @@ export default {
     return {
       isContract: null,
       tokenType: '',
-      address: "0x",
+      address: '0x',
       account: {},
       summary: [],
       verified: false, // only for contract
@@ -27,7 +27,7 @@ export default {
       contractDataCount: {
         txCount: 0,
         transfersCount: 0,
-        holdersCount: 0
+        holdersCount: 0,
       },
       userDataCount: {
         txCount: 0,
@@ -36,8 +36,8 @@ export default {
         erc721TxCount: 0,
         bidCount: 0,
         proposedCount: 0,
-        bucketCount: 0
-      }
+        bucketCount: 0,
+      },
     };
   },
   computed: {
@@ -62,90 +62,83 @@ export default {
         this.address = address;
         this.summary = [];
 
-        const res = await this.$api.account.getAccountDetail(
-          this.network,
-          address
-        );
+        const res = await this.$api.account.getAccountDetail(this.network, address);
 
         const { account } = res;
-        console.log("account:", account);
         this.isContract = account.type !== undefined;
         this.tokenType = account.type;
-        console.log("iscontract:", this.isContract);
-        console.log("token type:", this.tokenType);
-        if (this.address === "0x0000000000000000000000000000000000000000") {
+        if (this.address === '0x0000000000000000000000000000000000000000') {
           if (new BigNumber(account.mtrgBalance).isLessThan(0)) {
-            account.mtrgBalance = "0";
+            account.mtrgBalance = '0';
           }
           if (new BigNumber(account.mtrgBounded).isLessThan(0)) {
-            account.mtrgBounded = "0";
+            account.mtrgBounded = '0';
           }
           if (new BigNumber(account.mtrBalance).isLessThan(0)) {
-            account.mtrBalance = "0";
+            account.mtrBalance = '0';
           }
           if (new BigNumber(account.mtrBounded).isLessThan(0)) {
-            account.mtrBounded = "0";
+            account.mtrBounded = '0';
           }
         }
         this.summary = this.summary.concat([
           // { key: "Address", value: account.address },
           {
-            key: "Balance",
+            key: 'Balance',
             mtrg: account.mtrgBalance,
             mtr: account.mtrBalance,
             mtrToken: this.currentChain.symbol,
             mtrgToken: this.currentChain.gSymbol,
-            type: "balance",
+            type: 'balance',
             precision: -1,
           },
           {
-            key: "Staked",
+            key: 'Staked',
             value: account.mtrgBounded,
-            type: "amount",
+            type: 'amount',
             token: this.currentChain.gSymbol,
             precision: -1,
           },
         ]);
         if (account.name) {
-          this.summary.push({ key: "Name", value: account.name });
+          this.summary.push({ key: 'Name', value: account.name });
         }
         if (account.firstSeen && account.firstSeen.number > 0) {
           this.summary.push({
-            key: "First Seen",
-            type: "block-link-with-note",
+            key: 'First Seen',
+            type: 'block-link-with-note',
             value: this.fromNow(account.firstSeen.timestamp),
             block: account.firstSeen.number,
           });
         }
         if (account.lastUpdate && account.lastUpdate.number > 0) {
           this.summary.push({
-            key: "Last Updated",
-            type: "block-link-with-note",
+            key: 'Last Updated',
+            type: 'block-link-with-note',
             value: this.fromNow(account.lastUpdate.timestamp),
             block: account.lastUpdate.number,
           });
         }
         if (account.hasCode) {
-          this.summary.push({ key: "Type", value: "Contract" });
+          this.summary.push({ key: 'Type', value: 'Contract' });
         }
         if (account.tokenName && account.tokenSymbol) {
           this.summary.push({
             key: `${this.tokenType} Token`,
-            value: `${account.tokenName || "Unnamed Token"} (${account.tokenSymbol || "ERC20"
-              })`,
+            value: `${account.tokenName || 'Unnamed Token'} (${account.tokenSymbol || 'ERC20'})`,
           });
         }
         if (account.tokenSymbol && account.type === 'ERC20') {
           this.summary.push({
-            key: "Decimals",
+            key: 'Decimals',
             value: account.tokenDecimals || 18,
           });
         }
         if (account.totalSupply && account.type === 'ERC20') {
           if (account.totalSupply) {
             this.summary.push({
-              key: "Total Supply",
-              type: "amount",
+              key: 'Total Supply',
+              type: 'amount',
               value: account.totalSupply,
               token: account.tokenSymbol,
               decimals: account.tokenDecimals,
@@ -154,16 +147,16 @@ export default {
         }
         if (account.holdersCount) {
           this.summary.push({
-            key: "Holders",
-            type: "holders",
+            key: 'Holders',
+            type: 'holders',
             value: account.holdersCount,
           });
         }
 
         if (account.transfersCount) {
           this.summary.push({
-            key: "Transfers",
-            type: "transfers",
+            key: 'Transfers',
+            type: 'transfers',
             value: account.transfersCount,
           });
         }
@@ -172,11 +165,11 @@ export default {
           this.verified = account.verified;
           this.verifiedDesc = account.status;
           this.summary.push({
-            key: "owner",
+            key: 'owner',
             value: account.master,
           });
           this.summary.push({
-            key: "creationTxHash",
+            key: 'creationTxHash',
             value: account.creationTxHash,
           });
           this.contractDataCount = {
@@ -184,7 +177,7 @@ export default {
             transfersCount: account.transfersCount,
             holdersCount: account.holdersCount,
             erc20TokenCount: account.erc20TokenCount,
-          }
+          };
         } else {
           this.userDataCount = {
             txCount: account.txCount,
@@ -194,8 +187,8 @@ export default {
             nftTxCount: account.nftTxCount,
             bidCount: account.bidCount,
             proposedCount: account.proposedCount,
-            bucketCount: account.bucketCount
-          }
+            bucketCount: account.bucketCount,
+          };
         }
       } catch (e) {
         console.log(e);

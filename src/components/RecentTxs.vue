@@ -24,20 +24,15 @@
             <div class="signed-view">
               <p>
                 From:
-                <router-link
-                  class="link"
-                  :to="{ name: 'address', params: { address: tx.from } }"
-                  >{{ shortAddr(tx.from, 12) }}</router-link
-                >
+                <router-link class="link" :to="{ name: 'address', params: { address: tx.from } }">{{
+                  shortAddr(tx.from, 12)
+                }}</router-link>
               </p>
               <p>
                 To:
-                <router-link
-                  v-if="tx.to"
-                  class="link"
-                  :to="{ name: 'address', params: { address: tx.to } }"
-                  >{{ shortAddr(tx.to, 12) }}</router-link
-                >
+                <router-link v-if="tx.to" class="link" :to="{ name: 'address', params: { address: tx.to } }">{{
+                  shortAddr(tx.to, 12)
+                }}</router-link>
                 <span v-else>nobody</span>
               </p>
             </div>
@@ -48,20 +43,18 @@
         </ul>
       </b-card-text>
       <b-card-footer>
-        <b-btn variant="outline-primary" block size="sm" :to="{ path: 'txs' }"
-          >View all Transactions</b-btn
-        >
+        <b-btn variant="outline-primary" block size="sm" :to="{ path: 'txs' }">View all Transactions</b-btn>
       </b-card-footer>
     </b-card>
   </b-container>
 </template>
 
 <script>
-import Loading from "@/components/Loading";
-import { fromWei } from "@/utils";
-import { BigNumber } from "bignumber.js";
+import Loading from '@/components/Loading';
+import { fromWei } from '@/utils';
+import { BigNumber } from 'bignumber.js';
 export default {
-  name: "RecentTxs",
+  name: 'RecentTxs',
   components: {
     Loading,
   },
@@ -92,11 +85,9 @@ export default {
     async initData() {
       try {
         const res = await this.$api.transaction.getRecentTxs(this.network);
-        console.log(res.txs);
         this.recent_txs = res.txs.slice(0, 10).map((tx) => {
           try {
-            console.log("tx", tx);
-            let totalAmount = "";
+            let totalAmount = '';
             if (tx.mtr && new BigNumber(tx.mtr).isGreaterThan(0)) {
               totalAmount = fromWei(tx.mtr, 4, this.currentChain.symbol);
             } else {
@@ -108,7 +99,6 @@ export default {
             console.log(e);
           }
         });
-        console.log("recent txs:", this.recent_txs);
         this.loading = false;
       } catch (e) {
         this.loading = false;
@@ -172,7 +162,7 @@ export default {
   display: flex;
 
   .block-icon {
-    background-image: url("~@/assets/transaction.png");
+    background-image: url('~@/assets/transaction.png');
     background-color: #ebeef6;
     background-repeat: no-repeat;
     background-position: center;

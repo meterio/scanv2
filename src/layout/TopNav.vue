@@ -7,9 +7,7 @@
       <b-navbar-brand href="/" class="mr-5">
         <b-img :src="computedLogo" height="40" />
 
-        <span class="ml-1" style="font-size: 19px; font-weight: bold">{{
-          currentChain.title
-        }}</span>
+        <span class="ml-1" style="font-size: 19px; font-weight: bold">{{ currentChain.title }}</span>
         <!-- Upgrade Badge -->
         <!--<b-badge
           class="ml-2"
@@ -41,7 +39,7 @@
               list="domain-list1"
               v-model="searchKey"
               placeholder="Search by address/tx/block/name"
-              @keydown="keydown"
+              @keypress="keypress"
               debounce="500"
             ></b-form-input>
             <b-input-group-append>
@@ -58,35 +56,19 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="m-bar ml-auto">
           <b-nav-item>
-            <router-link
-              :to="{ name: 'home' }"
-              :class="homeActive ? 'active' : ''"
-              >Home</router-link
-            >
+            <router-link :to="{ name: 'home' }" :class="homeActive ? 'active' : ''">Home</router-link>
           </b-nav-item>
 
-          <b-nav-item-dropdown
-            text="Blockchain"
-            right
-            :class="blockActive ? 'top-dropdown active' : ''"
-          >
+          <b-nav-item-dropdown text="Blockchain" right :class="blockActive ? 'top-dropdown active' : ''">
             <b-dropdown-item :to="{ name: 'pos' }">PoS</b-dropdown-item>
             <b-dropdown-item v-if="currentChain.pow" :to="{ name: 'pow' }">PoW</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item :to="{ name: 'txList' }">View Txs</b-dropdown-item>
-            <b-dropdown-item :to="{ name: 'blockList' }"
-              >View Blocks</b-dropdown-item
-            >
-            <b-dropdown-item :to="{ name: 'epochList' }"
-              >View Epochs</b-dropdown-item
-            >
+            <b-dropdown-item :to="{ name: 'blockList' }">View Blocks</b-dropdown-item>
+            <b-dropdown-item :to="{ name: 'epochList' }">View Epochs</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item :to="{ name: 'topMTR' }"
-              >Top {{ currentChain.symbol }} Accounts</b-dropdown-item
-            >
-            <b-dropdown-item :to="{ name: 'topMTRG' }"
-              >Top {{ currentChain.gSymbol }} Accounts</b-dropdown-item
-            >
+            <b-dropdown-item :to="{ name: 'topMTR' }">Top {{ currentChain.symbol }} Accounts</b-dropdown-item>
+            <b-dropdown-item :to="{ name: 'topMTRG' }">Top {{ currentChain.gSymbol }} Accounts</b-dropdown-item>
           </b-nav-item-dropdown>
 
           <b-nav-item v-if="currentChain.pow"
@@ -97,19 +79,10 @@
             ></b-nav-item
           >
 
-          <b-dropdown
-            :text="currentNetwork"
-            size="sm"
-            variant="outline-primary"
-            class="mx-2"
-            right
-          >
-            <b-dropdown-item
-              v-for="item in chainList"
-              :key="item.chainId"
-              @click="changeNetwork(item.chainId)"
-              >{{ item.name }}</b-dropdown-item
-            >
+          <b-dropdown :text="currentNetwork" size="sm" variant="outline-primary" class="mx-2" right>
+            <b-dropdown-item v-for="item in chainList" :key="item.chainId" @click="changeNetwork(item.chainId)">{{
+              item.name
+            }}</b-dropdown-item>
           </b-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -118,14 +91,14 @@
 </template>
 
 <script>
-import { getCurrentChain, chainList } from "@/config";
+import { getCurrentChain, chainList } from '@/config';
 
 export default {
-  name: "TopNav",
+  name: 'TopNav',
   data() {
     return {
       modal_show: false,
-      searchKey: "",
+      searchKey: '',
       domainnames: [],
     };
   },
@@ -140,19 +113,11 @@ export default {
       return chainList;
     },
     homeActive() {
-      return this.$route.path === "" || this.$route.path === "/";
+      return this.$route.path === '' || this.$route.path === '/';
     },
     blockActive() {
       const path = this.$route.path;
-      const prefixs = [
-        "/tx",
-        "/block",
-        "/pos",
-        "/pow",
-        "/account",
-        "/address",
-        "/epoch",
-      ];
+      const prefixs = ['/tx', '/block', '/pos', '/pow', '/account', '/address', '/epoch'];
       for (const p of prefixs) {
         if (path.startsWith(p)) {
           return true;
@@ -168,51 +133,48 @@ export default {
   },
   watch: {
     async searchKey(newVal, oldVal) {
-      const _newVal = newVal.trim()
+      const _newVal = newVal.trim();
       if (String(_newVal).startsWith('0x')) {
-        return
+        return;
       }
       if (_newVal.length < 3) {
-        return
+        return;
       }
       if (!isNaN(Number(_newVal))) {
-        return
+        return;
       }
-
       for (const d of this.domainnames) {
         if (String(d).includes(_newVal)) {
-          return
+          return;
         }
       }
-
       const { type, data } = await this.$api.search.searchKeyWord(this.network, _newVal);
-
       if (type === 'address') {
-        const temp = []
+        const temp = [];
         for (const d of data) {
-          temp.push(`${d.name}(${d.address})`)
-          this.domainnames = temp
+          temp.push(`${d.name}(${d.address})`);
+          this.domainnames = temp;
         }
       }
-    }
+    },
   },
   methods: {
-    keydown(evt) {
+    keypress(evt) {
       if (evt) {
         if (evt.which === 13) {
           // enter key
+          setTimeout(this.searchKeyWords, 500);
           evt.preventDefault();
-          this.searchKeyWords();
         }
       }
     },
     changeNetwork(newNetwork) {
       const { network } = this.$store.state.dom;
       if (network !== newNetwork) {
-        if (process.env.NODE_ENV === "development") {
-          this.$store.commit("dom/SET_NETWORK", newNetwork);
+        if (process.env.NODE_ENV === 'development') {
+          this.$store.commit('dom/SET_NETWORK', newNetwork);
         }
-        if (process.env.NODE_ENV === "production") {
+        if (process.env.NODE_ENV === 'production') {
           const newChain = getCurrentChain(newNetwork);
           const domain = newChain.deployDomain;
           window.location.href = `https://${domain}`;
@@ -221,36 +183,36 @@ export default {
     },
     async searchKeyWords() {
       try {
-        const key = this.searchKey.replace(/\r?\n|\r|\s/g, "");
+        const key = this.searchKey.replace(/\r|\n|\r|\s/g, '');
+        console.log('KEY:', key);
         this.searchKey = key;
+        console.log('SEARCH KEY: ', this.searchKey);
         const arr = key.match(/\([^\)]+\)/g);
-        if (arr) {
-          const address = arr[0].substring(1, arr[0].length - 1);
-          this.$router.push('/address/' + address);
-          return;
-        }
-        const res = await this.$api.search.searchKeyWord(
-          this.network,
-          this.searchKey
-        );
+        // if (arr) {
+        //   const address = arr[0].substring(1, arr[0].length - 1);
+        //   console.log('JUMP TO ADD:', address);
+        //   // this.$router.push('/address/' + address);
+        //   return;
+        // }
+        console.log('SEARCH FOR KEY: ', key);
+        const res = await this.$api.search.searchKeyWord(this.network, this.searchKey);
         const { type } = res;
-        let jump_url = "";
-        if (type === "tx") {
+        let jump_url = '';
+        if (type === 'tx') {
           jump_url = `/tx/${this.searchKey}`;
-        } else if (type == "block") {
+        } else if (type == 'block') {
           jump_url = `/block/${this.searchKey}`;
-        } else if (type == "address") {
+        } else if (type == 'address') {
           jump_url = `/address/${this.searchKey}`;
         } else {
           this.modal_show = true;
         }
-        if (
-          jump_url != this.$route.path &&
-          jump_url !== "" &&
-          !this.modal_show
-        ) {
-          this.searchKey = "";
+        if (jump_url != this.$route.path && jump_url !== '' && !this.modal_show) {
+          this.searchKey = '';
+          console.log('JUMP TO ', jump_url);
           this.$router.push(jump_url);
+        } else {
+          console.log('NO JUMP');
         }
       } catch (e) {
         console.error(e);

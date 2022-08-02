@@ -1,11 +1,8 @@
 <template>
   <div>
     <div class="function-container m-2 p-1" v-if="abi">
-      <div
-        class="function-name d-flex justify-content-between"
-        @click="isOpenFolder"
-      >
-        <span>{{ index + ". " + computedFunName }}</span>
+      <div class="function-name d-flex justify-content-between" @click="isOpenFolder">
+        <span>{{ index + '. ' + computedFunName }}</span>
         <span class="d-flex align-center">
           <b-icon v-if="!v" icon="arrow-right"></b-icon>
           <b-icon @click.stop="refresh" v-else icon="arrow-clockwise"></b-icon>
@@ -15,32 +12,15 @@
         <b-card>
           <Loading v-if="readLoading" />
           <b-form v-if="paramsLength" @submit.prevent="onSubmit">
-            <div
-              class="my-2"
-              v-for="(item, index) in computedParams"
-              :key="item.label"
-            >
+            <div class="my-2" v-for="(item, index) in computedParams" :key="item.label">
               <div class="d-flex">
                 <label>{{ item.name }}</label>
                 <div v-if="item.isUnit">
-                  <b-icon
-                    class="ml-2"
-                    icon="plus-square-fill"
-                    @click="addNumberModal(index)"
-                  ></b-icon>
-                  <AddNumberModal
-                    v-model="showNumberModal"
-                    @ok="ok"
-                    @close="closeAddNumberModel"
-                  />
+                  <b-icon class="ml-2" icon="plus-square-fill" @click="addNumberModal(index)"></b-icon>
+                  <AddNumberModal v-model="showNumberModal" @ok="ok" @close="closeAddNumberModel" />
                 </div>
               </div>
-              <b-form-input
-                required
-                v-model="params[index]"
-                trim
-                :placeholder="item.name"
-              ></b-form-input>
+              <b-form-input required v-model="params[index]" trim :placeholder="item.name"></b-form-input>
             </div>
             <section>
               <b-button type="submit" variant="primary">Read</b-button>
@@ -54,10 +34,10 @@
 </template>
 
 <script>
-import Loading from "@/components/Loading";
-import AddNumberModal from "@/components/AddNumberModal";
+import Loading from '@/components/Loading';
+import AddNumberModal from '@/components/AddNumberModal';
 export default {
-  name: "ContractReadFunction",
+  name: 'ContractReadFunction',
   components: {
     Loading,
     AddNumberModal,
@@ -85,7 +65,7 @@ export default {
   data() {
     return {
       v: false,
-      res: "",
+      res: '',
       params: [],
       readLoading: false,
       showNumberModal: false,
@@ -104,7 +84,7 @@ export default {
       for (const i of this.abi.inputs) {
         inputs.push({
           name: `${i.name}(${i.type})`,
-          isUnit: i.type.includes("uint"),
+          isUnit: i.type.includes('uint'),
         });
       }
       return inputs;
@@ -122,7 +102,6 @@ export default {
       this.showNumberModal = show;
     },
     ok(num) {
-      console.log("ok");
       this.params[this.currentSelectIndex] = num;
     },
     addNumberModal(index) {
@@ -138,30 +117,27 @@ export default {
       this.read();
     },
     async read() {
-      this.res = "";
+      this.res = '';
       if (this.contract) {
         try {
           this.readLoading = true;
           const params = this.paramsLength === 0 ? [] : [...this.params];
           const res = await this.contract[this.abi.name].apply(null, params);
-          console.log("res", res);
           if (res) {
             this.res = res;
           } else {
-            this.res = "no result";
+            this.res = 'no result';
           }
 
           this.readLoading = false;
         } catch (e) {
           this.readLoading = false;
-          alert(
-            `${e.message} ${e.data && e.data.error && e.data.error.message}`
-          );
+          alert(`${e.message} ${e.data && e.data.error && e.data.error.message}`);
         }
       }
     },
     refresh() {
-      this.res = "";
+      this.res = '';
       if (this.paramsLength) {
         this.params = [];
       } else {

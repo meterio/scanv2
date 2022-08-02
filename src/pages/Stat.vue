@@ -1,21 +1,18 @@
 <template lang="pug">
 .detail-page
   b-container.summary
-    data-table-v2.mt-2pert.px-0(
-      :items="explains.items",
-      :fields="explains.fields"
-    )
-      div(slot="header")
+    data-table-v2.mt-2pert.px-0(:items='explains.items', :fields='explains.fields')
+      div(slot='header')
         .card-title Penalty Details
-        b-form-group(label="Node:", v-if="options.length > 0")
-          b-form-select(v-model="selected", :options="options")
+        b-form-group(label='Node:', v-if='options.length > 0')
+          b-form-select(v-model='selected', :options='options')
 </template>
 
 <script>
-import DataTableV2 from "@/components/DataTableV2.vue";
-import DataSummary from "@/components/DataSummary.vue";
+import DataTableV2 from '@/components/DataTableV2.vue';
+import DataSummary from '@/components/DataSummary.vue';
 export default {
-  name: "Address",
+  name: 'Address',
   components: {
     DataTableV2,
     DataSummary,
@@ -30,12 +27,12 @@ export default {
       infractions: {},
 
       explains: {
-        pagination: { show: false, align: "center", perPage: 20 },
+        pagination: { show: false, align: 'center', perPage: 20 },
         fields: [
-          { key: "type", label: "Infraction" },
-          { key: "explain", label: "Detail" },
-          { key: "penalty", label: "Penalty" },
-          { key: "actualPenalty", label: "Actual Penalty" },
+          { key: 'type', label: 'Infraction' },
+          { key: 'explain', label: 'Detail' },
+          { key: 'penalty', label: 'Penalty' },
+          { key: 'actualPenalty', label: 'Actual Penalty' },
         ],
         items: [],
       },
@@ -43,7 +40,6 @@ export default {
   },
   watch: {
     selected: function (newVal, oldVal) {
-      console.log(oldVal, newVal);
       if (newVal && newVal.toLowerCase() in this.infractions) {
         if (newVal && newVal.toLowerCase() in this.infractions) {
           this.explains.items = this.infractions[newVal.toLowerCase()];

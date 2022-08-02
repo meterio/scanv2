@@ -2,7 +2,6 @@
   <span>
     <b-link :id="id" class="link" :to="{ name: 'address', params: { address: address } }">{{ text }}</b-link>
     <b-popover triggers="hover" :target="id">
-      {{ tip }}
       <b-button @click="copyToClipBoard" variant="light" pill size="sm">
         <b-icon icon="clipboard"></b-icon>
       </b-button>
@@ -60,6 +59,9 @@ export default {
     },
   },
   methods: {
+    handleHover(hovered) {
+      this.isHovered = hovered;
+    },
     async copyToClipBoard() {
       await navigator.clipboard.writeText(this.address);
       this.hint = 'copied';

@@ -1,48 +1,43 @@
 <template lang="pug">
 .detail-page
   data-summary(
-    :title="title",
-    :data="addressInfo.summary",
+    :title='title',
+    :data='addressInfo.summary',
     wide,
     isContract,
-    :verified="verified"
-    :verifiedDesc="verifiedDesc"
+    :verified='verified',
+    :verifiedDesc='verifiedDesc'
   )
 
   b-container.summary
     .mt-2pert.px-5
     data-table-v3.mt-2pert.px-0(
-      :isTableData="isTableData",
-      :loadItems="loadItems",
-      :fields="fields",
-      :pagination="pagination",
-      :key="loadTarget"
+      :isTableData='isTableData',
+      :loadItems='loadItems',
+      :fields='fields',
+      :pagination='pagination',
+      :key='loadTarget'
     )
-      div(slot="header")
-        nav-tabs.px-0(
-          :tabs="tabs",
-          :value="tabValue",
-          :verified="verified",
-          @changeTab="navTabChange"
-        )
-      div(slot="otherData")
+      div(slot='header')
+        nav-tabs.px-0(:tabs='tabs', :value='tabValue', :verified='verified', @changeTab='navTabChange')
+      div(slot='otherData')
         <div class="loading" v-if="filesLoading">
           <div class="text-center text-primary my-2">
             b-spinner.align-middle.mr-2
             strong Loading...
           </div>
         </div>
-        contract-detail(v-else, :verified="verified" :files="files", :address="addressInfo.address")
+        contract-detail(v-else, :verified='verified', :files='files', :address='addressInfo.address')
 </template>
 
 <script>
-import DataTableV3 from "@/components/DataTableV3.vue";
-import NavTabs from "@/components/NavTabs.vue";
-import DataSummary from "@/components/DataSummary.vue";
-import ContractDetail from "./ContractDetail.vue";
-import Loading from "@/components/Loading.vue";
+import DataTableV3 from '@/components/DataTableV3.vue';
+import NavTabs from '@/components/NavTabs.vue';
+import DataSummary from '@/components/DataSummary.vue';
+import ContractDetail from './ContractDetail.vue';
+import Loading from '@/components/Loading.vue';
 export default {
-  name: "ContractAddress",
+  name: 'ContractAddress',
   components: {
     DataTableV3,
     NavTabs,
@@ -57,7 +52,7 @@ export default {
         return {
           isContract: true,
           tokenType: '',
-          address: "0x",
+          address: '0x',
           summary: [],
         };
       },
@@ -65,7 +60,7 @@ export default {
     contractDataCount: {
       type: Object,
       required: true,
-    }
+    },
   },
   computed: {
     isToken() {
@@ -96,40 +91,63 @@ export default {
     tabs() {
       if (this.isToken) {
         return [
-          { name: this.contractDataCount.transfersCount > 0 ? `Transfers(${this.contractDataCount.transfersCount})` : 'Transfers' },
-          { name: this.contractDataCount.holdersCount > 0 ? `Holders(${this.contractDataCount.holdersCount})` : 'Holders' },
-          { name: this.contractDataCount.erc20TokenCount > 0 ? `ERC20 Tokens(${this.contractDataCount.erc20TokenCount})` : 'ERC20 Tokens' },
-          { name: "Contract" },
+          {
+            name: this.contractDataCount.txCount > 0 ? `Txs(${this.contractDataCount.txCount})` : 'Txs',
+          },
+          {
+            name:
+              this.contractDataCount.transfersCount > 0
+                ? `Transfers(${this.contractDataCount.transfersCount})`
+                : 'Transfers',
+          },
+          {
+            name:
+              this.contractDataCount.holdersCount > 0 ? `Holders(${this.contractDataCount.holdersCount})` : 'Holders',
+          },
+          {
+            name:
+              this.contractDataCount.erc20TokenCount > 0
+                ? `ERC20 Tokens(${this.contractDataCount.erc20TokenCount})`
+                : 'ERC20 Tokens',
+          },
+          { name: 'Contract' },
         ];
       }
       return [
-        { name: this.contractDataCount.txCount > 0 ? `Transactions(${this.contractDataCount.txCount})` : 'Transactions' },
-        { name: this.contractDataCount.erc20TokenCount > 0 ? `ERC20 Tokens(${this.contractDataCount.erc20TokenCount})` : 'ERC20 Tokens' },
-        { name: "Contract" }
+        {
+          name: this.contractDataCount.txCount > 0 ? `Txs(${this.contractDataCount.txCount})` : 'Txs',
+        },
+        {
+          name:
+            this.contractDataCount.erc20TokenCount > 0
+              ? `ERC20 Tokens(${this.contractDataCount.erc20TokenCount})`
+              : 'ERC20 Tokens',
+        },
+        { name: 'Contract' },
       ];
     },
     fields() {
       if (this.isERC20) {
         switch (this.loadTarget) {
-          case "txs":
+          case 'txs':
             return this.txs.fields;
-          case "transfers":
-            return this.transfers.fields
-          case "holders":
+          case 'transfers':
+            return this.transfers.fields;
+          case 'holders':
             return this.holders.fields;
-          case "erc20Tokens":
+          case 'erc20Tokens':
             return this.erc20Tokens.fields;
         }
         return this.txs.fields;
       } else {
         switch (this.loadTarget) {
-          case "txs":
+          case 'txs':
             return this.txs.fields;
-          case "transfers":
+          case 'transfers':
             return this.transfers.fields2;
-          case "holders":
+          case 'holders':
             return this.holders.fields2;
-          case "erc20Tokens":
+          case 'erc20Tokens':
             return this.erc20Tokens.fields;
         }
         return this.txs.fields;
@@ -137,32 +155,32 @@ export default {
     },
     pagination() {
       switch (this.loadTarget) {
-        case "txs":
+        case 'txs':
           return this.txs.pagination;
-        case "transfers":
+        case 'transfers':
           return this.transfers.pagination;
-        case "holders":
+        case 'holders':
           return this.holders.pagination;
-        case "erc20Tokens":
+        case 'erc20Tokens':
           return this.erc20Tokens.pagination;
       }
       return this.txs.pagination;
     },
     loadItems() {
       switch (this.loadTarget) {
-        case "txs":
+        case 'txs':
           return this.loadTxs;
-        case "transfers":
+        case 'transfers':
           return this.loadTransfers;
-        case "holders":
+        case 'holders':
           return this.loadHolders;
-        case "erc20Tokens":
+        case 'erc20Tokens':
           return this.loadErc20Tokens;
       }
       return this.loadTxs;
     },
     isTableData() {
-      if (this.loadTarget === "contract") {
+      if (this.loadTarget === 'contract') {
         return false;
       }
 
@@ -174,69 +192,69 @@ export default {
       filesLoading: false,
       files: [],
       tabValue: 0,
-      loadTarget: "transfers",
+      loadTarget: 'transfers',
       holders: {
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 20 },
         fields: [
-          { key: "rank", label: "Rank" },
-          { key: "fullAddress", label: "Address" },
-          { key: "balance", label: "Balance" },
+          { key: 'rank', label: 'Rank' },
+          { key: 'fullAddress', label: 'Address' },
+          { key: 'balance', label: 'Balance' },
         ],
         fields2: [
-          { key: "rank", label: "Rank" },
+          { key: 'rank', label: 'Rank' },
           // { key: "fullAddress", label: "Address" },
-          { key: "nft", label: "Token ID" },
-        ]
+          { key: 'nft', label: 'Token ID' },
+        ],
       },
       txs: {
         pagination: {
           show: true,
-          align: "center",
+          align: 'center',
           perPage: 20,
         },
         fields: [
-          { key: "txhashWithStatus", label: "Hash" },
-          { key: "methodName", label: "Method" },
-          { key: "blocknum", label: "Block" },
-          { key: "timestamp", label: "Time" },
-          { key: "from", label: "From" },
-          { key: "direct", label: "" },
-          { key: "to", label: "To" },
-          { key: "amount", label: "Amount" },
+          { key: 'txhashWithStatus', label: 'Hash' },
+          { key: 'methodName', label: 'Method' },
+          { key: 'blocknum', label: 'Block' },
+          { key: 'timestamp', label: 'Time' },
+          { key: 'from', label: 'From' },
+          { key: 'direct', label: '' },
+          { key: 'to', label: 'To' },
+          { key: 'amount', label: 'Amount' },
         ],
         items: [],
       },
       transfers: {
         pagination: {
           show: true,
-          align: "center",
+          align: 'center',
           perPage: 20,
         },
         fields: [
-          { key: "txhashWithStatus", label: "Hash" },
-          { key: "blocknum", label: "Block" },
-          { key: "timestamp", label: "Time" },
-          { key: "from", label: "From" },
-          { key: "to", label: "To" },
-          { key: "amount", label: "Amount" },
+          { key: 'txhashWithStatus', label: 'Hash' },
+          { key: 'blocknum', label: 'Block' },
+          { key: 'timestamp', label: 'Time' },
+          { key: 'from', label: 'From' },
+          { key: 'to', label: 'To' },
+          { key: 'amount', label: 'Amount' },
         ],
         fields2: [
-          { key: "txhashWithStatus", label: "Hash" },
-          { key: "blocknum", label: "Block" },
-          { key: "timestamp", label: "Time" },
-          { key: "from", label: "From" },
-          { key: "to", label: "To" },
-          { key: "nft", label: "Token ID" },
+          { key: 'txhashWithStatus', label: 'Hash' },
+          { key: 'blocknum', label: 'Block' },
+          { key: 'timestamp', label: 'Time' },
+          { key: 'from', label: 'From' },
+          { key: 'to', label: 'To' },
+          { key: 'nft', label: 'Token ID' },
         ],
         items: [],
       },
       erc20Tokens: {
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 20 },
         fields: [
-          { key: "tokenType", label: "Type" },
-          { key: "fullAddress", label: "Token Address" },
-          { key: "balance", label: "Balance" },
-          { key: "blocknum", label: "Last Updated on Block" },
+          { key: 'tokenType', label: 'Type' },
+          { key: 'fullAddress', label: 'Token Address' },
+          { key: 'balance', label: 'Balance' },
+          { key: 'blocknum', label: 'Last Updated on Block' },
         ],
       },
     };
@@ -267,45 +285,43 @@ export default {
       if (this.isToken) {
         switch (val) {
           case 0:
-            this.loadTarget = "transfers";
+            this.loadTarget = 'txs';
             break;
           case 1:
-            this.loadTarget = "holders";
+            this.loadTarget = 'transfers';
             break;
           case 2:
-            this.loadTarget = "erc20Tokens";
+            this.loadTarget = 'holders';
             break;
           case 3:
-            this.loadTarget = "contract";
+            this.loadTarget = 'erc20Tokens';
+            break;
+          case 4:
+            this.loadTarget = 'contract';
             break;
           default:
-            this.loadTarget = "transfers";
+            this.loadTarget = 'transfers';
         }
       } else {
         switch (val) {
           case 0:
-            this.loadTarget = "txs";
+            this.loadTarget = 'txs';
             break;
           case 1:
-            this.loadTarget = "erc20Tokens";
+            this.loadTarget = 'erc20Tokens';
             break;
           case 2:
-            this.loadTarget = "contract";
+            this.loadTarget = 'contract';
             break;
           default:
-            this.loadTarget = "txs";
+            this.loadTarget = 'txs';
         }
       }
     },
     async loadErc20Tokens(network, page, limit) {
       this.load = true;
       const { address } = this.$route.params;
-      const { tokens, totalRows } = await this.$api.account.getErc20Tokens(
-        network,
-        address,
-        page,
-        limit
-      );
+      const { tokens, totalRows } = await this.$api.account.getErc20Tokens(network, address, page, limit);
       const items = [];
       for (const t of tokens) {
         items.push({
@@ -313,24 +329,19 @@ export default {
           fullAddress: t.tokenAddress,
           blocknum: t.lastUpdate.number,
           balance: {
-            type: "amount",
+            type: 'amount',
             amount: t.balance,
             token: t.tokenSymbol,
             precision: 8,
             decimals: t.tokenDecimals,
           },
-        })
+        });
       }
       return { items, totalRows };
     },
     async loadHolders(network, page, limit) {
       const { address } = this.$route.params;
-      const res = await this.$api.account.getHolders(
-        network,
-        address,
-        page,
-        limit
-      );
+      const res = await this.$api.account.getHolders(network, address, page, limit);
       const { holders, token, totalRows } = res;
       const pageNum = page ? Number(page) : 1;
       const limitNum = limit ? Number(limit) : 10;
@@ -343,18 +354,18 @@ export default {
 
         if (this.isERC20) {
           res.balance = {
-            type: "amount",
+            type: 'amount',
             amount: h.balance,
             precision: 6,
             decimals: token.decimals || 18,
             token: token.symbol,
-          }
+          };
         } else {
           res.nft = {
             address: h.tokenAddress,
             nftBalances: h.nftBalances,
             account: h.address,
-          }
+          };
         }
 
         return res;
@@ -362,12 +373,11 @@ export default {
       return { items, totalRows };
     },
     async loadTxs(network, page, limit) {
-      console.log("LOAD TXS");
       const { address } = this.$route.params;
       const res = await this.$api.account.getTxs(network, address, page, limit);
       const { txs, totalRows } = res;
       const items = txs.map((t) => {
-        let direct = "";
+        let direct = '';
         const fromAddr = t.from;
         const toAddr = t.to;
         let amount = t.mtr;
@@ -379,11 +389,11 @@ export default {
         }
 
         if (fromAddr === toAddr) {
-          direct = "Self";
+          direct = 'Self';
         } else if (fromAddr === address.toLowerCase()) {
-          direct = "Out";
+          direct = 'Out';
         } else {
-          direct = "In";
+          direct = 'In';
         }
 
         // console.log('direct = ', direct);
@@ -397,9 +407,9 @@ export default {
           blocknum: t.block.number,
           from: fromAddr,
           direct,
-          to: toAddr || "nobody",
+          to: toAddr || 'nobody',
           amount: {
-            type: "amount",
+            type: 'amount',
             amount: amount,
             token: token,
             precision: 8,
@@ -407,19 +417,12 @@ export default {
           timestamp: t.block.timestamp,
         };
       });
-      console.log(items);
       return { items, totalRows };
     },
 
     async loadTransfers(network, page, limit) {
-      console.log("LOAD TRANSFERS");
       const { address } = this.$route.params;
-      const res = await this.$api.account.getTransfers(
-        network,
-        address,
-        page,
-        limit
-      );
+      const res = await this.$api.account.getTransfers(network, address, page, limit);
       const { transfers, totalRows, contract } = res;
       const items = transfers.map((t) => {
         const res = {
@@ -435,21 +438,20 @@ export default {
         };
         if (this.isERC20) {
           res.amount = {
-            type: "amount",
+            type: 'amount',
             amount: t.amount,
             token: contract.symbol,
             decimals: contract.decimals,
             precision: 8,
-          }
+          };
         } else {
           res.nft = {
             address: t.tokenAddress,
-            nftBalances: t.nftTransfers
-          }
+            nftBalances: t.nftTransfers,
+          };
         }
         return res;
       });
-      console.log(items);
       return { items, totalRows };
     },
   },

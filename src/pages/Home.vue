@@ -68,7 +68,6 @@ export default {
       const res = await this.$api.metric.getAll(this.network);
       this.loading = false;
       const { mtr, mtrg, pos, pow, staking, committee } = res;
-      console.log('mtrg', mtrg);
 
       const stakingRatio = new BigNumber(staking.totalStaked).dividedBy(1e18).dividedBy(40e6);
       this.data = [

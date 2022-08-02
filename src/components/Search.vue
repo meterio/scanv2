@@ -5,16 +5,11 @@
         list="domain-list"
         :placeholder="placeholder"
         v-model="searchWord"
-        @keydown="keydown"
+        @keypress="keypress"
         debounce="500"
       ></b-form-input>
       <b-input-group-append>
-        <b-button
-          class="query"
-          variant="primary"
-          v-if="btnType == 1"
-          @click="btnClick"
-        >
+        <b-button class="query" variant="primary" v-if="btnType == 1" @click="btnClick">
           <b-icon icon="search"></b-icon>
         </b-button>
         <b-button
@@ -22,12 +17,7 @@
           variant="primary"
           size="sm"
           block
-          style="
-            margin-left: 0.2rem;
-            width: 100px;
-            border-top-left-radius: 0.2rem;
-            border-bottom-left-radius: 0.2rem;
-          "
+          style="margin-left: 0.2rem; width: 100px; border-top-left-radius: 0.2rem; border-bottom-left-radius: 0.2rem"
           @click="btnClick"
         >
           <b-icon icon="search" class="mr-1"></b-icon>
@@ -42,7 +32,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     btnType: {
@@ -52,57 +41,58 @@ export default {
     },
     placeholder: {
       type: String,
-      default: "Search by address/tx/block/name",
+      default: 'Search by address/tx/block/name',
     },
   },
-  name: "Search",
+  name: 'Search',
   data() {
     return {
-      searchWord: "",
+      searchWord: '',
       domainnames: [],
     };
   },
   watch: {
     async searchWord(newVal, oldVal) {
-      const _newVal = newVal.trim()
+      const _newVal = newVal.trim();
       if (String(_newVal).startsWith('0x')) {
-        return
+        return;
       }
       if (_newVal.length < 3) {
-        return
+        return;
       }
       if (!isNaN(Number(_newVal))) {
-        return
+        return;
       }
 
       for (const d of this.domainnames) {
         if (String(d).includes(_newVal)) {
-          return
+          return;
         }
       }
 
       const { type, data } = await this.$api.search.searchKeyWord(this.network, _newVal);
 
       if (type === 'address') {
-        const temp = []
+        const temp = [];
         for (const d of data) {
-          temp.push(`${d.name}(${d.address})`)
-          this.domainnames = temp
+          temp.push(`${d.name}(${d.address})`);
+          this.domainnames = temp;
         }
       }
-    }
+    },
   },
   beforeMount() {},
   methods: {
     btnClick() {
       const key = this.searchWord.trim();
-      this.$emit("click", key);
+      this.$emit('click', key);
     },
-    keydown(evt) {
+    keypress(evt) {
       if (evt) {
         if (evt.which === 13) {
           // enter key
-          this.btnClick();
+          setTimeout(this.btnClick.bind(this), 500);
+          evt.preventDefault();
         }
       }
     },
@@ -124,7 +114,7 @@ export default {
     }
   }
 
-  input[type="text"] {
+  input[type='text'] {
     border: none;
     margin-left: 18px;
     padding: 0;
