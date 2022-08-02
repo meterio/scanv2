@@ -192,7 +192,7 @@ export default {
       filesLoading: false,
       files: [],
       tabValue: 0,
-      loadTarget: 'transfers',
+      loadTarget: 'txs',
       holders: {
         pagination: { show: true, align: 'center', perPage: 20 },
         fields: [
@@ -300,7 +300,7 @@ export default {
             this.loadTarget = 'contract';
             break;
           default:
-            this.loadTarget = 'transfers';
+            this.loadTarget = 'txs';
         }
       } else {
         switch (val) {
