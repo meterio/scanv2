@@ -140,6 +140,7 @@ export default {
       }
     },
     async searchKeyWords(key) {
+      console.log("searchKeyWords", key)
       try {
         const str = key.replace(/\r?\n|\r/g, '');
         const arr = str.match(/\([^\)]+\)/g);

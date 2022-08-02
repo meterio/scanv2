@@ -102,7 +102,9 @@ export default {
       if (evt) {
         if (evt.which === 13) {
           // enter key
-          this.btnClick();
+          setTimeout(() => {
+            this.btnClick();
+          }, 500);
         }
       }
     },

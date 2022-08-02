@@ -202,7 +202,9 @@ export default {
         if (evt.which === 13) {
           // enter key
           evt.preventDefault();
-          this.searchKeyWords();
+          setTimeout(() => {
+            this.searchKeyWords();
+          }, 500);
         }
       }
     },
