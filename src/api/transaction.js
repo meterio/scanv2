@@ -1,4 +1,4 @@
-import { get } from "@/utils/http";
+import { get } from '@/utils/http';
 
 const transaction = {
   getRecentTxs(network, page = 1, limit = 40) {
@@ -11,10 +11,13 @@ const transaction = {
     return get(network, `txs/${hash}/clauses`);
   },
   getTransfers(network, hash) {
-    return get(network, `txs/${hash}/transfers`)
+    return get(network, `txs/${hash}/transfers`);
   },
   getEvents(network, hash) {
-    return get(network, `txs/${hash}/events`)
+    return get(network, `txs/${hash}/events`);
+  },
+  getInternalTxs(network, hash) {
+    return get(network, `txs/${hash}/internaltxs`);
   }
 };
 

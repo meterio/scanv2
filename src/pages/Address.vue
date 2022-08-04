@@ -24,6 +24,7 @@ export default {
       summary: [],
       verified: false, // only for contract
       verifiedDesc: '', // only for contract
+      verifiedFrom: '', // only for contract
       contractDataCount: {
         txCount: 0,
         transfersCount: 0,
@@ -49,6 +50,7 @@ export default {
         summary: this.summary,
         verified: this.verified,
         verifiedDesc: this.verifiedDesc,
+        verifiedFrom: this.verifiedFrom,
       };
     },
   },
@@ -164,6 +166,7 @@ export default {
         if (this.isContract) {
           this.verified = account.verified;
           this.verifiedDesc = account.status;
+          this.verifiedFrom = account.verifiedFrom;
           this.summary.push({
             key: 'owner',
             value: account.master,

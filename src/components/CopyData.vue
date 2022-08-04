@@ -1,34 +1,34 @@
 <template>
   <div>
-    <b-button variant="light" size="sm" class="mr-2" @click="copyData()">
+    <b-button variant="light" size="sm" class="float-right btn-outline-secondary mr-2" @click="copyData()">
       <b-icon icon="clipboard"></b-icon>
-      <span class="ml-1">{{ copied ? 'copied' : 'copy data' }}</span>
+      <span class="ml-1">{{ copied ? 'copied' : 'Copy data' }}</span>
     </b-button>
   </div>
 </template>
 
 <script>
 export default {
-  name: "CopyData",
+  name: 'CopyData',
   props: {
     data: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {
-      copied: false
-    }
+      copied: false,
+    };
   },
   methods: {
     async copyData() {
       await navigator.clipboard.writeText(this.data);
-      this.copied = true
+      this.copied = true;
       setTimeout(() => {
-        this.copied = false
+        this.copied = false;
       }, 1000);
-    }
-  }
-}
+    },
+  },
+};
 </script>

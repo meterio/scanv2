@@ -242,82 +242,91 @@
 
         <!-- Clause template -->
         <template v-slot:cell(clause)="data">
-          <div class="breakable">
-            <div class="address-row">
-              <span>To: </span>
-              <address-link :address="data.value.to" />
-            </div>
-            <div class="amount-row" v-if="data.value.amount">
-              Value:
-              <amount-tag
-                v-if="data.value.amount.type == 'amount'"
-                :amount="data.value.amount.amount"
-                :token="data.value.amount.token"
-                :precision="data.value.amount.precision"
-                :decimals="data.value.amount.decimals || 18"
-              />
-            </div>
-            <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
-            <div class="title-row d-flex justify-content-between">
-              <span v-if="data.value.methodId > 0">MethodID: {{ data.value.methodId }}</span>
-              <copy-data v-if="data.value.data !== '0x'" :data="data.value.data" />
+          <div class="breakable row pt-2 pb-2">
+            <div class="col-12 col-md-9">
+              <div class="address-row">
+                <span>To: </span>
+                <address-link :address="data.value.to" />
+              </div>
+              <div class="amount-row" v-if="data.value.amount">
+                Value:
+                <amount-tag
+                  v-if="data.value.amount.type == 'amount'"
+                  :amount="data.value.amount.amount"
+                  :token="data.value.amount.token"
+                  :precision="data.value.amount.precision"
+                  :decimals="data.value.amount.decimals || 18"
+                />
+              </div>
+              <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
+              <div class="title-row d-flex justify-content-between">
+                <span v-if="data.value.methodId > 0">MethodID: {{ data.value.methodId }}</span>
+              </div>
+
+              <template v-if="data.value.isDecoded">
+                <div v-for="(data, index) in data.value.datas" :key="index" class="topic-row">
+                  <span class="index">{{ index }}</span>
+                  <span>{{ data }}</span>
+                </div>
+              </template>
+              <div v-else-if="data.value.data !== '0x'">
+                <b-form-textarea readonly rows="3" max-rows="16" :value="data.value.data"></b-form-textarea>
+              </div>
+              <div v-else>{{ data.value.data }}</div>
             </div>
 
-            <template v-if="data.value.isDecoded">
-              <div v-for="(data, index) in data.value.datas" :key="index" class="topic-row">
-                <span class="index">{{ index }}</span>
-                <span>{{ data }}</span>
-              </div>
-            </template>
-            <div v-else-if="data.value.data !== '0x'">
-              <b-form-textarea readonly rows="3" max-rows="16" :value="data.value.data"></b-form-textarea>
+            <div class="col-12 col-md-3">
+              <b-button
+                v-if="data.item.decoded"
+                size="sm"
+                variant="outline-secondary"
+                @click="data.toggleDetails"
+                class="mr-2 float-right mb-2"
+              >
+                <span v-if="!data.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Decode </span>
+                <span v-else> <b-icon icon="chevron-double-up"></b-icon>Hide</span>
+              </b-button>
+              <copy-data v-if="data.value.data !== '0x'" :data="data.value.data" />
             </div>
-            <div v-else>{{ data.value.data }}</div>
           </div>
-          <b-button
-            v-if="data.item.decoded"
-            size="sm"
-            variant="outline-secondary"
-            @click="data.toggleDetails"
-            class="mr-2 float-right"
-          >
-            <span v-if="!data.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Show Decoded </span>
-            <span v-else> <b-icon icon="chevron-double-up"></b-icon> Hide Decoded </span>
-          </b-button>
         </template>
 
         <!-- Event template -->
         <template v-slot:cell(event)="data">
-          <div class="dt-row breakable">
-            <div class="address-row">
-              <span>Address: </span>
-              <address-link :address="data.value.address" />
-            </div>
-            <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
-            <div class="title-row" v-if="data.value.topics.length > 0">Topics:</div>
-            <div v-for="(topic, index) in data.value.topics" :key="index" class="topic-row">
-              <span class="index">{{ index }}</span>
-              <span>{{ topic }}</span>
-            </div>
-
-            <div v-if="data.value.datas && data.value.datas.length" class="mt-3">
-              <h6 class="title-row">Data:</h6>
-              <div v-for="(data, index) in data.value.datas" :key="index" class="data-row">
+          <div class="row pt-2 pb-2">
+            <div class="breakable col-12 col-md-9">
+              <div class="address-row">
+                <span>Address: </span>
+                <address-link :address="data.value.address" />
+              </div>
+              <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
+              <div class="title-row" v-if="data.value.topics.length > 0">Topics:</div>
+              <div v-for="(topic, index) in data.value.topics" :key="index" class="topic-row">
                 <span class="index">{{ index }}</span>
-                <span>{{ data }}</span>
+                <span>{{ topic }}</span>
+              </div>
+
+              <div v-if="data.value.datas && data.value.datas.length" class="mt-3">
+                <h6 class="title-row">Data:</h6>
+                <div v-for="(data, index) in data.value.datas" :key="index" class="data-row">
+                  <span class="index">{{ index }}</span>
+                  <span>{{ data }}</span>
+                </div>
               </div>
             </div>
+            <div class="col-12 col-md-3">
+              <b-button
+                v-if="data.item.decoded"
+                size="sm"
+                variant="outline-secondary"
+                @click="data.toggleDetails"
+                class="mr-2 float-right"
+              >
+                <span v-if="!data.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Decode</span>
+                <span v-else> <b-icon icon="chevron-double-up"></b-icon> Hide</span>
+              </b-button>
+            </div>
           </div>
-          <b-button
-            v-if="data.item.decoded"
-            size="sm"
-            variant="outline-secondary"
-            @click="data.toggleDetails"
-            class="mr-2 float-right"
-          >
-            <span v-if="!data.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Show Decoded </span>
-            <span v-else> <b-icon icon="chevron-double-up"></b-icon> Hide Decoded </span>
-          </b-button>
         </template>
 
         <!-- method name -->

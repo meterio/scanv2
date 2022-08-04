@@ -8,10 +8,14 @@
       </template>
       <template v-slot:cell(to)="data">
         <div class="dt-row">
-          <router-link class="link" :to="{
-            name: 'address',
-            params: { address: data.value },
-          }">{{ data.value }}</router-link>
+          <router-link
+            class="link"
+            :to="{
+              name: 'address',
+              params: { address: data.value },
+            }"
+            >{{ data.value }}</router-link
+          >
         </div>
       </template>
 
@@ -21,14 +25,15 @@
         </div>
 
         <div v-if="row.row_hovered"></div>
-        <b-button v-if="row.item.decoded" size="sm" variant="outline-secondary" @click="row.toggleDetails"
-          class="mr-2 float-right">
-          <span v-if="!row.detailsShowing">
-            <b-icon icon="chevron-double-down"></b-icon> Show Decoded
-          </span>
-          <span v-else>
-            <b-icon icon="chevron-double-up"></b-icon> Hide Decoded
-          </span>
+        <b-button
+          v-if="row.item.decoded"
+          size="sm"
+          variant="outline-secondary"
+          @click="row.toggleDetails"
+          class="mr-2 float-right"
+        >
+          <span v-if="!row.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Decode </span>
+          <span v-else> <b-icon icon="chevron-double-up"></b-icon> Hide </span>
         </b-button>
       </template>
 
@@ -97,6 +102,18 @@ export default {
         pagination: { show: true, align: 'center', perPage: 20 },
         items: [],
       },
+      internaltxs: {
+        fields: [
+          { key: 'clauseIndex', label: 'Clause' },
+          { key: 'name', label: 'Name' },
+          { key: 'from', label: 'From' },
+          { key: 'to', label: 'To' },
+          { key: 'value', label: 'Value' },
+          { key: 'gasLimit', label: 'gasLimit' },
+        ],
+        pagination: { show: false, align: 'center', perPage: 20 },
+        items: [],
+      },
       events: {
         fields: [
           { key: 'index', label: 'Index' },
@@ -116,6 +133,8 @@ export default {
           return this.transfers.items;
         case 2:
           return this.events.items;
+        case 3:
+          return this.internaltxs.items;
       }
       return this.clauses.items;
     },
@@ -127,6 +146,8 @@ export default {
           return this.transfers.fields;
         case 2:
           return this.events.fields;
+        case 3:
+          return this.internaltxs.fields;
       }
       return this.clauses.fields;
     },
@@ -138,6 +159,8 @@ export default {
           return this.transfers.pagination;
         case 2:
           return this.events.pagination;
+        case 3:
+          return this.internaltxs.pagination;
       }
       return this.clauses.pagination;
     },
@@ -149,6 +172,8 @@ export default {
           return this.loadTransfers;
         case 2:
           return this.loadEvents;
+        case 3:
+          return this.loadInternalTxs;
       }
       return this.loadClauses;
     },
@@ -169,6 +194,9 @@ export default {
         case 2:
           this.loadEvents();
           break;
+        case 3:
+          this.loadInternalTxs();
+          break;
         default:
           this.loadClauses();
           break;
@@ -187,6 +215,7 @@ export default {
           { name: tx.clauseCount > 0 ? `Clauses (${tx.clauseCount})` : 'Clauses' },
           { name: tx.transferCount > 0 ? `Transfers (${tx.transferCount})` : 'Transfers' },
           { name: tx.eventCount > 0 ? `Events (${tx.eventCount})` : 'Events' },
+          { name: tx.internaltxsCount > 0 ? `Internal Txs (${tx.internaltxsCount})` : 'Internal Txs' },
         ];
         this.summary = [
           { key: 'Hash', value: tx.hash },
@@ -226,7 +255,7 @@ export default {
         }
 
         if (!!tx.contractAddress) {
-          this.summary.splice(5, 0, { key: 'To', value: tx.contractAddress, type: 'contract-created-link' },)
+          this.summary.splice(5, 0, { key: 'To', value: tx.contractAddress, type: 'contract-created-link' });
         }
       }
     },
@@ -269,6 +298,14 @@ export default {
           index: index + 1,
         };
       });
+    },
+    async loadInternalTxs() {
+      const { internalTxs } = await this.$api.transaction.getInternalTxs(this.network, this.txHash);
+      console.log(internalTxs);
+      this.internaltxs.items = internalTxs.map((itx) => ({
+        ...itx,
+        gasLimit: itx.gasLimit,
+      }));
     },
     async loadEvents() {
       const { events } = await this.$api.transaction.getEvents(this.network, this.txHash);

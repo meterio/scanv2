@@ -245,6 +245,7 @@
             <b-col sm="12" :md="contentCols">
               <template v-if="verified">
                 <span>{{ computedVerifiedDesc }}</span>
+                <address-link v-if="verifiedFrom" :address="verifiedFrom" short="true" />
               </template>
               <template v-else>
                 <span>Not verified yet.</span>
@@ -290,6 +291,10 @@ export default {
       default: false,
     },
     verifiedDesc: {
+      type: String,
+      default: '',
+    },
+    verifiedFrom: {
       type: String,
       default: '',
     },
@@ -364,6 +369,9 @@ export default {
     computedVerifiedDesc() {
       if (this.verifiedDesc === 'perfect' || this.verifiedDesc === 'full') {
         return 'Contract Source Code and Metadata Fully Verified';
+      }
+      if (this.verifiedDesc === 'match') {
+        return 'Deployed code matched with ';
       } else {
         return 'Contract Source Code Verified';
       }

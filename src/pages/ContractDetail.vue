@@ -68,20 +68,20 @@
 </template>
 
 <script>
-import detectEthereumProvider from "@metamask/detect-provider";
-import ContractReadFunction from "./ContractReadFunction.vue";
-import ContractWriteFunction from "./ContractWriteFunction.vue";
-import CodeTextArea from "@/components/CodeTextArea.vue";
-import CopyData from "../components/CopyData.vue";
-import { ethers } from "ethers";
+import detectEthereumProvider from '@metamask/detect-provider';
+import ContractReadFunction from './ContractReadFunction.vue';
+import ContractWriteFunction from './ContractWriteFunction.vue';
+import CodeTextArea from '@/components/CodeTextArea.vue';
+import CopyData from '../components/CopyData.vue';
+import { ethers } from 'ethers';
 
 export default {
-  name: "Contract",
+  name: 'Contract',
   components: {
     ContractReadFunction,
     ContractWriteFunction,
     CodeTextArea,
-    CopyData
+    CopyData,
   },
   props: {
     verified: {
@@ -96,7 +96,7 @@ export default {
     },
     address: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   data() {
@@ -114,15 +114,15 @@ export default {
   computed: {
     variantBtn() {
       if (this.account && this.chainId == this.currentChain.chainId) {
-        return "primary";
+        return 'primary';
       } else {
-        return "danger";
+        return 'danger';
       }
     },
     computedFiles() {
       const files = [];
       for (const f of this.files) {
-        if (f.name.includes(".sol")) {
+        if (f.name.includes('.sol')) {
           files.unshift(f);
         } else {
           files.push(f);
@@ -131,51 +131,54 @@ export default {
       return files;
     },
     computedVerifyParams() {
-      const params = []
+      const params = [];
       try {
-        const metadata = this.files.find(f => f.name === 'metadata.json')
-        const jsonData = JSON.parse(metadata.content)
-        const compilerVersion = jsonData.compiler.version
-        const settings = jsonData.settings
-        const contractName = Object.values(settings.compilationTarget)[0]
+        const metadata = this.files.find((f) => f.name === 'metadata.json');
+        const jsonData = JSON.parse(metadata.content);
+        const compilerVersion = jsonData.compiler.version;
+        const settings = jsonData.settings;
+        const contractName = Object.values(settings.compilationTarget)[0];
         const optimizationEnable = settings.optimizer.enabled
           ? `Yes with ${settings.optimizer.runs} runs`
-          : `No with ${settings.optimizer.runs} runs`
-        const evmVersion = settings.evmVersion
+          : `No with ${settings.optimizer.runs} runs`;
+        const evmVersion = settings.evmVersion;
 
-        params.push({
-          name: 'Contract Name: ',
-          value: contractName
-        }, {
-          name: 'Optimization Enabled: ',
-          value: optimizationEnable
-        }, {
-          name: 'Compiler Version: ',
-          value: compilerVersion
-        }, {
-          name: 'EVM Version: ',
-          value: evmVersion
-        })
-      } catch(e) {
-        console.log('get verify params error', e.message)
+        params.push(
+          {
+            name: 'Contract Name: ',
+            value: contractName,
+          },
+          {
+            name: 'Optimization Enabled: ',
+            value: optimizationEnable,
+          },
+          {
+            name: 'Compiler Version: ',
+            value: compilerVersion,
+          },
+          {
+            name: 'EVM Version: ',
+            value: evmVersion,
+          }
+        );
+      } catch (e) {
+        console.log('get verify params error', e.message);
       }
 
-      return params
+      return params;
     },
     computedBtnText() {
       if (this.account) {
         if (this.chainId != this.currentChain.chainId) {
           return `Wrong Network`;
         }
-        return this.account.substr(0, 4) + "..." + this.account.substr(-2);
+        return this.account.substr(0, 4) + '...' + this.account.substr(-2);
       } else {
-        return "Connect";
+        return 'Connect';
       }
     },
     openable() {
-      return (
-        this.contract && this.account && this.chainId == this.currentChain.chainId
-      );
+      return this.contract && this.account && this.chainId == this.currentChain.chainId;
     },
   },
   async created() {
@@ -214,11 +217,11 @@ export default {
       }
       const readAbi = [];
       const writeAbi = [];
-      const metadata = this.files.find((item) => item.name === "metadata.json");
+      const metadata = this.files.find((item) => item.name === 'metadata.json');
       const abi = JSON.parse(metadata.content).output.abi;
       for (const f of abi) {
-        if (f.type === "function") {
-          if (f.stateMutability === "view" || f.stateMutability === 'pure') {
+        if (f.type === 'function') {
+          if (f.stateMutability === 'view' || f.stateMutability === 'pure') {
             readAbi.push(f);
           } else {
             writeAbi.push(f);
@@ -233,22 +236,20 @@ export default {
       if (!this.provider) {
         return;
       }
-      this.provider.on("chainChanged", this.chainChangedHandle);
-      this.provider.on("accountsChanged", this.accountsChangeHandle);
+      this.provider.on('chainChanged', this.chainChangedHandle);
+      this.provider.on('accountsChanged', this.accountsChangeHandle);
 
       this.provider
-        .request({ method: "eth_requestAccounts" })
+        .request({ method: 'eth_requestAccounts' })
         .then((accounts) => {
           this.account = accounts[0];
-          const signer = new ethers.providers.Web3Provider(
-            this.provider
-          ).getSigner();
+          const signer = new ethers.providers.Web3Provider(this.provider).getSigner();
           this.contract = new ethers.Contract(this.address, this.abi, signer);
         })
         .catch((err) => {
           console.log(err);
         });
-      this.provider.request({ method: "eth_chainId" }).then((chainId) => {
+      this.provider.request({ method: 'eth_chainId' }).then((chainId) => {
         this.chainId = chainId;
       });
     },
@@ -260,11 +261,8 @@ export default {
     },
     removeAllListeners() {
       if (this.provider) {
-        this.provider.removeListener("chainChanged", this.chainChangedHandle);
-        this.provider.removeListener(
-          "accountsChanged",
-          this.accountsChangeHandle
-        );
+        this.provider.removeListener('chainChanged', this.chainChangedHandle);
+        this.provider.removeListener('accountsChanged', this.accountsChangeHandle);
       }
     },
   },
@@ -282,6 +280,6 @@ export default {
 }
 .verify-params-name {
   color: '#77838f';
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 </style>

@@ -6,7 +6,8 @@
     wide,
     isContract,
     :verified='verified',
-    :verifiedDesc='verifiedDesc'
+    :verifiedDesc='verifiedDesc',
+    :verifiedFrom='verifiedFrom'
   )
 
   b-container.summary
@@ -80,6 +81,9 @@ export default {
     },
     verifiedDesc() {
       return this.addressInfo.verifiedDesc;
+    },
+    verifiedFrom() {
+      return this.addressInfo.verifiedFrom;
     },
     title() {
       if (this.isToken) {
