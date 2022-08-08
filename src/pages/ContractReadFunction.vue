@@ -36,6 +36,7 @@
 <script>
 import Loading from '@/components/Loading';
 import AddNumberModal from '@/components/AddNumberModal';
+import BigNumber from 'bignumber.js';
 export default {
   name: 'ContractReadFunction',
   components: {
@@ -124,7 +125,20 @@ export default {
           const params = this.paramsLength === 0 ? [] : [...this.params];
           const res = await this.contract[this.abi.name].apply(null, params);
           if (res) {
-            this.res = res;
+            let r = ''
+            if (Array.isArray(res)) {
+              r = []
+              for (let i = 0; i < this.abi.outputs.length; i++) {
+                if (this.abi.outputs[i].type.includes('int')) {
+                  r.push(new BigNumber(String(res[i])).toFixed())
+                } else {
+                  r.push(res[i])
+                }
+              }
+            } else {
+              r = res
+            }
+            this.res = r;
           } else {
             this.res = 'no result';
           }
