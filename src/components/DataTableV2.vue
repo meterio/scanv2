@@ -370,14 +370,16 @@
           <div class="dt-row">
             <!-- amount tag -->
             <amount-tag
-              v-if="data.value.type == 'amount'"
+              v-if="data.value.type == 'amount' || data.value.type == 'tokenAmount'"
               :amount="data.value.amount"
               :token="data.value.token"
               :precision="data.value.precision"
               :decimals="data.value.decimals || 18"
               :tokenId="data.value.tokenId"
               :tokenType="data.value.tokenType"
+              :tokenAddr="data.value.address"
             />
+
             <router-link
               v-if="data.value.type == 'block'"
               class="link"

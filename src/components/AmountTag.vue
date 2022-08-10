@@ -3,7 +3,13 @@
     <template v-if="tokenType === 'ERC20'">
       <span>{{ integer }}</span>
       <span v-if="shortMantissa" class="text-secondary">{{ shortMantissa }}</span>
-      <span v-if="token" class="badge1 ml-1">{{ token }}</span>
+
+      <b-link class="badge1 ml-1" v-if="token && tokenAddr" :to="{ name: 'address', params: { address: tokenAddr } }">{{
+        token
+      }}</b-link>
+      <span v-else
+        ><span v-if="token" class="badge1 ml-1">{{ token }}</span></span
+      >
     </template>
     <template v-else-if="tokenType === 'ERC721' || tokenType === 'ERC1155'">
       <span :title="tokenId">[{{ computedTokenId }}]</span>
@@ -40,7 +46,11 @@ export default {
     tokenId: {
       type: String,
       default: '',
-    }
+    },
+    tokenAddr: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -91,7 +101,7 @@ export default {
       } else {
         return this.tokenId;
       }
-    }
+    },
     // badgeClass() {
     //   if (this.token === "MTR") {
     //     return "badge badge-light ml-1";

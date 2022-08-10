@@ -431,6 +431,7 @@ export default {
           token: t.symbol || 'ERC20',
           precision: 8,
           decimals: t.decimals || 18,
+          address: t.tokenAddress,
         },
         timestamp: t.block.timestamp,
       }));
