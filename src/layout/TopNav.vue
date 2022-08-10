@@ -34,7 +34,8 @@
           >
         </b-nav-form> -->
         <b-nav-form>
-          <b-input-group class="search-group" v-if="!homeActive">
+          <auto-search-input @selected="selected" v-if="!homeActive" />
+          <!-- <b-input-group class="search-group" v-if="!homeActive">
             <b-form-input
               list="domain-list1"
               v-model="searchKey"
@@ -47,11 +48,11 @@
                 <b-icon icon="search"></b-icon>
               </b-button>
             </b-input-group-append>
-          </b-input-group>
+          </b-input-group> -->
         </b-nav-form>
-        <datalist id="domain-list1">
+        <!-- <datalist id="domain-list1">
           <option v-for="name in domainnames" :key="name">{{ name }}</option>
-        </datalist>
+        </datalist> -->
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="m-bar ml-auto">
@@ -92,16 +93,19 @@
 
 <script>
 import { getCurrentChain, chainList } from '@/config';
+import AutoSearchInput from '../components/AutoSearchInput.vue';
 
 export default {
   name: 'TopNav',
   data() {
     return {
+      selectedValue: null,
       modal_show: false,
       searchKey: '',
       domainnames: [],
     };
   },
+  components: { AutoSearchInput },
   computed: {
     computedLogo() {
       return require(`@/assets/${this.currentChain.symbol.toLowerCase()}.png`);
@@ -159,6 +163,24 @@ export default {
     },
   },
   methods: {
+    selected(item) {
+      let jump_url = '';
+      if (item.type === 'tx') {
+        jump_url = `/tx/${item.hash}`;
+      } else if (item.type == 'block') {
+        jump_url = `/block/${item.number}`;
+      } else if (item.type == 'address') {
+        jump_url = `/address/${item.address}`;
+      } else {
+        this.modal_show = true;
+      }
+      if (jump_url != this.$route.path && jump_url !== '' && !this.modal_show) {
+        console.log('JUMP TO ', jump_url);
+        this.$router.push(jump_url);
+      } else {
+        console.log('NO JUMP');
+      }
+    },
     keypress(evt) {
       if (evt) {
         if (evt.which === 13) {
@@ -233,10 +255,6 @@ export default {
 .navbar-nav .nav-link {
   padding-left: 0px !important;
   padding-right: 0px !important;
-}
-
-.search-group {
-  width: 500px !important;
 }
 
 .navbar-expand-lg .navbar-nav .nav-link {
