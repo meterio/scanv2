@@ -11,7 +11,7 @@
       >
         <template #button-content> </template>
         <b-dropdown-item v-for="item in items" @click="selectItem(item)" :key="item.address"
-          >{{ item.tag ? '[' + item.tag + ']' : '' }} {{ item.name }} - {{ item.address }}</b-dropdown-item
+          >{{ item.symbol ? '[' + item.symbol + ']' : '' }} {{ item.name }} - {{ item.address }}</b-dropdown-item
         >
       </b-dropdown>
     </template>
