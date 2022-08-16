@@ -254,7 +254,8 @@ export default {
           });
         }
 
-        if (!!tx.contractAddress) {
+        if (Array.isArray(tx.contractAddress) && tx.contractAddress.length) {
+
           this.summary.splice(5, 0, { key: 'To', value: tx.contractAddress, type: 'contract-created-link' });
         }
       }

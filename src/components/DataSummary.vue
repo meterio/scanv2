@@ -80,9 +80,11 @@
 
               <!-- contract-created-link -->
               <div v-if="item.type === 'contract-created-link'">
-                <span>[Contract </span>
-                <address-link :address="item.value" />
-                <span> Created]</span>
+                <div v-for="addr in item.value" :key="addr">
+                  <span>[Contract </span>
+                  <address-link :address="addr" />
+                  <span> Created]</span>
+                </div>
               </div>
 
               <!-- address-or-name-link -->
