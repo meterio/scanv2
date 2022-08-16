@@ -44,9 +44,6 @@ export default {
   getErc20Tokens(network, address, page, limit = 8) {
     return get(network, `accounts/${address}/erc20tokens?page=${page}&limit=${limit}`);
   },
-  getNFTTokens(network, address, page, limit = 8) {
-    return get(network, `accounts/${address}/nfttokens?page=${page}&limit=${limit}`);
-  },
   getNFTs(network, address, page, limit = 8) {
     return get(network, `accounts/${address}/nfts?page=${page}&limit=${limit}`);
   },
