@@ -4,7 +4,8 @@
   .search-banner
     .container
       h1.title {{ currentChain.title }} Blockchain Explorer
-      search.mt25(:btnType='2', placeholder='Search Transation/Blocks/Address/Name', @click='searchKeyWords')
+      auto-search-input(@selected='selected', large)
+      //- search.mt25(:btnType='2', placeholder='Search Transation/Blocks/Address/Name', @click='searchKeyWords')
     //- block statistic
   data-dashboard.mt35(v-bind:rows='data', v-if='data.length > 0')
     //- node statistic
@@ -26,6 +27,7 @@ import RecentTxs from '@/components/RecentTxs.vue';
 import { formatNum } from '@/utils';
 import BigNumber from 'bignumber.js';
 import { mapState } from 'vuex';
+import AutoSearchInput from '@/components/AutoSearchInput.vue';
 
 export default {
   name: 'Home',
@@ -35,6 +37,7 @@ export default {
     DataDashboard,
     RecentBlocks,
     RecentTxs,
+    AutoSearchInput,
   },
   computed: {
     ...mapState({
@@ -138,8 +141,26 @@ export default {
         }, 60 * 30 * 1000); // 30 min
       }
     },
+    selected(item) {
+      let jump_url = '';
+      if (item.type === 'tx') {
+        jump_url = `/tx/${item.hash}`;
+      } else if (item.type == 'block') {
+        jump_url = `/block/${item.number}`;
+      } else if (item.type == 'address') {
+        jump_url = `/address/${item.address}`;
+      } else {
+        this.modal_show = true;
+      }
+      if (jump_url != this.$route.path && jump_url !== '' && !this.modal_show) {
+        console.log('JUMP TO ', jump_url);
+        this.$router.push(jump_url);
+      } else {
+        console.log('NO JUMP');
+      }
+    },
     async searchKeyWords(key) {
-      console.log("searchKeyWords", key)
+      console.log('searchKeyWords', key);
       try {
         const str = key.replace(/\r?\n|\r/g, '');
         const arr = str.match(/\([^\)]+\)/g);
