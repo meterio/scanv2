@@ -345,18 +345,18 @@
               <address-link :address="data.value.address" />
             </div>
 
-            <section v-if="data.value.nftBalances">
-              <span v-for="(n, index) in data.value.nftBalances" :key="index" class="topic-row text-nowrap index">
-                <span v-if="n.value > 1">{{ n.value }} of </span>
-                <span v-if="data.value.nolink">[{{ n.tokenId }}]</span>
+            <section v-if="data.value.tokens">
+              <span v-for="(n, index) in data.value.tokens" :key="index" class="topic-row text-nowrap index">
+                <span v-if="n.val > 1">{{ n.val }} of </span>
+                <span v-if="data.value.nolink">[{{ n.id }}]</span>
                 <span v-else>
                   <span>[</span>
                   <router-link
                     :to="{
-                      name: 'nftDetail',
-                      params: { address: data.value.address, tokenId: n.tokenId },
+                      name: 'nft',
+                      params: { address: data.value.address, tokenId: n.id },
                     }"
-                    >{{ n.tokenId }}</router-link
+                    >{{ n.id }}</router-link
                   >
                   <span>]</span>
                 </span>

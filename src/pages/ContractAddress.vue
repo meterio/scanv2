@@ -111,8 +111,8 @@ export default {
           {
             name:
               this.contractDataCount.erc20TokenCount > 0
-                ? `ERC20 Tokens(${this.contractDataCount.erc20TokenCount})`
-                : 'ERC20 Tokens',
+                ? `ERC20s(${this.contractDataCount.erc20TokenCount})`
+                : 'ERC20s',
           },
           { name: 'Contract' },
         ];

@@ -1,17 +1,18 @@
-import block from "./block";
-import transaction from "./transaction";
-import account from "./account";
-import metric from "./metric";
-import pow from "./pow";
-import auction from "./auction";
-import validator from "./validator";
-import search from "./search";
-import bucket from "./bucket";
-import epoch from "./epoch";
-import known from "./known";
-import verify from "./verify";
-import token from "./token";
-import contract from "./contract";
+import block from './block';
+import transaction from './transaction';
+import account from './account';
+import metric from './metric';
+import pow from './pow';
+import auction from './auction';
+import validator from './validator';
+import search from './search';
+import bucket from './bucket';
+import epoch from './epoch';
+import known from './known';
+import verify from './verify';
+import token from './token';
+import contract from './contract';
+import nft from './nft';
 
 export default {
   block,
@@ -28,4 +29,5 @@ export default {
   verify,
   token,
   contract,
+  nft
 };

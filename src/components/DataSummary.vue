@@ -78,6 +78,11 @@
               <!-- address-link -->
               <address-link :address="item.value" v-if="item.type === 'address-link'" />
 
+              <!-- address-link -->
+              <b-link :to="{ name: 'txDetail', params: { hash: item.value } }" v-if="item.type === 'tx-link'">{{
+                item.value
+              }}</b-link>
+
               <!-- contract-created-link -->
               <div v-if="item.type === 'contract-created-link'">
                 <div v-for="addr in item.value" :key="addr">
@@ -211,6 +216,10 @@
               <!-- nft token image -->
               <span v-if="item.type === 'token-image'">
                 <b-img-lazy thumbnail fluid :src="item.value" blank-color="#777" width="100" />
+              </span>
+
+              <span v-if="item.type === 'media'">
+                <b-img-lazy v-if="item.value" thumbnail fluid :src="item.value" blank-color="#777" width="100" />
               </span>
             </b-col>
           </b-row>

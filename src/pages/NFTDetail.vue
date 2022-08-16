@@ -15,61 +15,47 @@ import DataTableV2 from '@/components/DataTableV2.vue';
 import NavTabs from '@/components/NavTabs.vue';
 
 export default {
-  name: "NFTDetail",
+  name: 'NFTDetail',
   components: {
     DataSummary,
     DataTableV2,
-    NavTabs
+    NavTabs,
   },
   props: {
     address: {
-      type: String
+      type: String,
     },
     tokenId: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
-      summaryTitle: 'NFT token detail',
+      summaryTitle: 'NFT Token',
       summary: [],
       tabs: [{ name: 'Transfers' }],
       tabValue: 0,
       transfers: {
         pagination: {
           show: true,
-          align: "center",
+          align: 'center',
           perPage: 20,
         },
         fields: [
-          { key: "txhashWithStatus", label: "Hash" },
-          { key: "blocknum", label: "Block" },
-          { key: "timestamp", label: "Time" },
-          { key: "from", label: "From" },
-          { key: "direct", label: "" },
-          { key: "to", label: "To" },
-          { key: "nft", label: "Token ID" },
+          { key: 'txhashWithStatus', label: 'Hash' },
+          { key: 'blocknum', label: 'Block' },
+          { key: 'timestamp', label: 'Time' },
+          { key: 'from', label: 'From' },
+          { key: 'direct', label: '' },
+          { key: 'to', label: 'To' },
+          { key: 'nft', label: 'Token ID' },
         ],
         items: [],
       },
-    }
+    };
   },
   mounted() {
-    this.summary.push(
-      {
-        key: 'Address',
-        value: this.address,
-        type: 'address-link'
-      },
-      {
-        key: 'ID',
-        value: this.tokenId
-      },
-      {
-        key: 'Image',
-        value: `${this.currentChain.nftImageUrlBase}${this.address}/${this.tokenId}`,
-        type: 'token-image'
-      })
+    this.init();
   },
   computed: {
     items() {
@@ -120,9 +106,34 @@ export default {
       this.getSummary();
       this.loadData();
     },
-    getSummary() { },
+    async getSummary() {
+      const detail = await this.$api.nft.getTokenDetail(this.network, this.address, this.tokenId);
+      this.summary = [
+        { key: 'Type', value: detail.type },
+        {
+          key: 'Address',
+          value: this.address,
+          type: 'address-link',
+        },
+        {
+          key: 'Token ID',
+          value: `${detail.value} of [${this.tokenId}]`,
+        },
+        {
+          key: 'Media',
+          value: detail.mediaURI,
+          type: 'media',
+        },
+
+        { key: 'Owner', value: detail.owner, type: 'address-link' },
+        { key: 'Mint Tx', value: detail.creationTxHash, type: 'tx-link' },
+        { key: 'Minted By', value: detail.minter, type: 'address-link' },
+        { key: 'Minted At', value: detail.block.timestamp, type: 'timestamp' },
+      ];
+    },
+
     async loadTransfers(network, page, limit) {
-      if (!network) return
+      if (!network) return;
       const { totalRows, txs } = await this.$api.account.getNFTTxsByTokenAddrTokenId(
         network,
         this.address,
@@ -138,15 +149,15 @@ export default {
         blocknum: t.block.number,
         from: t.from,
         to: t.to,
-        direct: t.from === this.address ? "Out" : "In",
+        direct: t.from === this.address ? 'Out' : 'In',
         nft: {
           nolink: true,
-          nftBalances: t.nftTransfers,
+          tokens: t.nftTransfers.map((t) => ({ id: t.tokenId, val: t.value })),
         },
         timestamp: t.block.timestamp,
       }));
       return { items, totalRows };
     },
-  }
-}
+  },
+};
 </script>

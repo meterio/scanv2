@@ -47,10 +47,7 @@ export default {
       return [
         { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs' },
         {
-          name:
-            this.userDataCount.erc20TokenCount > 0
-              ? `ERC20 Tokens(${this.userDataCount.erc20TokenCount})`
-              : 'ERC20 Tokens',
+          name: this.userDataCount.erc20TokenCount > 0 ? `ERC20s(${this.userDataCount.erc20TokenCount})` : 'ERC20s',
         },
         { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.userDataCount.erc20TxCount})` : 'ERC20 Txs' },
         { name: this.userDataCount.nftTokenCount > 0 ? `NFT(${this.userDataCount.nftTokenCount})` : 'NFT' },
@@ -83,8 +80,8 @@ export default {
           return this.holders.fields;
         case 'erc20Tokens':
           return this.erc20Tokens.fields;
-        case 'nftTokens':
-          return this.nftTokens.fields;
+        case 'nfts':
+          return this.nfts.fields;
       }
       return this.txs.fields;
     },
@@ -106,8 +103,8 @@ export default {
           return this.holders.pagination;
         case 'erc20Tokens':
           return this.erc20Tokens.pagination;
-        case 'nftTokens':
-          return this.nftTokens.pagination;
+        case 'nfts':
+          return this.nfts.pagination;
       }
       return this.txs.pagination;
     },
@@ -129,8 +126,8 @@ export default {
           return this.loadHolders;
         case 'erc20Tokens':
           return this.loadErc20Tokens;
-        case 'nftTokens':
-          return this.loadNFTTokens;
+        case 'nfts':
+          return this.loadNFTs;
       }
       return this.loadTxs;
     },
@@ -263,7 +260,7 @@ export default {
           { key: 'blocknum', label: 'Last Updated on Block' },
         ],
       },
-      nftTokens: {
+      nfts: {
         pagination: { show: true, align: 'center', perPage: 20 },
         fields: [
           { key: 'type', label: 'Type' },
@@ -296,7 +293,7 @@ export default {
           this.loadTarget = 'erc20Txs';
           break;
         case 3:
-          this.loadTarget = 'nftTokens';
+          this.loadTarget = 'nfts';
           break;
         case 4:
           this.loadTarget = 'nftTxs';
@@ -463,19 +460,22 @@ export default {
       const { address } = this.$route.params;
       const { proposed, totalRows } = await this.$api.account.getProposed(network, address, page, limit);
 
-      const items = proposed.map((b) => {
-        return {
-          ...b,
-          blockNum: b.number,
-          blockhash: b.hash,
-          actualRewardStr: {
-            type: 'amount',
-            amount: b.actualReward,
-            precision: -1,
-            token: this.tokenSymbol,
-          },
-        };
-      });
+      let items = [];
+      if (proposed && proposed.length > 0) {
+        items = proposed.map((b) => {
+          return {
+            ...b,
+            blockNum: b.number,
+            blockhash: b.hash,
+            actualRewardStr: {
+              type: 'amount',
+              amount: b.actualReward,
+              precision: -1,
+              token: this.tokenSymbol,
+            },
+          };
+        });
+      }
       return { items, totalRows };
     },
     async loadBids(network, page, limit) {
@@ -534,23 +534,25 @@ export default {
       }
       return { items, totalRows };
     },
-    async loadNFTTokens(network, page, limit) {
+    async loadNFTs(network, page, limit) {
       this.load = true;
       const { address } = this.$route.params;
-      const { tokens, totalRows } = await this.$api.account.getNFTTokens(network, address, page, limit);
+      const { nfts, totalRows } = await this.$api.account.getNFTs(network, address, page, limit);
       const items = [];
-      for (const t of tokens) {
-        items.push({
-          type: t.tokenType,
-          nft: {
-            name: t.tokenName,
-            address: t.tokenAddress,
-            showAddress: true,
-            nftBalances: t.nftBalances,
-          },
-        });
+      if (nfts && nfts.length > 0) {
+        for (const t of nfts) {
+          items.push({
+            type: t.type,
+            nft: {
+              name: t.tokenName,
+              symbol: t.tokenSymbol,
+              address: t.address,
+              showAddress: true,
+              tokens: t.tokens,
+            },
+          });
+        }
       }
-      console.log('items', items);
       return { items, totalRows };
     },
   },
