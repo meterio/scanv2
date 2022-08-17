@@ -548,11 +548,12 @@ export default {
               symbol: t.tokenSymbol,
               address: t.address,
               showAddress: true,
-              tokens: t.tokens,
+              nftTokens: t.tokens,
             },
           });
         }
       }
+      console.log('items:', items);
       return { items, totalRows };
     },
   },

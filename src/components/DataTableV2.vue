@@ -336,6 +336,21 @@
           </div>
         </template>
 
+        <!-- NFT Tokens -->
+        <template v-slot:cell(nftTokens)="data">
+          <div class="dt-row breakable">
+            <span v-for="(n, index) in data.value" :key="index" class="topic-row text-nowrap">
+              <nft-link
+                :address="n.address"
+                :tokenId="n.id"
+                :value="n.val"
+                :disabled="n.nolink"
+                :mediaUrl="n.mediaUrl"
+              />
+            </span>
+          </div>
+        </template>
+
         <!-- NFT -->
         <template v-slot:cell(nft)="data">
           <div class="dt-row breakable">
@@ -345,21 +360,15 @@
               <address-link :address="data.value.address" />
             </div>
 
-            <section v-if="data.value.tokens">
-              <span v-for="(n, index) in data.value.tokens" :key="index" class="topic-row text-nowrap index">
-                <span v-if="n.val > 1">{{ n.val }} of </span>
-                <span v-if="data.value.nolink">[{{ n.id }}]</span>
-                <span v-else>
-                  <span>[</span>
-                  <router-link
-                    :to="{
-                      name: 'nft',
-                      params: { address: data.value.address, tokenId: n.id },
-                    }"
-                    >{{ n.id }}</router-link
-                  >
-                  <span>]</span>
-                </span>
+            <section v-if="data.value.nftTokens">
+              <span v-for="(n, index) in data.value.nftTokens" :key="index" class="topic-row text-nowrap">
+                <nft-link
+                  :address="data.value.address"
+                  :tokenId="n.id"
+                  :value="n.val"
+                  :disabled="data.value.nolink"
+                  :mediaUrl="n.mediaUrl"
+                />
               </span>
             </section>
           </div>
@@ -414,8 +423,9 @@ import DirectTag from './DirectTag.vue';
 import AmountTag from './AmountTag.vue';
 import AddressLink from './AddressLink.vue';
 import CopyData from './CopyData.vue';
+import NftLink from './NftLink.vue';
 export default {
-  components: { DirectTag, AddressLink, AmountTag, CopyData },
+  components: { DirectTag, AddressLink, AmountTag, CopyData, NftLink },
   name: 'DataTable',
   props: {
     sortBy: { type: String },

@@ -205,9 +205,9 @@ export default {
           { key: 'balance', label: 'Balance' },
         ],
         fields2: [
-          { key: 'rank', label: 'Rank' },
-          // { key: "fullAddress", label: "Address" },
-          { key: 'nft', label: 'Token ID' },
+          // { key: 'rank', label: 'Rank' },
+          { key: 'fullAddress', label: 'Address' },
+          { key: 'nftTokens', label: 'Token ID' },
         ],
       },
       txs: {
@@ -353,7 +353,7 @@ export default {
         const res = {
           ...h,
           rank: index + 1 + (pageNum - 1) * limitNum,
-          fullAddress: h.address,
+          fullAddress: h.address || h.owner,
         };
 
         if (this.isERC20) {
@@ -365,15 +365,12 @@ export default {
             token: token.symbol,
           };
         } else {
-          res.nft = {
-            address: h.tokenAddress,
-            nftBalances: h.nftBalances,
-            account: h.address,
-          };
+          res.nftTokens = h.tokens.map((t) => ({ ...t, address: token.address }));
         }
 
         return res;
       });
+      console.log('items: ', items);
       return { items, totalRows };
     },
     async loadTxs(network, page, limit) {

@@ -48,7 +48,7 @@ export default {
           { key: 'from', label: 'From' },
           { key: 'direct', label: '' },
           { key: 'to', label: 'To' },
-          { key: 'nft', label: 'Token ID' },
+          { key: 'nftTokens', label: 'Token ID' },
         ],
         items: [],
       },
@@ -150,10 +150,7 @@ export default {
         from: t.from,
         to: t.to,
         direct: t.from === this.address ? 'Out' : 'In',
-        nft: {
-          nolink: true,
-          tokens: t.nftTransfers.map((t) => ({ id: t.tokenId, val: t.value })),
-        },
+        nftTokens: t.nftTransfers.map((t) => ({ address: '1', id: t.tokenId, val: t.value, nolink: true })),
         timestamp: t.block.timestamp,
       }));
       return { items, totalRows };

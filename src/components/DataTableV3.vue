@@ -262,6 +262,21 @@
           </div>
         </template>
 
+        <!-- NFT Tokens -->
+        <template v-slot:cell(nftTokens)="data">
+          <div class="dt-row breakable">
+            <span v-for="(n, index) in data.value" :key="index" class="topic-row text-nowrap">
+              <nft-link
+                :address="n.address"
+                :tokenId="n.id"
+                :value="n.val"
+                :disabled="n.nolink"
+                :mediaUrl="n.mediaUrl"
+              />
+            </span>
+          </div>
+        </template>
+
         <!-- NFT -->
         <template v-slot:cell(nft)="data">
           <div class="dt-row breakable">
@@ -272,19 +287,13 @@
 
             <section v-if="data.value.nftBalances">
               <span v-for="(n, index) in data.value.nftBalances" :key="index" class="topic-row text-nowrap index">
-                <span v-if="n.value > 1">{{ n.value }} of </span>
-                <span v-if="data.value.nolink">[{{ n.tokenId }}]</span>
-                <span v-else>
-                  <span>[</span>
-                  <router-link
-                    :to="{
-                      name: 'nft',
-                      params: { address: data.value.address, tokenId: n.tokenId },
-                    }"
-                    >{{ n.tokenId }}</router-link
-                  >
-                  <span>]</span>
-                </span>
+                <nft-link
+                  :address="data.value.address"
+                  :tokenId="n.tokenId"
+                  :value="n.value"
+                  :disabled="data.value.nolink"
+                  :mediaUrl="n.mediaUrl"
+                />
               </span>
             </section>
           </div>
@@ -335,8 +344,9 @@
 import DirectTag from './DirectTag.vue';
 import AmountTag from './AmountTag.vue';
 import AddressLink from './AddressLink.vue';
+import NftLink from './NftLink.vue';
 export default {
-  components: { DirectTag, AddressLink, AmountTag },
+  components: { DirectTag, AddressLink, AmountTag, NftLink },
   name: 'DataTable',
   props: {
     sortBy: { type: String },
