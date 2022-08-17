@@ -55,7 +55,6 @@ export default {
     async keyword(val) {
       if (val === '') {
         clearInterval();
-        console.log('reset when keyword is empty');
         this.$refs.dropdown.hide(false);
         this.dropdownShown = false;
         this.items = [];
@@ -81,18 +80,15 @@ export default {
       clearInterval();
       const curTime = new Date().getTime();
       if (this.lastUpdatedAt == 0) {
-        console.log('first call');
         await this.updateItems(val);
         this.lastUpdatedAt = curTime;
         return;
       }
       const leftover = 1000 - (curTime - this.lastUpdatedAt);
-      console.log('leftover: ', leftover);
       if (leftover <= 0) {
         await this.updateItems(val);
         this.lastUpdatedAt = curTime;
       }
-      console.log('set time out');
       setTimeout(() => {
         this.updateItems(val);
         this.lastUpdatedAt = new Date().getTime();
@@ -123,7 +119,6 @@ export default {
           return;
         } else if (type === 'suggestions') {
           this.items = data;
-          console.log(this.items);
           this.lastUpdatedAt = new Date().getTime();
         }
 
@@ -141,7 +136,6 @@ export default {
       this.dropdownShown = false;
     },
     dropdownHide(bvEvent) {
-      console.log('dropdown HIDE');
       if (!this.selected) {
         bvEvent.preventDefault();
       } else {
@@ -150,7 +144,6 @@ export default {
       }
     },
     dropdownShow(bvEvent) {
-      console.log('DROPDOWN SHOW');
       this.dropdownShown = true;
       this.$refs.input.focus();
     },

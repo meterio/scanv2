@@ -117,7 +117,7 @@ export function get(network, url, params) {
       .get(url, { params })
       .then(res => {
         // get data success
-        console.log(res);
+        // console.log(res);
         if (res && res.data) {
           resolve(res.data);
         } else {

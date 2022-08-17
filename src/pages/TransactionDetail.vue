@@ -255,7 +255,6 @@ export default {
         }
 
         if (Array.isArray(tx.contractAddress) && tx.contractAddress.length) {
-
           this.summary.splice(5, 0, { key: 'To', value: tx.contractAddress, type: 'contract-created-link' });
         }
       }
@@ -302,7 +301,6 @@ export default {
     },
     async loadInternalTxs() {
       const { internalTxs } = await this.$api.transaction.getInternalTxs(this.network, this.txHash);
-      console.log(internalTxs);
       this.internaltxs.items = internalTxs.map((itx) => ({
         ...itx,
         gasLimit: itx.gasLimit,

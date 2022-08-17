@@ -200,8 +200,6 @@ export default {
           direct = 'In';
         }
 
-        // console.log('direct = ', direct);
-
         return {
           txhashWithStatus: {
             hash: t.txHash,

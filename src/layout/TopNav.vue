@@ -175,10 +175,8 @@ export default {
         this.modal_show = true;
       }
       if (jump_url != this.$route.path && jump_url !== '' && !this.modal_show) {
-        console.log('JUMP TO ', jump_url);
         this.$router.push(jump_url);
       } else {
-        console.log('NO JUMP');
       }
     },
     keypress(evt) {
@@ -206,13 +204,10 @@ export default {
     async searchKeyWords() {
       try {
         const key = this.searchKey.replace(/\r|\n|\r|\s/g, '');
-        console.log('KEY:', key);
         this.searchKey = key;
-        console.log('SEARCH KEY: ', this.searchKey);
         const arr = key.match(/\([^\)]+\)/g);
         // if (arr) {
         //   const address = arr[0].substring(1, arr[0].length - 1);
-        //   console.log('JUMP TO ADD:', address);
         //   // this.$router.push('/address/' + address);
         //   return;
         // }
@@ -234,7 +229,6 @@ export default {
           console.log('JUMP TO ', jump_url);
           this.$router.push(jump_url);
         } else {
-          console.log('NO JUMP');
         }
       } catch (e) {
         console.error(e);

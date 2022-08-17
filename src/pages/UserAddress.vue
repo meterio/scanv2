@@ -380,8 +380,6 @@ export default {
           direct = 'In';
         }
 
-        // console.log('direct = ', direct);
-
         let methodName = t.method;
         if (String(t.method).includes('(')) {
           const index = String(t.method).indexOf('(');
@@ -406,7 +404,6 @@ export default {
           timestamp: t.block.timestamp,
         };
       });
-      console.log(items);
       return { items, totalRows };
     },
     async loadTxs20(network, page, limit) {
@@ -553,7 +550,6 @@ export default {
           });
         }
       }
-      console.log('items:', items);
       return { items, totalRows };
     },
   },

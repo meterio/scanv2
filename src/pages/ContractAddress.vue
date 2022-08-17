@@ -370,7 +370,6 @@ export default {
 
         return res;
       });
-      console.log('items: ', items);
       return { items, totalRows };
     },
     async loadTxs(network, page, limit) {
@@ -396,8 +395,6 @@ export default {
         } else {
           direct = 'In';
         }
-
-        // console.log('direct = ', direct);
 
         return {
           txhashWithStatus: {

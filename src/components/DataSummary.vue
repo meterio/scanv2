@@ -352,7 +352,6 @@ export default {
       return temp;
     },
     computedData() {
-      console.log('data summary', this.data);
       const temp = [];
       for (const obj of this.data) {
         if (obj.key !== 'owner' && obj.key !== 'creationTxHash') {

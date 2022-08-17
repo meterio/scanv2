@@ -208,7 +208,6 @@ export default {
   methods: {
     async getContractBytecode() {
       const data = await this.$api.contract.getContractBytecode(this.network, this.address);
-      // console.log(data.contract.code);
       this.bytecode = data.contract.code;
     },
     initAbi() {

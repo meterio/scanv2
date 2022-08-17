@@ -156,11 +156,9 @@ export default {
         console.log('JUMP TO ', jump_url);
         this.$router.push(jump_url);
       } else {
-        console.log('NO JUMP');
       }
     },
     async searchKeyWords(key) {
-      console.log('searchKeyWords', key);
       try {
         const str = key.replace(/\r?\n|\r/g, '');
         const arr = str.match(/\([^\)]+\)/g);
