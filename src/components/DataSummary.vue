@@ -172,6 +172,7 @@
                       :token="row.symbol"
                       :precision="row.decimals"
                       :decimals="row.decimals"
+                      :tokenAddr="row.tokenAddress"
                     />
                   </template>
                   <template v-else-if="row.type === 'ERC721'">
