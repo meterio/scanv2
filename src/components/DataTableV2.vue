@@ -339,6 +339,7 @@
         <!-- NFT Tokens -->
         <template v-slot:cell(nftTokens)="data">
           <div class="dt-row breakable">
+            hello!
             <span v-for="(n, index) in data.value" :key="index" class="topic-row text-nowrap">
               <nft-link
                 :address="n.address"
