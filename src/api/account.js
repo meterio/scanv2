@@ -52,5 +52,8 @@ export default {
   },
   getNFTTxsByTokenAddrTokenId(network, address, id, page, limit = 8) {
     return get(network, `accounts/${address}/${id}/nfttxs?page=${page}&limit=${limit}`);
+  },
+  getInternalTxs(network, address, page, limit = 8) {
+    return get(network, `accounts/${address}/internaltxs?page=${page}&limit=${limit}`);
   }
 };
