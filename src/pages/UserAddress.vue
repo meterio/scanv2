@@ -46,6 +46,63 @@ export default {
       return `Address: ${this.address}`;
     },
     tabs() {
+      if (this.txsDownloading) {
+        return [
+          { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs', download: 'downloading' },
+          {
+            name: this.userDataCount.erc20TokenCount > 0 ? `ERC20s(${this.userDataCount.erc20TokenCount})` : 'ERC20s'
+          },
+          { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.userDataCount.erc20TxCount})` : 'ERC20 Txs', download: 'download' },
+          { name: this.userDataCount.nftTokenCount > 0 ? `NFT(${this.userDataCount.nftTokenCount})` : 'NFT' },
+          { name: this.userDataCount.nftTxCount > 0 ? `NFT Txs(${this.userDataCount.nftTxCount})` : 'NFT Txs', download: 'download' },
+          { name: this.userDataCount.bidCount > 0 ? `Auction Bids(${this.userDataCount.bidCount})` : 'Auction Bids' },
+          {
+            name:
+              this.userDataCount.proposedCount > 0
+                ? `Proposed Blocks(${this.userDataCount.proposedCount})`
+                : 'Proposed Blocks'
+          },
+          { name: this.userDataCount.bucketCount > 0 ? `Buckets(${this.userDataCount.bucketCount})` : 'Buckets' }
+        ];
+      }
+      if (this.erc20TxsDownloading) {
+        return [
+          { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs', download: 'download' },
+          {
+            name: this.userDataCount.erc20TokenCount > 0 ? `ERC20s(${this.userDataCount.erc20TokenCount})` : 'ERC20s'
+          },
+          { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.userDataCount.erc20TxCount})` : 'ERC20 Txs', download: 'downloading' },
+          { name: this.userDataCount.nftTokenCount > 0 ? `NFT(${this.userDataCount.nftTokenCount})` : 'NFT' },
+          { name: this.userDataCount.nftTxCount > 0 ? `NFT Txs(${this.userDataCount.nftTxCount})` : 'NFT Txs', download: 'download' },
+          { name: this.userDataCount.bidCount > 0 ? `Auction Bids(${this.userDataCount.bidCount})` : 'Auction Bids' },
+          {
+            name:
+              this.userDataCount.proposedCount > 0
+                ? `Proposed Blocks(${this.userDataCount.proposedCount})`
+                : 'Proposed Blocks'
+          },
+          { name: this.userDataCount.bucketCount > 0 ? `Buckets(${this.userDataCount.bucketCount})` : 'Buckets' }
+        ];
+      }
+      if (this.nftTxsDownloading) {
+        return [
+          { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs', download: 'download' },
+          {
+            name: this.userDataCount.erc20TokenCount > 0 ? `ERC20s(${this.userDataCount.erc20TokenCount})` : 'ERC20s'
+          },
+          { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.userDataCount.erc20TxCount})` : 'ERC20 Txs', download: 'download' },
+          { name: this.userDataCount.nftTokenCount > 0 ? `NFT(${this.userDataCount.nftTokenCount})` : 'NFT' },
+          { name: this.userDataCount.nftTxCount > 0 ? `NFT Txs(${this.userDataCount.nftTxCount})` : 'NFT Txs', download: 'downloading' },
+          { name: this.userDataCount.bidCount > 0 ? `Auction Bids(${this.userDataCount.bidCount})` : 'Auction Bids' },
+          {
+            name:
+              this.userDataCount.proposedCount > 0
+                ? `Proposed Blocks(${this.userDataCount.proposedCount})`
+                : 'Proposed Blocks'
+          },
+          { name: this.userDataCount.bucketCount > 0 ? `Buckets(${this.userDataCount.bucketCount})` : 'Buckets' }
+        ];
+      }
       return [
         { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs', download: 'download' },
         {
@@ -273,7 +330,9 @@ export default {
           // { key: "blocknum", label: "Last Updated on Block" },
         ]
       },
-      downloading: false,
+      txsDownloading: false,
+      erc20TxsDownloading: false,
+      nftTxsDownloading: false
     };
   },
   methods: {
@@ -316,7 +375,7 @@ export default {
     },
     async downloadTxs(tabIndex) {
       console.log('tabIndex', tabIndex)
-      if (this.downloading) {
+      if (this.txsDownloading || this.erc20TxsDownloading || this.nftTxsDownloading) {
         console.log('downloading return')
         return
       }
@@ -325,6 +384,7 @@ export default {
         const contents = []
         let fileName = ''
         if (tabIndex == 0) {
+          this.txsDownloading = true
           // Txs
           fileName = `txs-${this.address}.csv`
           const header = this.txs.fields.map(item => {
@@ -381,6 +441,7 @@ export default {
             contents.push(row.join(','))
           }
         } else if (tabIndex == 2) {
+          this.erc20TxsDownloading = true
           // erc20 Txs
           fileName = `erc20Txs-${this.address}.csv`
           const header = this.erc20txs.fields.map(item => {
@@ -429,6 +490,7 @@ export default {
             contents.push(row.join(','))
           }
         } else if (tabIndex == 4) {
+          this.nftTxsDownloading = true
           // nft Txs
           fileName = `nftTxs-${this.address}.csv`
           const header = this.nftTxs.fields.map(item => {
@@ -480,9 +542,15 @@ export default {
 
         if (contents.length) {
           this.downloadCsv(contents, fileName)
+        } else {
+          this.txsDownloading = false
+          this.erc20TxsDownloading = false
+          this.nftTxsDownloading = false
         }
       } catch(e) {
-        this.downloading = false
+        this.txsDownloading = false
+        this.erc20TxsDownloading = false
+        this.nftTxsDownloading = false
         console.log(e.message)
       }
     },
@@ -495,7 +563,9 @@ export default {
       link.click()
       document.body.removeChild(link)
       
-      this.downloading = false
+      this.txsDownloading = false
+      this.erc20TxsDownloading = false
+      this.nftTxsDownloading = false
     },
     async loadBuckets(network, page, limit) {
       const { address } = this.$route.params;
