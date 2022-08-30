@@ -11,6 +11,13 @@ b-container
         icon="check-circle",
         variant="primary"
       )
+      b-icon(
+        v-if="tab.download"
+        :icon="tab.download === 'download' ? 'download' : 'arrow-clockwise'"
+        :animation="tab.download === 'download' ? '' : 'spin'"
+        class="ml-1"
+        @click.stop="clickDownload(index)"
+      )
 </template>
 <script>
 export default {
@@ -66,6 +73,9 @@ export default {
     isShowCheck(name) {
       return name === "Contract" && this.verified;
     },
+    clickDownload(tabIndex) {
+      this.$emit("download", tabIndex)
+    }
   },
 };
 </script>
