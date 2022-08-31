@@ -13,8 +13,7 @@ b-container
       )
       b-icon(
         v-if="tab.download"
-        :icon="tab.download === 'download' ? 'download' : 'arrow-clockwise'"
-        :animation="tab.download === 'download' ? '' : 'spin'"
+        icon="download"
         class="ml-1"
         @click.stop="clickDownload(index)"
       )

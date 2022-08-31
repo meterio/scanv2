@@ -46,63 +46,6 @@ export default {
       return `Address: ${this.address}`;
     },
     tabs() {
-      if (this.txsDownloading) {
-        return [
-          { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs', download: 'downloading' },
-          {
-            name: this.userDataCount.erc20TokenCount > 0 ? `ERC20s(${this.userDataCount.erc20TokenCount})` : 'ERC20s'
-          },
-          { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.userDataCount.erc20TxCount})` : 'ERC20 Txs', download: 'download' },
-          { name: this.userDataCount.nftTokenCount > 0 ? `NFT(${this.userDataCount.nftTokenCount})` : 'NFT' },
-          { name: this.userDataCount.nftTxCount > 0 ? `NFT Txs(${this.userDataCount.nftTxCount})` : 'NFT Txs', download: 'download' },
-          { name: this.userDataCount.bidCount > 0 ? `Auction Bids(${this.userDataCount.bidCount})` : 'Auction Bids' },
-          {
-            name:
-              this.userDataCount.proposedCount > 0
-                ? `Proposed Blocks(${this.userDataCount.proposedCount})`
-                : 'Proposed Blocks'
-          },
-          { name: this.userDataCount.bucketCount > 0 ? `Buckets(${this.userDataCount.bucketCount})` : 'Buckets' }
-        ];
-      }
-      if (this.erc20TxsDownloading) {
-        return [
-          { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs', download: 'download' },
-          {
-            name: this.userDataCount.erc20TokenCount > 0 ? `ERC20s(${this.userDataCount.erc20TokenCount})` : 'ERC20s'
-          },
-          { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.userDataCount.erc20TxCount})` : 'ERC20 Txs', download: 'downloading' },
-          { name: this.userDataCount.nftTokenCount > 0 ? `NFT(${this.userDataCount.nftTokenCount})` : 'NFT' },
-          { name: this.userDataCount.nftTxCount > 0 ? `NFT Txs(${this.userDataCount.nftTxCount})` : 'NFT Txs', download: 'download' },
-          { name: this.userDataCount.bidCount > 0 ? `Auction Bids(${this.userDataCount.bidCount})` : 'Auction Bids' },
-          {
-            name:
-              this.userDataCount.proposedCount > 0
-                ? `Proposed Blocks(${this.userDataCount.proposedCount})`
-                : 'Proposed Blocks'
-          },
-          { name: this.userDataCount.bucketCount > 0 ? `Buckets(${this.userDataCount.bucketCount})` : 'Buckets' }
-        ];
-      }
-      if (this.nftTxsDownloading) {
-        return [
-          { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs', download: 'download' },
-          {
-            name: this.userDataCount.erc20TokenCount > 0 ? `ERC20s(${this.userDataCount.erc20TokenCount})` : 'ERC20s'
-          },
-          { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.userDataCount.erc20TxCount})` : 'ERC20 Txs', download: 'download' },
-          { name: this.userDataCount.nftTokenCount > 0 ? `NFT(${this.userDataCount.nftTokenCount})` : 'NFT' },
-          { name: this.userDataCount.nftTxCount > 0 ? `NFT Txs(${this.userDataCount.nftTxCount})` : 'NFT Txs', download: 'downloading' },
-          { name: this.userDataCount.bidCount > 0 ? `Auction Bids(${this.userDataCount.bidCount})` : 'Auction Bids' },
-          {
-            name:
-              this.userDataCount.proposedCount > 0
-                ? `Proposed Blocks(${this.userDataCount.proposedCount})`
-                : 'Proposed Blocks'
-          },
-          { name: this.userDataCount.bucketCount > 0 ? `Buckets(${this.userDataCount.bucketCount})` : 'Buckets' }
-        ];
-      }
       return [
         { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs', download: 'download' },
         {
@@ -375,197 +318,33 @@ export default {
     },
     async downloadTxs(tabIndex) {
       console.log('tabIndex', tabIndex)
-      if (this.txsDownloading || this.erc20TxsDownloading || this.nftTxsDownloading) {
-        console.log('downloading return')
-        return
+      if (tabIndex == 0) {
+        this.$router.push({
+          name: 'exportData',
+          params: {
+            address: this.address,
+            type: 'txs'
+          }
+        })
       }
-      this.downloading = true
-      try {
-        const contents = []
-        let fileName = ''
-        if (tabIndex == 0) {
-          this.txsDownloading = true
-          // Txs
-          fileName = `txs-${this.address}.csv`
-          const header = this.txs.fields.map(item => {
-            if (item.label) {
-              return item.label
-            } else {
-              return item.key
-            }
-          })
-          contents.push(header.join(','))
-          
-          const totalTx = []
-          const { txs, totalRows } = await this.$api.account.getTxs(this.network, this.address, 1, PAGE_COUNT);
-          totalTx.push(...txs)
-          if (totalRows > PAGE_COUNT) {
-            const leftPages = Math.ceil((totalRows - PAGE_COUNT) / PAGE_COUNT)
-            console.log('leftPages', leftPages)
-            for (let i = 0; i < leftPages; i++) {
-              const { txs } = await this.$api.account.getTxs(this.network, this.address, i + 2, PAGE_COUNT);
-              totalTx.push(...txs)
-            }
+      if (tabIndex == 2) {
+        this.$router.push({
+          name: 'exportData',
+          params: {
+            address: this.address,
+            type: 'erc20Txs'
           }
-          for (let i = 0; i < totalTx.length; i++) {
-            const row = []
-            const tx = totalTx[i]
-
-            row.push(tx.txHash)
-            row.push(tx.method)
-            row.push(tx.block.number)
-            row.push(new Date(tx.block.timestamp*1000).toLocaleString())
-            row.push(tx.from)
-
-            let direct = ''
-            if (tx.from === tx.to) {
-              direct = 'Self';
-            } else if (tx.from === this.address.toLowerCase()) {
-              direct = 'Out';
-            } else {
-              direct = 'In';
-            }
-            row.push(direct)
-
-            row.push(tx.to)
-
-            let amount = tx.mtr;
-
-            let token = this.currentChain.symbol;
-            if (tx.mtrg !== '0') {
-              amount = tx.mtrg;
-              token = this.currentChain.gSymbol;
-            }
-            row.push(`${fromWei(amount, 6, token, 18)}`)
-
-            contents.push(row.join(','))
-          }
-        } else if (tabIndex == 2) {
-          this.erc20TxsDownloading = true
-          // erc20 Txs
-          fileName = `erc20Txs-${this.address}.csv`
-          const header = this.erc20txs.fields.map(item => {
-            if (item.label) {
-              return item.label
-            } else {
-              return item.key
-            }
-          })
-          contents.push(header.join(','))
-          
-          const totalTx = []
-          const { txs, totalRows } = await this.$api.account.getTxs20(this.network, this.address, 1, PAGE_COUNT);
-          totalTx.push(...txs)
-          if (totalRows > PAGE_COUNT) {
-            const leftPages = Math.ceil((totalRows - PAGE_COUNT) / PAGE_COUNT)
-            console.log('leftPages', leftPages)
-            for (let i = 0; i < leftPages; i++) {
-              const { txs } = await this.$api.account.getTxs20(this.network, this.address, i + 2, PAGE_COUNT);
-              totalTx.push(...txs)
-            }
-          }
-          for (let i = 0; i < totalTx.length; i++) {
-            const row = []
-            const tx = totalTx[i]
-
-            row.push(tx.txHash)
-            row.push(tx.block.number)
-            row.push(new Date(tx.block.timestamp*1000).toLocaleString())
-            row.push(tx.from)
-
-            let direct = ''
-            if (tx.from === tx.to) {
-              direct = 'Self';
-            } else if (tx.from === this.address.toLowerCase()) {
-              direct = 'Out';
-            } else {
-              direct = 'In';
-            }
-            row.push(direct)
-
-            row.push(tx.to)
-
-            row.push(`${fromWei(tx.amount, 6, tx.symbol, tx.decimals)}`)
-
-            contents.push(row.join(','))
-          }
-        } else if (tabIndex == 4) {
-          this.nftTxsDownloading = true
-          // nft Txs
-          fileName = `nftTxs-${this.address}.csv`
-          const header = this.nftTxs.fields.map(item => {
-            if (item.label) {
-              return item.label
-            } else {
-              return item.key
-            }
-          })
-          contents.push(header.join(','))
-          
-          const totalTx = []
-          const { txs, totalRows } = await this.$api.account.getNFTTxs(this.network, this.address, 1, PAGE_COUNT);
-          totalTx.push(...txs)
-          if (totalRows > PAGE_COUNT) {
-            const leftPages = Math.ceil((totalRows - PAGE_COUNT) / PAGE_COUNT)
-            console.log('leftPages', leftPages)
-            for (let i = 0; i < leftPages; i++) {
-              const { txs } = await this.$api.account.getNFTTxs(this.network, this.address, i + 2, PAGE_COUNT);
-              totalTx.push(...txs)
-            }
-          }
-          for (let i = 0; i < totalTx.length; i++) {
-            const row = []
-            const tx = totalTx[i]
-
-            row.push(tx.txHash)
-            row.push(tx.block.number)
-            row.push(new Date(tx.block.timestamp*1000).toLocaleString())
-            row.push(tx.from)
-
-            let direct = ''
-            if (tx.from === tx.to) {
-              direct = 'Self';
-            } else if (tx.from === this.address.toLowerCase()) {
-              direct = 'Out';
-            } else {
-              direct = 'In';
-            }
-            row.push(direct)
-
-            row.push(tx.to)
-
-            row.push(tx.nftTransfers.map(nft => `${nft.tokenId} for ${nft.value}`).join(','))
-
-            contents.push(row.join(','))
-          }
-        }
-
-        if (contents.length) {
-          this.downloadCsv(contents, fileName)
-        } else {
-          this.txsDownloading = false
-          this.erc20TxsDownloading = false
-          this.nftTxsDownloading = false
-        }
-      } catch(e) {
-        this.txsDownloading = false
-        this.erc20TxsDownloading = false
-        this.nftTxsDownloading = false
-        console.log(e.message)
+        })
       }
-    },
-    downloadCsv(contents, name) {
-      const csvContent = "data:text/csv;charset=utf-8,\ufeff" + contents.join("\n")
-      let link = document.createElement("a")
-      document.body.appendChild(link)
-      link.href = encodeURI(csvContent)
-      link.download = name
-      link.click()
-      document.body.removeChild(link)
-      
-      this.txsDownloading = false
-      this.erc20TxsDownloading = false
-      this.nftTxsDownloading = false
+      if (tabIndex == 4) {
+        this.$router.push({
+          name: 'exportData',
+          params: {
+            address: this.address,
+            type: 'nftTxs'
+          }
+        })
+      }
     },
     async loadBuckets(network, page, limit) {
       const { address } = this.$route.params;
