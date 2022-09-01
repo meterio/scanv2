@@ -15,8 +15,6 @@
 import DataTableV2 from '@/components/DataTableV2.vue';
 import NavTabs from '@/components/NavTabs.vue';
 import DataSummary from '@/components/DataSummary.vue';
-import { fromWei } from '../utils';
-const PAGE_COUNT = 1000;
 export default {
   name: 'UserAddress',
   components: {
