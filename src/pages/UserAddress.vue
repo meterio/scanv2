@@ -8,7 +8,7 @@
 
     data-table-v2.mt-2pert.px-0(:loadItems='loadItems', :fields='fields', :pagination='pagination', :key='loadTarget')
       div(slot='header')
-        nav-tabs.px-0(:tabs='tabs', :value='tabValue', @changeTab='navTabChange')
+        nav-tabs.px-0(:tabs='tabs', :value='tabValue', @changeTab='navTabChange', @download="downloadTxs")
 </template>
 
 <script>
@@ -45,13 +45,13 @@ export default {
     },
     tabs() {
       return [
-        { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs' },
+        { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs', download: 'download' },
         {
           name: this.userDataCount.erc20TokenCount > 0 ? `ERC20s(${this.userDataCount.erc20TokenCount})` : 'ERC20s'
         },
-        { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.userDataCount.erc20TxCount})` : 'ERC20 Txs' },
+        { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.userDataCount.erc20TxCount})` : 'ERC20 Txs', download: 'download' },
         { name: this.userDataCount.nftTokenCount > 0 ? `NFT(${this.userDataCount.nftTokenCount})` : 'NFT' },
-        { name: this.userDataCount.nftTxCount > 0 ? `NFT Txs(${this.userDataCount.nftTxCount})` : 'NFT Txs' },
+        { name: this.userDataCount.nftTxCount > 0 ? `NFT Txs(${this.userDataCount.nftTxCount})` : 'NFT Txs', download: 'download' },
         { name: this.userDataCount.bidCount > 0 ? `Auction Bids(${this.userDataCount.bidCount})` : 'Auction Bids' },
         {
           name:
@@ -270,7 +270,10 @@ export default {
           // { key: "balance", label: "Balance" },
           // { key: "blocknum", label: "Last Updated on Block" },
         ]
-      }
+      },
+      txsDownloading: false,
+      erc20TxsDownloading: false,
+      nftTxsDownloading: false
     };
   },
   methods: {
@@ -309,6 +312,36 @@ export default {
           break;
         default:
           this.loadTarget = 'txs';
+      }
+    },
+    async downloadTxs(tabIndex) {
+      console.log('tabIndex', tabIndex)
+      if (tabIndex == 0) {
+        this.$router.push({
+          name: 'exportData',
+          params: {
+            address: this.address,
+            type: 'txs'
+          }
+        })
+      }
+      if (tabIndex == 2) {
+        this.$router.push({
+          name: 'exportData',
+          params: {
+            address: this.address,
+            type: 'erc20Txs'
+          }
+        })
+      }
+      if (tabIndex == 4) {
+        this.$router.push({
+          name: 'exportData',
+          params: {
+            address: this.address,
+            type: 'nftTxs'
+          }
+        })
       }
     },
     async loadBuckets(network, page, limit) {

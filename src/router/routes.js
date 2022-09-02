@@ -23,6 +23,7 @@ import StatPage from '@/pages/Stat.vue';
 import VerifyPage from '@/pages/Verify.vue';
 import TokenAddress from '@/pages/tokenAddress.vue';
 import NFTDetail from '@/pages/NFTDetail.vue';
+import DownloadCSV from '@/pages/DownloadCsv.vue'
 
 import notFoundPage from '../pages/NotFound.vue';
 
@@ -183,6 +184,13 @@ export const routes = [
     component: NFTDetail,
     props: true,
     meta: { title: `nft` }
+  },
+  {
+    path: '/exportData/:address/:type',
+    name: 'exportData',
+    component: DownloadCSV,
+    props: true,
+    meta: { title: `export` }
   },
 
   {

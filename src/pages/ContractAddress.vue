@@ -20,7 +20,7 @@
       :key='loadTarget'
     )
       div(slot='header')
-        nav-tabs.px-0(:tabs='tabs', :value='tabValue', :verified='verified', @changeTab='navTabChange')
+        nav-tabs.px-0(:tabs='tabs', :value='tabValue', :verified='verified', @changeTab='navTabChange', @download="downloadTxs")
       div(slot='otherData')
         <div class="loading" v-if="filesLoading">
           <div class="text-center text-primary my-2">
@@ -96,7 +96,8 @@ export default {
       if (this.isToken) {
         return [
           {
-            name: this.contractDataCount.txCount > 0 ? `Txs(${this.contractDataCount.txCount})` : 'Txs'
+            name: this.contractDataCount.txCount > 0 ? `Txs(${this.contractDataCount.txCount})` : 'Txs',
+            download: true
           },
           {
             name:
@@ -312,6 +313,17 @@ export default {
     this.getContractFiles();
   },
   methods: {
+    async downloadTxs(tabIndex) {
+      if (tabIndex == 0) {
+        this.$router.push({
+          name: 'exportData',
+          params: {
+            address: this.address,
+            type: 'txs'
+          }
+        })
+      }
+    },
     async getContractFiles() {
       this.filesLoading = true;
       const { files } = await this.$api.contract.getContractFiles(this.network, this.address);
