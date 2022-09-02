@@ -24,8 +24,8 @@
                   :to="{
                     name: 'blockDetail',
                     params: {
-                      revision: item.block,
-                    },
+                      revision: item.block
+                    }
                   }"
                   >#{{ item.block }}</router-link
                 >
@@ -46,7 +46,7 @@
                   href="#"
                   :to="{
                     name: 'blockDetail',
-                    params: { revision: item.start },
+                    params: { revision: item.start }
                   }"
                   >#{{ item.start }}</b-link
                 >
@@ -96,7 +96,7 @@
               <router-link
                 :to="{
                   name: 'address',
-                  params: { address: item.value.address },
+                  params: { address: item.value.address }
                 }"
                 v-if="item.type === 'address-or-name-link' && !!item.value.name"
                 >{{ item.value.name }}</router-link
@@ -177,17 +177,31 @@
                   </template>
                   <template v-else-if="row.type === 'ERC721'">
                     <div class="small-font-size">
-                      <div v-for="id in row.ids" :key="id">
-                        <span class="mr-3">{{ `For ${row.type} Token ID [${id}] ${row.symbol}` }}</span>
+                      <div v-for="(id, index) in row.ids" :key="id">
+                        <span>{{ `For ${row.type} Token ID ` }}</span>
+                        <nft-link
+                          :address="row.tokenAddress"
+                          :tokenId="id"
+                          :value="row.values[index]"
+                          :disabled="false"
+                          :mediaUrl="row.mediaUrl"
+                        />
+                        <span>{{ row.symbol }}</span>
                       </div>
                     </div>
                   </template>
                   <template v-else-if="row.type === 'ERC1155'">
                     <div class="small-font-size">
-                      <div v-for="(id, indx) in row.ids" :key="id">
-                        <span class="mr-3">{{
-                          `For ${row.type} Token ID [${id}] ${row.values[indx]} ${row.symbol}`
-                        }}</span>
+                      <div v-for="(id, index) in row.ids" :key="id">
+                        <span class="mr-3">{{ `For ${row.type} Token ID` }}</span>
+                        <nft-link
+                          :address="row.tokenAddress"
+                          :tokenId="id"
+                          :value="row.values[index]"
+                          :disabled="false"
+                          :mediaUrl="row.mediaUrl"
+                        />
+                        <span>{{ row.symbol }}</span>
                       </div>
                     </div>
                   </template>
@@ -243,8 +257,8 @@
                 :to="{
                   name: 'txDetail',
                   params: {
-                    hash: computedCreationTxHash,
-                  },
+                    hash: computedCreationTxHash
+                  }
                 }"
                 >{{ shortHash(computedCreationTxHash) }}</router-link
               >
@@ -274,53 +288,53 @@
 import StatusTag from '@/components/StatusTag.vue';
 import AmountTag from '@/components/AmountTag.vue';
 import AddressLink from '@/components/AddressLink.vue';
-
+import NftLink from './NftLink.vue';
 import { formatNum } from '@/utils';
 
 export default {
-  components: { StatusTag, AddressLink, AmountTag },
+  components: { StatusTag, AddressLink, AmountTag, NftLink },
   name: 'DataList',
   props: {
     title: {
-      type: String,
+      type: String
     },
     data: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
-      },
+      }
     },
     wide: {
       type: Boolean,
-      default: false,
+      default: false
     },
     isContract: {
       type: Boolean,
-      default: false,
+      default: false
     },
     verified: {
       type: Boolean,
-      default: false,
+      default: false
     },
     verifiedDesc: {
       type: String,
-      default: '',
+      default: ''
     },
     verifiedFrom: {
       type: String,
-      default: '',
-    },
+      default: ''
+    }
   },
   data() {
     return {
-      isShowAllTransfers: false,
+      isShowAllTransfers: false
     };
   },
   watch: {
     data() {
-      const t = this.data.find((d) => d.type === 'transfer-highlight');
+      const t = this.data.find(d => d.type === 'transfer-highlight');
       t && t.value.length > 10 ? (this.isShowAllTransfers = false) : (this.isShowAllTransfers = true);
-    },
+    }
   },
   computed: {
     loading() {
@@ -386,18 +400,18 @@ export default {
       } else {
         return 'Contract Source Code Verified';
       }
-    },
+    }
   },
   filters: {
     formatNumber(val) {
       return formatNum(val);
-    },
+    }
   },
   methods: {
     showMoreTransfers() {
       this.isShowAllTransfers = true;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
