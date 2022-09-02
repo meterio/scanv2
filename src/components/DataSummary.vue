@@ -184,7 +184,7 @@
                           :tokenId="id"
                           :value="row.values[index]"
                           :disabled="false"
-                          :mediaUrl="row.mediaUrl"
+                          :mediaUrl="row.mediaUrls[index] || ''"
                         />
                         <span>{{ row.symbol }}</span>
                       </div>
@@ -199,7 +199,7 @@
                           :tokenId="id"
                           :value="row.values[index]"
                           :disabled="false"
-                          :mediaUrl="row.mediaUrl"
+                          :mediaUrl="row.mediaUrls[index] || ''"
                         />
                         <span>{{ row.symbol }}</span>
                       </div>
