@@ -38,6 +38,9 @@ export default {
   getHolders(network, address, page, limit = 8) {
     return get(network, `accounts/${address}/holders?page=${page}&limit=${limit}`);
   },
+  getEvents(network, address, page, limit = 8) {
+    return get(network, `accounts/${address}/events?page=${page}&limit=${limit}`);
+  },
   getTokens(network, address, page, limit = 8) {
     return get(network, `accounts/${address}/tokens?page=${page}&limit=${limit}`);
   },

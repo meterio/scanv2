@@ -121,7 +121,8 @@ export default {
                 ? `ERC20s(${this.contractDataCount.erc20TokenCount})`
                 : 'ERC20s'
           },
-          { name: 'Contract' }
+          { name: 'Contract' },
+          { name: this.contractDataCount.eventsCount > 0 ? `Events(${this.contractDataCount.eventsCount})` : 'Events' }
         ];
       }
       return [
@@ -140,7 +141,8 @@ export default {
               ? `ERC20 Tokens(${this.contractDataCount.erc20TokenCount})`
               : 'ERC20 Tokens'
         },
-        { name: 'Contract' }
+        { name: 'Contract' },
+        { name: this.contractDataCount.eventsCount > 0 ? `Events(${this.contractDataCount.eventsCount})` : 'Events' }
       ];
     },
     fields() {
@@ -156,6 +158,8 @@ export default {
             return this.holders.fields;
           case 'erc20Tokens':
             return this.erc20Tokens.fields;
+          case 'events':
+            return this.events.fields;
         }
         return this.txs.fields;
       } else {
@@ -170,6 +174,8 @@ export default {
             return this.holders.fields2;
           case 'erc20Tokens':
             return this.erc20Tokens.fields;
+          case 'events':
+            return this.events.fields;
         }
         return this.txs.fields;
       }
@@ -186,6 +192,8 @@ export default {
           return this.holders.pagination;
         case 'erc20Tokens':
           return this.erc20Tokens.pagination;
+        case 'events':
+          return this.events.pagination;
       }
       return this.txs.pagination;
     },
@@ -201,6 +209,8 @@ export default {
           return this.loadHolders;
         case 'erc20Tokens':
           return this.loadErc20Tokens;
+        case 'events':
+          return this.loadEvents;
       }
       return this.loadTxs;
     },
@@ -267,7 +277,19 @@ export default {
         ],
         items: []
       },
-
+      events: {
+        pagination: {
+          show: true,
+          align: 'center',
+          perPage: 20
+        },
+        fields: [
+          { key: 'txInfo', label: 'Tx Hash' },
+          { key: 'method', label: 'Method' },
+          { key: 'event', label: 'Logs' }
+        ],
+        items: []
+      },
       transfers: {
         pagination: {
           show: true,
@@ -321,7 +343,7 @@ export default {
             address: this.address,
             type: 'txs'
           }
-        })
+        });
       }
     },
     async getContractFiles() {
@@ -357,6 +379,9 @@ export default {
           case 5:
             this.loadTarget = 'contract';
             break;
+          case 6:
+            this.loadTarget = 'events';
+            break;
           default:
             this.loadTarget = 'txs';
         }
@@ -373,6 +398,9 @@ export default {
             break;
           case 3:
             this.loadTarget = 'contract';
+            break;
+          case 4:
+            this.loadTarget = 'events';
             break;
           default:
             this.loadTarget = 'txs';
@@ -425,6 +453,32 @@ export default {
           res.nftTokens = h.tokens.map(t => ({ ...t, address: token.address }));
         }
 
+        return res;
+      });
+      return { items, totalRows };
+    },
+    async loadEvents(network, page, limit) {
+      const { address } = this.$route.params;
+      const res = await this.$api.account.getEvents(network, address, page, limit);
+      const { rows, totalRows } = res;
+      const items = rows.map((r, index) => {
+        let res = {
+          txInfo: {
+            txHash: r.txHash,
+            block: r.block
+          },
+          method: r.method,
+          event: {
+            name: r.name,
+            abi: r.abi,
+            address: r.address,
+            topics: r.topics,
+            data: r.data,
+            datas: r.datas,
+            abi: r.abi
+          },
+          decoded: r.decoded
+        };
         return res;
       });
       return { items, totalRows };

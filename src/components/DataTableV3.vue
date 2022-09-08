@@ -36,7 +36,7 @@
               class="link"
               :to="{
                 name: 'epochDetail',
-                params: { epoch: data.value },
+                params: { epoch: data.value }
               }"
               >{{ data.value }}</router-link
             >
@@ -86,7 +86,7 @@
               class="link"
               :to="{
                 name: 'txDetail',
-                params: { hash: data.value },
+                params: { hash: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -102,7 +102,7 @@
               class="link"
               :to="{
                 name: 'txDetail',
-                params: { hash: data.value.hash },
+                params: { hash: data.value.hash }
               }"
               >{{ shortHash(data.value.hash) }}</router-link
             >
@@ -116,7 +116,7 @@
               class="link"
               :to="{
                 name: 'bucket',
-                params: { id: data.value },
+                params: { id: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -127,6 +127,78 @@
         <template v-slot:cell(fullAddress)="data">
           <div class="dt-row">
             <address-link :address="data.value" />
+          </div>
+        </template>
+
+        <!-- TxInfo column template -->
+        <template v-slot:cell(txInfo)="data">
+          <div class="dt-row">
+            <router-link
+              class="link"
+              :to="{
+                name: 'txDetail',
+                params: { hash: data.value.txHash }
+              }"
+              >{{ shortHash(data.value.txHash) }}</router-link
+            >
+            <br />
+            <router-link
+              class="link"
+              :to="{
+                name: 'blockDetail',
+                params: { revision: data.value.block.number }
+              }"
+              >#{{ data.value.block.number }}</router-link
+            >
+            <br />
+
+            <span class="time">{{ fromNow(data.value.block.timestamp) }}</span>
+          </div>
+        </template>
+
+        <!-- log column template -->
+        <template v-slot:cell(log)="data">
+          <div class="dt-row">
+            {{ data.value.abi }}
+            {{ data.value.decoded }}
+          </div>
+        </template>
+
+        <!-- Event template -->
+        <template v-slot:cell(event)="data">
+          <div class="row pt-2 pb-2">
+            <div class="breakable col-12 col-md-10">
+              <div class="address-row">
+                <span>Address: </span>
+                <address-link :address="data.value.address" />
+              </div>
+              <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
+              <div class="title-row" v-if="data.value.topics.length > 0">Topics:</div>
+              <div v-for="(topic, index) in data.value.topics" :key="index" class="topic-row">
+                <span class="index">{{ index }}</span>
+                <span>{{ topic }}</span>
+              </div>
+
+              <div v-if="data.value.datas && data.value.datas.length" class="mt-3">
+                <h6 class="title-row">Data:</h6>
+                <div v-for="(data, index) in data.value.datas" :key="index" class="data-row">
+                  <span class="index">{{ index }}</span>
+                  <span>{{ data }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-2">
+              <b-button
+                v-if="data.item.decoded"
+                size="sm"
+                variant="outline-secondary"
+                @click="data.toggleDetails"
+                class="mr-2 float-right"
+              >
+                <span v-if="!data.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Decode</span>
+                <span v-else> <b-icon icon="chevron-double-up"></b-icon> Hide</span>
+              </b-button>
+            </div>
           </div>
         </template>
 
@@ -160,7 +232,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >#{{ data.value }}</router-link
             >
@@ -172,7 +244,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >#{{ data.value }}</router-link
             >
@@ -185,7 +257,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >#{{ data.value }}</router-link
             >
@@ -199,7 +271,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -219,7 +291,7 @@
               v-if="data.value.bidCount && data.value.bidCount > 0"
               :to="{
                 name: 'auctionDetail',
-                params: { auctionID: data.value.id },
+                params: { auctionID: data.value.id }
               }"
               >{{ data.value.bidCount }}</router-link
             >
@@ -262,6 +334,13 @@
           </div>
         </template>
 
+        <!-- method name -->
+        <template v-slot:cell(method)="data">
+          <div class="dt-row">
+            {{ data.value | shortName }}
+          </div>
+        </template>
+
         <!-- NFT Tokens -->
         <template v-slot:cell(nftTokens)="data">
           <div class="dt-row breakable">
@@ -299,6 +378,14 @@
           </div>
         </template>
 
+        <template #row-details="data">
+          <b-card>
+            <!-- <div style="word-break: break-all"> -->
+            <VueJsonPretty :data="data.item.decoded" />
+            <!-- </div> -->
+          </b-card>
+        </template>
+
         <!-- default template -->
         <template v-slot:cell()="data">
           <div class="dt-row">
@@ -315,7 +402,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value.block },
+                params: { revision: data.value.block }
               }"
               >#{{ data.value.block }}</router-link
             >
@@ -345,54 +432,55 @@ import DirectTag from './DirectTag.vue';
 import AmountTag from './AmountTag.vue';
 import AddressLink from './AddressLink.vue';
 import NftLink from './NftLink.vue';
+import VueJsonPretty from 'vue-json-pretty';
 export default {
-  components: { DirectTag, AddressLink, AmountTag, NftLink },
+  components: { DirectTag, AddressLink, AmountTag, NftLink, VueJsonPretty },
   name: 'DataTable',
   props: {
     sortBy: { type: String },
     sortDesc: { type: Boolean },
     title: {
-      type: String,
+      type: String
     },
     minHeight: {
       type: String,
-      default: 'auto',
+      default: 'auto'
     },
     items: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
-      },
+      }
     },
     fields: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
-      },
+      }
     },
     pagination: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           show: false,
-          align: 'right',
+          align: 'right'
         };
-      },
+      }
     },
     loadItems: {
-      type: Function,
+      type: Function
     },
     isTableData: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   data() {
     return {
       itemsLocal: [],
       totalRows: 0,
       currentPage: 1,
-      loading: true,
+      loading: true
     };
   },
   created() {
@@ -404,10 +492,10 @@ export default {
   computed: {
     passedItems() {
       if (this.items) {
-        return this.items.map((i) => i);
+        return this.items.map(i => i);
       }
       return undefined;
-    },
+    }
   },
   watch: {
     passedItems(to, from) {
@@ -417,7 +505,7 @@ export default {
       if (!this.loadItems) {
         this.initWithPassed();
       }
-    },
+    }
   },
   methods: {
     async initWithPassed() {
@@ -467,8 +555,8 @@ export default {
       this.init();
 
       this.$router.replace({ query: { ...this.$route.query, p: val } });
-    },
-  },
+    }
+  }
 };
 </script>
 

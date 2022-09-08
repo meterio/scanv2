@@ -181,7 +181,8 @@ export default {
             transfersCount: account.transfersCount,
             holdersCount: account.holdersCount,
             erc20TokenCount: account.erc20TokenCount,
-            internalTxCount: account.internalTxCount
+            internalTxCount: account.internalTxCount,
+            eventsCount: account.eventsCount
           };
         } else {
           this.userDataCount = {
@@ -192,7 +193,8 @@ export default {
             nftTxCount: account.nftTxCount,
             bidCount: account.bidCount,
             proposedCount: account.proposedCount,
-            bucketCount: account.bucketCount
+            bucketCount: account.bucketCount,
+            eventsCount: account.eventsCount
           };
         }
       } catch (e) {
