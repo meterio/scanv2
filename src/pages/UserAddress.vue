@@ -49,9 +49,15 @@ export default {
         {
           name: this.userDataCount.erc20TokenCount > 0 ? `ERC20s(${this.userDataCount.erc20TokenCount})` : 'ERC20s'
         },
-        { name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.userDataCount.erc20TxCount})` : 'ERC20 Txs', download: 'download' },
+        {
+          name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.userDataCount.erc20TxCount})` : 'ERC20 Txs',
+          download: 'download'
+        },
         { name: this.userDataCount.nftTokenCount > 0 ? `NFT(${this.userDataCount.nftTokenCount})` : 'NFT' },
-        { name: this.userDataCount.nftTxCount > 0 ? `NFT Txs(${this.userDataCount.nftTxCount})` : 'NFT Txs', download: 'download' },
+        {
+          name: this.userDataCount.nftTxCount > 0 ? `NFT Txs(${this.userDataCount.nftTxCount})` : 'NFT Txs',
+          download: 'download'
+        },
         { name: this.userDataCount.bidCount > 0 ? `Auction Bids(${this.userDataCount.bidCount})` : 'Auction Bids' },
         {
           name:
@@ -203,7 +209,8 @@ export default {
           { key: 'from', label: 'From' },
           { key: 'direct', label: '' },
           { key: 'to', label: 'To' },
-          { key: 'amount', label: 'Amount' }
+          { key: 'amount', label: 'Amount' },
+          { key: 'fee', label: 'Fee' }
         ],
         items: []
       },
@@ -211,7 +218,8 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20
+          perPage: 5,
+          limit: 10
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -220,7 +228,8 @@ export default {
           { key: 'from', label: 'From' },
           { key: 'direct', label: '' },
           { key: 'to', label: 'To' },
-          { key: 'amount', label: 'Amount' }
+          { key: 'amount', label: 'Amount' },
+          { key: 'fee', label: 'Fee' }
         ],
         items: []
       },
@@ -237,7 +246,8 @@ export default {
           { key: 'from', label: 'From' },
           { key: 'direct', label: '' },
           { key: 'to', label: 'To' },
-          { key: 'nft', label: 'Token ID' }
+          { key: 'nft', label: 'Token ID' },
+          { key: 'fee', label: 'Fee' }
         ],
         items: []
       },
@@ -315,7 +325,7 @@ export default {
       }
     },
     async downloadTxs(tabIndex) {
-      console.log('tabIndex', tabIndex)
+      console.log('tabIndex', tabIndex);
       if (tabIndex == 0) {
         this.$router.push({
           name: 'exportData',
@@ -323,7 +333,7 @@ export default {
             address: this.address,
             type: 'txs'
           }
-        })
+        });
       }
       if (tabIndex == 2) {
         this.$router.push({
@@ -332,7 +342,7 @@ export default {
             address: this.address,
             type: 'erc20Txs'
           }
-        })
+        });
       }
       if (tabIndex == 4) {
         this.$router.push({
@@ -341,7 +351,7 @@ export default {
             address: this.address,
             type: 'nftTxs'
           }
-        })
+        });
       }
     },
     async loadBuckets(network, page, limit) {
@@ -398,6 +408,7 @@ export default {
         const fromAddr = t.from;
         const toAddr = t.to;
         let amount = t.mtr;
+        let fee = t.fee;
 
         let token = this.currentChain.symbol;
         if (t.mtrg !== '0') {
@@ -434,6 +445,12 @@ export default {
             token: token,
             precision: 8
           },
+          fee: {
+            type: 'amount',
+            amount: fee,
+            token: 'MTR',
+            precision: -1
+          },
           timestamp: t.block.timestamp
         };
       });
@@ -459,6 +476,12 @@ export default {
           precision: 8,
           decimals: t.decimals || 18,
           address: t.tokenAddress
+        },
+        fee: {
+          type: 'amount',
+          amount: t.fee,
+          token: 'MTR',
+          precision: -1
         },
         timestamp: t.block.timestamp
       }));
@@ -490,6 +513,12 @@ export default {
             nolink: false,
             mediaUrl: ''
           }))
+        },
+        fee: {
+          type: 'amount',
+          amount: t.fee,
+          token: 'MTR',
+          precision: -1
         },
         timestamp: t.block.timestamp
       }));

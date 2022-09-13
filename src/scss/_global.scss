@@ -33,6 +33,11 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+@media (min-width: 1200px){
+.container, .container-lg, .container-md, .container-sm, .container-xl {
+    max-width: 1240px;
+}
+}
 
 /***************  Blockchain div  ********************/
 .col-row h3,
