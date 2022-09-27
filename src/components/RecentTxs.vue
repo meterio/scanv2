@@ -15,7 +15,7 @@
                     name: 'txDetail',
                     params: { hash: tx.txHash }
                   }"
-                  >{{ shortHash(tx.txHash, 8) }}</router-link
+                  >{{ shortHash(tx.txHash, 10) }}</router-link
                 >
                 <span class="ago">{{ fromNow(tx.block.timestamp) }}</span>
               </div>
@@ -123,6 +123,9 @@ export default {
     li.block-detail {
       margin: 3px 0;
       padding: 8px 15px;
+      @media only screen and (max-width: 500px) {
+        padding: 8px 8px;
+      }
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -173,6 +176,9 @@ export default {
 
   .height {
     margin-left: 20px;
+    @media only screen and (max-width: 500px) {
+      margin-left: 8px !important;
+    }
     display: flex;
     flex-direction: column;
     justify-content: center;

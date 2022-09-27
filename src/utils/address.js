@@ -1,9 +1,9 @@
 export const shortAddress = (address, num) => {
-  return shortStr(address, num | 8);
+  return shortStr(address, num || 8);
 };
 
 export const shortHash = (hash, num) => {
-  return shortStr(hash, num | 18);
+  return shortStr(hash, num || 18);
 };
 
 export const shortName = hash => {
