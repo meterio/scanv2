@@ -23,13 +23,13 @@
 
             <div class="signed-view">
               <p>
-                From:
+                <span class="d-none d-sm-inline">From:</span>
                 <router-link class="link" :to="{ name: 'address', params: { address: tx.from } }">{{
                   shortAddr(tx.from, 12)
                 }}</router-link>
               </p>
               <p>
-                To:
+                <span class="d-none d-sm-inline">To:</span>
                 <router-link v-if="tx.to" class="link" :to="{ name: 'address', params: { address: tx.to } }">{{
                   shortAddr(tx.to, 12)
                 }}</router-link>
@@ -124,7 +124,7 @@ export default {
       margin: 3px 0;
       padding: 8px 15px;
       @media only screen and (max-width: 500px) {
-        padding: 8px 8px;
+        padding: 8px 4px;
       }
       display: flex;
       justify-content: space-between;
