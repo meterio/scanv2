@@ -15,7 +15,7 @@
                     name: 'txDetail',
                     params: { hash: tx.txHash }
                   }"
-                  >{{ shortHash(tx.txHash, 8) }}</router-link
+                  >{{ shortHash(tx.txHash, 10) }}</router-link
                 >
                 <span class="ago">{{ fromNow(tx.block.timestamp) }}</span>
               </div>
