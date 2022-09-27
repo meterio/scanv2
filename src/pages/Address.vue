@@ -85,7 +85,7 @@ export default {
           }
         }
         this.summary = this.summary.concat([
-          // { key: "Address", value: account.address },
+          // { key: 'Address', value: account.address, type: 'copyable' },
           {
             key: 'Balance',
             mtrg: account.mtrgBalance,

@@ -3,7 +3,7 @@
     <b-modal v-model="modal_show" hide-footer hide-header>
       <div class="text-center">Search No More Data</div>
     </b-modal>
-    <b-navbar toggleable="lg" type="light" variant="light" class="px-4 py-2">
+    <b-navbar toggleable="lg" type="light" variant="light" class="px-4">
       <b-navbar-brand href="/" class="mr-5">
         <b-img :src="computedLogo" height="40" />
 
@@ -102,7 +102,7 @@ export default {
       selectedValue: null,
       modal_show: false,
       searchKey: '',
-      domainnames: [],
+      domainnames: []
     };
   },
   components: { AutoSearchInput },
@@ -133,7 +133,7 @@ export default {
       const path = this.$route.path;
       let x = path.startsWith(`/auction`);
       return x;
-    },
+    }
   },
   watch: {
     async searchKey(newVal, oldVal) {
@@ -160,7 +160,7 @@ export default {
           this.domainnames = temp;
         }
       }
-    },
+    }
   },
   methods: {
     selected(item) {
@@ -235,13 +235,15 @@ export default {
         // this.$bvModal.show('homeModal')
         this.modal_show = true;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .navbar {
+  padding-top: 3px;
+  padding-bottom: 3px;
   border-bottom: 1px solid #dfdfdf;
   background: white !important;
 }

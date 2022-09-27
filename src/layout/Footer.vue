@@ -64,45 +64,44 @@
 </template>
 
 <script>
-
 export default {
-  name: "Footer",
+  name: 'Footer',
   data() {
     return {
       currentYear: new Date().getFullYear(),
       socials: [
         {
-          key: "github",
-          value: "https://github.com/meterio",
+          key: 'github',
+          value: 'https://github.com/meterio'
         },
         {
-          key: "telegram",
-          value: "https://t.me/Meter_IO",
+          key: 'telegram',
+          value: 'https://t.me/Meter_IO'
         },
         {
-          key: "instagram",
-          value: "https://www.instagram.com/meter.io/",
+          key: 'instagram',
+          value: 'https://www.instagram.com/meter.io/'
         },
         {
-          key: "twitter",
-          value: "https://twitter.com/Meter_IO",
+          key: 'twitter',
+          value: 'https://twitter.com/Meter_IO'
         },
         {
-          key: "discord",
-          value: "https://discord.gg/XZgZsCn",
+          key: 'discord',
+          value: 'https://discord.gg/XZgZsCn'
         },
         {
-          key: "youtube",
-          value: "https://www.youtube.com/channel/UCgQVD2Ab-i3IKUhjs6-Z76w",
-        },
+          key: 'youtube',
+          value: 'https://www.youtube.com/channel/UCgQVD2Ab-i3IKUhjs6-Z76w'
+        }
         // {
         //   key: "wechat",
         //   type: "image",
         //   value: "https://github.com",
         // },
-      ],
+      ]
     };
-  },
+  }
 };
 </script>
 
@@ -113,7 +112,6 @@ footer {
   width: 100%;
   background-color: $back-white;
   color: $third-font-color;
-  margin-top: 20px;
   padding: 20px 0;
 
   ul {
@@ -129,7 +127,7 @@ footer {
   .footer-meter {
     grid-area: footer-meter;
     height: 100%;
-    @include media("<=desktop") {
+    @include media('<=desktop') {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -176,12 +174,12 @@ footer {
       display: flex;
       justify-content: flex-end;
 
-      @include media("<=desktop") {
+      @include media('<=desktop') {
         justify-content: space-evenly;
       }
 
       .footer-menu {
-        @include media(">desktop") {
+        @include media('>desktop') {
           margin-left: 60px;
         }
         a {
@@ -203,12 +201,12 @@ footer {
     .social-icons {
       display: flex;
 
-      @include media(">desktop") {
+      @include media('>desktop') {
         float: right;
         margin-top: 20px;
       }
 
-      @include media("<=desktop") {
+      @include media('<=desktop') {
         justify-content: center;
       }
 
@@ -228,35 +226,34 @@ footer {
           background-size: 23px auto;
 
           &.icon-github {
-            background-image: url("~@/assets/socials/github.svg");
+            background-image: url('~@/assets/socials/github.svg');
           }
           &.icon-wechat {
-            background-image: url("~@/assets/socials/wechat.svg");
+            background-image: url('~@/assets/socials/wechat.svg');
           }
 
           &.icon-youtube {
-            background-image: url("~@/assets/socials/youtube.svg");
+            background-image: url('~@/assets/socials/youtube.svg');
           }
 
           &.icon-twitter {
-            background-image: url("~@/assets/socials/twitter.svg");
+            background-image: url('~@/assets/socials/twitter.svg');
           }
 
           &.icon-instagram {
-            background-image: url("~@/assets/socials/instagram.svg");
+            background-image: url('~@/assets/socials/instagram.svg');
           }
 
           &.icon-discord {
-            background-image: url("~@/assets/socials/discord.svg");
+            background-image: url('~@/assets/socials/discord.svg');
           }
 
           &.icon-telegram {
-            background-image: url("~@/assets/socials/telegram.svg");
+            background-image: url('~@/assets/socials/telegram.svg');
           }
           &:hover,
           &:focus {
-            filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(200deg)
-              brightness(104%) contrast(97%);
+            filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(200deg) brightness(104%) contrast(97%);
           }
         }
       }

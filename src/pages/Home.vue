@@ -7,7 +7,7 @@
       auto-search-input(@selected='selected', large)
       //- search.mt25(:btnType='2', placeholder='Search Transation/Blocks/Address/Name', @click='searchKeyWords')
     //- block statistic
-  data-dashboard.mt35(v-bind:rows='data', v-if='data.length > 0')
+  data-dashboard.mt-n5(v-bind:rows='data', v-if='data.length > 0')
     //- node statistic
   b-container.px-0
     b-row
@@ -37,12 +37,12 @@ export default {
     DataDashboard,
     RecentBlocks,
     RecentTxs,
-    AutoSearchInput,
+    AutoSearchInput
   },
   computed: {
     ...mapState({
-      home_block_height: (state) => state.home_block_height,
-    }),
+      home_block_height: state => state.home_block_height
+    })
   },
 
   data() {
@@ -53,7 +53,7 @@ export default {
       nav_tabs: ['PoS', 'PoW'],
       // fake data
       msg: 'Welcome to Index!!!',
-      data: [],
+      data: []
     };
   },
   watch: {
@@ -61,7 +61,7 @@ export default {
       if (this.data && this.data[2] && this.data[2][0]) {
         this.data[2][0]['content'] = newVal;
       }
-    },
+    }
   },
   mounted() {
     this.running = true;
@@ -78,16 +78,16 @@ export default {
           { label: 'Block Height', content: pos.best },
           { label: 'Epoch', content: pos.epoch },
           { label: 'Transactions', content: pos.txsCount },
-          { label: 'Avg Block Time', content: pos.avgBlockTime + ' sec' },
+          { label: 'Avg Block Time', content: pos.avgBlockTime + ' sec' }
         ],
         [
           {
             label: 'Healthy / Total Nodes',
-            content: `${staking.healthyNodes} / ${staking.candidates}`,
+            content: `${staking.healthyNodes} / ${staking.candidates}`
           },
           {
             label: 'Staking Ratio',
-            content: stakingRatio.times(100).toFixed(2) + '%',
+            content: stakingRatio.times(100).toFixed(2) + '%'
             // content:
             //   new BigNumber(staking.totalCirculationStaked)
             //     .dividedBy(1e18)
@@ -106,33 +106,30 @@ export default {
           // },
           {
             label: 'Address Count',
-            content: pos.addressCount,
-          },
-        ],
+            content: pos.addressCount
+          }
+        ]
       ];
 
       if (this.currentChain.priceEnable) {
-        this.data.unshift(
-          [
-            {
-              label: `${this.currentChain.gSymbol} Price`,
-              content: '$ ' + mtrg.price,
-              change: mtrg.priceChange,
-            },
-            {
-              label: `${this.currentChain.symbol} Price`,
-              content: '$ ' + mtr.price,
-              change: mtr.priceChange,
-            },
-          ],
-          [
-            {
-              label: `${this.currentChain.gSymbol} Circulation`,
-              content: formatNum(mtrg.circulation, 0),
-            },
-            { label: `${this.currentChain.symbol} Circulation`, content: formatNum(mtr.circulation, 0) },
-          ]
-        );
+        this.data.unshift([
+          {
+            label: `${this.currentChain.gSymbol} Price`,
+            content: '$ ' + mtrg.price,
+            change: mtrg.priceChange
+          },
+          {
+            label: `${this.currentChain.gSymbol} Circulation`,
+            content: formatNum(mtrg.circulation, 0)
+          },
+
+          {
+            label: `${this.currentChain.symbol} Price`,
+            content: '$ ' + mtr.price,
+            change: mtr.priceChange
+          },
+          { label: `${this.currentChain.symbol} Circulation`, content: formatNum(mtr.circulation, 0) }
+        ]);
       }
 
       if (this.running) {
@@ -181,21 +178,22 @@ export default {
         console.error(e);
         this.modal_show = true;
       }
-    },
+    }
   },
   beforeDestroy() {
     this.running = false;
-  },
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .search-banner {
-  background: #f0f2ff;
-  height: 180px;
+  background: #d0d2ff;
+  height: 230px;
   background-size: cover;
   display: flex;
   padding-top: 40px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 
   .title {

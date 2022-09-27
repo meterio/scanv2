@@ -1,6 +1,18 @@
 <template>
   <b-container class="summary">
-    <h2 class="title">{{ title }}</h2>
+    <h2 class="title-row">
+      <span class="title">{{ title }}</span>
+      <span class="title-value">{{ titleValue }}</span>
+
+      <span v-if="titleValue && titleCopyable">
+        <b-button v-if="titleCopied" variant="outline-success" pill size="sm">
+          <b-icon icon="check"></b-icon>
+        </b-button>
+        <b-button v-else @click="copyTitleToClipBoard(titleValue)" variant="light" pill size="sm">
+          <b-icon icon="clipboard"></b-icon>
+        </b-button>
+      </span>
+    </h2>
     <b-card>
       <div class="loading" v-if="loading">
         <div class="text-center text-primary my-2">
@@ -17,6 +29,15 @@
             </b-col>
             <b-col sm="12" :md="contentCols">
               <span v-if="!item.type" class="value">{{ item.value }}</span>
+              <span v-if="item.type == 'copyable'">
+                {{ item.value }}
+                <b-button v-if="copied" variant="outline-success" pill size="sm">
+                  <b-icon icon="check"></b-icon>
+                </b-button>
+                <b-button v-else @click="copyToClipBoard(item.value)" variant="light" pill size="sm">
+                  <b-icon icon="clipboard"></b-icon>
+                </b-button>
+              </span>
 
               <!-- block-link-with-note -->
               <span v-if="item.type == 'block-link-with-note'">
@@ -298,6 +319,10 @@ export default {
     title: {
       type: String
     },
+    titleValue: {
+      type: String
+    },
+    titleCopyable: { type: Boolean },
     data: {
       type: Array,
       default: function() {
@@ -327,6 +352,8 @@ export default {
   },
   data() {
     return {
+      titleCopied: false,
+      copied: false,
       isShowAllTransfers: false
     };
   },
@@ -408,6 +435,28 @@ export default {
     }
   },
   methods: {
+    async copyTitleToClipBoard(text) {
+      await navigator.clipboard.writeText(text);
+      this.titleCopied = true;
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      this.timer = setTimeout(this.clearTitleCopied, 800);
+    },
+    clearTitleCopied() {
+      this.titleCopied = false;
+    },
+    clearCopied() {
+      this.copied = false;
+    },
+    async copyToClipBoard(text) {
+      await navigator.clipboard.writeText(text);
+      this.copied = true;
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      this.timer = setTimeout(this.clearCopied, 1000);
+    },
     showMoreTransfers() {
       this.isShowAllTransfers = true;
     }
@@ -420,9 +469,16 @@ export default {
 }
 
 .summary {
-  .title {
+  .title-row {
     font-size: 19px;
     margin-bottom: 15px;
+    .title {
+      margin-right: 8px;
+    }
+    .title-value {
+      color: #77838f;
+      margin-right: 5px;
+    }
   }
 
   .row {

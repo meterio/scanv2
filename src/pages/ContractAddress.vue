@@ -2,6 +2,8 @@
 .detail-page
   data-summary(
     :title='title',
+    :titleValue="address",
+    :titleCopyable="true"
     :data='addressInfo.summary',
     wide,
     isContract,
@@ -87,9 +89,9 @@ export default {
     },
     title() {
       if (this.isToken) {
-        return `Token: ${this.address}`;
+        return 'Token';
       } else {
-        return `Contract: ${this.address}`;
+        return 'Contract';
       }
     },
     tabs() {

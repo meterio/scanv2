@@ -10,14 +10,14 @@
 
 <script>
 export default {
-  name: "DataCard",
-  props: ["data"],
+  name: 'DataCard',
+  props: ['data']
 };
 </script>
 
 <style lang="scss" scoped>
 .data-card {
-  min-height: 100px;
+  min-height: 90px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -26,7 +26,7 @@ export default {
   .content {
     color: #0c2954;
     font-weight: normal;
-    font-size: 1.17rem;
+    font-size: 1.1rem;
 
     .change {
       color: #6171ff;

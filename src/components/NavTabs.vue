@@ -1,7 +1,7 @@
 <template lang="pug">
-b-container
+div
   .s-nav-tabbar
-    .nav-item(
+    .nav-item.d-none.d-md-block(
       v-for="(tab, index) in localTabs",
       :class="computedTab == index ? 'active' : ''",
       @click="clickTab(index)"
@@ -17,26 +17,31 @@ b-container
         class="ml-1"
         @click.stop="clickDownload(index)"
       )
+  b-dropdown.d-md-none(block :text="chosenText" variant="outline")
+    b-dropdown-item(v-for="(tab, index) in localTabs",
+    @click="clickTab(index)"
+    ) {{ tab.name }}
 </template>
 <script>
 export default {
   props: {
     tabs: {
       type: Array,
-      required: true,
+      required: true
     },
     value: {
       type: Number,
-      default: 0,
+      default: 0
     },
     verified: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
       localTabIndex: 0,
+      chosenText: ''
     };
   },
 
@@ -46,36 +51,43 @@ export default {
     },
     computedTab() {
       return this.value;
-    },
+    }
   },
   created() {
     const q = this.$route.query;
     if (q.tab) {
       const tabIndex = Number(q.tab);
       this.localTabIndex = tabIndex;
-      this.$emit("changeTab", tabIndex);
+      this.$emit('changeTab', tabIndex);
     }
   },
   beforeMount() {
     // this.localTabs = this.tabs;
     this.localTabIndex = this.value;
+    for (const [i, v] of this.tabs.entries()) {
+      if (i === this.value) {
+        this.chosenText = v.name;
+      }
+    }
   },
   methods: {
     clickTab(tabIndex) {
       this.localTabIndex = tabIndex;
-      this.$emit("changeTab", tabIndex);
+      this.$emit('changeTab', tabIndex);
 
+      this.chosenText = this.tabs[tabIndex].name;
+      console.log('chosen text: ', this.chosenText);
       this.$router.replace({
-        query: { ...this.$route.query, tab: tabIndex, p: 1 },
+        query: { ...this.$route.query, tab: tabIndex, p: 1 }
       });
     },
     isShowCheck(name) {
-      return name === "Contract" && this.verified;
+      return name === 'Contract' && this.verified;
     },
     clickDownload(tabIndex) {
-      this.$emit("download", tabIndex)
+      this.$emit('download', tabIndex);
     }
-  },
+  }
 };
 </script>
 
@@ -84,6 +96,8 @@ export default {
   width: 100%;
   display: flex;
   border-bottom: 1px solid #ddd;
+  word-wrap: break-word;
+  flex-wrap: wrap;
   .nav-item {
     font-size: 15px;
     font-weight: bold;

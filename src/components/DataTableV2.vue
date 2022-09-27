@@ -270,7 +270,7 @@
                 </div>
               </template>
               <div v-else-if="data.value.data !== '0x'">
-                <b-form-textarea readonly rows="3" max-rows="16" :value="data.value.data"></b-form-textarea>
+                <b-form-textarea readonly rows="4" max-rows="10" :value="data.value.data"></b-form-textarea>
               </div>
               <div v-else>{{ data.value.data }}</div>
             </div>

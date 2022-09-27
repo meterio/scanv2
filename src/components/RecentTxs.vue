@@ -13,7 +13,7 @@
                 <router-link
                   :to="{
                     name: 'txDetail',
-                    params: { hash: tx.txHash },
+                    params: { hash: tx.txHash }
                   }"
                   >{{ shortHash(tx.txHash, 8) }}</router-link
                 >
@@ -56,20 +56,20 @@ import { BigNumber } from 'bignumber.js';
 export default {
   name: 'RecentTxs',
   components: {
-    Loading,
+    Loading
   },
   data() {
     return {
       loading: true,
       recent_txs: [],
-      time: null,
+      time: null
     };
   },
   mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function () {
+    this.time = setInterval(function() {
       me.initData();
     }, 3000);
   },
@@ -85,7 +85,7 @@ export default {
     async initData() {
       try {
         const res = await this.$api.transaction.getRecentTxs(this.network);
-        this.recent_txs = res.txs.slice(0, 10).map((tx) => {
+        this.recent_txs = res.txs.slice(0, 10).map(tx => {
           try {
             let totalAmount = '';
             if (tx.mtr && new BigNumber(tx.mtr).isGreaterThan(0)) {
@@ -106,8 +106,8 @@ export default {
     },
     jump(url) {
       this.$router.push(url);
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -176,6 +176,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    font-size: 14px;
 
     .number {
       font-size: 1rem;

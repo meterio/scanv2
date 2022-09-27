@@ -1,6 +1,6 @@
 <template>
   <div class="detail-page">
-    <DataSummary :data="summary" :title="summaryTitle" />
+    <DataSummary :data="summary" title="Transaction Detail" />
 
     <DataTableV2 :fields="fields" :items="items" :pagination="pagination">
       <template slot="header">
@@ -82,7 +82,6 @@ export default {
       txHash: '',
       tabs: [{ name: 'Clauses' }, { name: 'Transfers' }, { name: 'Events' }],
       tabValue: 0,
-      summaryTitle: 'Transaction',
       summary: [],
       clauses: {
         fields: [
@@ -218,7 +217,7 @@ export default {
           { name: tx.internaltxsCount > 0 ? `Internal Txs (${tx.internaltxsCount})` : 'Internal Txs' }
         ];
         this.summary = [
-          { key: 'Hash', value: tx.hash },
+          { key: 'Hash', value: tx.hash, type: 'copyable' },
           {
             key: 'Status',
             value: tx.reverted ? `reverted: ${tx.vmError.error},${tx.vmError.reason}` : 'success',

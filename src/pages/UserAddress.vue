@@ -1,6 +1,6 @@
 <template lang="pug">
 .detail-page
-  data-summary(:title='title', :data='addressInfo.summary')
+  data-summary(title='Address', :titleValue="address", :data='addressInfo.summary' :titleCopyable="true")
 
   b-container.summary
     #b-card.mt-2pert.px-5
@@ -40,9 +40,6 @@ export default {
     }
   },
   computed: {
-    title() {
-      return `Address: ${this.address}`;
-    },
     tabs() {
       return [
         { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs', download: 'download' },

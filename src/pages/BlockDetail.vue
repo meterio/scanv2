@@ -1,19 +1,14 @@
 <template>
   <div class="detail-page">
-    <DataSummary :data="summary" :title="summaryTitle" />
-    <DataTableV2
-      title="Transactions"
-      :fields="txs.fields"
-      :items="txs.items"
-      :pagination="txs.pagination"
-    >
+    <DataSummary :data="summary" title="Block" :titleValue="summaryTitleValue" />
+    <DataTableV2 title="Transactions" :fields="txs.fields" :items="txs.items" :pagination="txs.pagination">
       <template v-slot:cell(hash)="data">
         <div class="dt-row">
           <router-link
             class="link"
             :to="{
               name: 'txDetail',
-              params: { hash: data.value },
+              params: { hash: data.value }
             }"
             >{{ shortHash(data.value) }}</router-link
           >
@@ -36,34 +31,34 @@
 </template>
 
 <script>
-import DataTableV2 from "@/components/DataTableV2.vue";
-import StatusTag from "@/components/StatusTag.vue";
-import DataSummary from "@/components/DataSummary.vue";
+import DataTableV2 from '@/components/DataTableV2.vue';
+import StatusTag from '@/components/StatusTag.vue';
+import DataSummary from '@/components/DataSummary.vue';
 import BigNumber from 'bignumber.js';
 export default {
-  name: "BlockDetail",
+  name: 'BlockDetail',
   components: {
     DataTableV2,
     StatusTag,
-    DataSummary,
+    DataSummary
   },
   data() {
     return {
       loading: false,
-      summaryTitle: "",
+      summaryTitleValue: '',
       summary: [],
       txs: {
-        pagination: { show: true, align: "center", perPage: 10 },
+        pagination: { show: true, align: 'center', perPage: 10 },
         fields: [
-          { key: "hash", label: "Hash" },
-          { key: "method", label: "Method" },
-          { key: "amount", label: "Amount" },
-          { key: "fee", label: "Fee" },
-          { key: "clauseCount", label: "nClause" },
-          { key: "result", label: "Result" },
+          { key: 'hash', label: 'Hash' },
+          { key: 'method', label: 'Method' },
+          { key: 'amount', label: 'Amount' },
+          { key: 'fee', label: 'Fee' },
+          { key: 'clauseCount', label: 'nClause' },
+          { key: 'result', label: 'Result' }
         ],
-        items: [],
-      },
+        items: []
+      }
     };
   },
   methods: {
@@ -72,39 +67,39 @@ export default {
       this.loading = true;
       const res = await this.$api.block.getBlockDetail(this.network, revision);
       const b = res.block;
-      this.summaryTitle = `Block: #${b.number}`;
+      this.summaryTitleValue = `#${b.number}`;
       if (!!b) {
         this.summary = [
-          { key: "Hash", value: b.hash },
-          { key: "Number", value: b.number },
-          { key: "Block Type", value: b.blockType === 1 ? "KBlock" : "MBlock" },
-          { key: "Epoch", value: b.epoch, type: "epoch-link" },
+          { key: 'Hash', value: b.hash },
+          { key: 'Number', value: b.number },
+          { key: 'Block Type', value: b.blockType === 1 ? 'KBlock' : 'MBlock' },
+          { key: 'Epoch', value: b.epoch, type: 'epoch-link' },
           {
-            key: "KBlock Height",
+            key: 'KBlock Height',
             value: b.lastKBlockHeight,
-            type: "block-link",
+            type: 'block-link'
           },
-          { key: "QC Height", value: b.qcHeight, type: "block-link" },
+          { key: 'QC Height', value: b.qcHeight, type: 'block-link' },
           {
-            key: "Proposer",
+            key: 'Proposer',
             value: { address: b.beneficiary, name: b.beneficiaryName },
-            type: "address-or-name-link",
+            type: 'address-or-name-link'
           },
-          { key: "Gas Used", value: b.gasUsed },
+          { key: 'Gas Used', value: b.gasUsed },
           {
-            key: "Reward",
+            key: 'Reward',
             value: b.actualReward,
-            type: "amount",
+            type: 'amount',
             precision: -1,
-            token: this.currentChain.symbol,
+            token: this.currentChain.symbol
           },
-          { key: "Txs Count", value: b.txCount },
-          { key: "Time", value: b.timestamp, type: "timestamp" },
+          { key: 'Txs Count', value: b.txCount },
+          { key: 'Time', value: b.timestamp, type: 'timestamp' }
         ];
       }
       let items = [];
       if (res.block.txSummaries) {
-        items = res.block.txSummaries.map((tx) => {
+        items = res.block.txSummaries.map(tx => {
           let totalClauseAmount = new BigNumber(0);
           if (tx.clauses) {
             for (const c of tx.clauses) {
@@ -115,25 +110,25 @@ export default {
             hash: tx.hash,
             method: tx.selector,
             amount: {
-              type: "amount",
+              type: 'amount',
               amount: totalClauseAmount.toFixed(),
               token: tx.token,
-              precision: 8,
+              precision: 8
             },
             fee: {
-              type: "amount",
+              type: 'amount',
               amount: tx.paid,
               token: this.currentChain.symbol,
-              precision: 8,
+              precision: 8
             },
-            result: tx.reverted ? "reverted" : "success",
-            clauseCount: tx.clauseCount,
+            result: tx.reverted ? 'reverted' : 'success',
+            clauseCount: tx.clauseCount
           };
         });
       }
       this.txs.items = items;
       this.loading = false;
-    },
-  },
+    }
+  }
 };
 </script>

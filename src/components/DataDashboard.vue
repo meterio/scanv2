@@ -2,11 +2,7 @@
   <b-container class="card p-0">
     <div v-bind:key="index" v-for="(row, index) in rows">
       <b-row>
-        <b-col
-          v-bind:key="index"
-          v-for="(col, index) in row"
-          v-bind:class="hasBorderRight(row.length, index)"
-        >
+        <b-col v-bind:key="index" v-for="(col, index) in row" v-bind:class="hasBorderRight(row.length, index)">
           <DataCard v-bind:data="col"></DataCard>
         </b-col>
       </b-row>
@@ -16,27 +12,27 @@
 </template>
 
 <script>
-import DataCard from "@/components/DataCard.vue";
+import DataCard from '@/components/DataCard.vue';
 
 export default {
-  name: "DataDashboard",
+  name: 'DataDashboard',
   components: {
-    DataCard,
+    DataCard
   },
-  props: ["rows"],
+  props: ['rows'],
   methods: {
-    hasRowLine: function (row_size, index) {
+    hasRowLine: function(row_size, index) {
       return row_size > index + 1;
     },
 
-    hasBorderRight: function (col_size, index) {
+    hasBorderRight: function(col_size, index) {
       if (col_size > index + 1) {
-        return { "border-r": true };
+        return { 'border-r': true };
       }
 
-      return { "border-r": false };
-    },
-  },
+      return { 'border-r': false };
+    }
+  }
 };
 </script>
 

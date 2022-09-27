@@ -2,10 +2,12 @@
   <span>
     <b-link :id="id" class="link" :to="{ name: 'address', params: { address: address } }">{{ text }}</b-link>
     <b-popover triggers="hover" :target="id">
-      <b-button @click="copyToClipBoard" variant="light" pill size="sm">
+      <b-button v-if="copied" variant="outline-success" pill size="sm">
+        <b-icon icon="check"></b-icon>
+      </b-button>
+      <b-button v-else @click="copyToClipBoard" variant="light" pill size="sm">
         <b-icon icon="clipboard"></b-icon>
       </b-button>
-      <span>{{ hint }}</span>
     </b-popover>
   </span>
 </template>
@@ -17,21 +19,21 @@ export default {
   props: {
     address: {
       type: String,
-      default: '0x',
+      default: '0x'
     },
     name: {
       type: String,
-      default: '',
+      default: ''
     },
     short: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
-      hint: '',
-      timer: null,
+      copied: false,
+      timer: null
     };
   },
   computed: {
@@ -56,7 +58,7 @@ export default {
         return this.shortAddr(this.address.toLowerCase(), 14);
       }
       return this.address.toLowerCase();
-    },
+    }
   },
   methods: {
     handleHover(hovered) {
@@ -64,16 +66,16 @@ export default {
     },
     async copyToClipBoard() {
       await navigator.clipboard.writeText(this.address);
-      this.hint = 'copied';
+      this.copied = true;
       if (this.timer) {
         clearTimeout(this.timer);
       }
-      this.timer = setTimeout(this.clearHint, 500);
+      this.timer = setTimeout(this.clearCopied, 800);
     },
-    clearHint() {
-      this.hint = '';
-    },
-  },
+    clearCopied() {
+      this.copied = false;
+    }
+  }
 };
 </script>
 
