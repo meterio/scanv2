@@ -3,8 +3,8 @@
     <b-card>
       <div class="header">
         <b-row>
-          <b-col>
-            <h3 class="title">Validators</h3>
+          <b-col sm="0">
+            <!-- <h3 class="title d-none d-md-block">Validators</h3> -->
           </b-col>
 
           <b-col>
@@ -27,12 +27,7 @@
                 <b-icon icon="search"></b-icon>
               </span>
 
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Search"
-                v-model="validate_right_search"
-              />
+              <input type="text" class="form-control" placeholder="Search" v-model="validate_right_search" />
             </div>
           </b-col>
         </b-row>
@@ -49,6 +44,7 @@
         show-empty
         @sort-changed="sortingChanged"
         no-local-sorting
+        stacked="lg"
       >
         <template slot="empty">
           <div class="text-center pt15 text-grey" style="color: #5c6f8c">
@@ -57,10 +53,7 @@
         </template>
         <template v-slot:cell(addressWithName)="data">
           <div class="dt-row">
-            <address-link
-              :address="data.value.address"
-              :name="data.value.name"
-            />
+            <address-link :address="data.value.address" :name="data.value.name" />
           </div>
         </template>
         <template v-slot:cell(totalPoints)="data">
@@ -69,7 +62,7 @@
               v-if="data.value.penalty > 0"
               :to="{
                 name: 'statDetail',
-                params: { address: data.value.address },
+                params: { address: data.value.address }
               }"
               >{{ data.value.penalty }}</router-link
             >
@@ -87,7 +80,7 @@
               class="link"
               :to="{
                 name: 'validatorDetail',
-                params: { address: data.value },
+                params: { address: data.value }
               }"
             >
               {{ data.value }}
@@ -130,39 +123,39 @@
 </template>
 
 <script>
-import Loading from "@/components/Loading";
-import AddressLink from "@/components/AddressLink";
-import AmountTag from "@/components/AmountTag";
-import { fromNow, formatTime } from "@/utils";
+import Loading from '@/components/Loading';
+import AddressLink from '@/components/AddressLink';
+import AmountTag from '@/components/AmountTag';
+import { fromNow, formatTime } from '@/utils';
 
 export default {
-  name: "ValidatorTable",
+  name: 'ValidatorTable',
   data() {
     return {
-      sortBy: "votingPower",
+      sortBy: 'votingPower',
       sortDesc: true,
       page_size: 15,
       loading: true,
-      current_tab: "Delegates",
-      tabs: ["Delegates", "Candidates", "Jailed"],
+      current_tab: 'Delegates',
+      tabs: ['Delegates', 'Candidates', 'Jailed'],
       current_page: 1,
       validate_table_total: 0,
-      validate_right_search: "",
+      validate_right_search: '',
       validator_data: {
         fields: [],
-        items: [],
-      },
+        items: []
+      }
     };
   },
   components: {
     Loading,
     AmountTag,
-    AddressLink,
+    AddressLink
   },
   watch: {
     validate_right_search(newVal) {
       this.loadData();
-    },
+    }
   },
   methods: {
     sortingChanged({ sortBy, sortDesc }) {
@@ -211,67 +204,67 @@ export default {
           this.current_tab,
           this.validate_right_search,
           this.sortBy,
-          this.sortDesc ? "desc" : "asc"
+          this.sortDesc ? 'desc' : 'asc'
         );
         this.loading = false;
         this.validate_table_total = res.totalRows;
-        if (this.current_tab === "Delegates") {
+        if (this.current_tab === 'Delegates') {
           this.validator_data.fields = [
-            { key: "addressWithName", label: "Address" },
-            { key: "votingPower", label: "Total Votes", sortable: true },
-            { key: "commission%", label: "Commission Rate", sortable: true },
+            { key: 'addressWithName', label: 'Address' },
+            { key: 'votingPower', label: 'Total Votes', sortable: true },
+            { key: 'commission%', label: 'Commission Rate', sortable: true },
             // { key: "shares%", label: "Pool Share%" },
-            { key: "totalPoints", label: "Penalty Points", sortable: true },
+            { key: 'totalPoints', label: 'Penalty Points', sortable: true }
           ];
-          this.validator_data.items = res.delegates.map((d) => ({
+          this.validator_data.items = res.delegates.map(d => ({
             ...d,
             votingPower: {
-              type: "amount",
+              type: 'amount',
               amount: d.votingPower,
               token: this.currentChain.gSymbol,
-              precision: 2,
+              precision: 2
             },
             addressWithName: { address: d.address, name: d.name },
-            totalPoints: { address: d.address, penalty: d.totalPoints },
+            totalPoints: { address: d.address, penalty: d.totalPoints }
           }));
         }
-        if (this.current_tab === "Candidates") {
+        if (this.current_tab === 'Candidates') {
           this.validator_data.fields = [
-            { key: "addressWithName", label: "Address" },
-            { key: "totalVotes", label: "Total Votes", sortable: true },
-            { key: "commission%", label: "Commission Rate", sortable: true },
-            { key: "totalPoints", label: "Penalty Points", sortable: true },
+            { key: 'addressWithName', label: 'Address' },
+            { key: 'totalVotes', label: 'Total Votes', sortable: true },
+            { key: 'commission%', label: 'Commission Rate', sortable: true },
+            { key: 'totalPoints', label: 'Penalty Points', sortable: true }
           ];
-          this.validator_data.items = res.candidates.map((c) => ({
+          this.validator_data.items = res.candidates.map(c => ({
             ...c,
             totalVotes: {
-              type: "amount",
+              type: 'amount',
               amount: c.totalVotes,
               token: this.currentChain.gSymbol,
-              precision: 2,
+              precision: 2
             },
             addressWithName: { address: c.address, name: c.name },
-            totalPoints: { address: c.address, penalty: c.totalPoints },
+            totalPoints: { address: c.address, penalty: c.totalPoints }
           }));
         }
-        if (this.current_tab === "Jailed") {
+        if (this.current_tab === 'Jailed') {
           this.validator_data.fields = [
-            { key: "addressWithName", label: "Address" },
-            { key: "totalPoints", label: "Penalty Points", sortable: true },
-            { key: "jailedTime", label: "Jailed Time", sortable: true },
-            { key: "bailAmount", label: "Bail Amount", sortable: true },
+            { key: 'addressWithName', label: 'Address' },
+            { key: 'totalPoints', label: 'Penalty Points', sortable: true },
+            { key: 'jailedTime', label: 'Jailed Time', sortable: true },
+            { key: 'bailAmount', label: 'Bail Amount', sortable: true }
           ];
-          this.validator_data.items = res.jailed.map((j) => ({
+          this.validator_data.items = res.jailed.map(j => ({
             ...j,
             addressWithName: { address: j.address, name: j.name },
-            totalPoints: { address: j.address, penalty: j.totalPoints },
+            totalPoints: { address: j.address, penalty: j.totalPoints }
           }));
         }
       } catch (e) {
         this.loading = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
