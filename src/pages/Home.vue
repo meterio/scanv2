@@ -188,7 +188,7 @@ export default {
 
 <style lang="scss" scoped>
 .search-banner {
-  background: #010e35;
+  background: #003cb2;
   height: 230px;
   background-size: cover;
   display: flex;

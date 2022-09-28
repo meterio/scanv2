@@ -5,7 +5,7 @@
     </b-modal>
     <b-navbar toggleable="lg" type="light" variant="light" class="px-4">
       <b-navbar-brand href="/" class="mr-5">
-        <b-img :src="computedLogo" height="40" />
+        <b-img :src="computedLogo" height="40" class="mr-1" />
 
         <span class="ml-1" style="font-size: 19px; font-weight: bold">{{ currentChain.title }}</span>
         <!-- Upgrade Badge -->

@@ -24,7 +24,7 @@
       @keypress="keypress"
     />
     <b-input-group-append>
-      <b-button variant="primary" @click="search">
+      <b-button :variant="btnVariant" @click="search">
         <b-icon icon="search"></b-icon>
         <span v-if="large"> Search</span>
       </b-button>
@@ -43,13 +43,16 @@ export default {
       selectedItem: null,
       dropdownShown: false,
       lastUpdatedAt: 0,
-      selected: false,
+      selected: false
     };
   },
   computed: {
     className() {
       return this.large ? 'search-group-large' : 'search-group';
     },
+    btnVariant() {
+      return this.large ? 'secondary' : 'primary';
+    }
   },
   watch: {
     async keyword(val) {
@@ -93,7 +96,7 @@ export default {
         this.updateItems(val);
         this.lastUpdatedAt = new Date().getTime();
       }, leftover);
-    },
+    }
   },
   methods: {
     keypress(evt) {
@@ -146,8 +149,8 @@ export default {
     dropdownShow(bvEvent) {
       this.dropdownShown = true;
       this.$refs.input.focus();
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -171,6 +174,6 @@ export default {
   }
 }
 #input-query {
-  border-radius: 5px !important;
+  border-radius: 5px 0 0 5px !important;
 }
 </style>
