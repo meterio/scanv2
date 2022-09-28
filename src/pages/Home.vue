@@ -74,45 +74,41 @@ export default {
 
       const stakingRatio = new BigNumber(staking.totalStaked).dividedBy(1e18).dividedBy(40e6);
       this.data = [
-        [
-          { label: 'Block Height', content: pos.best },
-          { label: 'Epoch', content: pos.epoch },
-          { label: 'Transactions', content: pos.txsCount },
-          { label: 'Avg Block Time', content: pos.avgBlockTime + ' sec' }
-        ],
-        [
-          {
-            label: 'Healthy / Total Nodes',
-            content: `${staking.healthyNodes} / ${staking.candidates}`
-          },
-          {
-            label: 'Staking Ratio',
-            content: stakingRatio.times(100).toFixed(2) + '%'
-            // content:
-            //   new BigNumber(staking.totalCirculationStaked)
-            //     .dividedBy(1e18)
-            //     .dividedBy(mtrg.circulation)
-            //     .times(100)
-            //     .toFixed(2) + "%",
-          },
-          { label: 'Annual Network Inflation', content: pos.inflation },
-          // {
-          //   label: "Avg Staking APY",
-          //   content:
-          //     new BigNumber(0.05)
-          //       .dividedBy(stakingRatio)
-          //       .times(100)
-          //       .toFixed(2) + "%",
-          // },
-          {
-            label: 'Address Count',
-            content: pos.addressCount
-          }
-        ]
+        { label: 'Block Height', content: pos.best },
+        { label: 'Epoch', content: pos.epoch },
+        { label: 'Transactions', content: pos.txsCount },
+        { label: 'Avg Block Time', content: pos.avgBlockTime + ' sec' },
+        {
+          label: 'Healthy / Total Nodes',
+          content: `${staking.healthyNodes} / ${staking.candidates}`
+        },
+        {
+          label: 'Staking Ratio',
+          content: stakingRatio.times(100).toFixed(2) + '%'
+          // content:
+          //   new BigNumber(staking.totalCirculationStaked)
+          //     .dividedBy(1e18)
+          //     .dividedBy(mtrg.circulation)
+          //     .times(100)
+          //     .toFixed(2) + "%",
+        },
+        { label: 'Annual Network Inflation', content: pos.inflation },
+        // {
+        //   label: "Avg Staking APY",
+        //   content:
+        //     new BigNumber(0.05)
+        //       .dividedBy(stakingRatio)
+        //       .times(100)
+        //       .toFixed(2) + "%",
+        // },
+        {
+          label: 'Address Count',
+          content: pos.addressCount
+        }
       ];
 
       if (this.currentChain.priceEnable) {
-        this.data.unshift([
+        this.data.unshift(
           {
             label: `${this.currentChain.gSymbol} Price`,
             content: '$ ' + mtrg.price,
@@ -129,7 +125,7 @@ export default {
             change: mtr.priceChange
           },
           { label: `${this.currentChain.symbol} Circulation`, content: formatNum(mtr.circulation, 0) }
-        ]);
+        );
       }
 
       if (this.running) {
