@@ -184,13 +184,14 @@ export default {
 
 <style lang="scss" scoped>
 .search-banner {
-  background: #003cb2;
+  // background: #003cb2;
   height: 230px;
   background-size: cover;
   display: flex;
   padding-top: 40px;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  // border-top: 1px solid rgba(0, 0, 0, 0.08);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background-image: url('~@/assets/background.png');
 
   .title {
     font-size: 20px;
