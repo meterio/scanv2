@@ -41,12 +41,12 @@ export default {
 
     hasBorderRight: function(col_size, index) {
       const vp = this.getViewport();
-      if (vp == 'md' || vp == 'lg' || vp == 'xl') {
+      if (vp == 'lg' || vp == 'xl') {
         if ((index + 1) % 4 != 0) {
           return { 'border-r': true, 'border-b': true };
         }
       }
-      if (vp == 'xs' || vp == 'sm') {
+      if (vp == 'xs' || vp == 'sm' || vp == 'md') {
         if ((index + 1) % 2 != 0) {
           return { 'border-r': true, 'border-b': true };
         }
