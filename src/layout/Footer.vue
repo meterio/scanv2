@@ -18,6 +18,11 @@
                 <b-icon icon="link"></b-icon> Meter Web Wallet
               </a>
             </div>
+            <div class="download-wallet">
+              <a target="_blank" href="https://passport.meter.io/" class="desktop-btn">
+                <b-icon icon="link"></b-icon> Bridge Assets
+              </a>
+            </div>
           </div>
         </b-col>
         <b-col cols="12" md="6">
