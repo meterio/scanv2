@@ -58,8 +58,11 @@ export default {
   },
   watch: {
     home_block_height(newVal) {
-      if (this.data && this.data[1] && this.data[1][0]) {
-        this.data[1][0]['content'] = newVal;
+      for (const item of this.data) {
+        if (item.label === 'Block Height') {
+          item['content'] = newVal;
+          return;
+        }
       }
     }
   },
