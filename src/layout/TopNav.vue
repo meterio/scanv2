@@ -266,7 +266,7 @@ export default {
     }
     &.active,
     &.active:hover {
-      color: #6171ff;
+      color: #003cb2;
     }
   }
 }

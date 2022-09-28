@@ -4,7 +4,7 @@
   .bold {
     color: #5c6f8c;
     font-size: 16px;
-    font-weight: bold;;
+    font-weight: bold;
   }
 
   .title {
@@ -22,7 +22,7 @@
       &.active {
         .page-link {
           background-color: #fff;
-          color: #6171ff;
+          color: #003cb2;
         }
       }
     }
@@ -63,14 +63,14 @@
       border-radius: 5px;
 
       &.icon-mint-active {
-        background-image: url("~@/assets/hammer_primary.png");
+        background-image: url('~@/assets/hammer_primary.png');
         background-color: #d9e8ff;
         height: 36px;
         width: 36px;
       }
 
       &.icon-mint-past {
-        background-image: url("~@/assets/hammer_secondary.png");
+        background-image: url('~@/assets/hammer_secondary.png');
         height: 36px;
         width: 36px;
         background-color: #ebeef6;
@@ -78,7 +78,7 @@
     }
 
     .primary {
-      color: #6171ff;
+      color: #003cb2;
     }
 
     .time {
@@ -86,7 +86,7 @@
     }
 
     .link {
-      color: #6171ff;
+      color: #003cb2;
     }
 
     .badge {
@@ -98,7 +98,7 @@
       }
 
       &.badge-primary {
-        color: #6171ff;
+        color: #003cb2;
         background-color: #e9f2ff;
       }
     }

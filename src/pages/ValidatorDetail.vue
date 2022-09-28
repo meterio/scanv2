@@ -25,19 +25,14 @@
             </b-col>
             <b-col cols="8" class="pt-3">
               <label
-                >Total Votes: {{ delegated_chart_legend.total }}
-                <span>{{ gTokenSymbol }}</span></label
+                >Total Votes: {{ delegated_chart_legend.total }} <span>{{ gTokenSymbol }}</span></label
               >
 
               <b-row>
                 <b-col cols="12" class="d-flex justify-content-between">
                   <span>Self: </span>
                   <span class="percent">
-                    <amount-tag
-                      :amount="delegated_chart_legend.self"
-                      :token="gTokenSymbol"
-                      :precision="precision"
-                    />
+                    <amount-tag :amount="delegated_chart_legend.self" :token="gTokenSymbol" :precision="precision" />
                     ({{ delegated_chart_legend.selfRatio }})</span
                   >
                 </b-col>
@@ -46,11 +41,7 @@
                 <b-col cols="12" class="d-flex justify-content-between">
                   <span>Others</span>
                   <span class="percent">
-                    <amount-tag
-                      :amount="delegated_chart_legend.others"
-                      :token="gTokenSymbol"
-                      :precision="precision"
-                    />
+                    <amount-tag :amount="delegated_chart_legend.others" :token="gTokenSymbol" :precision="precision" />
                     ({{ delegated_chart_legend.othersRatio }})</span
                   >
                 </b-col>
@@ -106,7 +97,7 @@
             <router-link
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -118,19 +109,19 @@
 </template>
 
 <script>
-import PieChart from "@/charts/PieChart.js";
-import DataTable from "@/components/DataTable.vue";
-import DataTableV2 from "@/components/DataTableV2.vue";
-import BigNumber from "bignumber.js";
-import AmountTag from "@/components/AmountTag.vue";
+import PieChart from '@/charts/PieChart.js';
+import DataTable from '@/components/DataTable.vue';
+import DataTableV2 from '@/components/DataTableV2.vue';
+import BigNumber from 'bignumber.js';
+import AmountTag from '@/components/AmountTag.vue';
 
 export default {
-  name: "ValidatorDetail",
+  name: 'ValidatorDetail',
   components: {
     PieChart,
     DataTable,
     DataTableV2,
-    AmountTag,
+    AmountTag
   },
   data() {
     return {
@@ -143,73 +134,73 @@ export default {
       load: true,
       current_page: 1,
       validator: {
-        name: "",
-        description: "",
-        address: "0x",
+        name: '',
+        description: '',
+        address: '0x'
       },
       mainProps: {
         blank: true,
-        blankColor: "#777",
+        blankColor: '#777',
         width: 100,
         height: 100,
-        class: "m1",
+        class: 'm1'
       },
       delegated_chart_legend: {
-        total: "",
-        self: "0",
-        selfRatio: "0%",
-        others: "0",
-        othersRatio: "0%",
+        total: '',
+        self: '0',
+        selfRatio: '0%',
+        others: '0',
+        othersRatio: '0%'
       },
       delegated_chart: {
         options: {
           legend: {
-            display: false,
-          },
+            display: false
+          }
         },
         data: {
-          labels: ["Self", "Others"],
-          datasets: [],
-        },
+          labels: ['Self', 'Others'],
+          datasets: []
+        }
       },
       delegators: {
-        title: "Delegators",
+        title: 'Delegators',
         total: 0,
         data: {
           fields: [
-            { key: "address", label: "Delegator" },
-            { key: "amount", label: "Amount" },
-            { key: "percent", label: "Share" },
+            { key: 'address', label: 'Delegator' },
+            { key: 'amount', label: 'Amount' },
+            { key: 'percent', label: 'Share' }
           ],
-          items: [],
+          items: []
         },
-        pagination: { show: true, align: "center", perPage: 3 },
+        pagination: { show: true, align: 'center', perPage: 3 }
       },
       votes: {
-        title: "Votes",
+        title: 'Votes',
         total: 0,
         data: {
           fields: [
-            { key: "bucketid", label: "Bucket ID" },
-            { key: "address", label: "Voter" },
-            { key: "value", label: "Amount" },
-            { key: "timestamp", label: "Time" },
+            { key: 'bucketid', label: 'Bucket ID' },
+            { key: 'address', label: 'Voter' },
+            { key: 'value', label: 'Amount' },
+            { key: 'timestamp', label: 'Time' }
           ],
-          items: [],
+          items: []
         },
-        pagination: { show: true, align: "center", perPage: 3 },
+        pagination: { show: true, align: 'center', perPage: 3 }
       },
       proposed: {
-        title: "Proposed Blocks",
+        title: 'Proposed Blocks',
         fields: [
-          { key: "number", label: "Height" },
-          { key: "blockhash", label: "Block Hash" },
-          { key: "txCount", label: "Txs" },
-          { key: "reward", label: "Reward" },
-          { key: "timestamp", label: "Time" },
+          { key: 'number', label: 'Height' },
+          { key: 'blockhash', label: 'Block Hash' },
+          { key: 'txCount', label: 'Txs' },
+          { key: 'reward', label: 'Reward' },
+          { key: 'timestamp', label: 'Time' }
         ],
-        pagination: { show: true, align: "center", perPage: 8 },
-      },
+        pagination: { show: true, align: 'center', perPage: 8 }
+      }
     };
   },
   computed: {
@@ -218,7 +209,7 @@ export default {
     },
     gTokenSymbol() {
       return this.currentChain.gSymbol;
-    },
+    }
   },
   methods: {
     async init() {
@@ -241,16 +232,13 @@ export default {
       const res = await this.$api.validator.getVotes(this.network, address);
       this.chart_load = false;
       const { votes } = res;
-      this.votes_array = votes.map((v) => ({
+      this.votes_array = votes.map(v => ({
         ...v,
         bucketid: v.id,
-        value: { type: "amount", amount: v.value, precision: 4, token: "MTRG" },
+        value: { type: 'amount', amount: v.value, precision: 4, token: 'MTRG' }
       }));
       this.votes.total = votes.length;
-      this.votes.data.items = this.votes_array.slice(
-        (this.votes_current - 1) * 3,
-        this.votes_current * 3
-      );
+      this.votes.data.items = this.votes_array.slice((this.votes_current - 1) * 3, this.votes_current * 3);
       let self = new BigNumber(0);
       let others = new BigNumber(0);
       for (const v of votes) {
@@ -265,51 +253,45 @@ export default {
       let totalNum = selfNum + othersNum;
       this.delegated_chart.data.datasets = [
         {
-          backgroundColor: ["#6171ff", "#42DCFE"],
-          data: [selfNum, othersNum],
-        },
+          backgroundColor: ['#003CB2', '#42DCFE'],
+          data: [selfNum, othersNum]
+        }
       ];
       if (totalNum > 0) {
         this.delegated_chart_legend = {
           total: totalNum,
-          selfRatio: Math.floor((selfNum * 10000) / totalNum) / 100 + "%",
+          selfRatio: Math.floor((selfNum * 10000) / totalNum) / 100 + '%',
           self: self.toFixed(),
           others: others.toFixed(),
-          othersRatio: Math.floor((othersNum * 10000) / totalNum) / 100 + "%",
+          othersRatio: Math.floor((othersNum * 10000) / totalNum) / 100 + '%'
         };
       } else {
         this.delegated_chart_legend = {
           total: 0,
-          selfRatio: "0%",
+          selfRatio: '0%',
           self: 0,
           others: 0,
-          othersRatio: "0%",
+          othersRatio: '0%'
         };
       }
       this.chart_load = true;
     },
     votePaginationChange(val) {
       this.votes_current = val;
-      this.votes.data.items = this.votes_array.slice(
-        (this.votes_current - 1) * 3,
-        this.votes_current * 3
-      );
+      this.votes.data.items = this.votes_array.slice((this.votes_current - 1) * 3, this.votes_current * 3);
     },
     async loadDelegators() {
       const { address } = this.$route.params;
-      const res = await this.$api.validator.getDelegators(
-        this.network,
-        address
-      );
+      const res = await this.$api.validator.getDelegators(this.network, address);
       const { delegators } = res;
-      this.delegators_array = delegators.map((d) => ({
+      this.delegators_array = delegators.map(d => ({
         ...d,
         amount: {
-          type: "amount",
+          type: 'amount',
           amount: d.amount,
           token: this.gTokenSymbol,
-          precision: 4,
-        },
+          precision: 4
+        }
       }));
       this.delegators.total = delegators.length;
       this.delegators.data.items = this.delegators_array.slice(
@@ -328,28 +310,23 @@ export default {
     async loadProposed(network, page, limit) {
       this.load = true;
       const { address } = this.$route.params;
-      const { proposed, totalRows } = await this.$api.account.getProposed(
-        network,
-        address,
-        page,
-        limit
-      );
+      const { proposed, totalRows } = await this.$api.account.getProposed(network, address, page, limit);
 
-      const items = proposed.map((b) => {
+      const items = proposed.map(b => {
         return {
           ...b,
           blockhash: b.hash,
           reward: {
-            type: "amount",
+            type: 'amount',
             amount: b.actualReward,
             token: this.tokenSymbol,
-            precision: 8,
-          },
+            precision: 8
+          }
         };
       });
       return { items, totalRows };
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -415,7 +392,7 @@ h2.title {
     }
 
     &.others {
-      background-color: #6171ff;
+      background-color: #003cb2;
     }
   }
 }

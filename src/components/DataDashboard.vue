@@ -3,10 +3,10 @@
     <b-row>
       <b-col
         cols="6"
-        md="3"
+        :md="col.cols"
         v-bind:key="index"
         v-for="(col, index) in rows"
-        :class="hasBorderRight(rows.length, index)"
+        :class="hasBorderRight(rows.length, index, col.cols)"
       >
         <DataCard v-bind:data="col"></DataCard>
       </b-col>
@@ -39,10 +39,11 @@ export default {
       return 'xl';
     },
 
-    hasBorderRight: function(col_size, index) {
+    hasBorderRight: function(col_size, index, ncols) {
       const vp = this.getViewport();
+      const n = 12 / ncols;
       if (vp == 'lg' || vp == 'xl') {
-        if ((index + 1) % 4 != 0) {
+        if ((index + 1) % n != 0) {
           return { 'border-r': true, 'border-b': true };
         }
       }

@@ -27,12 +27,12 @@ export default {
       } else {
         return null;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 // badge
 .badge-status {
   padding: 0.3rem 0.5rem !important;
@@ -44,7 +44,7 @@ export default {
   }
 
   &.badge-primary {
-    color: #6171ff;
+    color: #003cb2;
     background-color: #e9f2ff;
   }
 
