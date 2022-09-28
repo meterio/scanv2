@@ -58,8 +58,8 @@ export default {
   },
   watch: {
     home_block_height(newVal) {
-      if (this.data && this.data[2] && this.data[2][0]) {
-        this.data[2][0]['content'] = newVal;
+      if (this.data && this.data[1] && this.data[1][0]) {
+        this.data[1][0]['content'] = newVal;
       }
     }
   },
