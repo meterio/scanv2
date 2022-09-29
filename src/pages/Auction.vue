@@ -37,23 +37,23 @@
 </template>
 
 <script>
-import ActiveAuctions from "@/components/ActiveAuctions.vue";
-import PastAuctions from "@/components/PastAuctions.vue";
+import ActiveAuctions from '@/components/ActiveAuctions.vue';
+import PastAuctions from '@/components/PastAuctions.vue';
 
 export default {
-  name: "Home",
+  name: 'Home',
 
   components: {
     ActiveAuctions,
-    PastAuctions,
+    PastAuctions
   },
 
   data() {
     return {
-      msg: "Welcome to Index!!!",
-      mtrPrice: "$ -.--",
-      mtrgPrice: "$ -.--",
-      mtrgPriceInMtr: "- MTR",
+      msg: 'Welcome to Index!!!',
+      mtrPrice: '$ -.--',
+      mtrgPrice: '$ -.--',
+      mtrgPriceInMtr: '- MTR'
     };
   },
 
@@ -61,19 +61,18 @@ export default {
     async init() {
       const res = await this.$api.metric.getAll(this.network);
       const { mtr, mtrg } = res;
-      this.mtrPrice = "$ " + mtr.price;
-      this.mtrgPrice = "$ " + mtrg.price;
-      this.mtrgPriceInMtr =
-        Math.floor((100 * mtrg.price) / mtr.price) / 100 + " MTR";
-    },
-  },
+      this.mtrPrice = '$ ' + mtr.price;
+      this.mtrgPrice = '$ ' + mtrg.price;
+      this.mtrgPriceInMtr = Math.floor((100 * mtrg.price) / mtr.price) / 100 + ' MTR';
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .banner {
   // background-image: url("~@/assets/banner_bg.png");
-  background: #6171ff;
+  background: #003cb2;
   height: 164px;
   background-size: cover;
   display: flex;

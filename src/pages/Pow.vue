@@ -27,7 +27,7 @@ export default {
   components: {
     DataDashboard,
     HashRateChart,
-    DataTableV2,
+    DataTableV2
   },
   data() {
     return {
@@ -39,16 +39,16 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 8,
+          perPage: 8
         },
         fields: [
           { key: 'blockNum', label: 'Kblock (PoS)' },
           { key: 'pow_range', label: 'PoW Height Range' },
           { key: 'amount', label: 'Amount' },
           { key: 'time', label: 'Time' },
-          { key: 'powReward', label: 'More' },
-        ],
-      },
+          { key: 'powReward', label: 'More' }
+        ]
+      }
     };
   },
   methods: {
@@ -61,28 +61,28 @@ export default {
         const res = await this.$api.metric.getAll(this.network);
         const { mtr, pow } = res;
         this.pow_data = [
-          [
-            { content: pow.best, label: 'PoW Chain Height' },
-            { content: '$ ' + mtr.price, label: 'MTR Price' },
-            {
-              content: formatNum(mtr.circulation, 0),
-              label: 'MTR Circulations',
-            },
-          ],
-          [
-            {
-              content: `${formatHashrate(pow.hashrate)}`,
-              label: 'Network Hash Rate',
-            },
-            {
-              content: bigNum(pow.rewardPerDay, 3) + ' MTR',
-              label: 'Reward (TH/s*Day)',
-            },
-            {
-              content: '$ ' + bigNum(pow.costParity, 3),
-              label: 'MTR Cost Parity',
-            },
-          ],
+          { content: pow.best, label: 'PoW Chain Height', cols: 4 },
+          { content: '$ ' + mtr.price, label: 'MTR Price', cols: 4 },
+          {
+            content: formatNum(mtr.circulation, 0),
+            label: 'MTR Circulations',
+            cols: 4
+          },
+          {
+            content: `${formatHashrate(pow.hashrate)}`,
+            label: 'Network Hash Rate',
+            cols: 4
+          },
+          {
+            content: bigNum(pow.rewardPerDay, 3) + ' MTR',
+            label: 'Reward (TH/s*Day)',
+            cols: 4
+          },
+          {
+            content: '$ ' + bigNum(pow.costParity, 3),
+            label: 'MTR Cost Parity',
+            cols: 4
+          }
         ];
       } catch (e) {}
     },
@@ -90,7 +90,7 @@ export default {
     async loadRewards(network, page, limit) {
       const { rewards, totalRows } = await this.$api.pow.getRewards(network, page, limit);
 
-      const items = rewards.map((r) => {
+      const items = rewards.map(r => {
         return {
           blockNum: r.posBlock,
           pow_range: `${r.powStart} - ${r.powEnd}`,
@@ -98,10 +98,10 @@ export default {
             type: 'amount',
             amount: r.totalAmount,
             token: 'MTR',
-            precision: -1,
+            precision: -1
           },
           time: fromNow(r.timestamp * 1000),
-          powReward: r.epoch,
+          powReward: r.epoch
         };
       });
       return { items, totalRows };
@@ -115,17 +115,17 @@ export default {
         this.line_data = {
           labels: [],
           values: [],
-          diffs: [],
+          diffs: []
         };
         const data = hashrates[network];
         const me = this;
-        data.map((itm) => {
+        data.map(itm => {
           const time_str = me.formatLineTime(itm[0]);
           me.line_data.labels.push(time_str);
           me.line_data.values.push(itm[1]);
         });
         const diff_data = diffs[network];
-        diff_data.map((itm) => {
+        diff_data.map(itm => {
           me.line_data.diffs.push(itm[1]);
         });
         this.line_load = true;
@@ -138,8 +138,8 @@ export default {
       const b = new Date(time * 1000);
       const m = b.getMonth() + 1;
       return `${b.getDate() < 10 ? '0' + b.getDate() : b.getDate().toString()}/${m < 10 ? '0' + m : m.toString()}`;
-    },
-  },
+    }
+  }
 };
 </script>
 

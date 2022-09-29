@@ -260,7 +260,7 @@
               </div>
               <div class="title-row" v-if="data.value.abi">{{ data.value.abi }}</div>
               <div class="title-row d-flex justify-content-between">
-                <span v-if="data.value.methodId > 0">MethodID: {{ data.value.methodId }}</span>
+                <span v-if="data.value.methodId">MethodID: {{ data.value.methodId }}</span>
               </div>
 
               <template v-if="data.value.isDecoded">

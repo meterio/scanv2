@@ -23,13 +23,13 @@
 
             <div class="signed-view">
               <p>
-                <span class="d-none d-sm-inline">From:</span>
+                <span class="d-none d-sm-inline mr-1">From:</span>
                 <router-link class="link" :to="{ name: 'address', params: { address: tx.from } }">{{
                   shortAddr(tx.from, 12)
                 }}</router-link>
               </p>
               <p>
-                <span class="d-none d-sm-inline">To:</span>
+                <span class="d-none d-sm-inline mr-1">To:</span>
                 <router-link v-if="tx.to" class="link" :to="{ name: 'address', params: { address: tx.to } }">{{
                   shortAddr(tx.to, 12)
                 }}</router-link>

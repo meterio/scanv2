@@ -112,8 +112,8 @@ export default {
     }
     &.active {
       font-weight: bold;
-      color: #6171ff;
-      border-bottom: 2px solid #6171ff;
+      color: #003cb2;
+      border-bottom: 2px solid #003cb2;
       // border: 1px solid #ddd;
       // border-bottom: none;
       // border-radius: 5px 5px 0 0;

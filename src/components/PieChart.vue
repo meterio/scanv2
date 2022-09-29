@@ -22,47 +22,35 @@ b-container
 </template>
 
 <script>
-import PieChart from "@/charts/PieChart";
+import PieChart from '@/charts/PieChart';
 export default {
-  name: "PieChartComponent",
+  name: 'PieChartComponent',
   data() {
     return {
       pieCollections: {
         datasets: [
           {
             data: [67, 5.78, 23.4, 15.68, 5.44],
-            backgroundColor: [
-              "#6171ff",
-              "#80d2e4",
-              "#a6b5cc",
-              "#b871ff",
-              "#42DCFE",
-            ],
-          },
+            backgroundColor: ['#003CB2', '#80d2e4', '#a6b5cc', '#b871ff', '#42DCFE']
+          }
         ],
-        labels: [
-          "Total Avaliable",
-          "Delegated",
-          "Unbounded",
-          "Reward",
-          "Commision",
-        ],
+        labels: ['Total Avaliable', 'Delegated', 'Unbounded', 'Reward', 'Commision']
       },
       // #5c6f8c
       options: {
         legend: {
-          position: "right",
+          position: 'right',
           labels: {
             padding: 25,
-            usePointStyle: true,
-          },
-        },
-      },
+            usePointStyle: true
+          }
+        }
+      }
     };
   },
   components: {
-    PieChart,
-  },
+    PieChart
+  }
 };
 </script>
 

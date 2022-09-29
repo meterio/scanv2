@@ -58,8 +58,11 @@ export default {
   },
   watch: {
     home_block_height(newVal) {
-      if (this.data && this.data[1] && this.data[1][0]) {
-        this.data[1][0]['content'] = newVal;
+      for (const item of this.data) {
+        if (item.label === 'Block Height') {
+          item['content'] = newVal;
+          return;
+        }
       }
     }
   },
@@ -74,62 +77,64 @@ export default {
 
       const stakingRatio = new BigNumber(staking.totalStaked).dividedBy(1e18).dividedBy(40e6);
       this.data = [
-        [
-          { label: 'Block Height', content: pos.best },
-          { label: 'Epoch', content: pos.epoch },
-          { label: 'Transactions', content: pos.txsCount },
-          { label: 'Avg Block Time', content: pos.avgBlockTime + ' sec' }
-        ],
-        [
-          {
-            label: 'Healthy / Total Nodes',
-            content: `${staking.healthyNodes} / ${staking.candidates}`
-          },
-          {
-            label: 'Staking Ratio',
-            content: stakingRatio.times(100).toFixed(2) + '%'
-            // content:
-            //   new BigNumber(staking.totalCirculationStaked)
-            //     .dividedBy(1e18)
-            //     .dividedBy(mtrg.circulation)
-            //     .times(100)
-            //     .toFixed(2) + "%",
-          },
-          { label: 'Annual Network Inflation', content: pos.inflation },
-          // {
-          //   label: "Avg Staking APY",
-          //   content:
-          //     new BigNumber(0.05)
-          //       .dividedBy(stakingRatio)
-          //       .times(100)
-          //       .toFixed(2) + "%",
-          // },
-          {
-            label: 'Address Count',
-            content: pos.addressCount
-          }
-        ]
+        { label: 'Block Height', content: pos.best, cols: 3 },
+        { label: 'Epoch', content: pos.epoch, cols: 3 },
+        { label: 'Transactions', content: pos.txsCount, cols: 3 },
+        { label: 'Avg Block Time', content: pos.avgBlockTime + ' sec', cols: 3 },
+        {
+          label: 'Healthy / Total Nodes',
+          content: `${staking.healthyNodes} / ${staking.candidates}`,
+          cols: 3
+        },
+        {
+          label: 'Staking Ratio',
+          content: stakingRatio.times(100).toFixed(2) + '%',
+          cols: 3
+          // content:
+          //   new BigNumber(staking.totalCirculationStaked)
+          //     .dividedBy(1e18)
+          //     .dividedBy(mtrg.circulation)
+          //     .times(100)
+          //     .toFixed(2) + "%",
+        },
+        { label: 'Annual Network Inflation', content: pos.inflation, cols: 3 },
+        // {
+        //   label: "Avg Staking APY",
+        //   content:
+        //     new BigNumber(0.05)
+        //       .dividedBy(stakingRatio)
+        //       .times(100)
+        //       .toFixed(2) + "%",
+        // },
+        {
+          label: 'Address Count',
+          content: pos.addressCount,
+          cols: 3
+        }
       ];
 
       if (this.currentChain.priceEnable) {
-        this.data.unshift([
+        this.data.unshift(
           {
             label: `${this.currentChain.gSymbol} Price`,
             content: '$ ' + mtrg.price,
-            change: mtrg.priceChange
+            change: mtrg.priceChange,
+            cols: 3
           },
           {
             label: `${this.currentChain.gSymbol} Circulation`,
-            content: formatNum(mtrg.circulation, 0)
+            content: formatNum(mtrg.circulation, 0),
+            cols: 3
           },
 
           {
             label: `${this.currentChain.symbol} Price`,
             content: '$ ' + mtr.price,
-            change: mtr.priceChange
+            change: mtr.priceChange,
+            cols: 3
           },
-          { label: `${this.currentChain.symbol} Circulation`, content: formatNum(mtr.circulation, 0) }
-        ]);
+          { label: `${this.currentChain.symbol} Circulation`, content: formatNum(mtr.circulation, 0), cols: 3 }
+        );
       }
 
       if (this.running) {
@@ -188,12 +193,12 @@ export default {
 
 <style lang="scss" scoped>
 .search-banner {
-  background: #010e35;
+  background: #003cb2;
   height: 230px;
   background-size: cover;
   display: flex;
   padding-top: 40px;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  // border-top: 1px solid rgba(0, 0, 0, 0.08);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 
   .title {

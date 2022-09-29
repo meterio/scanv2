@@ -5,7 +5,7 @@
     </b-modal>
     <b-navbar toggleable="lg" type="light" variant="light" class="px-4">
       <b-navbar-brand href="/" class="mr-5">
-        <b-img :src="computedLogo" height="40" />
+        <b-img :src="computedLogo" height="40" class="mr-1" />
 
         <span class="ml-1" style="font-size: 19px; font-weight: bold">{{ currentChain.title }}</span>
         <!-- Upgrade Badge -->
@@ -249,8 +249,8 @@ export default {
 }
 
 .navbar-nav .nav-link {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
+  padding-left: 0.6rem !important;
+  padding-right: 0.6rem !important;
 }
 
 .navbar-expand-lg .navbar-nav .nav-link {
@@ -266,7 +266,7 @@ export default {
     }
     &.active,
     &.active:hover {
-      color: #6171ff;
+      color: #003cb2;
     }
   }
 }

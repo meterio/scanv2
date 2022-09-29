@@ -1,28 +1,24 @@
 <template>
   <b-container class="hash-chart">
     <b-card title="Daily Hashrate and Reward" class="text-center">
-      <line-chart
-        :chart-data="datacollection"
-        :options="options"
-        v-if="dataCollection.labels"
-      ></line-chart>
+      <line-chart :chart-data="datacollection" :options="options" v-if="dataCollection.labels"></line-chart>
     </b-card>
   </b-container>
 </template>
 
 <script>
-import LineChart from "@/charts/LineChart.js";
+import LineChart from '@/charts/LineChart.js';
 
 export default {
-  name: "HashRateChart",
+  name: 'HashRateChart',
   props: {
     dataCollection: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   components: {
-    LineChart,
+    LineChart
   },
   data() {
     return {
@@ -31,36 +27,36 @@ export default {
         scales: {
           yAxes: [
             {
-              id: "LEFT",
+              id: 'LEFT',
               gridLines: {
-                display: true,
+                display: true
               },
-              position: "left",
+              position: 'left'
             },
             {
-              id: "RIGHT",
+              id: 'RIGHT',
               gridLines: { display: false },
-              position: "right",
-            },
+              position: 'right'
+            }
           ],
           xAxes: [
             {
               gridLines: {
-                display: false,
-              },
-            },
-          ],
+                display: false
+              }
+            }
+          ]
         },
         legend: {
           display: true,
-          position: "bottom",
+          position: 'bottom',
           labels: {
-            usePointStyle: true,
-          },
+            usePointStyle: true
+          }
         },
         responsive: true,
-        maintainAspectRatio: false,
-      },
+        maintainAspectRatio: false
+      }
     };
   },
   mounted() {
@@ -72,27 +68,27 @@ export default {
         labels: this.dataCollection.labels,
         datasets: [
           {
-            label: "Network Hashrate",
+            label: 'Network Hashrate',
             fill: false,
-            borderColor: "#6171ff",
-            pointBorderColor: "#6171ff",
-            pointBackgroundColor: "#6171ff",
+            borderColor: '#003CB2',
+            pointBorderColor: '#003CB2',
+            pointBackgroundColor: '#003CB2',
             data: this.dataCollection.values,
-            yAxisID: "LEFT",
+            yAxisID: 'LEFT'
           },
           {
-            label: "Mining Reward (TH/s)",
+            label: 'Mining Reward (TH/s)',
             fill: false,
-            borderColor: "#42DCFE",
-            pointBorderColor: "#42DCFE",
-            pointBackgroundColor: "#42DCFE",
+            borderColor: '#42DCFE',
+            pointBorderColor: '#42DCFE',
+            pointBackgroundColor: '#42DCFE',
             data: this.dataCollection.diffs,
-            yAxisID: "RIGHT",
-          },
-        ],
+            yAxisID: 'RIGHT'
+          }
+        ]
       };
-    },
-  },
+    }
+  }
 };
 </script>
 
