@@ -5,11 +5,7 @@
         <Loading v-if="loading" />
 
         <ul v-if="!loading" class="block-list">
-          <li
-            class="block-detail"
-            :key="block.id"
-            v-for="block in recent_blocks"
-          >
+          <li class="block-detail" :key="block.id" v-for="block in recent_blocks">
             <div class="height-view">
               <div class="block-icon"></div>
 
@@ -18,14 +14,14 @@
                   <router-link
                     :to="{
                       name: 'blockDetail',
-                      params: { revision: block.number },
+                      params: { revision: block.number }
                     }"
                   >
                     {{ block.number }}</router-link
                   >
                 </h4>
 
-                <span class="ago">{{ fromNow(block.timestamp) }}</span>
+                <span class="ago"><time-tag :timestamp="block.timestamp"/></span>
               </div>
             </div>
 
@@ -36,7 +32,7 @@
                 v-if="block.beneficiaryName"
                 :to="{
                   name: 'address',
-                  params: { address: block.beneficiary },
+                  params: { address: block.beneficiary }
                 }"
                 >{{ shortAddr(block.beneficiaryName, 12) }}</router-link
               >
@@ -45,7 +41,7 @@
                 v-else
                 :to="{
                   name: 'address',
-                  params: { address: block.beneficiary },
+                  params: { address: block.beneficiary }
                 }"
                 >{{ shortAddr(block.beneficiary, 12) }}</router-link
               >
@@ -57,33 +53,26 @@
         </ul>
       </b-card-text>
       <b-card-footer>
-        <b-btn
-          variant="outline-primary"
-          block
-          size="sm"
-          :to="{ name: 'blockList' }"
-          >View all Blocks</b-btn
-        >
+        <b-btn variant="outline-primary" block size="sm" :to="{ name: 'blockList' }">View all Blocks</b-btn>
       </b-card-footer>
     </b-card>
   </b-container>
 </template>
 
 <script>
-import Loading from "@/components/Loading";
-import { mapActions } from "vuex";
+import Loading from '@/components/Loading';
+import { mapActions } from 'vuex';
+import TimeTag from '@/components/TimeTag.vue';
 
 export default {
-  name: "RecentBlocks",
-  components: {
-    Loading,
-  },
+  name: 'RecentBlocks',
+  components: { Loading, TimeTag },
   data() {
     return {
       loading: true,
       recent_blocks: [],
       time: null,
-      running: false,
+      running: false
     };
   },
   async mounted() {
@@ -94,7 +83,7 @@ export default {
     this.running = false;
   },
   methods: {
-    ...mapActions(["configVal"]),
+    ...mapActions(['configVal']),
     async initData() {
       try {
         const res = await this.$api.block.getRecentBlocks(this.network);
@@ -102,8 +91,8 @@ export default {
         this.recent_blocks = res.blocks.splice(0, 10);
         if (this.recent_blocks.length > 0) {
           this.configVal({
-            key: "home_block_height",
-            val: this.recent_blocks[0].number,
+            key: 'home_block_height',
+            val: this.recent_blocks[0].number
           });
         }
       } catch (e) {
@@ -112,8 +101,8 @@ export default {
       if (this.running) {
         setTimeout(this.initData, 3000);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -167,7 +156,7 @@ export default {
   display: flex;
 
   .block-icon {
-    background-image: url("~@/assets/block.png");
+    background-image: url('~@/assets/block.png');
     background-color: #ebeef6;
     background-repeat: no-repeat;
     background-position: center;

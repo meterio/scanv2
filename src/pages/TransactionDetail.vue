@@ -226,9 +226,8 @@ export default {
           {
             key: 'Block',
             block: tx.block.number,
-            value: this.fromNow(tx.block.timestamp),
-            time: this.formatTime(tx.block.timestamp),
-            type: 'block-link-with-note'
+            value: tx.block.timestamp,
+            type: 'block-link-with-time'
           },
           { key: 'ChainTag', value: tx.chainTag },
           { key: 'Origin', value: tx.origin, type: 'address-link' },

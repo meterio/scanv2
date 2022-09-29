@@ -14,11 +14,7 @@
       >
         <template #table-busy>
           <div class="text-center">
-            <b-spinner
-              variant="primary"
-              type="grow"
-              label="Spinning"
-            ></b-spinner>
+            <b-spinner variant="primary" type="grow" label="Spinning"></b-spinner>
           </div>
         </template>
         <template slot="empty">
@@ -27,10 +23,7 @@
           </div>
         </template>
 
-        <template
-          v-for="slotName in Object.keys($scopedSlots)"
-          v-slot:[slotName]="slotScope"
-        >
+        <template v-for="slotName in Object.keys($scopedSlots)" v-slot:[slotName]="slotScope">
           <slot :name="slotName" v-bind="slotScope"></slot>
         </template>
 
@@ -44,7 +37,7 @@
         <!-- Time column template -->
         <template v-slot:cell(timestamp)="data">
           <div class="dt-row">
-            <span class="time">{{ fromNow(data.value) }}</span>
+            <time-tag :timestamp="data.value" />
           </div>
         </template>
 
@@ -61,7 +54,7 @@
               class="link"
               :to="{
                 name: 'txDetail',
-                params: { hash: data.value },
+                params: { hash: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -75,7 +68,7 @@
               class="link"
               :to="{
                 name: 'bucket',
-                params: { id: data.value },
+                params: { id: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -113,7 +106,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >#{{ data.value }}</router-link
             >
@@ -127,7 +120,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value },
+                params: { revision: data.value }
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -137,19 +130,14 @@
         <!-- Auction column template-->
         <template v-slot:cell(auctionid)="data">
           <div class="dt-row">
-            <router-link
-              :to="{ name: 'auctionDetail', params: { auctionID: data.value } }"
-              >Bids</router-link
-            >
+            <router-link :to="{ name: 'auctionDetail', params: { auctionID: data.value } }">Bids</router-link>
           </div>
         </template>
 
         <!-- Mining Reward -->
         <template v-slot:cell(powReward)="data">
           <div class="dt-row">
-            <router-link
-              :to="{ name: 'powRewards', params: { epoch: data.value } }"
-            >
+            <router-link :to="{ name: 'powRewards', params: { epoch: data.value } }">
               Rewards
             </router-link>
           </div>
@@ -158,10 +146,7 @@
         <!-- Pos Reward template -->
         <template v-slot:cell(posReward)="data">
           <div class="dt-row">
-            <router-link
-              :to="{ name: 'posRewards', params: { epoch: data.value } }"
-              >Rewards</router-link
-            >
+            <router-link :to="{ name: 'posRewards', params: { epoch: data.value } }">Rewards</router-link>
           </div>
         </template>
 
@@ -180,10 +165,7 @@
         </template>
       </b-table>
 
-      <div
-        v-if="pagination.show && paginateTotal > pagination.perPage"
-        class="data-pagination"
-      >
+      <div v-if="pagination.show && paginateTotal > pagination.perPage" class="data-pagination">
         <b-pagination
           :align="pagination.align"
           v-model="paginateCurrentPage"
@@ -197,62 +179,63 @@
 </template>
 
 <script>
-import DirectTag from "./DirectTag.vue";
-import AmountTag from "./AmountTag.vue";
-import AddressLink from "./AddressLink.vue";
+import DirectTag from './DirectTag.vue';
+import AmountTag from './AmountTag.vue';
+import AddressLink from './AddressLink.vue';
+import TimeTag from './TimeTag.vue';
 export default {
   components: { DirectTag, AddressLink, AmountTag },
-  name: "DataTable",
+  name: 'DataTable',
   props: {
     title: {
-      type: String,
+      type: String
     },
     minHeight: {
       type: String,
-      default: "auto",
+      default: 'auto'
     },
     data: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
-          title: "",
+          title: '',
           items: [],
-          fields: [],
+          fields: []
         };
-      },
+      }
     },
     pagination: {
       type: Object,
-      default: function () {
+      default: function() {
         return {
           show: false,
-          align: "right",
+          align: 'right'
         };
-      },
+      }
     },
     loading: {
       type: Boolean,
-      default: false,
+      default: false
     },
     paginateTotal: {
       type: Number,
-      default: 0,
+      default: 0
     },
     paginateCurrentPage: {
       type: Number,
-      default: 1,
-    },
+      default: 1
+    }
   },
   data() {
     return {
-      currentPage: 1,
+      currentPage: 1
     };
   },
   methods: {
     pgChange(val) {
-      this.$emit("tablePaginationChange", val);
-    },
-  },
+      this.$emit('tablePaginationChange', val);
+    }
+  }
 };
 </script>
 
@@ -266,7 +249,7 @@ export default {
   padding-left: 0;
   padding-right: 0;
   font-size: 14px;
-  tr td[role="cell"] {
+  tr td[role='cell'] {
     padding: 0.1rem;
   }
 

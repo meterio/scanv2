@@ -1,6 +1,6 @@
 <template>
   <div class="validator">
-    <DataDashboard :rows="pos_data"></DataDashboard>
+    <DataDashboard :rows="pos_data" :ncols="4"></DataDashboard>
 
     <ValidatorTable class="px-0"></ValidatorTable>
     <DataTableV2

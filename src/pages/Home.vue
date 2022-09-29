@@ -7,7 +7,7 @@
       auto-search-input(@selected='selected', large)
       //- search.mt25(:btnType='2', placeholder='Search Transation/Blocks/Address/Name', @click='searchKeyWords')
     //- block statistic
-  data-dashboard.mt-n5(v-bind:rows='data', v-if='data.length > 0')
+  data-dashboard.mt-n5(v-bind:rows='data', :ncols="4", v-if='data.length > 0')
     //- node statistic
   b-container.px-0
     b-row

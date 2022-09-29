@@ -52,22 +52,22 @@
         <!-- Time column template -->
         <template v-slot:cell(time)="data">
           <div class="dt-row">
-            <span class="time">{{ data.value }}</span>
+            <span class="time"><time-tag :timestamp="data.value"/></span>
           </div>
         </template>
         <template v-slot:cell(timestamp)="data">
           <div class="dt-row">
-            <span class="time">{{ fromNow(data.value) }}</span>
+            <span class="time"><time-tag :timestamp="data.value" /> </span>
           </div>
         </template>
         <template v-slot:cell(startTime)="data">
           <div class="dt-row">
-            <span class="time">{{ fromNow(data.value) }}</span>
+            <span class="time"><time-tag :timestamp="data.value"/></span>
           </div>
         </template>
         <template v-slot:cell(endTime)="data">
           <div class="dt-row" v-if="data.value">
-            <span class="time">{{ fromNow(data.value) }}</span>
+            <span class="time"><time-tag :timestamp="data.value"/></span>
           </div>
           <div class="dt-row" v-else>-</div>
         </template>
@@ -422,11 +422,12 @@
 <script>
 import DirectTag from './DirectTag.vue';
 import AmountTag from './AmountTag.vue';
+import TimeTag from './TimeTag.vue';
 import AddressLink from './AddressLink.vue';
 import CopyData from './CopyData.vue';
 import NftLink from './NftLink.vue';
 export default {
-  components: { DirectTag, AddressLink, AmountTag, CopyData, NftLink },
+  components: { DirectTag, AddressLink, AmountTag, CopyData, NftLink, TimeTag },
   name: 'DataTable',
   props: {
     sortBy: { type: String },

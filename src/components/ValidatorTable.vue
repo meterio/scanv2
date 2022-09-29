@@ -88,9 +88,7 @@
           </div>
         </template>
         <template v-slot:cell(jailedTime)="data">
-          <div class="dt-row">
-            {{ fromNow(data.value * 1000) }}
-          </div>
+          <time-tag :timestamp="data.value" />
         </template>
 
         <template v-slot:cell()="data">
@@ -126,7 +124,7 @@
 import Loading from '@/components/Loading';
 import AddressLink from '@/components/AddressLink';
 import AmountTag from '@/components/AmountTag';
-import { fromNow, formatTime } from '@/utils';
+import TimeTag from '@/components/TimeTag';
 
 export default {
   name: 'ValidatorTable',
@@ -150,7 +148,8 @@ export default {
   components: {
     Loading,
     AmountTag,
-    AddressLink
+    AddressLink,
+    TimeTag
   },
   watch: {
     validate_right_search(newVal) {
@@ -167,12 +166,6 @@ export default {
     },
     init() {
       this.loadData();
-    },
-    formatTime(value) {
-      return formatTime(value);
-    },
-    fromNow(value) {
-      return fromNow(value);
     },
     switchTab(tab) {
       switch (tab) {
