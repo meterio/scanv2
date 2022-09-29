@@ -3,11 +3,11 @@
     <b-card>
       <div class="header">
         <b-row>
-          <b-col sm="0">
+          <b-col sm="0" lg="4">
             <!-- <h3 class="title d-none d-md-block">Validators</h3> -->
           </b-col>
 
-          <b-col>
+          <b-col cols="12" md="6" lg="4">
             <div class="btn-nav">
               <b-button-group>
                 <b-button
@@ -21,7 +21,7 @@
             </div>
           </b-col>
 
-          <b-col>
+          <b-col cols="12" md="6" lg="4">
             <div class="form-group has-search">
               <span class="form-control-feedback">
                 <b-icon icon="search"></b-icon>
@@ -281,6 +281,9 @@ export default {
 
 .has-search .form-control {
   padding-left: 2.375rem;
+  @media only screen and (max-width: 768px) {
+    margin-top: 10px;
+  }
 }
 
 .has-search .form-control-feedback {
@@ -293,5 +296,11 @@ export default {
   text-align: center;
   pointer-events: none;
   color: #aaa;
+}
+
+.btn-nav {
+  @media only screen and (max-width: 768px) {
+    text-align: center;
+  }
 }
 </style>

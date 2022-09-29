@@ -249,8 +249,8 @@ export default {
 }
 
 .navbar-nav .nav-link {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
+  padding-left: 0.6rem !important;
+  padding-right: 0.6rem !important;
 }
 
 .navbar-expand-lg .navbar-nav .nav-link {
