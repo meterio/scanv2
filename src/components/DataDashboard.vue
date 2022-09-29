@@ -42,9 +42,7 @@ export default {
     },
     handleResize() {
       const vp = this.getViewport();
-      console.log('RESIZE!', vp);
       if (vp == 'xs' || vp == 'sm' || vp == 'md') {
-        console.log('ncols change to 2');
         this.actualNCols = 2;
         this.cols = 12 / this.actualNCols;
       } else {
