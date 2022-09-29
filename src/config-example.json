@@ -24,18 +24,5 @@
     "pow": true,
     "priceEnable": true,
     "nftImageUrlBase": "https://nft-image.meter.io/"
-  },
-  {
-    "name": "Verse Testnet",
-    "chainId": 72,
-    "title": "Verse",
-    "symbol": "STPT",
-    "gSymbol": "STPD",
-    "apiBase": "https://api0-testnet.stp.network/api/",
-    "sourcifyApiBase": "https://sourcify.dev/server",
-    "deployDomain": "testexplorer.stp.network",
-    "pow": false,
-    "priceEnable": false,
-    "nftImageUrlBase": "https://nft-image.meter.io/"
   }
 ]
