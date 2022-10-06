@@ -38,7 +38,9 @@ export default {
   padding: 0.3rem 0.5rem !important;
   font-size: 90% !important;
   font-weight: normal;
-
+  text-align: left !important;
+  white-space: normal;
+  word-break: break-all;
   svg {
     margin-right: 0.2rem;
   }
