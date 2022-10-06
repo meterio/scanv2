@@ -39,8 +39,8 @@
                 </b-button>
               </span>
 
-              <!-- block-link-with-note -->
-              <span v-if="item.type == 'block-link-with-note'">
+              <!-- block-link-with-time -->
+              <span v-if="item.type == 'block-link-with-time'">
                 <router-link
                   :to="{
                     name: 'blockDetail',
@@ -50,7 +50,7 @@
                   }"
                   >#{{ item.block }}</router-link
                 >
-                <span class="value" :title="item.time"> ({{ item.value }})</span>
+                <span class="value" :title="item.time"> (<time-tag :timestamp="item.value" />)</span>
               </span>
 
               <!-- block-link -->
@@ -126,8 +126,7 @@
               <!-- timestamp -->
               <span v-if="item.type === 'timestamp'">
                 <span v-if="item.value">
-                  <span>{{ fromNow(item.value) }}</span>
-                  <span class="px-2">({{ formatTime(item.value) }})</span>
+                  <time-tag :timestamp="item.value" />
                 </span>
                 <span v-else>-</span>
               </span>
@@ -183,7 +182,11 @@
 
               <!-- status -->
               <span v-if="item.type === 'transfer-highlight'">
-                <div class="d-flex justify-content-start" :key="index" v-for="(row, index) in computedTransfer">
+                <div
+                  class="d-flex justify-content-start flex-wrap"
+                  :key="index"
+                  v-for="(row, index) in computedTransfer"
+                >
                   <address-link class="mr-3" short :address="row.from" />
                   <span class="mr-3">to</span>
                   <address-link class="mr-3" short :address="row.to" />
@@ -309,11 +312,12 @@
 import StatusTag from '@/components/StatusTag.vue';
 import AmountTag from '@/components/AmountTag.vue';
 import AddressLink from '@/components/AddressLink.vue';
+import TimeTag from '@/components/TimeTag.vue';
 import NftLink from './NftLink.vue';
 import { formatNum } from '@/utils';
 
 export default {
-  components: { StatusTag, AddressLink, AmountTag, NftLink },
+  components: { StatusTag, AddressLink, AmountTag, NftLink, TimeTag },
   name: 'DataList',
   props: {
     title: {
@@ -499,5 +503,9 @@ export default {
   .small-font-size {
     font-size: 90%;
   }
+}
+.flex-wrap {
+  flex-wrap: wrap;
+  margin-top: 10px;
 }
 </style>

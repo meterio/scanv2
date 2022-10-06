@@ -4,16 +4,15 @@
 </template>
 
 <script>
-import DataSummary from "@/components/DataSummary.vue";
-import { fromNow } from "@/utils";
+import DataSummary from '@/components/DataSummary.vue';
 
 export default {
-  name: "Bucket",
+  name: 'Bucket',
   components: {
-    DataSummary,
+    DataSummary
   },
   data() {
-    return { id: "", summary: {} };
+    return { id: '', summary: {} };
   },
   beforeMount() {},
   methods: {
@@ -23,17 +22,17 @@ export default {
     getLockOption(option) {
       switch (option) {
         case 0:
-          return "One Day";
+          return 'One Day';
         case 1:
-          return "One Week";
+          return 'One Week';
         case 2:
-          return "Two Weeks";
+          return 'Two Weeks';
         case 3:
-          return "Three Weeks";
+          return 'Three Weeks';
         case 4:
-          return "Four Weeks";
+          return 'Four Weeks';
         case 1000:
-          return "Forever";
+          return 'Forever';
       }
     },
     async loadBucket() {
@@ -43,32 +42,33 @@ export default {
         const res = await this.$api.bucket.getBucket(this.network, id);
         const { bucket } = res;
         this.summary = [
-          { key: "Owner", value: bucket.owner, type: "address-link" },
-          { key: "Candidate", value: bucket.candidate, type: "address-link" },
+          { key: 'Owner', value: bucket.owner, type: 'address-link' },
+          { key: 'Candidate', value: bucket.candidate, type: 'address-link' },
           {
-            key: "Value",
+            key: 'Value',
             value: bucket.value,
-            type: "amount",
+            type: 'amount',
             token: this.currentChain.gSymbol,
-            precision: -1,
+            precision: -1
           },
-          { key: "Lock Option", value: this.getLockOption(bucket.option) },
-          { key: "Created At", value: fromNow(bucket.createTime * 1000) },
-          { key: "Nonce", value: bucket.nonce },
-          { key: "Unbounded", value: bucket.unbounded ? "Yes" : "No" },
+          { key: 'Lock Option', value: this.getLockOption(bucket.option) },
+          { key: 'Created At', value: bucket.createTime * 1000, type: 'timestamp' },
+          { key: 'Nonce', value: bucket.nonce },
+          { key: 'Unbounded', value: bucket.unbounded ? 'Yes' : 'No' }
         ];
 
         if (bucket.unbounded) {
           this.summary.push({
-            key: "Mature Time",
-            value: fromNow(bucket.matureTime),
+            key: 'Mature Time',
+            value: bucket.matureTime,
+            type: 'timestamp'
           });
         }
       } catch (e) {
         console.log(e);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -109,16 +109,16 @@ export default {
         if (account.firstSeen && account.firstSeen.number > 0) {
           this.summary.push({
             key: 'First Seen',
-            type: 'block-link-with-note',
-            value: this.fromNow(account.firstSeen.timestamp),
+            type: 'block-link-with-time',
+            value: account.firstSeen.timestamp,
             block: account.firstSeen.number
           });
         }
         if (account.lastUpdate && account.lastUpdate.number > 0) {
           this.summary.push({
             key: 'Last Updated',
-            type: 'block-link-with-note',
-            value: this.fromNow(account.lastUpdate.timestamp),
+            type: 'block-link-with-time',
+            value: account.lastUpdate.timestamp,
             block: account.lastUpdate.number
           });
         }

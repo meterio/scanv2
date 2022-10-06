@@ -1,7 +1,7 @@
 <template>
   <div class="mining">
     <!-- block statistic -->
-    <DataDashboard v-bind:rows="pow_data"></DataDashboard>
+    <DataDashboard v-bind:rows="pow_data" :ncols="3"></DataDashboard>
 
     <HashRateChart class="px-0" :dataCollection="line_data" v-if="line_load"></HashRateChart>
 
@@ -20,7 +20,7 @@
 import DataDashboard from '@/components/DataDashboard.vue';
 import HashRateChart from '@/components/HashRateChart.vue';
 import DataTableV2 from '@/components/DataTableV2.vue';
-import { formatNum, fromNow, bigNum, bigNumDiv, formatHashrate } from '@/utils';
+import { formatNum, bigNum, formatHashrate } from '@/utils';
 
 export default {
   name: 'Mining',
@@ -45,7 +45,7 @@ export default {
           { key: 'blockNum', label: 'Kblock (PoS)' },
           { key: 'pow_range', label: 'PoW Height Range' },
           { key: 'amount', label: 'Amount' },
-          { key: 'time', label: 'Time' },
+          { key: 'timestamp', label: 'Time' },
           { key: 'powReward', label: 'More' }
         ]
       }
@@ -100,7 +100,7 @@ export default {
             token: 'MTR',
             precision: -1
           },
-          time: fromNow(r.timestamp * 1000),
+          timestamp: r.timestamp,
           powReward: r.epoch
         };
       });

@@ -1,17 +1,10 @@
 <template>
   <b-container class="card p-0">
     <b-row>
-      <b-col
-        cols="6"
-        :md="col.cols"
-        v-bind:key="index"
-        v-for="(col, index) in rows"
-        :class="hasBorderRight(rows.length, index, col.cols)"
-      >
+      <b-col cols="6" :md="cols" v-bind:key="index" v-for="(col, index) in rows" :class="'ncols-' + actualNCols">
         <DataCard v-bind:data="col"></DataCard>
       </b-col>
     </b-row>
-    <hr v-if="hasRowLine(rows.length, index)" class="m-0" />
   </b-container>
 </template>
 
@@ -23,12 +16,21 @@ export default {
   components: {
     DataCard
   },
-  props: ['rows'],
+  props: ['rows', 'ncols'],
+  data() {
+    return {
+      cols: 3,
+      actualNCols: 4
+    };
+  },
+  created() {
+    this.handleResize();
+    window.addEventListener('resize', this.handleResize);
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
+  },
   methods: {
-    hasRowLine: function(row_size, index) {
-      return row_size > index + 1;
-    },
-
     getViewport() {
       // https://stackoverflow.com/a/8876069
       const width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -38,22 +40,15 @@ export default {
       if (width <= 1200) return 'lg';
       return 'xl';
     },
-
-    hasBorderRight: function(col_size, index, ncols) {
+    handleResize() {
       const vp = this.getViewport();
-      const n = 12 / ncols;
-      if (vp == 'lg' || vp == 'xl') {
-        if ((index + 1) % n != 0) {
-          return { 'border-r': true, 'border-b': true };
-        }
-      }
       if (vp == 'xs' || vp == 'sm' || vp == 'md') {
-        if ((index + 1) % 2 != 0) {
-          return { 'border-r': true, 'border-b': true };
-        }
+        this.actualNCols = 2;
+        this.cols = 12 / this.actualNCols;
+      } else {
+        this.cols = 12 / this.ncols;
+        this.actualNCols = this.ncols;
       }
-
-      return { 'border-r': false, 'border-b': true };
     }
   }
 };
@@ -74,5 +69,21 @@ export default {
   .border-r {
     border-right: 1px solid $border-light;
   }
+}
+
+.ncols-3,
+.ncols-2,
+.ncols-4 {
+  border-right: 1px solid $border-light;
+  border-bottom: 1px solid $border-light;
+}
+.ncols-3:nth-of-type(3n + 3) {
+  border-right: none;
+}
+.ncols-2:nth-of-type(2n + 2) {
+  border-right: none;
+}
+.ncols-4:nth-of-type(4n + 4) {
+  border-right: none;
 }
 </style>

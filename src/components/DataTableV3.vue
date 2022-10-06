@@ -58,17 +58,17 @@
         </template>
         <template v-slot:cell(timestamp)="data">
           <div class="dt-row">
-            <span class="time">{{ fromNow(data.value) }}</span>
+            <time-tag :timestamp="data.value" />
           </div>
         </template>
         <template v-slot:cell(startTime)="data">
           <div class="dt-row">
-            <span class="time">{{ fromNow(data.value) }}</span>
+            <time-tag :timestamp="data.value" />
           </div>
         </template>
         <template v-slot:cell(endTime)="data">
           <div class="dt-row" v-if="data.value">
-            <span class="time">{{ fromNow(data.value) }}</span>
+            <time-tag :timestamp="data.value" />
           </div>
           <div class="dt-row" v-else>-</div>
         </template>
@@ -152,7 +152,9 @@
             >
             <br />
 
-            <span class="time">{{ fromNow(data.value.block.timestamp) }}</span>
+            <span class="time">
+              <time-tag :timestamp="data.value.block.timestamp" />
+            </span>
           </div>
         </template>
 
@@ -433,8 +435,9 @@ import AmountTag from './AmountTag.vue';
 import AddressLink from './AddressLink.vue';
 import NftLink from './NftLink.vue';
 import VueJsonPretty from 'vue-json-pretty';
+import TimeTag from './TimeTag.vue';
 export default {
-  components: { DirectTag, AddressLink, AmountTag, NftLink, VueJsonPretty },
+  components: { DirectTag, AddressLink, AmountTag, NftLink, VueJsonPretty, TimeTag },
   name: 'DataTable',
   props: {
     sortBy: { type: String },

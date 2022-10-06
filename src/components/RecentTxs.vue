@@ -17,7 +17,7 @@
                   }"
                   >{{ shortHash(tx.txHash, 10) }}</router-link
                 >
-                <span class="ago">{{ fromNow(tx.block.timestamp) }}</span>
+                <span class="ago"><time-tag :timestamp="tx.block.timestamp"/></span>
               </div>
             </div>
 
@@ -53,11 +53,10 @@
 import Loading from '@/components/Loading';
 import { fromWei } from '@/utils';
 import { BigNumber } from 'bignumber.js';
+import TimeTag from '@/components/TimeTag.vue';
 export default {
   name: 'RecentTxs',
-  components: {
-    Loading
-  },
+  components: { Loading, TimeTag },
   data() {
     return {
       loading: true,
