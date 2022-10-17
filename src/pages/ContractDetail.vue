@@ -190,6 +190,9 @@ export default {
     if (!this.verified) {
       this.getContractBytecode();
     }
+    if (this.verified && !this.files.length) {
+      this.emitImportApi();
+    }
   },
   watch: {
     async chainId(newVal, oldVal) {
@@ -206,6 +209,12 @@ export default {
     },
   },
   methods: {
+    async emitImportApi() {
+      const res = await this.$api.known.emitImportApi(this.network, this.address);
+      if (res && res.verified) {
+        window.location.reload()
+      }
+    },
     async getContractBytecode() {
       const data = await this.$api.contract.getContractBytecode(this.network, this.address);
       this.bytecode = data.contract.code;
