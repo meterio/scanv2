@@ -188,7 +188,8 @@ export default {
     this.provider = provider;
 
     if (!this.verified) {
-      this.getContractBytecode();
+      // this.getContractBytecode();
+      this.emitImportApi();
     }
     if (this.verified && !this.files.length) {
       this.emitImportApi();
@@ -210,9 +211,12 @@ export default {
   },
   methods: {
     async emitImportApi() {
+      console.log('emit import verified contract files')
       const res = await this.$api.known.emitImportApi(this.network, this.address);
       if (res && res.verified) {
         window.location.reload()
+      } else {
+        this.getContractBytecode();
       }
     },
     async getContractBytecode() {
