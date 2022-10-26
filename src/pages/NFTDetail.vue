@@ -19,15 +19,15 @@ export default {
   components: {
     DataSummary,
     DataTableV2,
-    NavTabs,
+    NavTabs
   },
   props: {
     address: {
-      type: String,
+      type: String
     },
     tokenId: {
-      type: String,
-    },
+      type: String
+    }
   },
   data() {
     return {
@@ -39,7 +39,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 20
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -48,10 +48,10 @@ export default {
           { key: 'from', label: 'From' },
           { key: 'direct', label: '' },
           { key: 'to', label: 'To' },
-          { key: 'nftTokens', label: 'Token ID' },
+          { key: 'nftTokens', label: 'Token ID' }
         ],
-        items: [],
-      },
+        items: []
+      }
     };
   },
   mounted() {
@@ -85,7 +85,7 @@ export default {
           return this.loadTransfers;
       }
       return this.loadTransfers;
-    },
+    }
   },
   methods: {
     navTabChange(val) {
@@ -113,22 +113,22 @@ export default {
         {
           key: 'Address',
           value: this.address,
-          type: 'address-link',
+          type: 'address-link'
         },
         {
           key: 'Token ID',
-          value: `${detail.value} of [${this.tokenId}]`,
+          value: `${detail.value} of [${this.tokenId}]`
         },
         {
           key: 'Media',
           value: detail.mediaURI,
-          type: 'media',
+          type: 'media'
         },
 
         { key: 'Owner', value: detail.owner, type: 'address-link' },
         { key: 'Mint Tx', value: detail.creationTxHash, type: 'tx-link' },
         { key: 'Minted By', value: detail.minter, type: 'address-link' },
-        { key: 'Minted At', value: detail.block.timestamp, type: 'timestamp' },
+        { key: 'Minted At', value: detail.block.timestamp, type: 'full-timestamp' }
       ];
     },
 
@@ -141,20 +141,20 @@ export default {
         page,
         limit
       );
-      const items = txs.map((t) => ({
+      const items = txs.map(t => ({
         txhashWithStatus: {
           hash: t.txHash,
-          status: false,
+          status: false
         },
         blocknum: t.block.number,
         from: t.from,
         to: t.to,
         direct: t.from === this.address ? 'Out' : 'In',
-        nftTokens: t.nftTransfers.map((t) => ({ address: '1', id: t.tokenId, val: t.value, nolink: true })),
-        timestamp: t.block.timestamp,
+        nftTokens: t.nftTransfers.map(t => ({ address: '1', id: t.tokenId, val: t.value, nolink: true })),
+        timestamp: t.block.timestamp
       }));
       return { items, totalRows };
-    },
-  },
+    }
+  }
 };
 </script>

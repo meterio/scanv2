@@ -223,12 +223,8 @@ export default {
             value: tx.reverted ? `reverted: ${tx.vmError.error},${tx.vmError.reason}` : 'success',
             type: 'status'
           },
-          {
-            key: 'Block',
-            block: tx.block.number,
-            value: tx.block.timestamp,
-            type: 'block-link-with-time'
-          },
+          { key: 'Block', value: tx.block.number, type: 'block-link' },
+          { key: 'Timestamp', value: tx.block.timestamp, type: 'full-timestamp' },
           { key: 'ChainTag', value: tx.chainTag },
           { key: 'Origin', value: tx.origin, type: 'address-link' },
           { key: 'Fee', value: tx.paid, type: 'amount', token: this.currentChain.symbol },

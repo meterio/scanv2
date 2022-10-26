@@ -151,6 +151,12 @@ export default {
         jump_url = `/block/${item.number}`;
       } else if (item.type == 'address') {
         jump_url = `/address/${item.address}`;
+      } else if (item.type == 'auction') {
+        jump_url = `/auction/${item.id}`;
+        // } else if (item.type == 'bid') {
+        // jump_url = `/bid/${item.id}`;
+      } else if (item.type == 'bucket') {
+        jump_url = `/buckets/${item.id}`;
       } else {
         this.modal_show = true;
       }
@@ -159,31 +165,37 @@ export default {
         this.$router.push(jump_url);
       } else {
       }
-    },
-    async searchKeyWords(key) {
-      try {
-        const str = key.replace(/\r?\n|\r/g, '');
-        const arr = str.match(/\([^\)]+\)/g);
-        if (arr) {
-          const address = arr[0].substring(1, arr[0].length - 1);
-          this.$router.push('/address/' + address);
-          return;
-        }
-        const { type } = await this.$api.search.searchKeyWord(this.network, str);
-        if (type === 'tx') {
-          this.$router.push('/tx/' + key);
-        } else if (type == 'block') {
-          this.$router.push('/block/' + key);
-        } else if (type == 'address') {
-          this.$router.push('/address/' + key);
-        } else {
-          this.modal_show = true;
-        }
-      } catch (e) {
-        console.error(e);
-        this.modal_show = true;
-      }
     }
+    // async searchKeyWords(key) {
+    //   try {
+    //     const str = key.replace(/\r?\n|\r/g, '');
+    //     const arr = str.match(/\([^\)]+\)/g);
+    //     if (arr) {
+    //       const address = arr[0].substring(1, arr[0].length - 1);
+    //       this.$router.push('/address/' + address);
+    //       return;
+    //     }
+    //     const { type } = await this.$api.search.searchKeyWord(this.network, str);
+    //     if (type === 'tx') {
+    //       this.$router.push('/tx/' + key);
+    //     } else if (type == 'block') {
+    //       this.$router.push('/block/' + key);
+    //     } else if (type == 'address') {
+    //       this.$router.push('/address/' + key);
+    //     } else if (type == 'auction') {
+    //       this.$router.push(`/auction/${key}`);
+    //     } else if (type == 'bid') {
+    //       this.$router.push(`/bid/${key}`);
+    //     } else if (type == 'bucket') {
+    //       this.$router.push(`/buckets/${key}`);
+    //     } else {
+    //       this.modal_show = true;
+    //     }
+    //   } catch (e) {
+    //     console.error(e);
+    //     this.modal_show = true;
+    //   }
+    // }
   },
   beforeDestroy() {
     this.running = false;

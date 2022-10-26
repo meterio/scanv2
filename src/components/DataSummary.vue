@@ -61,6 +61,13 @@
                 >#{{ item.value }}</b-link
               >
 
+              <b-link
+                href="#"
+                :to="{ name: 'blockDetail', params: { revision: item.value } }"
+                v-if="item.type === 'block-hash'"
+                >{{ item.value }}</b-link
+              >
+
               <!-- block-range -->
               <div v-if="item.type === 'block-range'">
                 <b-link
@@ -127,6 +134,14 @@
               <span v-if="item.type === 'timestamp'">
                 <span v-if="item.value">
                   <time-tag :timestamp="item.value" />
+                </span>
+                <span v-else>-</span>
+              </span>
+
+              <!-- timestamp -->
+              <span v-if="item.type === 'full-timestamp'">
+                <span v-if="item.value">
+                  <full-time-tag :timestamp="item.value" />
                 </span>
                 <span v-else>-</span>
               </span>
@@ -313,11 +328,12 @@ import StatusTag from '@/components/StatusTag.vue';
 import AmountTag from '@/components/AmountTag.vue';
 import AddressLink from '@/components/AddressLink.vue';
 import TimeTag from '@/components/TimeTag.vue';
+import FullTimeTag from '@/components/FullTimeTag.vue';
 import NftLink from './NftLink.vue';
 import { formatNum } from '@/utils';
 
 export default {
-  components: { StatusTag, AddressLink, AmountTag, NftLink, TimeTag },
+  components: { StatusTag, AddressLink, AmountTag, NftLink, TimeTag, FullTimeTag },
   name: 'DataList',
   props: {
     title: {

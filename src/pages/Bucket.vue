@@ -52,7 +52,7 @@ export default {
             precision: -1
           },
           { key: 'Lock Option', value: this.getLockOption(bucket.option) },
-          { key: 'Created At', value: bucket.createTime * 1000, type: 'timestamp' },
+          { key: 'Created At', value: bucket.createTime, type: 'full-timestamp' },
           { key: 'Nonce', value: bucket.nonce },
           { key: 'Unbounded', value: bucket.unbounded ? 'Yes' : 'No' }
         ];

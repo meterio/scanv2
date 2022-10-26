@@ -72,6 +72,8 @@ export default {
         this.summary = [
           { key: 'Hash', value: b.hash },
           { key: 'Number', value: b.number },
+          { key: 'QC Height', value: b.qcHeight, type: 'block-link' },
+          { key: 'Timestamp', value: b.timestamp, type: 'full-timestamp' },
           { key: 'Block Type', value: b.blockType === 1 ? 'KBlock' : 'MBlock' },
           { key: 'Epoch', value: b.epoch, type: 'epoch-link' },
           {
@@ -79,22 +81,22 @@ export default {
             value: b.lastKBlockHeight,
             type: 'block-link'
           },
-          { key: 'QC Height', value: b.qcHeight, type: 'block-link' },
           {
             key: 'Proposer',
             value: { address: b.beneficiary, name: b.beneficiaryName },
             type: 'address-or-name-link'
           },
           { key: 'Gas Used', value: b.gasUsed },
+          { key: 'Txs Count', value: b.txCount },
+          { key: 'Parent Hash', value: b.parentID, type: 'block-hash' },
+          { key: 'State Root', value: b.stateRoot },
           {
             key: 'Reward',
             value: b.actualReward,
             type: 'amount',
             precision: -1,
             token: this.currentChain.symbol
-          },
-          { key: 'Txs Count', value: b.txCount },
-          { key: 'Time', value: b.timestamp, type: 'timestamp' }
+          }
         ];
       }
       let items = [];

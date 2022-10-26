@@ -116,8 +116,15 @@ export default {
         val = val.toLowerCase();
         const { type, data } = await this.$api.search.searchKeyWord(this.network, val);
 
-        console.log(`search result type: ${type}, data: ${data}`);
-        if (type === 'address' || type === 'tx' || type === 'block') {
+        console.log(`search result type: ${type}, data:`, data);
+        if (
+          type === 'address' ||
+          type === 'tx' ||
+          type === 'block' ||
+          type === 'auction' ||
+          type === 'bid' ||
+          type === 'bucket'
+        ) {
           this.$emit('selected', { ...data, type });
           return;
         } else if (type === 'suggestions') {

@@ -21,7 +21,7 @@ export default {
   name: 'EpochDetail',
   components: {
     DataSummary,
-    DataTableV2,
+    DataTableV2
   },
   data() {
     return {
@@ -33,10 +33,10 @@ export default {
           { key: 'name', label: 'Name' },
           { key: 'fullAddress', label: 'Address' },
           { key: 'netAddr', label: 'IP Address' },
-          { key: 'shortPubKey', label: 'Public Key' },
+          { key: 'shortPubKey', label: 'Public Key' }
         ],
-        pagination: { show: true, align: 'center', perPage: 20 },
-      },
+        pagination: { show: true, align: 'center', perPage: 20 }
+      }
     };
   },
   async mounted() {
@@ -50,15 +50,15 @@ export default {
       this.summary = [
         { key: 'Epoch', value: summary.epoch, type: 'epoch-with-stats' },
         { key: 'Start Block', value: summary.startKBlock, type: 'block-link' },
-        { key: 'Start Time', value: summary.startTime, type: 'timestamp' },
+        { key: 'Start Time', value: summary.startTime, type: 'full-timestamp' },
         { key: 'End KBlock', value: summary.endKBlock, type: 'block-link' },
-        { key: 'End Time', value: summary.endTime, type: 'timestamp' },
+        { key: 'End Time', value: summary.endTime, type: 'full-timestamp' },
         {
           key: 'Duration',
           value: summary.duration * 1000,
-          type: 'duration',
+          type: 'duration'
         },
-        { key: 'Committee Size', value: summary.committeeSize },
+        { key: 'Committee Size', value: summary.committeeSize }
       ];
 
       if (this.currentChain.pow) {
@@ -71,16 +71,16 @@ export default {
       const { epoch } = this.$route.params;
       const res = await this.$api.epoch.getMembers(network, epoch, page, limit);
       const { members, totalRows } = res;
-      const items = members.map((m) => {
+      const items = members.map(m => {
         return {
           ...m,
           shortPubKey: shortHash(m.pubKey),
-          fullAddress: m.address,
+          fullAddress: m.address
         };
       });
       return { items, totalRows };
-    },
-  },
+    }
+  }
 };
 </script>
 

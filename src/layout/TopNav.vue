@@ -165,16 +165,24 @@ export default {
   methods: {
     selected(item) {
       let jump_url = '';
+      console.log('selected: ', item);
       if (item.type === 'tx') {
         jump_url = `/tx/${item.hash}`;
       } else if (item.type == 'block') {
         jump_url = `/block/${item.number}`;
       } else if (item.type == 'address') {
         jump_url = `/address/${item.address}`;
+      } else if (item.type == 'auction') {
+        jump_url = `/auction/${item.id}`;
+        // } else if (item.type == 'bid') {
+        // jump_url = `/bid/${item.id}`;
+      } else if (item.type == 'bucket') {
+        jump_url = `/buckets/${item.id}`;
       } else {
         this.modal_show = true;
       }
       if (jump_url != this.$route.path && jump_url !== '' && !this.modal_show) {
+        console.log('JUMP: ', jump_url);
         this.$router.push(jump_url);
       } else {
       }
