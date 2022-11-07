@@ -1,7 +1,5 @@
 <template>
   <span>
-    <span v-if="value > 1">{{ value }} of </span>
-
     <span v-if="disabled" class="nft-link">
       <span>[</span><span>{{ tokenId }}</span
       ><span>]</span>
@@ -12,6 +10,7 @@
         tokenId
       }}</b-link>
       <span>]</span>
+      <span v-if="value > 1">({{ value }})</span>
       <b-popover v-if="mediaUrl" triggers="hover" :target="id">
         <img :src="mediaUrl" width="110" class="thumbnail" />
       </b-popover>
