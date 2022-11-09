@@ -143,8 +143,8 @@ export default {
               value: '0x' + Number(value).toString(16),
             });
           }
-
-          const tx = await this.contract[this.abi.name].apply(null, parameters);
+          const abiName = `${this.abi.name}(${this.abi.inputs.map(input => input.type).join(',')})`
+          const tx = await this.contract[abiName].apply(null, parameters);
 
           await tx.wait();
           this.hash = tx.hash;

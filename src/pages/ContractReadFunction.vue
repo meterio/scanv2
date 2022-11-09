@@ -123,7 +123,8 @@ export default {
         try {
           this.readLoading = true;
           const params = this.paramsLength === 0 ? [] : [...this.params];
-          const res = await this.contract[this.abi.name].apply(null, params);
+          const abiName = `${this.abi.name}(${this.abi.inputs.map(input => input.type).join(',')})`
+          const res = await this.contract[abiName].apply(null, params);
           if (res) {
             let r = ''
             if (Array.isArray(res)) {
