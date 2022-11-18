@@ -103,7 +103,7 @@ export default {
       this.showNumberModal = show;
     },
     ok(num) {
-      this.params[this.currentSelectIndex] = num;
+      this.params[this.currentSelectIndex] = String(num);
     },
     addNumberModal(index) {
       this.currentSelectIndex = index;
@@ -129,12 +129,8 @@ export default {
             let r = ''
             if (Array.isArray(res)) {
               r = []
-              for (let i = 0; i < this.abi.outputs.length; i++) {
-                if (this.abi.outputs[i].type.includes('int')) {
-                  r.push(new BigNumber(String(res[i])).toFixed())
-                } else {
-                  r.push(res[i])
-                }
+              for (let i = 0; i < res.length; i++) {
+                r.push(String(res[i]))
               }
             } else {
               r = res
