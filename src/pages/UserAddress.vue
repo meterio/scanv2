@@ -465,7 +465,7 @@ export default {
         blocknum: t.block.number,
         from: t.from,
         to: t.to,
-        direct: t.from === this.address ? 'Out' : 'In',
+        direct: t.from === this.address.toLowerCase() ? 'Out' : t.to === this.address.toLowerCase() ? 'In' : '-',
         amount: {
           type: 'amount',
           amount: t.amount,
@@ -497,7 +497,7 @@ export default {
         blocknum: t.block.number,
         from: t.from,
         to: t.to,
-        direct: t.from === this.address ? 'Out' : 'In',
+        direct: t.from === this.address.toLowerCase() ? 'Out' : t.to === this.address.toLowerCase() ? 'In' : '-',
         nft: {
           address: t.tokenAddress,
           nftTokens: t.nftTransfers.map(n => ({
