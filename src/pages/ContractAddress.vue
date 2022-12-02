@@ -138,6 +138,10 @@ export default {
               : 'Internal Txs'
         },
         {
+          name: this.contractDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.contractDataCount.erc20TxCount})` : 'ERC20 Txs',
+          download: 'download'
+        },
+        {
           name:
             this.contractDataCount.erc20TokenCount > 0
               ? `ERC20 Tokens(${this.contractDataCount.erc20TokenCount})`
@@ -170,8 +174,8 @@ export default {
             return this.txs.fields;
           case 'internaltxs':
             return this.internaltxs.fields;
-          case 'transfers':
-            return this.transfers.fields2;
+          case 'erc20Txs':
+            return this.erc20txs.fields;
           case 'holders':
             return this.holders.fields2;
           case 'erc20Tokens':
@@ -213,6 +217,8 @@ export default {
           return this.loadErc20Tokens;
         case 'events':
           return this.loadEvents;
+        case 'erc20Txs':
+          return this.loadTxs20;
       }
       return this.loadTxs;
     },
@@ -324,7 +330,26 @@ export default {
           { key: 'balance', label: 'Balance' },
           { key: 'blocknum', label: 'Last Updated on Block' }
         ]
-      }
+      },
+      erc20txs: {
+        pagination: {
+          show: true,
+          align: 'center',
+          perPage: 5,
+          limit: 10
+        },
+        fields: [
+          { key: 'txhashWithStatus', label: 'Hash' },
+          { key: 'blocknum', label: 'Block' },
+          { key: 'timestamp', label: 'Time' },
+          { key: 'from', label: 'From' },
+          { key: 'direct', label: '' },
+          { key: 'to', label: 'To' },
+          { key: 'amount', label: 'Amount' },
+          { key: 'fee', label: 'Fee' }
+        ],
+        items: []
+      },
     };
   },
   watch: {
@@ -344,6 +369,15 @@ export default {
           params: {
             address: this.address,
             type: 'txs'
+          }
+        });
+      }
+      if (tabIndex == 2) {
+        this.$router.push({
+          name: 'exportData',
+          params: {
+            address: this.address,
+            type: 'erc20Txs'
           }
         });
       }
@@ -396,18 +430,52 @@ export default {
             this.loadTarget = 'internaltxs';
             break;
           case 2:
-            this.loadTarget = 'erc20Tokens';
+            this.loadTarget = 'erc20Txs';
             break;
           case 3:
-            this.loadTarget = 'contract';
+            this.loadTarget = 'erc20Tokens';
             break;
           case 4:
+            this.loadTarget = 'contract';
+            break;
+          case 5:
             this.loadTarget = 'events';
             break;
           default:
             this.loadTarget = 'txs';
         }
       }
+    },
+    async loadTxs20(network, page, limit) {
+      const { address } = this.$route.params;
+      const res = await this.$api.account.getTxs20(network, address, page, limit);
+      const { txs, totalRows } = res;
+      const items = txs.map(t => ({
+        txhashWithStatus: {
+          hash: t.txHash,
+          status: false
+        },
+        blocknum: t.block.number,
+        from: t.from,
+        to: t.to,
+        direct: t.from === this.address ? 'Out' : 'In',
+        amount: {
+          type: 'amount',
+          amount: t.amount,
+          token: t.symbol || 'ERC20',
+          precision: 8,
+          decimals: t.decimals || 18,
+          address: t.tokenAddress
+        },
+        fee: {
+          type: 'amount',
+          amount: t.fee,
+          token: 'MTR',
+          precision: -1
+        },
+        timestamp: t.block.timestamp
+      }));
+      return { items, totalRows };
     },
     async loadErc20Tokens(network, page, limit) {
       this.load = true;

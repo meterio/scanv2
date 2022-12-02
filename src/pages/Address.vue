@@ -180,6 +180,7 @@ export default {
             txCount: account.txCount,
             transfersCount: account.transfersCount,
             holdersCount: account.holdersCount,
+            erc20TxCount: account.erc20TxCount,
             erc20TokenCount: account.erc20TokenCount,
             internalTxCount: account.internalTxCount,
             eventsCount: account.eventsCount
