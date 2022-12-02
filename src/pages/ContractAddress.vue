@@ -263,7 +263,8 @@ export default {
           { key: 'from', label: 'From' },
           { key: 'direct', label: '' },
           { key: 'to', label: 'To' },
-          { key: 'amount', label: 'Amount' }
+          { key: 'amount', label: 'Amount' },
+          { key: 'fee', label: 'Fee' }
         ],
         items: []
       },
@@ -576,6 +577,7 @@ export default {
         } else {
           direct = 'In';
         }
+        let fee = t.fee;
 
         return {
           txhashWithStatus: {
@@ -592,6 +594,12 @@ export default {
             amount: amount,
             token: token,
             precision: 8
+          },
+          fee: {
+            type: 'amount',
+            amount: fee,
+            token: 'MTR',
+            precision: -1
           },
           timestamp: t.block.timestamp
         };

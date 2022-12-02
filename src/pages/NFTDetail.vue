@@ -149,7 +149,7 @@ export default {
         blocknum: t.block.number,
         from: t.from,
         to: t.to,
-        direct: t.from === this.address ? 'Out' : 'In',
+        direct: t.from === this.address.toLowerCase() ? 'Out' : t.to === this.address.toLowerCase() ? 'In' : '-',
         nftTokens: t.nftTransfers.map(t => ({ address: '1', id: t.tokenId, val: t.value, nolink: true })),
         timestamp: t.block.timestamp
       }));
