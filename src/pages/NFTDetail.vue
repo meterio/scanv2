@@ -125,7 +125,7 @@ export default {
           type: 'media'
         },
 
-        { key: 'Owner', value: detail.owner, type: 'address-link' },
+        { key: 'Holders', value: detail.ownerCount },
         { key: 'Mint Tx', value: detail.creationTxHash, type: 'tx-link' },
         { key: 'Minted By', value: detail.minter, type: 'address-link' },
         { key: 'Minted At', value: detail.block.timestamp, type: 'full-timestamp' }
