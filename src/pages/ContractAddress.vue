@@ -457,8 +457,14 @@ export default {
           status: false
         },
         blocknum: t.block.number,
-        from: t.from,
-        to: t.to,
+        from: {
+          address: t.from,
+          isContract: t.fromIsContract
+        },
+        to: {
+          address: t.to,
+          isContract: t.toIsContract
+        },
         direct: t.from === this.address ? 'Out' : 'In',
         amount: {
           type: 'amount',
@@ -586,9 +592,15 @@ export default {
           },
           methodName: t.method,
           blocknum: t.block.number,
-          from: fromAddr,
+          from: {
+            address: fromAddr,
+            isContract: t.fromIsContract
+          },
           direct,
-          to: toAddr || 'nobody',
+          to: {
+            address: toAddr || 'nobody',
+            isContract: t.toIsContract
+          },
           amount: {
             type: 'amount',
             amount: amount,
@@ -633,9 +645,15 @@ export default {
           },
           methodName: t.method,
           blocknum: t.block.number,
-          from: fromAddr,
+          from: {
+            address: fromAddr,
+            isContract: t.fromIsContract
+          },
           direct,
-          to: toAddr || 'nobody',
+          to: {
+            address: toAddr || 'nobody',
+            isContract: t.toIsContract
+          },
           amount: {
             type: 'amount',
             amount: amount,
@@ -659,8 +677,14 @@ export default {
           },
           methodName: t.method,
           blocknum: t.block.number,
-          from: t.from,
-          to: t.to,
+          from: {
+            address: t.from,
+            isContract: t.fromIsContract
+          },
+          to: {
+            address: t.to,
+            isContract: t.toIsContract
+          },
           timestamp: t.block.timestamp
         };
         if (this.isERC20) {

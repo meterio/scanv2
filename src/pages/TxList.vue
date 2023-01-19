@@ -50,8 +50,14 @@ export default {
           txhash: tx.txHash,
           methodName,
           blocknum: tx.block.number,
-          from: tx.from,
-          to: tx.to,
+          from: {
+            address: tx.from,
+            isContract: tx.fromIsContract
+          },
+          to: {
+            address: tx.to,
+            isContract: tx.toIsContract
+          },
           amount: {
             type: "amount",
             amount: tx.mtr || tx.mtrg,

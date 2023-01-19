@@ -217,12 +217,14 @@
         </template>
         <template v-slot:cell(from)="data">
           <div class="dt-row">
-            <address-link :address="data.value" :short="true" />
+            <address-link v-if="!data.value.address" :address="data.value" :short="true" />
+            <address-link1 v-else :data="data.value" :short="true" />
           </div>
         </template>
         <template v-slot:cell(to)="data">
           <div class="dt-row" v-if="data.value">
-            <address-link :address="data.value" :short="true" />
+            <address-link v-if="!data.value.address" :address="data.value" :short="true" />
+            <address-link1 v-else :data="data.value" :short="true" />
           </div>
           <div v-else class="dt-row">-</div>
         </template>
@@ -433,11 +435,12 @@
 import DirectTag from './DirectTag.vue';
 import AmountTag from './AmountTag.vue';
 import AddressLink from './AddressLink.vue';
+import AddressLink1 from './AddressLink1.vue';
 import NftLink from './NftLink.vue';
 import VueJsonPretty from 'vue-json-pretty';
 import TimeTag from './TimeTag.vue';
 export default {
-  components: { DirectTag, AddressLink, AmountTag, NftLink, VueJsonPretty, TimeTag },
+  components: { DirectTag, AddressLink, AddressLink1, AmountTag, NftLink, VueJsonPretty, TimeTag },
   name: 'DataTable',
   props: {
     sortBy: { type: String },
