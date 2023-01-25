@@ -21,7 +21,7 @@ import BucketPage from '@/pages/Bucket.vue';
 import AddressLinkPage from '@/pages/AddressLinkPage.vue';
 import StatPage from '@/pages/Stat.vue';
 import VerifyPage from '@/pages/Verify.vue';
-import TokenAddress from '@/pages/tokenAddress.vue';
+// import TokenAddress from '@/pages/tokenAddress.vue';
 import NFTDetail from '@/pages/NFTDetail.vue';
 import DownloadCSV from '@/pages/DownloadCsv.vue'
 
@@ -175,7 +175,7 @@ export const routes = [
   {
     path: '/token/:address',
     name: 'tokenInfo',
-    component: TokenAddress,
+    component: AddressPage,
     meta: { title: `token` }
   },
   {
