@@ -1,21 +1,21 @@
-import axios from "axios";
+import axios from 'axios';
 
 const instance = axios.create({
-  timeout: 20000,
+  timeout: 60 * 1000 * 2 // 2min
   // withCredentials: true,
 });
 
 instance.interceptors.response.use(
-  (res) => {
+  res => {
     return {
       error: false,
-      data: res.data,
+      data: res.data
     };
   },
-  (err) => {
+  err => {
     return {
       error: true,
-      msg: err.response ? err.response.data : err.message,
+      msg: err.response ? err.response.data : err.message
     };
   }
 );
@@ -26,14 +26,14 @@ export const fetch = (
   data = {},
   options = {
     Headers: {
-      "Content-Type": "application/json",
-    },
+      'Content-Type': 'application/json'
+    }
   }
 ) => {
   return instance({
     url,
     method,
     data,
-    ...options,
+    ...options
   });
 };
