@@ -7,7 +7,7 @@
       <b-navbar-brand href="/" class="mr-5">
         <b-img :src="computedLogo" height="40" class="mr-1" />
 
-        <span class="ml-1" style="font-size: 19px; font-weight: bold">{{ currentChain.title }}</span>
+        <!-- <span class="ml-1" style="font-size: 19px; font-weight: bold">{{ currentChain.title }}</span> -->
         <!-- Upgrade Badge -->
         <!--<b-badge
           class="ml-2"
