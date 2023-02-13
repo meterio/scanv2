@@ -39,6 +39,13 @@ export default {
         bidCount: 0,
         proposedCount: 0,
         bucketCount: 0
+      },
+      proxyContract: {
+        isProxy: false,
+        proxyType: '',
+        implAddr: '',
+        prevImplAddr: '',
+        adminAddr: ''
       }
     };
   },
@@ -51,7 +58,8 @@ export default {
         summary: this.summary,
         verified: this.verified,
         verifiedDesc: this.verifiedDesc,
-        verifiedFrom: this.verifiedFrom
+        verifiedFrom: this.verifiedFrom,
+        proxyContract: this.proxyContract,
       };
     }
   },
@@ -66,6 +74,8 @@ export default {
         this.summary = [];
 
         const res = await this.$api.account.getAccountDetail(this.network, address);
+
+        console.log('res', res)
 
         const { account } = res;
         this.isContract = account.type !== undefined;
@@ -197,6 +207,18 @@ export default {
             bucketCount: account.bucketCount,
             eventsCount: account.eventsCount
           };
+        }
+
+        if (account.isProxy) {
+          this.proxyContract = {
+            isProxy: account.isProxy,
+            proxyType: account.proxyType,
+            implAddr: account.implAddr,
+            prevImplAddr: account.prevImplAddr,
+            adminAddr: account.adminAddr
+          }
+        } else {
+          this.proxyContract.isProxy = false
         }
       } catch (e) {
         console.log(e);

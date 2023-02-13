@@ -30,7 +30,7 @@
             strong Loading...
           </div>
         </div>
-        contract-detail(v-else, :verified='verified', :files='files', :address='addressInfo.address')
+        contract-detail(v-else, :verified='verified', :files='files', :impl-files='implFiles' :proxy-contract="addressInfo.proxyContract" :address='addressInfo.address')
 </template>
 
 <script>
@@ -56,14 +56,21 @@ export default {
           isContract: true,
           tokenType: '',
           address: '0x',
-          summary: []
+          summary: [],
+          contractDataCount: {
+            isProxy: false,
+            proxyType: '',
+            implAddr: '',
+            prevImplAddr: '',
+            adminAddr: ''
+          }
         };
       }
     },
     contractDataCount: {
       type: Object,
       required: true
-    }
+    },
   },
   computed: {
     isToken() {
@@ -234,6 +241,7 @@ export default {
     return {
       filesLoading: false,
       files: [],
+      implFiles: [],
       tabValue: 0,
       loadTarget: 'txs',
       holders: {
@@ -356,11 +364,13 @@ export default {
   watch: {
     address() {
       this.getContractFiles();
+      this.getImplContractFiles();
     }
   },
   created() {
     this.getLoadTarget();
     this.getContractFiles();
+    this.getImplContractFiles();
   },
   methods: {
     async downloadTxs(tabIndex) {
@@ -389,6 +399,12 @@ export default {
       this.files = files;
 
       this.filesLoading = false;
+    },
+    async getImplContractFiles() {
+      if (this.addressInfo.proxyContract.isProxy) {
+        const { files } = await this.$api.contract.getContractFiles(this.network, this.addressInfo.proxyContract.implAddr)
+        this.implFiles = files
+      }
     },
     navTabChange(val) {
       this.tabValue = val;

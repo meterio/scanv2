@@ -61,6 +61,40 @@
             :index="index + 1"
           />
         </b-tab>
+        <b-tab v-if="proxyContract.isProxy" title="Read as Proxy">
+          <div>ABI for the implemention contract at 
+            <address-link :address="proxyContract.implAddr" />
+            <span v-if="proxyContract.implAddr !== proxyContract.prevImplAddr">, Previously recorded to be on <address-link :address="proxyContract.prevImplAddr" /></span>
+          </div>
+          <b-button @click="connect" :variant="variantBtn" pill size="sm">
+            {{ computedBtnText }}
+          </b-button>
+          <ContractReadFunction
+            v-for="(item, index) in implReadAbi"
+            :key="index"
+            :abi="item"
+            :contract="implContract"
+            :open="implOpenable"
+            :index="index + 1"
+          />
+        </b-tab>
+        <b-tab v-if="proxyContract.isProxy" title="Write as Proxy">
+          <div>ABI for the implemention contract at 
+            <address-link :address="proxyContract.implAddr" />
+            <span v-if="proxyContract.implAddr !== proxyContract.prevImplAddr">, Previously recorded to be on <address-link :address="proxyContract.prevImplAddr" /></span>
+          </div>
+          <b-button @click="connect" :variant="variantBtn" pill size="sm">
+            {{ computedBtnText }}
+          </b-button>
+          <ContractWriteFunction
+            v-for="(item, index) in implWriteAbi"
+            :key="index"
+            :abi="item"
+            :contract="implContract"
+            :open="implOpenable"
+            :index="index + 1"
+          />
+        </b-tab>
       </b-tabs>
     </div>
     <span v-else class="d-flex justify-content-center">No Code.</span>
@@ -74,6 +108,7 @@ import ContractWriteFunction from './ContractWriteFunction.vue';
 import CodeTextArea from '@/components/CodeTextArea.vue';
 import CopyData from '../components/CopyData.vue';
 import { ethers } from 'ethers';
+import AddressLink from '../components/AddressLink.vue'
 
 export default {
   name: 'Contract',
@@ -82,6 +117,7 @@ export default {
     ContractWriteFunction,
     CodeTextArea,
     CopyData,
+    AddressLink
   },
   props: {
     verified: {
@@ -94,10 +130,28 @@ export default {
         return [];
       },
     },
+    implFiles: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
     address: {
       type: String,
       default: '',
     },
+    proxyContract: {
+      type: Object,
+      default() {
+        return {
+          isProxy: false,
+          proxyType: '',
+          implAddr: '',
+          prevImplAddr: '',
+          adminAddr: ''
+        }
+      }
+    }
   },
   data() {
     return {
@@ -109,6 +163,10 @@ export default {
       readAbi: [],
       writeAbi: [],
       bytecode: '',
+      implAbi: null,
+      implReadAbi: [],
+      implWriteAbi: [],
+      implContract: null,
     };
   },
   computed: {
@@ -180,9 +238,13 @@ export default {
     openable() {
       return this.contract && this.account && this.chainId == this.currentChain.chainId;
     },
+    implOpenable() {
+      return this.implContract && this.account && this.chainId == this.currentChain.chainId;
+    },
   },
   async created() {
     this.initAbi();
+    this.initImplAbi();
 
     const provider = await detectEthereumProvider();
     this.provider = provider;
@@ -208,6 +270,13 @@ export default {
     files() {
       this.initAbi();
     },
+    implFiles(val) {
+      console.log('impl file', val)
+      this.initImplAbi();
+    },
+    proxyContract(val) {
+      console.log('proxy contract', val)
+    }
   },
   methods: {
     async emitImportApi() {
@@ -244,6 +313,27 @@ export default {
       this.readAbi = readAbi;
       this.writeAbi = writeAbi;
     },
+    initImplAbi() {
+      if (!this.implFiles.length) {
+        return;
+      }
+      const readAbi = [];
+      const writeAbi = [];
+      const metadata = this.implFiles.find((item) => item.name === 'metadata.json');
+      const abi = JSON.parse(metadata.content).output.abi;
+      for (const f of abi) {
+        if (f.type === 'function') {
+          if (f.stateMutability === 'view' || f.stateMutability === 'pure') {
+            readAbi.push(f);
+          } else {
+            writeAbi.push(f);
+          }
+        }
+      }
+      this.implAbi = abi;
+      this.implReadAbi = readAbi;
+      this.implWriteAbi = writeAbi;
+    },
     connect() {
       if (!this.provider) {
         return;
@@ -257,6 +347,9 @@ export default {
           this.account = accounts[0];
           const signer = new ethers.providers.Web3Provider(this.provider).getSigner();
           this.contract = new ethers.Contract(this.address, this.abi, signer);
+          if (this.implAbi) {
+            this.implContract = new ethers.Contract(this.proxyContract.implAddr, this.implAbi, signer)
+          }
         })
         .catch((err) => {
           console.log(err);
