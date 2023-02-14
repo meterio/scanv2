@@ -216,11 +216,21 @@ export default {
           { name: tx.eventCount > 0 ? `Events (${tx.eventCount})` : 'Events' },
           { name: tx.internaltxsCount > 0 ? `Internal Txs (${tx.internaltxsCount})` : 'Internal Txs' }
         ];
+        let errMsg = '';
+        if (tx.vmError.error) {
+          errMsg = `reverted: ${tx.vmError.error}`;
+          if (tx.vmError.reason) {
+            errMsg += ` (${tx.vmError.reason})`;
+          }
+        }
+        if (tx.vmError.error === 'execution reverted' && tx.vmError.reason) {
+          errMsg = `reverted: ${tx.vmError.reason}`;
+        }
         this.summary = [
           { key: 'Hash', value: tx.hash, type: 'copyable' },
           {
             key: 'Status',
-            value: tx.reverted ? `reverted: ${tx.vmError.error},${tx.vmError.reason}` : 'success',
+            value: tx.reverted ? errMsg : 'success',
             type: 'status'
           },
           { key: 'Block', value: tx.block.number, type: 'block-link' },
