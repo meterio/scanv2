@@ -217,13 +217,13 @@ export default {
           { name: tx.internaltxsCount > 0 ? `Internal Txs (${tx.internaltxsCount})` : 'Internal Txs' }
         ];
         let errMsg = '';
-        if (tx.vmError.error) {
+        if (tx.vmError?.error) {
           errMsg = `reverted: ${tx.vmError.error}`;
           if (tx.vmError.reason) {
             errMsg += ` (${tx.vmError.reason})`;
           }
         }
-        if (tx.vmError.error === 'execution reverted' && tx.vmError.reason) {
+        if (tx.vmError?.error === 'execution reverted' && tx.vmError?.reason) {
           errMsg = `reverted: ${tx.vmError.reason}`;
         }
         this.summary = [
