@@ -111,12 +111,14 @@
                 item.value
               }}</b-link>
 
-              <!-- contract-created-link -->
-              <div v-if="item.type === 'contract-created-link'">
-                <div v-for="addr in item.value" :key="addr">
-                  <span>[Contract </span>
-                  <address-link :address="addr" />
-                  <span> Created]</span>
+              <!-- contract-created-or-selfDestructed-link -->
+              <div v-if="item.type === 'contract-created-or-selfDestructed-link'">
+                <div v-for="(val, idx) in item.value" :key="idx">
+                  <div v-for="addr in val.data" :key="addr">
+                    <span>[{{ val.prefix }} </span>
+                    <address-link :address="addr" />
+                    <span> {{ val.suffix }}]</span>
+                  </div>
                 </div>
               </div>
 
@@ -317,6 +319,14 @@
               </template>
             </b-col>
           </b-row>
+          <b-row v-if="!!deployStatus">
+            <b-col sm="12" :md="labelCols">
+              <span class="label">Deploy Status:</span>
+            </b-col>
+            <b-col sm="12" :md="contentCols">
+              <span>{{ deployStatus }}</span>
+            </b-col>
+          </b-row>
         </b-col>
       </b-row>
     </b-card>
@@ -368,6 +378,10 @@ export default {
     verifiedFrom: {
       type: String,
       default: ''
+    },
+    deployStatus: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -416,7 +430,7 @@ export default {
     computedData() {
       const temp = [];
       for (const obj of this.data) {
-        if (obj.key !== 'owner' && obj.key !== 'creationTxHash') {
+        if (obj.key !== 'owner' && obj.key !== 'creationTxHash' && obj.key !== 'deployStatus') {
           temp.push(obj);
         }
       }

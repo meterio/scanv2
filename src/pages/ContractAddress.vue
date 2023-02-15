@@ -9,7 +9,8 @@
     isContract,
     :verified='verified',
     :verifiedDesc='verifiedDesc',
-    :verifiedFrom='verifiedFrom'
+    :verifiedFrom='verifiedFrom',
+    :deployStatus='deployStatus'
   )
 
   b-container.summary
@@ -30,7 +31,12 @@
             strong Loading...
           </div>
         </div>
-        contract-detail(v-else, :verified='verified', :files='files', :impl-files='implFiles' :proxy-contract="addressInfo.proxyContract" :address='addressInfo.address')
+        contract-detail(v-else, :verified='verified',
+          :files='files',
+          :impl-files='implFiles',
+          :proxy-contract="addressInfo.proxyContract",
+          :address='addressInfo.address',
+          :deploy-status="deployStatus")
 </template>
 
 <script>
@@ -93,6 +99,9 @@ export default {
     },
     verifiedFrom() {
       return this.addressInfo.verifiedFrom;
+    },
+    deployStatus() {
+      return this.addressInfo.deployStatus
     },
     title() {
       if (this.isToken) {

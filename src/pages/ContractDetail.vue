@@ -35,7 +35,7 @@
             :total="computedFiles.length"
           />
         </b-tab>
-        <b-tab title="Read">
+        <b-tab v-if="contractCallEnable" title="Read">
           <b-button @click="connect" :variant="variantBtn" pill size="sm">
             {{ computedBtnText }}
           </b-button>
@@ -48,7 +48,7 @@
             :index="index + 1"
           />
         </b-tab>
-        <b-tab title="Write">
+        <b-tab v-if="contractCallEnable" title="Write">
           <b-button @click="connect" :variant="variantBtn" pill size="sm">
             {{ computedBtnText }}
           </b-button>
@@ -151,6 +151,10 @@ export default {
           adminAddr: ''
         }
       }
+    },
+    deployStatus: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -241,6 +245,9 @@ export default {
     implOpenable() {
       return this.implContract && this.account && this.chainId == this.currentChain.chainId;
     },
+    contractCallEnable() {
+      return this.deployStatus !== 'selfDestructed'
+    }
   },
   async created() {
     this.initAbi();
@@ -348,7 +355,7 @@ export default {
           const signer = new ethers.providers.Web3Provider(this.provider).getSigner();
           this.contract = new ethers.Contract(this.address, this.abi, signer);
           if (this.implAbi) {
-            this.implContract = new ethers.Contract(this.proxyContract.implAddr, this.implAbi, signer)
+            this.implContract = new ethers.Contract(this.address, this.implAbi, signer)
           }
         })
         .catch((err) => {

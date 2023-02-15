@@ -25,6 +25,7 @@ export default {
       verified: false, // only for contract
       verifiedDesc: '', // only for contract
       verifiedFrom: '', // only for contract
+      deployStatus: '',
       contractDataCount: {
         txCount: 0,
         transfersCount: 0,
@@ -58,6 +59,7 @@ export default {
         summary: this.summary,
         verified: this.verified,
         verifiedDesc: this.verifiedDesc,
+        deployStatus: this.deployStatus,
         verifiedFrom: this.verifiedFrom,
         proxyContract: this.proxyContract,
       };
@@ -178,6 +180,7 @@ export default {
           this.verified = account.verified;
           this.verifiedDesc = account.status;
           this.verifiedFrom = account.verifiedFrom;
+          this.deployStatus = account.deployStatus ? account.deployStatus : '';
           this.summary.push({
             key: 'owner',
             value: account.master
