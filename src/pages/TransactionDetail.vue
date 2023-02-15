@@ -55,20 +55,20 @@ import DataSummary from '@/components/DataSummary.vue';
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 import { bigNum } from '@/utils';
-import { abi, ScriptEngine } from '@meterio/devkit';
+// import { abi, ScriptEngine } from '@meterio/devkit';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 
-const TransferABI = new abi.Event({
-  anonymous: false,
-  inputs: [
-    { indexed: true, name: '_from', type: 'address' },
-    { indexed: true, name: '_to', type: 'address' },
-    { indexed: false, name: '_value', type: 'uint256' }
-  ],
-  name: 'Transfer',
-  type: 'event'
-});
+// const TransferABI = new abi.Event({
+//   anonymous: false,
+//   inputs: [
+//     { indexed: true, name: '_from', type: 'address' },
+//     { indexed: true, name: '_to', type: 'address' },
+//     { indexed: false, name: '_value', type: 'uint256' }
+//   ],
+//   name: 'Transfer',
+//   type: 'event'
+// });
 
 export default {
   components: {
