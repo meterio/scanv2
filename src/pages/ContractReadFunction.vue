@@ -125,20 +125,16 @@ export default {
           const params = this.paramsLength === 0 ? [] : [...this.params];
           const abiName = `${this.abi.name}(${this.abi.inputs.map(input => input.type).join(',')})`
           const res = await this.contract[abiName].apply(null, params);
-          if (res) {
-            let r = ''
-            if (Array.isArray(res)) {
-              r = []
-              for (let i = 0; i < res.length; i++) {
-                r.push(String(res[i]))
-              }
-            } else {
-              r = res
+          let r = ''
+          if (Array.isArray(res)) {
+            r = []
+            for (let i = 0; i < res.length; i++) {
+              r.push(String(res[i]))
             }
-            this.res = r;
           } else {
-            this.res = 'no result';
+            r = res
           }
+          this.res = r;
 
           this.readLoading = false;
         } catch (e) {
