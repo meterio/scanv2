@@ -113,7 +113,7 @@ export default {
       this.showNumberModal = show;
     },
     ok(num) {
-      this.params[this.currentSelectIndex] = num;
+      this.params[this.currentSelectIndex] = num + '';
     },
     addNumberModal(index) {
       this.currentSelectIndex = index;
