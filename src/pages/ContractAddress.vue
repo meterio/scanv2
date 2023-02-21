@@ -381,6 +381,7 @@ export default {
   created() {
     this.getLoadTarget();
     this.getContractFiles();
+    this.getImplContractFiles();
   },
   methods: {
     async downloadTxs(tabIndex) {
