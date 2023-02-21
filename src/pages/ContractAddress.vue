@@ -373,13 +373,14 @@ export default {
   watch: {
     address() {
       this.getContractFiles();
+    },
+    "addressInfo"(val) {
       this.getImplContractFiles();
     }
   },
   created() {
     this.getLoadTarget();
     this.getContractFiles();
-    this.getImplContractFiles();
   },
   methods: {
     async downloadTxs(tabIndex) {

@@ -256,6 +256,8 @@ export default {
     const provider = await detectEthereumProvider();
     this.provider = provider;
 
+    this.connect();
+
     if (!this.verified) {
       // this.getContractBytecode();
       this.emitImportApi();
@@ -278,12 +280,8 @@ export default {
       this.initAbi();
     },
     implFiles(val) {
-      console.log('impl file', val)
       this.initImplAbi();
     },
-    proxyContract(val) {
-      console.log('proxy contract', val)
-    }
   },
   methods: {
     async emitImportApi() {
@@ -322,6 +320,9 @@ export default {
     },
     initImplAbi() {
       if (!this.implFiles.length) {
+        this.implAbi = null
+        this.implReadAbi = []
+        this.implWriteAbi = []
         return;
       }
       const readAbi = [];
