@@ -47,7 +47,8 @@ export default {
         implAddr: '',
         prevImplAddr: '',
         adminAddr: ''
-      }
+      },
+      logoURI: '',
     };
   },
   computed: {
@@ -57,6 +58,7 @@ export default {
         tokenType: this.tokenType,
         address: this.address,
         summary: this.summary,
+        logoURI: this.logoURI,
         verified: this.verified,
         verifiedDesc: this.verifiedDesc,
         deployStatus: this.deployStatus,
@@ -82,6 +84,7 @@ export default {
         const { account } = res;
         this.isContract = account.type !== undefined;
         this.tokenType = account.type;
+        this.logoURI = account.logoURI || '';
         if (this.address === '0x0000000000000000000000000000000000000000') {
           if (new BigNumber(account.mtrgBalance).isLessThan(0)) {
             account.mtrgBalance = '0';

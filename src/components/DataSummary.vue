@@ -1,17 +1,22 @@
 <template>
   <b-container class="summary">
-    <h2 class="title-row">
-      <span class="title">{{ title }}</span>
-      <span class="title-value">{{ titleValue }}</span>
+    <h2 class="title-row d-xl-flex">
+      <div class="text-nowrap d-flex align-items-center">
+        <img v-if="logoURI" class="mr-1" :src="logoURI" width="25" height="25" alt="">
+        <span class="title">{{ title }}</span>
+      </div>
+      <div class="text-break d-flex align-items-center">
+        <span class="title-value">{{ titleValue }}</span>
 
-      <span v-if="titleValue && titleCopyable">
-        <b-button v-if="titleCopied" variant="outline-success" pill size="sm">
-          <b-icon icon="check"></b-icon>
-        </b-button>
-        <b-button v-else @click="copyTitleToClipBoard(titleValue)" variant="light" pill size="sm">
-          <b-icon icon="clipboard"></b-icon>
-        </b-button>
-      </span>
+        <span v-if="titleValue && titleCopyable">
+          <b-button v-if="titleCopied" variant="outline-success" pill size="sm">
+            <b-icon icon="check"></b-icon>
+          </b-button>
+          <b-button v-else @click="copyTitleToClipBoard(titleValue)" variant="light" pill size="sm">
+            <b-icon icon="clipboard"></b-icon>
+          </b-button>
+        </span>
+      </div>
     </h2>
     <b-card>
       <div class="loading" v-if="loading">
@@ -346,6 +351,9 @@ export default {
   components: { StatusTag, AddressLink, AmountTag, NftLink, TimeTag, FullTimeTag },
   name: 'DataList',
   props: {
+    logoURI: {
+      type: String
+    },
     title: {
       type: String
     },

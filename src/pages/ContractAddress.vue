@@ -1,6 +1,7 @@
 <template lang="pug">
 .detail-page
   data-summary(
+    :logoURI="logoURI"
     :title='title',
     :titleValue="address",
     :titleCopyable="true"
@@ -109,6 +110,9 @@ export default {
       } else {
         return 'Contract';
       }
+    },
+    logoURI() {
+      return this.addressInfo.logoURI
     },
     tabs() {
       if (this.isToken) {
