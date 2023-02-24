@@ -258,22 +258,22 @@ export default {
           });
         }
 
-        const toValue = []
+        const toValue = [];
         if (Array.isArray(tx.contractAddress) && tx.contractAddress.length) {
           toValue.push({
             prefix: 'Contract',
             suffix: 'Created',
             data: tx.contractAddress
-          })
+          });
         }
         if (Array.isArray(tx.selfDestructed) && tx.selfDestructed.length) {
           toValue.push({
             prefix: 'Contract',
             suffix: 'selfDestructed',
             data: tx.selfDestructed
-          })
+          });
         }
-        console.log('toValue', toValue)
+        console.log('toValue', toValue);
         if (toValue.length) {
           this.summary.splice(5, 0, { key: 'To', value: toValue, type: 'contract-created-or-selfDestructed-link' });
         }

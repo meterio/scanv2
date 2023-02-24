@@ -13,9 +13,11 @@ div
       )
       b-icon(
         v-if="tab.download"
-        icon="download"
-        class="ml-1"
+        icon="cloud-arrow-down"
+        class="ml-1 mr-1"
         @click.stop="clickDownload(index)"
+        data-toggle="tooltip" 
+        title="download in csv"
       )
   b-dropdown.d-md-none(block :text="chosenText" variant="outline")
     b-dropdown-item(v-for="(tab, index) in localTabs",

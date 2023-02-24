@@ -25,39 +25,39 @@ export default {
   props: {
     amount: {
       type: [String, Number],
-      default: '0',
+      default: '0'
     },
     token: {
       type: String,
-      default: 'MTR',
+      default: 'MTR'
     },
     precision: {
       type: Number,
-      default: -1,
+      default: -1
     },
     decimals: {
       type: Number,
-      default: 18,
+      default: 18
     },
     tokenType: {
       type: String,
-      default: 'ERC20',
+      default: 'ERC20'
     },
     tokenId: {
       type: String,
-      default: '',
+      default: ''
     },
     tokenAddr: {
       type: String,
-      default: '',
-    },
+      default: ''
+    }
   },
   data() {
     return {
       integer: '0',
       mantissa: '',
       shortMantissa: '',
-      text: '',
+      text: ''
     };
   },
   created() {
@@ -67,9 +67,9 @@ export default {
     this.init();
   },
   watch: {
-    amount: function (newVal, oldVal) {
+    amount: function(newVal, oldVal) {
       this.init();
-    },
+    }
   },
   methods: {
     init() {
@@ -92,7 +92,7 @@ export default {
         }
         this.text = items.join('.');
       }
-    },
+    }
   },
   computed: {
     computedTokenId() {
@@ -101,7 +101,7 @@ export default {
       } else {
         return this.tokenId;
       }
-    },
+    }
     // badgeClass() {
     //   if (this.token === "MTR") {
     //     return "badge badge-light ml-1";
@@ -111,15 +111,18 @@ export default {
     //   }
     //   return "badge badge-black ml-1";
     // },
-  },
+  }
 };
 </script>
 
 <style scoped lang="scss">
 .badge1 {
-  font-size: 80% !important;
-  padding: 2px 4px;
-  border-radius: 4px;
-  background: rgba(1, 1, 1, 0.05);
+  font-size: 90% !important;
+  margin-left: 2px;
+  // font-size: 70% !important;
+  // padding: 2px 4px;
+  // border-radius: 4px;
+  // background: rgba(1, 1, 1, 0.01);
+  // border: 1px solid rgba(1, 1, 1, 0.15);
 }
 </style>
