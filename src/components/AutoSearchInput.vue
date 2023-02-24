@@ -10,9 +10,15 @@
         class="search-prepend-btn"
       >
         <template #button-content> </template>
-        <b-dropdown-item v-for="item in items" @click="selectItem(item)" :key="item.address"
-          >{{ item.symbol ? '[' + item.symbol + ']' : '' }} {{ item.name }} - {{ item.address }}</b-dropdown-item
-        >
+        <b-dropdown-item v-for="item in items" @click="selectItem(item)" :key="item.address">
+          <div class="d-flex">
+            <img v-if="item.logoURI" width="25" height="25" :src="item.logoURI" alt="">
+            <div v-else class="addressSvgContainer">
+              <span class="addressSvg" v-html="getAddressSvg(item.address)"></span>
+            </div>
+            <span class="ml-1">{{ item.symbol ? '[' + item.symbol + ']' : '' }} {{ item.name }} - {{ item.address }}</span>
+          </div>
+        </b-dropdown-item>
       </b-dropdown>
     </template>
 
@@ -33,6 +39,25 @@
 </template>
 
 <script>
+import MersenneTwister from 'mersenne-twister'
+import Color from 'color'
+const allColors = [
+  '#f44336',
+  '#e91e63',
+  '#9c27b0',
+  '#673ab7',
+  '#3f51b5',
+  '#2196f3',
+  '#03a9f4',
+  '#00bcd4',
+  '#009688',
+  '#4caf50',
+  '#8bc34a',
+  '#cddc39',
+  '#ffc107',
+  '#ff9800',
+  '#ff5722',
+]
 export default {
   name: 'AutoSearchInput',
   props: { large: { type: Boolean, default: false } },
@@ -156,6 +181,48 @@ export default {
     dropdownShow(bvEvent) {
       this.dropdownShown = true;
       this.$refs.input.focus();
+    },
+    hash(str) {
+      if (str.length === 0) {
+        return 0
+      }
+      let h = 0
+      for (let i = 0; i < str.length; i++) {
+        h = h * 31 + str.charCodeAt(i)
+        h = h % 2 ** 32
+      }
+      return h
+    },
+    getAddressSvg(address) {
+      const seed = this.hash(address)
+      const rand = new MersenneTwister(seed)
+
+      const colors = allColors.map((hex) => {
+        const color = Color(hex).darken(0.2)
+        return color.hex()
+      })
+
+      const genColor = () => {
+        const idx = Math.floor(colors.length * rand.random())
+        return colors.splice(idx, 1)[0]
+      }
+
+      const bgStr = `<rect fill="${genColor()}" width="100" height="100"/>`
+      let shapesStr = ''
+      const layers = 3
+      const rs = [35, 40, 45, 50, 55, 60]
+      const cxs = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+      const cys = [30, 40, 50, 60, 70]
+
+      for (let i = 0; i < layers; i++) {
+        const r = rs.splice(Math.floor(rs.length * rand.random()), 1)[0]
+        const cx = cxs.splice(Math.floor(cxs.length * rand.random()), 1)[0]
+        const cy = cys.splice(Math.floor(cys.length * rand.random()), 1)[0]
+        const fill = genColor()
+
+        shapesStr += `<circle r="${r}" cx="${cx}" cy="${cy}" fill="${fill}" opacity="0.5"/>`
+      }
+      return `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">${bgStr}${shapesStr}</svg>`
     }
   }
 };
@@ -179,8 +246,23 @@ export default {
     border-radius: 5px;
     border: 0px solid white;
   }
+  .addressSvgContainer {
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+    border-radius: 100%;
+    .addressSvg {
+      display: block;
+      width: 40px;
+      height: 40px;
+    }
+  }
 }
 #input-query {
   border-radius: 5px 0 0 5px !important;
+}
+.dropdown-menu {
+  max-height: 600px;
+  overflow-y: auto;
 }
 </style>
