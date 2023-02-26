@@ -12,7 +12,7 @@
             class="link"
             :to="{
               name: 'address',
-              params: { address: data.value }
+              params: { address: data.value },
             }"
             >{{ data.value }}</router-link
           >
@@ -75,7 +75,7 @@ export default {
     NavTabs,
     DataSummary,
     DataTableV2,
-    VueJsonPretty
+    VueJsonPretty,
   },
   data() {
     return {
@@ -86,20 +86,20 @@ export default {
       clauses: {
         fields: [
           { key: 'index', label: 'Index' },
-          { key: 'clause', label: 'Clause' }
+          { key: 'clause', label: 'Clause' },
         ],
         pagination: { show: true, align: 'center', perPage: 20 },
-        items: []
+        items: [],
       },
       transfers: {
         fields: [
           { key: 'index', label: 'Index' },
           { key: 'from', label: 'Sender' },
           { key: 'to', label: 'Recipient' },
-          { key: 'amountStr', label: 'Amount' }
+          { key: 'amountStr', label: 'Amount' },
         ],
         pagination: { show: true, align: 'center', perPage: 20 },
-        items: []
+        items: [],
       },
       internaltxs: {
         fields: [
@@ -108,19 +108,19 @@ export default {
           { key: 'from', label: 'From' },
           { key: 'to', label: 'To' },
           { key: 'value', label: 'Value' },
-          { key: 'gasLimit', label: 'gasLimit' }
+          { key: 'gasLimit', label: 'gasLimit' },
         ],
         pagination: { show: false, align: 'center', perPage: 20 },
-        items: []
+        items: [],
       },
       events: {
         fields: [
           { key: 'index', label: 'Index' },
-          { key: 'event', label: 'Log' }
+          { key: 'event', label: 'Log' },
         ],
         pagination: { show: true, align: 'center', perPage: 20 },
-        items: []
-      }
+        items: [],
+      },
     };
   },
   computed: {
@@ -175,7 +175,7 @@ export default {
           return this.loadInternalTxs;
       }
       return this.loadClauses;
-    }
+    },
   },
   methods: {
     navTabChange(val) {
@@ -214,24 +214,27 @@ export default {
           { name: tx.clauseCount > 0 ? `Clauses (${tx.clauseCount})` : 'Clauses' },
           { name: tx.transferCount > 0 ? `Transfers (${tx.transferCount})` : 'Transfers' },
           { name: tx.eventCount > 0 ? `Events (${tx.eventCount})` : 'Events' },
-          { name: tx.internaltxsCount > 0 ? `Internal Txs (${tx.internaltxsCount})` : 'Internal Txs' }
+          { name: tx.internaltxsCount > 0 ? `Internal Txs (${tx.internaltxsCount})` : 'Internal Txs' },
         ];
         let errMsg = '';
+        if (tx.reverted) {
+          errMsg = 'reverted';
+        }
         if (tx.vmError?.error) {
-          errMsg = `reverted: ${tx.vmError.error}`;
+          errMsg += `: ${tx.vmError.error}`;
           if (tx.vmError.reason) {
             errMsg += ` (${tx.vmError.reason})`;
           }
         }
         if (tx.vmError?.error === 'execution reverted' && tx.vmError?.reason) {
-          errMsg = `reverted: ${tx.vmError.reason}`;
+          errMsg += `: ${tx.vmError.reason}`;
         }
         this.summary = [
           { key: 'Hash', value: tx.hash, type: 'copyable' },
           {
             key: 'Status',
             value: tx.reverted ? errMsg : 'success',
-            type: 'status'
+            type: 'status',
           },
           { key: 'Block', value: tx.block.number, type: 'block-link' },
           { key: 'Timestamp', value: tx.block.timestamp, type: 'full-timestamp' },
@@ -242,19 +245,19 @@ export default {
             key: 'BlockRef',
             value: tx.blockRef,
             type: 'blockRef',
-            ref: new BigNumber(tx.blockRef.substring(0, 10)).toFixed()
+            ref: new BigNumber(tx.blockRef.substring(0, 10)).toFixed(),
           },
           { key: 'Expiration', value: tx.expiration },
           { key: 'GasPriceCoef', value: tx.gasPriceCoef },
           { key: 'Gas Used/Limit', value: `${tx.gasUsed} / ${tx.gas}` },
-          { key: 'Nonce', value: new BigNumber(tx.nonce).toFixed() }
+          { key: 'Nonce', value: new BigNumber(tx.nonce).toFixed() },
         ];
 
         if (tx.tokenTransfers && tx.tokenTransfers.length > 0) {
           this.summary.push({
             key: 'Token Transfers',
             value: tx.tokenTransfers,
-            type: 'transfer-highlight'
+            type: 'transfer-highlight',
           });
         }
 
@@ -263,14 +266,14 @@ export default {
           toValue.push({
             prefix: 'Contract',
             suffix: 'Created',
-            data: tx.contractAddress
+            data: tx.contractAddress,
           });
         }
         if (Array.isArray(tx.selfDestructed) && tx.selfDestructed.length) {
           toValue.push({
             prefix: 'Contract',
             suffix: 'selfDestructed',
-            data: tx.selfDestructed
+            data: tx.selfDestructed,
           });
         }
         console.log('toValue', toValue);
@@ -291,15 +294,15 @@ export default {
             amount: {
               type: 'amount',
               amount: bigNum(value),
-              token: token
+              token: token,
             },
             abi,
             methodId,
             datas,
-            isDecoded: !!decoded
+            isDecoded: !!decoded,
           },
           decoded,
-          index: index + 1
+          index: index + 1,
         };
       });
     },
@@ -313,17 +316,17 @@ export default {
             type: 'amount',
             amount: bigNum(transfer.amount),
             token: transfer.token.toString(),
-            precision: 8
+            precision: 8,
           },
-          index: index + 1
+          index: index + 1,
         };
       });
     },
     async loadInternalTxs() {
       const { internalTxs } = await this.$api.transaction.getInternalTxs(this.network, this.txHash);
-      this.internaltxs.items = internalTxs.map(itx => ({
+      this.internaltxs.items = internalTxs.map((itx) => ({
         ...itx,
-        gasLimit: itx.gasLimit
+        gasLimit: itx.gasLimit,
       }));
     },
     async loadEvents() {
@@ -339,13 +342,13 @@ export default {
             topics,
             data,
             datas,
-            abi
+            abi,
           },
-          decoded
+          decoded,
         };
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
