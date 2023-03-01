@@ -19,7 +19,7 @@ body {
 
 .main-container {
   flex: 1 0 auto;
-  background: #eef0f2;
+  background: #FBFCFE;
   padding-bottom: 20px;
 }
 
@@ -59,13 +59,19 @@ body {
   font-size: 13px;
 }
 
+.card{
+  border-radius: 0.75rem !important;
+  box-shadow: 0 0.5rem 1.2rem rgb(189 197 209 / 20%);;
+}
 .card-header {
   font-weight: bold;
   background: white !important;
+  border-radius:0.75rem 0.75rem 0 0 !important;
 }
 .card-footer {
   font-weight: bold;
   background: white !important;
+  border-radius:0 0 0.75rem 0.75rem !important;
 }
 
 .card-title,

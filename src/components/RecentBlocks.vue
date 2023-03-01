@@ -14,14 +14,14 @@
                   <router-link
                     :to="{
                       name: 'blockDetail',
-                      params: { revision: block.number }
+                      params: { revision: block.number },
                     }"
                   >
                     {{ block.number }}</router-link
                   >
                 </h4>
 
-                <span class="ago"><time-tag :timestamp="block.timestamp"/></span>
+                <span class="ago"><time-tag :timestamp="block.timestamp" /></span>
               </div>
             </div>
 
@@ -32,7 +32,7 @@
                 v-if="block.beneficiaryName"
                 :to="{
                   name: 'address',
-                  params: { address: block.beneficiary }
+                  params: { address: block.beneficiary },
                 }"
                 >{{ shortAddr(block.beneficiaryName, 12) }}</router-link
               >
@@ -41,7 +41,7 @@
                 v-else
                 :to="{
                   name: 'address',
-                  params: { address: block.beneficiary }
+                  params: { address: block.beneficiary },
                 }"
                 >{{ shortAddr(block.beneficiary, 12) }}</router-link
               >
@@ -52,8 +52,11 @@
           </li>
         </ul>
       </b-card-text>
-      <b-card-footer>
-        <b-btn variant="outline-primary" block size="sm" :to="{ name: 'blockList' }">View all Blocks</b-btn>
+      <b-card-footer class="p-0">
+        <b-btn class="p-2" variant="outline-primary" block size="sm" :to="{ name: 'blockList' }"
+          >View all Blocks
+          <b-icon icon="arrow-right"></b-icon>
+        </b-btn>
       </b-card-footer>
     </b-card>
   </b-container>
@@ -72,7 +75,7 @@ export default {
       loading: true,
       recent_blocks: [],
       time: null,
-      running: false
+      running: false,
     };
   },
   async mounted() {
@@ -92,7 +95,7 @@ export default {
         if (this.recent_blocks.length > 0) {
           this.configVal({
             key: 'home_block_height',
-            val: this.recent_blocks[0].number
+            val: this.recent_blocks[0].number,
           });
         }
       } catch (e) {
@@ -101,8 +104,8 @@ export default {
       if (this.running) {
         setTimeout(this.initData, 3000);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -223,6 +226,15 @@ export default {
     border-radius: 5px;
     width: 50px;
     text-align: center;
+  }
+}
+
+.btn-block.btn-outline-primary {
+  color: $color-gray-450;
+  border: none;
+  border-radius: 0 0 0.75rem 0.75rem !important;
+  &:hover {
+    color: white;
   }
 }
 </style>

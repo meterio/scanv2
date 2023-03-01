@@ -101,6 +101,9 @@ export default {
   .mt-2pert {
     margin-top: 2.6%;
   }
+  .mt-1pert {
+    margin-top: 1%;
+  }
 
   .card-title {
     color: #0c2954 !important;

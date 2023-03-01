@@ -13,11 +13,11 @@
                 <router-link
                   :to="{
                     name: 'txDetail',
-                    params: { hash: tx.txHash }
+                    params: { hash: tx.txHash },
                   }"
                   >{{ shortHash(tx.txHash, 10) }}</router-link
                 >
-                <span class="ago"><time-tag :timestamp="tx.block.timestamp"/></span>
+                <span class="ago"><time-tag :timestamp="tx.block.timestamp" /></span>
               </div>
             </div>
 
@@ -42,8 +42,10 @@
           </li>
         </ul>
       </b-card-text>
-      <b-card-footer>
-        <b-btn variant="outline-primary" block size="sm" :to="{ path: 'txs' }">View all Transactions</b-btn>
+      <b-card-footer class="p-0">
+        <b-btn class="p-2" variant="outline-primary" block size="sm" :to="{ path: 'txs' }"
+          >View all Transactions <b-icon icon="arrow-right"
+        /></b-btn>
       </b-card-footer>
     </b-card>
   </b-container>
@@ -61,14 +63,14 @@ export default {
     return {
       loading: true,
       recent_txs: [],
-      time: null
+      time: null,
     };
   },
   mounted() {
     this.initData();
     this.clearTime();
     const me = this;
-    this.time = setInterval(function() {
+    this.time = setInterval(function () {
       me.initData();
     }, 3000);
   },
@@ -84,7 +86,7 @@ export default {
     async initData() {
       try {
         const res = await this.$api.transaction.getRecentTxs(this.network);
-        this.recent_txs = res.txs.slice(0, 10).map(tx => {
+        this.recent_txs = res.txs.slice(0, 10).map((tx) => {
           try {
             let totalAmount = '';
             if (tx.mtr && new BigNumber(tx.mtr).isGreaterThan(0)) {
@@ -105,8 +107,8 @@ export default {
     },
     jump(url) {
       this.$router.push(url);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -230,6 +232,14 @@ export default {
     border-radius: 5px;
     max-width: 70px;
     text-align: center;
+  }
+}
+.btn-block.btn-outline-primary {
+  color: $color-gray-450;
+  border: none;
+  border-radius: 0 0 0.75rem 0.75rem !important;
+  &:hover {
+    color: white;
   }
 }
 </style>

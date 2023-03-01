@@ -14,13 +14,13 @@ import DataCard from '@/components/DataCard.vue';
 export default {
   name: 'DataDashboard',
   components: {
-    DataCard
+    DataCard,
   },
   props: ['rows', 'ncols'],
   data() {
     return {
       cols: 3,
-      actualNCols: 4
+      actualNCols: 4,
     };
   },
   created() {
@@ -49,16 +49,20 @@ export default {
         this.cols = 12 / this.ncols;
         this.actualNCols = this.ncols;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .card {
-  margin: 0.5rem auto;
-  padding: 0.5rem;
+  // margin: 0.5rem auto;
+  // padding: 0.5rem;
 
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
   hr {
     border-color: $border-light;
   }
@@ -80,10 +84,26 @@ export default {
 .ncols-3:nth-of-type(3n + 3) {
   border-right: none;
 }
+/* last row, doesn't matter how many cells */
+.ncols-3:nth-last-child(-n + 3) {
+  /* reset the style, eg: */
+  border-bottom: none;
+}
+
 .ncols-2:nth-of-type(2n + 2) {
   border-right: none;
 }
+.ncols-2:nth-last-child(-n + 2) {
+  border-bottom: none;
+}
+
 .ncols-4:nth-of-type(4n + 4) {
   border-right: none;
+}
+
+/* last row, doesn't matter how many cells */
+.ncols-4:nth-last-child(-n + 4) /* first element of the last row */ {
+  /* reset the style, eg: */
+  border-bottom: none;
 }
 </style>

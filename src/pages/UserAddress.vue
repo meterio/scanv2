@@ -3,10 +3,10 @@
   data-summary(title='Address', :titleValue="address", :data='addressInfo.summary' :titleCopyable="true")
 
   b-container.summary
-    #b-card.mt-2pert.px-5
+    #b-card.px-5
       #pie-chart.px-0
 
-    data-table-v2.mt-2pert.px-0(:loadItems='loadItems', :fields='fields', :pagination='pagination', :key='loadTarget')
+    data-table-v2.mt-1pert.px-0(:loadItems='loadItems', :fields='fields', :pagination='pagination', :key='loadTarget')
       div(slot='header')
         nav-tabs.px-0(:tabs='tabs', :value='tabValue', @changeTab='navTabChange', @download="downloadTxs")
 </template>
@@ -20,7 +20,7 @@ export default {
   components: {
     DataTableV2,
     NavTabs,
-    DataSummary
+    DataSummary,
   },
   props: {
     addressInfo: {
@@ -30,39 +30,39 @@ export default {
           isContract: false,
           isERC20: false,
           address: '0x',
-          summary: []
+          summary: [],
         };
-      }
+      },
     },
     userDataCount: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     tabs() {
       return [
         { name: this.userDataCount.txCount > 0 ? `Txs(${this.userDataCount.txCount})` : 'Txs', download: 'download' },
         {
-          name: this.userDataCount.erc20TokenCount > 0 ? `ERC20s(${this.userDataCount.erc20TokenCount})` : 'ERC20s'
+          name: this.userDataCount.erc20TokenCount > 0 ? `ERC20s(${this.userDataCount.erc20TokenCount})` : 'ERC20s',
         },
         {
           name: this.userDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.userDataCount.erc20TxCount})` : 'ERC20 Txs',
-          download: 'download'
+          download: 'download',
         },
         { name: this.userDataCount.nftTokenCount > 0 ? `NFT(${this.userDataCount.nftTokenCount})` : 'NFT' },
         {
           name: this.userDataCount.nftTxCount > 0 ? `NFT Txs(${this.userDataCount.nftTxCount})` : 'NFT Txs',
-          download: 'download'
+          download: 'download',
         },
         { name: this.userDataCount.bidCount > 0 ? `Auction Bids(${this.userDataCount.bidCount})` : 'Auction Bids' },
         {
           name:
             this.userDataCount.proposedCount > 0
               ? `Proposed Blocks(${this.userDataCount.proposedCount})`
-              : 'Proposed Blocks'
+              : 'Proposed Blocks',
         },
-        { name: this.userDataCount.bucketCount > 0 ? `Buckets(${this.userDataCount.bucketCount})` : 'Buckets' }
+        { name: this.userDataCount.bucketCount > 0 ? `Buckets(${this.userDataCount.bucketCount})` : 'Buckets' },
       ];
     },
     fields() {
@@ -136,7 +136,7 @@ export default {
     },
     tokenSymbol() {
       return this.currentChain.symbol;
-    }
+    },
   },
   data() {
     return {
@@ -151,8 +151,8 @@ export default {
         fields: [
           { key: 'fullAddress', label: 'Holder Address' },
           { key: 'balance', label: 'Amount' },
-          { key: 'percentage', label: 'Percentage' }
-        ]
+          { key: 'percentage', label: 'Percentage' },
+        ],
       },
       transfers: {
         pagination: { show: true, align: 'center', perPage: 20 },
@@ -163,8 +163,8 @@ export default {
           { key: 'amount', label: 'Amount' },
           { key: 'txhashWithStatus', label: 'Transaction' },
           { key: 'blockNum', label: 'Block' },
-          { key: 'timestamp', label: 'Time' }
-        ]
+          { key: 'timestamp', label: 'Time' },
+        ],
       },
       proposedBlocks: {
         pagination: { show: true, align: 'center', perPage: 20 },
@@ -173,14 +173,14 @@ export default {
           { key: 'blockhash', label: 'Block Hash' },
           { key: 'txCount', label: 'Txs' },
           { key: 'actualRewardStr', label: 'Reward' },
-          { key: 'timestamp', label: 'Time' }
-        ]
+          { key: 'timestamp', label: 'Time' },
+        ],
       },
       bids: {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20
+          perPage: 20,
         },
         fields: [
           { key: 'blockNum', label: 'Block' },
@@ -189,14 +189,14 @@ export default {
           { key: 'amountStr', label: 'Amount' },
           { key: 'hammerPriceStr', label: 'Hammer Price' },
           { key: 'lotAmountStr', label: 'Lot Amount' },
-          { key: 'timestamp', label: 'Time' }
-        ]
+          { key: 'timestamp', label: 'Time' },
+        ],
       },
       txs: {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20
+          perPage: 20,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -207,16 +207,16 @@ export default {
           { key: 'direct', label: '' },
           { key: 'to', label: 'To' },
           { key: 'amount', label: 'Amount' },
-          { key: 'fee', label: 'Fee' }
+          { key: 'fee', label: 'Fee' },
         ],
-        items: []
+        items: [],
       },
       erc20txs: {
         pagination: {
           show: true,
           align: 'center',
           perPage: 5,
-          limit: 10
+          limit: 10,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -226,15 +226,15 @@ export default {
           { key: 'direct', label: '' },
           { key: 'to', label: 'To' },
           { key: 'amount', label: 'Amount' },
-          { key: 'fee', label: 'Fee' }
+          { key: 'fee', label: 'Fee' },
         ],
-        items: []
+        items: [],
       },
       nftTxs: {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20
+          perPage: 20,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -244,9 +244,9 @@ export default {
           { key: 'direct', label: '' },
           { key: 'to', label: 'To' },
           { key: 'nft', label: 'Token ID' },
-          { key: 'fee', label: 'Fee' }
+          { key: 'fee', label: 'Fee' },
         ],
-        items: []
+        items: [],
       },
       buckets: {
         pagination: { show: true, align: 'center', perPage: 20 },
@@ -255,8 +255,8 @@ export default {
           { key: 'address', label: 'Candidate Address' },
           { key: 'totalVotes', label: 'Votes' },
           { key: 'timestamp', label: 'Time' },
-          { key: 'status', label: 'Status' }
-        ]
+          { key: 'status', label: 'Status' },
+        ],
       },
       erc20Tokens: {
         pagination: { show: true, align: 'center', perPage: 20 },
@@ -264,23 +264,23 @@ export default {
           { key: 'tokenType', label: 'Type' },
           { key: 'fullAddress', label: 'Token Address' },
           { key: 'balance', label: 'Balance' },
-          { key: 'blocknum', label: 'Last Updated on Block' }
-        ]
+          { key: 'blocknum', label: 'Last Updated on Block' },
+        ],
       },
       nfts: {
         pagination: { show: true, align: 'center', perPage: 20 },
         fields: [
           { key: 'type', label: 'Type' },
           // { key: "name", label: "Name" },
-          { key: 'nft', label: 'Token ID' }
+          { key: 'nft', label: 'Token ID' },
           // { key: "fullAddress", label: "Token Address" },
           // { key: "balance", label: "Balance" },
           // { key: "blocknum", label: "Last Updated on Block" },
-        ]
+        ],
       },
       txsDownloading: false,
       erc20TxsDownloading: false,
-      nftTxsDownloading: false
+      nftTxsDownloading: false,
     };
   },
   methods: {
@@ -328,8 +328,8 @@ export default {
           name: 'exportData',
           params: {
             address: this.address,
-            type: 'txs'
-          }
+            type: 'txs',
+          },
         });
       }
       if (tabIndex == 2) {
@@ -337,8 +337,8 @@ export default {
           name: 'exportData',
           params: {
             address: this.address,
-            type: 'erc20Txs'
-          }
+            type: 'erc20Txs',
+          },
         });
       }
       if (tabIndex == 4) {
@@ -346,8 +346,8 @@ export default {
           name: 'exportData',
           params: {
             address: this.address,
-            type: 'nftTxs'
-          }
+            type: 'nftTxs',
+          },
         });
       }
     },
@@ -355,7 +355,7 @@ export default {
       const { address } = this.$route.params;
       const res = await this.$api.account.getBuckets(network, address, page, limit);
       const { buckets, totalRows } = res;
-      const items = buckets.map(b => {
+      const items = buckets.map((b) => {
         return {
           bucketid: b.id,
           address: b.candidate,
@@ -363,10 +363,10 @@ export default {
             type: 'amount',
             amount: b.totalVotes,
             precision: 6,
-            token: this.currentChain.gSymbol
+            token: this.currentChain.gSymbol,
           },
           timestamp: b.createTime,
-          status: b.unbounded ? 'Unbounded' : 'Created'
+          status: b.unbounded ? 'Unbounded' : 'Created',
         };
       });
       return { items, totalRows };
@@ -376,7 +376,7 @@ export default {
       const { address } = this.$route.params;
       const res = await this.$api.account.getHolders(network, address, page, limit);
       const { holders, token } = res;
-      const items = holders.map(h => {
+      const items = holders.map((h) => {
         return {
           ...h,
           fullAddress: h.address,
@@ -385,12 +385,12 @@ export default {
             amount: h.balance,
             precision: 6,
             decimals: token.decimals || 18,
-            token: h.symbol
+            token: h.symbol,
           },
           percentage: {
             type: 'percentage',
-            amount: h.percentage
-          }
+            amount: h.percentage,
+          },
         };
       });
       return { items, totalRows: token.holdersCount };
@@ -400,7 +400,7 @@ export default {
       const { address } = this.$route.params;
       const res = await this.$api.account.getTxs(network, address, page, limit);
       const { txs, totalRows } = res;
-      const items = txs.map(t => {
+      const items = txs.map((t) => {
         let direct = '';
         const fromAddr = t.from;
         const toAddr = t.to;
@@ -429,32 +429,32 @@ export default {
         return {
           txhashWithStatus: {
             hash: t.txHash,
-            status: t.reverted
+            status: t.reverted,
           },
           methodName,
           blocknum: t.block.number,
           from: {
             address: fromAddr,
-            isContract: t.fromIsContract
+            isContract: t.fromIsContract,
           },
           direct,
           to: {
             address: toAddr || 'nobody',
-            isContract: t.toIsContract
+            isContract: t.toIsContract,
           },
           amount: {
             type: 'amount',
             amount: amount,
             token: token,
-            precision: 8
+            precision: 8,
           },
           fee: {
             type: 'amount',
             amount: fee,
             token: 'MTR',
-            precision: -1
+            precision: -1,
           },
-          timestamp: t.block.timestamp
+          timestamp: t.block.timestamp,
         };
       });
       return { items, totalRows };
@@ -463,19 +463,19 @@ export default {
       const { address } = this.$route.params;
       const res = await this.$api.account.getTxs20(network, address, page, limit);
       const { txs, totalRows } = res;
-      const items = txs.map(t => ({
+      const items = txs.map((t) => ({
         txhashWithStatus: {
           hash: t.txHash,
-          status: false
+          status: false,
         },
         blocknum: t.block.number,
         from: {
           address: t.from,
-          isContract: t.fromIsContract
+          isContract: t.fromIsContract,
         },
         to: {
           address: t.to,
-          isContract: t.toIsContract
+          isContract: t.toIsContract,
         },
         direct: t.from === this.address.toLowerCase() ? 'Out' : t.to === this.address.toLowerCase() ? 'In' : '-',
         amount: {
@@ -484,15 +484,15 @@ export default {
           token: t.symbol || 'ERC20',
           precision: 8,
           decimals: t.decimals || 18,
-          address: t.tokenAddress
+          address: t.tokenAddress,
         },
         fee: {
           type: 'amount',
           amount: t.fee,
           token: 'MTR',
-          precision: -1
+          precision: -1,
         },
-        timestamp: t.block.timestamp
+        timestamp: t.block.timestamp,
       }));
       return { items, totalRows };
     },
@@ -501,10 +501,10 @@ export default {
       const res = await this.$api.account.getNFTTxs(network, address, page, limit);
       const { txs, totalRows } = res;
 
-      const items = txs.map(t => ({
+      const items = txs.map((t) => ({
         txhashWithStatus: {
           hash: t.txHash,
-          status: false
+          status: false,
         },
         blocknum: t.block.number,
         from: t.from,
@@ -512,7 +512,7 @@ export default {
         direct: t.from === this.address.toLowerCase() ? 'Out' : t.to === this.address.toLowerCase() ? 'In' : '-',
         nft: {
           address: t.tokenAddress,
-          nftTokens: t.nftTransfers.map(n => ({
+          nftTokens: t.nftTransfers.map((n) => ({
             name: t.name,
             id: n.tokenId,
             val: n.value,
@@ -520,16 +520,16 @@ export default {
             showAddress: true,
             address: t.tokenAddress,
             nolink: false,
-            mediaUrl: ''
-          }))
+            mediaUrl: '',
+          })),
         },
         fee: {
           type: 'amount',
           amount: t.fee,
           token: 'MTR',
-          precision: -1
+          precision: -1,
         },
-        timestamp: t.block.timestamp
+        timestamp: t.block.timestamp,
       }));
       return { items, totalRows };
     },
@@ -540,7 +540,7 @@ export default {
 
       let items = [];
       if (proposed && proposed.length > 0) {
-        items = proposed.map(b => {
+        items = proposed.map((b) => {
           return {
             ...b,
             blockNum: b.number,
@@ -549,8 +549,8 @@ export default {
               type: 'amount',
               amount: b.actualReward,
               precision: -1,
-              token: this.tokenSymbol
-            }
+              token: this.tokenSymbol,
+            },
           };
         });
       }
@@ -561,14 +561,14 @@ export default {
       const { address } = this.$route.params;
       const { bids, totalRows } = await this.$api.account.getBids(network, address, page, limit);
 
-      const items = bids.map(b => {
+      const items = bids.map((b) => {
         return {
           ...b,
           amountStr: {
             type: 'amount',
             amount: b.amount,
             precision: 8,
-            token: this.tokenSymbol
+            token: this.tokenSymbol,
           },
           hammerPriceStr: b.pending
             ? '-'
@@ -576,7 +576,7 @@ export default {
                 type: 'amount',
                 amount: b.hammerPrice,
                 precision: 4,
-                token: this.tokenSymbol
+                token: this.tokenSymbol,
               },
           lotAmountStr:
             b.pending || !b.lotAmount
@@ -585,8 +585,8 @@ export default {
                   type: 'amount',
                   amount: b.lotAmount,
                   precision: 8,
-                  token: this.tokenSymbol
-                }
+                  token: this.tokenSymbol,
+                },
         };
       });
       return { items, totalRows };
@@ -606,8 +606,8 @@ export default {
             amount: t.balance,
             token: t.tokenSymbol,
             precision: 8,
-            decimals: t.tokenDecimals
-          }
+            decimals: t.tokenDecimals,
+          },
         });
       }
       return { items, totalRows };
@@ -626,14 +626,14 @@ export default {
               symbol: t.tokenSymbol,
               address: t.address,
               showAddress: true,
-              nftTokens: t.tokens
-            }
+              nftTokens: t.tokens,
+            },
           });
         }
       }
       return { items, totalRows };
-    }
-  }
+    },
+  },
 };
 </script>
 

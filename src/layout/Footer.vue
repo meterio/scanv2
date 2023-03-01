@@ -14,13 +14,13 @@
 
             <div class="download-wallet">
               <!-- <p class="blue">Download Meter Wallets!</p> -->
-              <a target="_blank" href="https://wallet.meter.io/" class="desktop-btn">
-                <b-icon icon="link"></b-icon> Meter Web Wallet
+              <a target="_blank" href="https://wallet.meter.io/" class="btn btn-outline-primary btn-sm">
+                <b-icon icon="wallet" class="mr-1"></b-icon> Meter Web Wallet
               </a>
             </div>
             <div class="download-wallet">
-              <a target="_blank" href="https://passport.meter.io/" class="desktop-btn">
-                <b-icon icon="link"></b-icon> Bridge Assets
+              <a target="_blank" href="https://passport.meter.io/" class="btn btn-outline-primary btn-sm">
+                <b-icon icon="link-45deg" class="mr-1"></b-icon> Bridge Assets
               </a>
             </div>
           </div>
@@ -77,36 +77,36 @@ export default {
       socials: [
         {
           key: 'github',
-          value: 'https://github.com/meterio'
+          value: 'https://github.com/meterio',
         },
         {
           key: 'telegram',
-          value: 'https://t.me/Meter_IO'
+          value: 'https://t.me/Meter_IO',
         },
         {
           key: 'instagram',
-          value: 'https://www.instagram.com/meter.io/'
+          value: 'https://www.instagram.com/meter.io/',
         },
         {
           key: 'twitter',
-          value: 'https://twitter.com/Meter_IO'
+          value: 'https://twitter.com/Meter_IO',
         },
         {
           key: 'discord',
-          value: 'https://discord.gg/XZgZsCn'
+          value: 'https://discord.gg/XZgZsCn',
         },
         {
           key: 'youtube',
-          value: 'https://www.youtube.com/channel/UCgQVD2Ab-i3IKUhjs6-Z76w'
-        }
+          value: 'https://www.youtube.com/channel/UCgQVD2Ab-i3IKUhjs6-Z76w',
+        },
         // {
         //   key: "wechat",
         //   type: "image",
         //   value: "https://github.com",
         // },
-      ]
+      ],
     };
-  }
+  },
 };
 </script>
 
@@ -154,8 +154,11 @@ footer {
     }
 
     .download-wallet {
-      margin-top: 20px;
-
+      margin-top: 10px;
+      .btn-sm {
+        border-radius: 0.75rem;
+        padding: 0.25rem 0.5rem;
+      }
       .desktop-btn {
         background-color: $primary-color;
         color: white;

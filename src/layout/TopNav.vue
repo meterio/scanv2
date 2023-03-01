@@ -102,7 +102,7 @@ export default {
       selectedValue: null,
       modal_show: false,
       searchKey: '',
-      domainnames: []
+      domainnames: [],
     };
   },
   components: { AutoSearchInput },
@@ -133,7 +133,7 @@ export default {
       const path = this.$route.path;
       let x = path.startsWith(`/auction`);
       return x;
-    }
+    },
   },
   watch: {
     async searchKey(newVal, oldVal) {
@@ -160,7 +160,7 @@ export default {
           this.domainnames = temp;
         }
       }
-    }
+    },
   },
   methods: {
     selected(item) {
@@ -243,12 +243,12 @@ export default {
         // this.$bvModal.show('homeModal')
         this.modal_show = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .navbar {
   padding-top: 3px;
   padding-bottom: 3px;
@@ -267,7 +267,7 @@ export default {
 }
 .m-bar {
   a {
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.7);
     &:hover {
       text-decoration: none;
       color: rgba(0, 0, 0, 0.9);
@@ -283,5 +283,9 @@ export default {
   .search-group {
     width: 100% !important;
   }
+}
+.btn-outline-primary.btn-sm {
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 0.75rem !important;
 }
 </style>

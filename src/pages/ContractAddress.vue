@@ -15,8 +15,8 @@
   )
 
   b-container.summary
-    .mt-2pert.px-5
-    data-table-v3.mt-2pert.px-0(
+    .px-5
+    data-table-v3.mt-1pert.px-0(
       :isTableData='isTableData',
       :loadItems='loadItems',
       :fields='fields',
@@ -53,7 +53,7 @@ export default {
     NavTabs,
     DataSummary,
     ContractDetail,
-    Loading
+    Loading,
   },
   props: {
     addressInfo: {
@@ -69,14 +69,14 @@ export default {
             proxyType: '',
             implAddr: '',
             prevImplAddr: '',
-            adminAddr: ''
-          }
+            adminAddr: '',
+          },
         };
-      }
+      },
     },
     contractDataCount: {
       type: Object,
-      required: true
+      required: true,
     },
   },
   computed: {
@@ -102,7 +102,7 @@ export default {
       return this.addressInfo.verifiedFrom;
     },
     deployStatus() {
-      return this.addressInfo.deployStatus
+      return this.addressInfo.deployStatus;
     },
     title() {
       if (this.isToken) {
@@ -112,63 +112,64 @@ export default {
       }
     },
     logoURI() {
-      return this.addressInfo.logoURI
+      return this.addressInfo.logoURI;
     },
     tabs() {
       if (this.isToken) {
         return [
           {
             name: this.contractDataCount.txCount > 0 ? `Txs(${this.contractDataCount.txCount})` : 'Txs',
-            download: true
+            download: true,
           },
           {
             name:
               this.contractDataCount.internalTxCount > 0
                 ? `Internal Txs(${this.contractDataCount.internalTxCount})`
-                : 'Internal Txs'
+                : 'Internal Txs',
           },
           {
             name:
               this.contractDataCount.transfersCount > 0
                 ? `Transfers(${this.contractDataCount.transfersCount})`
-                : 'Transfers'
+                : 'Transfers',
           },
           {
             name:
-              this.contractDataCount.holdersCount > 0 ? `Holders(${this.contractDataCount.holdersCount})` : 'Holders'
+              this.contractDataCount.holdersCount > 0 ? `Holders(${this.contractDataCount.holdersCount})` : 'Holders',
           },
           {
             name:
               this.contractDataCount.erc20TokenCount > 0
                 ? `ERC20s(${this.contractDataCount.erc20TokenCount})`
-                : 'ERC20s'
+                : 'ERC20s',
           },
           { name: 'Contract' },
-          { name: this.contractDataCount.eventsCount > 0 ? `Events(${this.contractDataCount.eventsCount})` : 'Events' }
+          { name: this.contractDataCount.eventsCount > 0 ? `Events(${this.contractDataCount.eventsCount})` : 'Events' },
         ];
       }
       return [
         {
-          name: this.contractDataCount.txCount > 0 ? `Txs(${this.contractDataCount.txCount})` : 'Txs'
+          name: this.contractDataCount.txCount > 0 ? `Txs(${this.contractDataCount.txCount})` : 'Txs',
         },
         {
           name:
             this.contractDataCount.internalTxCount > 0
               ? `Internal Txs(${this.contractDataCount.internalTxCount})`
-              : 'Internal Txs'
+              : 'Internal Txs',
         },
         {
-          name: this.contractDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.contractDataCount.erc20TxCount})` : 'ERC20 Txs',
-          download: 'download'
+          name:
+            this.contractDataCount.erc20TxCount > 0 ? `ERC20 Txs(${this.contractDataCount.erc20TxCount})` : 'ERC20 Txs',
+          download: 'download',
         },
         {
           name:
             this.contractDataCount.erc20TokenCount > 0
               ? `ERC20 Tokens(${this.contractDataCount.erc20TokenCount})`
-              : 'ERC20 Tokens'
+              : 'ERC20 Tokens',
         },
         { name: 'Contract' },
-        { name: this.contractDataCount.eventsCount > 0 ? `Events(${this.contractDataCount.eventsCount})` : 'Events' }
+        { name: this.contractDataCount.eventsCount > 0 ? `Events(${this.contractDataCount.eventsCount})` : 'Events' },
       ];
     },
     fields() {
@@ -248,7 +249,7 @@ export default {
       }
 
       return true;
-    }
+    },
   },
   data() {
     return {
@@ -262,19 +263,19 @@ export default {
         fields: [
           { key: 'rank', label: 'Rank' },
           { key: 'fullAddress', label: 'Address' },
-          { key: 'balance', label: 'Balance' }
+          { key: 'balance', label: 'Balance' },
         ],
         fields2: [
           // { key: 'rank', label: 'Rank' },
           { key: 'fullAddress', label: 'Address' },
-          { key: 'nftTokens', label: 'Token ID' }
-        ]
+          { key: 'nftTokens', label: 'Token ID' },
+        ],
       },
       txs: {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20
+          perPage: 20,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -285,15 +286,15 @@ export default {
           { key: 'direct', label: '' },
           { key: 'to', label: 'To' },
           { key: 'amount', label: 'Amount' },
-          { key: 'fee', label: 'Fee' }
+          { key: 'fee', label: 'Fee' },
         ],
-        items: []
+        items: [],
       },
       internaltxs: {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20
+          perPage: 20,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Parent Tx Hash' },
@@ -303,28 +304,28 @@ export default {
           { key: 'from', label: 'From' },
           { key: 'direct', label: '' },
           { key: 'to', label: 'To' },
-          { key: 'amount', label: 'Amount' }
+          { key: 'amount', label: 'Amount' },
         ],
-        items: []
+        items: [],
       },
       events: {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20
+          perPage: 20,
         },
         fields: [
           { key: 'txInfo', label: 'Tx Hash' },
           { key: 'method', label: 'Method' },
-          { key: 'event', label: 'Logs' }
+          { key: 'event', label: 'Logs' },
         ],
-        items: []
+        items: [],
       },
       transfers: {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20
+          perPage: 20,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -332,7 +333,7 @@ export default {
           { key: 'timestamp', label: 'Time' },
           { key: 'from', label: 'From' },
           { key: 'to', label: 'To' },
-          { key: 'amount', label: 'Amount' }
+          { key: 'amount', label: 'Amount' },
         ],
         fields2: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -340,9 +341,9 @@ export default {
           { key: 'timestamp', label: 'Time' },
           { key: 'from', label: 'From' },
           { key: 'to', label: 'To' },
-          { key: 'nft', label: 'Token ID' }
+          { key: 'nft', label: 'Token ID' },
         ],
-        items: []
+        items: [],
       },
       erc20Tokens: {
         pagination: { show: true, align: 'center', perPage: 20 },
@@ -350,15 +351,15 @@ export default {
           { key: 'tokenType', label: 'Type' },
           { key: 'fullAddress', label: 'Token Address' },
           { key: 'balance', label: 'Balance' },
-          { key: 'blocknum', label: 'Last Updated on Block' }
-        ]
+          { key: 'blocknum', label: 'Last Updated on Block' },
+        ],
       },
       erc20txs: {
         pagination: {
           show: true,
           align: 'center',
           perPage: 5,
-          limit: 10
+          limit: 10,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -368,9 +369,9 @@ export default {
           { key: 'direct', label: '' },
           { key: 'to', label: 'To' },
           { key: 'amount', label: 'Amount' },
-          { key: 'fee', label: 'Fee' }
+          { key: 'fee', label: 'Fee' },
         ],
-        items: []
+        items: [],
       },
     };
   },
@@ -378,9 +379,9 @@ export default {
     address() {
       this.getContractFiles();
     },
-    "addressInfo"(val) {
+    addressInfo(val) {
       this.getImplContractFiles();
-    }
+    },
   },
   created() {
     this.getLoadTarget();
@@ -394,8 +395,8 @@ export default {
           name: 'exportData',
           params: {
             address: this.address,
-            type: 'txs'
-          }
+            type: 'txs',
+          },
         });
       }
       if (tabIndex == 2) {
@@ -403,8 +404,8 @@ export default {
           name: 'exportData',
           params: {
             address: this.address,
-            type: 'erc20Txs'
-          }
+            type: 'erc20Txs',
+          },
         });
       }
     },
@@ -417,8 +418,11 @@ export default {
     },
     async getImplContractFiles() {
       if (this.addressInfo.proxyContract.isProxy) {
-        const { files } = await this.$api.contract.getContractFiles(this.network, this.addressInfo.proxyContract.implAddr)
-        this.implFiles = files
+        const { files } = await this.$api.contract.getContractFiles(
+          this.network,
+          this.addressInfo.proxyContract.implAddr
+        );
+        this.implFiles = files;
       }
     },
     navTabChange(val) {
@@ -482,19 +486,19 @@ export default {
       const { address } = this.$route.params;
       const res = await this.$api.account.getTxs20(network, address, page, limit);
       const { txs, totalRows } = res;
-      const items = txs.map(t => ({
+      const items = txs.map((t) => ({
         txhashWithStatus: {
           hash: t.txHash,
-          status: false
+          status: false,
         },
         blocknum: t.block.number,
         from: {
           address: t.from,
-          isContract: t.fromIsContract
+          isContract: t.fromIsContract,
         },
         to: {
           address: t.to,
-          isContract: t.toIsContract
+          isContract: t.toIsContract,
         },
         direct: t.from === this.address ? 'Out' : 'In',
         amount: {
@@ -503,15 +507,15 @@ export default {
           token: t.symbol || 'ERC20',
           precision: 8,
           decimals: t.decimals || 18,
-          address: t.tokenAddress
+          address: t.tokenAddress,
         },
         fee: {
           type: 'amount',
           amount: t.fee,
           token: 'MTR',
-          precision: -1
+          precision: -1,
         },
-        timestamp: t.block.timestamp
+        timestamp: t.block.timestamp,
       }));
       return { items, totalRows };
     },
@@ -530,8 +534,8 @@ export default {
             amount: t.balance,
             token: t.tokenSymbol,
             precision: 8,
-            decimals: t.tokenDecimals
-          }
+            decimals: t.tokenDecimals,
+          },
         });
       }
       return { items, totalRows };
@@ -546,7 +550,7 @@ export default {
         const res = {
           ...h,
           rank: index + 1 + (pageNum - 1) * limitNum,
-          fullAddress: h.address || h.owner
+          fullAddress: h.address || h.owner,
         };
 
         if (this.isERC20) {
@@ -555,10 +559,10 @@ export default {
             amount: h.balance,
             precision: 6,
             decimals: token.decimals || 18,
-            token: token.symbol
+            token: token.symbol,
           };
         } else {
-          res.nftTokens = h.tokens.map(t => ({ ...t, address: token.address }));
+          res.nftTokens = h.tokens.map((t) => ({ ...t, address: token.address }));
         }
 
         return res;
@@ -573,7 +577,7 @@ export default {
         let res = {
           txInfo: {
             txHash: r.txHash,
-            block: r.block
+            block: r.block,
           },
           method: r.method,
           event: {
@@ -583,9 +587,9 @@ export default {
             topics: r.topics,
             data: r.data,
             datas: r.datas,
-            abi: r.abi
+            abi: r.abi,
           },
-          decoded: r.decoded
+          decoded: r.decoded,
         };
         return res;
       });
@@ -595,7 +599,7 @@ export default {
       const { address } = this.$route.params;
       const res = await this.$api.account.getTxs(network, address, page, limit);
       const { txs, totalRows } = res;
-      const items = txs.map(t => {
+      const items = txs.map((t) => {
         let direct = '';
         const fromAddr = t.from;
         const toAddr = t.to;
@@ -619,32 +623,32 @@ export default {
         return {
           txhashWithStatus: {
             hash: t.txHash,
-            status: t.reverted
+            status: t.reverted,
           },
           methodName: t.method,
           blocknum: t.block.number,
           from: {
             address: fromAddr,
-            isContract: t.fromIsContract
+            isContract: t.fromIsContract,
           },
           direct,
           to: {
             address: toAddr || 'nobody',
-            isContract: t.toIsContract
+            isContract: t.toIsContract,
           },
           amount: {
             type: 'amount',
             amount: amount,
             token: token,
-            precision: 8
+            precision: 8,
           },
           fee: {
             type: 'amount',
             amount: fee,
             token: 'MTR',
-            precision: -1
+            precision: -1,
           },
-          timestamp: t.block.timestamp
+          timestamp: t.block.timestamp,
         };
       });
       return { items, totalRows };
@@ -653,7 +657,7 @@ export default {
       const { address } = this.$route.params;
       const res = await this.$api.account.getInternalTxs(network, address, page, limit);
       const { rows, totalRows } = res;
-      const items = rows.map(t => {
+      const items = rows.map((t) => {
         let direct = '';
         const fromAddr = t.from;
         const toAddr = t.to;
@@ -672,26 +676,26 @@ export default {
         return {
           txhashWithStatus: {
             hash: t.txHash,
-            status: t.reverted
+            status: t.reverted,
           },
           methodName: t.method,
           blocknum: t.block.number,
           from: {
             address: fromAddr,
-            isContract: t.fromIsContract
+            isContract: t.fromIsContract,
           },
           direct,
           to: {
             address: toAddr || 'nobody',
-            isContract: t.toIsContract
+            isContract: t.toIsContract,
           },
           amount: {
             type: 'amount',
             amount: amount,
             token: token,
-            precision: 8
+            precision: 8,
           },
-          timestamp: t.block.timestamp
+          timestamp: t.block.timestamp,
         };
       });
       return { items, totalRows };
@@ -700,23 +704,23 @@ export default {
       const { address } = this.$route.params;
       const res = await this.$api.account.getTransfers(network, address, page, limit);
       const { transfers, totalRows, contract } = res;
-      const items = transfers.map(t => {
+      const items = transfers.map((t) => {
         const res = {
           txhashWithStatus: {
             hash: t.txHash,
-            status: false
+            status: false,
           },
           methodName: t.method,
           blocknum: t.block.number,
           from: {
             address: t.from,
-            isContract: t.fromIsContract
+            isContract: t.fromIsContract,
           },
           to: {
             address: t.to,
-            isContract: t.toIsContract
+            isContract: t.toIsContract,
           },
-          timestamp: t.block.timestamp
+          timestamp: t.block.timestamp,
         };
         if (this.isERC20) {
           res.amount = {
@@ -724,19 +728,19 @@ export default {
             amount: t.amount,
             token: contract.symbol,
             decimals: contract.decimals,
-            precision: 8
+            precision: 8,
           };
         } else {
           res.nft = {
             address: t.tokenAddress,
-            nftBalances: t.nftTransfers
+            nftBalances: t.nftTransfers,
           };
         }
         return res;
       });
       return { items, totalRows };
-    }
-  }
+    },
+  },
 };
 </script>
 

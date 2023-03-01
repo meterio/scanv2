@@ -1,7 +1,7 @@
 <template>
   <b-container class="table-container data-table-container">
+    <slot name="header"></slot>
     <b-card :title="title">
-      <slot name="header"></slot>
       <b-table
         hover
         class="data-table"
@@ -35,7 +35,7 @@
               class="link"
               :to="{
                 name: 'epochDetail',
-                params: { epoch: data.value }
+                params: { epoch: data.value },
               }"
               >{{ data.value }}</router-link
             >
@@ -52,7 +52,7 @@
         <!-- Time column template -->
         <template v-slot:cell(time)="data">
           <div class="dt-row">
-            <span class="time"><time-tag :timestamp="data.value"/></span>
+            <span class="time"><time-tag :timestamp="data.value" /></span>
           </div>
         </template>
         <template v-slot:cell(timestamp)="data">
@@ -62,12 +62,12 @@
         </template>
         <template v-slot:cell(startTime)="data">
           <div class="dt-row">
-            <span class="time"><time-tag :timestamp="data.value"/></span>
+            <span class="time"><time-tag :timestamp="data.value" /></span>
           </div>
         </template>
         <template v-slot:cell(endTime)="data">
           <div class="dt-row" v-if="data.value">
-            <span class="time"><time-tag :timestamp="data.value"/></span>
+            <span class="time"><time-tag :timestamp="data.value" /></span>
           </div>
           <div class="dt-row" v-else>-</div>
         </template>
@@ -85,7 +85,7 @@
               class="link"
               :to="{
                 name: 'txDetail',
-                params: { hash: data.value }
+                params: { hash: data.value },
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -101,7 +101,7 @@
               class="link"
               :to="{
                 name: 'txDetail',
-                params: { hash: data.value.hash }
+                params: { hash: data.value.hash },
               }"
               >{{ shortHash(data.value.hash) }}</router-link
             >
@@ -115,7 +115,7 @@
               class="link"
               :to="{
                 name: 'bucket',
-                params: { id: data.value }
+                params: { id: data.value },
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -161,7 +161,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value }
+                params: { revision: data.value },
               }"
               >#{{ data.value }}</router-link
             >
@@ -173,7 +173,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value }
+                params: { revision: data.value },
               }"
               >#{{ data.value }}</router-link
             >
@@ -186,7 +186,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value }
+                params: { revision: data.value },
               }"
               >#{{ data.value }}</router-link
             >
@@ -200,7 +200,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value }
+                params: { revision: data.value },
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -220,7 +220,7 @@
               v-if="data.value.bidCount && data.value.bidCount > 0"
               :to="{
                 name: 'auctionDetail',
-                params: { auctionID: data.value.id }
+                params: { auctionID: data.value.id },
               }"
               >{{ data.value.bidCount }}</router-link
             >
@@ -396,7 +396,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value.block }
+                params: { revision: data.value.block },
               }"
               >#{{ data.value.block }}</router-link
             >
@@ -435,36 +435,36 @@ export default {
     sortBy: { type: String },
     sortDesc: { type: Boolean },
     title: {
-      type: String
+      type: String,
     },
     minHeight: {
       type: String,
-      default: 'auto'
+      default: 'auto',
     },
     items: {
       type: Array,
-      default: function() {
+      default: function () {
         return [];
-      }
+      },
     },
     fields: {
       type: Array,
-      default: function() {
+      default: function () {
         return [];
-      }
+      },
     },
     pagination: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           show: false,
-          align: 'right'
+          align: 'right',
         };
-      }
+      },
     },
     loadItems: {
-      type: Function
-    }
+      type: Function,
+    },
   },
   data() {
     return {
@@ -472,7 +472,7 @@ export default {
       totalRows: 0,
       currentPage: 1,
       loading: true,
-      copied: false
+      copied: false,
     };
   },
   created() {
@@ -487,10 +487,10 @@ export default {
   computed: {
     passedItems() {
       if (this.items) {
-        return this.items.map(i => i);
+        return this.items.map((i) => i);
       }
       return undefined;
-    }
+    },
   },
   watch: {
     passedItems(to, from) {
@@ -500,7 +500,7 @@ export default {
       if (!this.loadItems) {
         this.initWithPassed();
       }
-    }
+    },
   },
   methods: {
     async initWithPassed() {
@@ -550,8 +550,8 @@ export default {
       this.init();
 
       this.$router.replace({ query: { ...this.$route.query, p: val } });
-    }
-  }
+    },
+  },
 };
 </script>
 

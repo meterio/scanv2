@@ -11,7 +11,7 @@
 <script>
 export default {
   name: 'DataCard',
-  props: ['data']
+  props: ['data'],
 };
 </script>
 
@@ -22,7 +22,6 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   .content {
     color: #0c2954;
     font-weight: normal;

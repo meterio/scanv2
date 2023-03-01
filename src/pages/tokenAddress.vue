@@ -4,7 +4,7 @@
 
   b-container.summary
     .mt-2pert.px-5
-    data-table-v2.mt-2pert.px-0(:loadItems='loadItems', :fields='fields', :pagination='pagination', :key='loadTarget')
+    data-table-v2.mt-1pert.px-0(:loadItems='loadItems', :fields='fields', :pagination='pagination', :key='loadTarget')
       div(slot='header')
         nav-tabs.px-0(:tabs='token_tabs', :value='tabValue', @changeTab='navTabChange')
 </template>

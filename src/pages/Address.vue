@@ -122,14 +122,23 @@ export default {
           this.summary.push({ key: 'Name', value: account.name });
         }
         if (account.firstSeen && account.firstSeen.number > 0) {
-          this.summary.push({
-            key: 'First Seen',
-            type: 'block-link-with-time',
-            value: account.firstSeen.timestamp,
-            block: account.firstSeen.number,
-          });
+          if (this.isContract) {
+            this.summary.push({
+              key: 'Deployed at',
+              type: 'block-link-with-time',
+              value: account.firstSeen.timestamp,
+              block: account.firstSeen.number,
+            });
+          } else {
+            this.summary.push({
+              key: 'First Seen',
+              type: 'block-link-with-time',
+              value: account.firstSeen.timestamp,
+              block: account.firstSeen.number,
+            });
+          }
         }
-        if (account.lastUpdate && account.lastUpdate.number > 0) {
+        if (!this.isContract && account.lastUpdate && account.lastUpdate.number > 0) {
           this.summary.push({
             key: 'Last Updated',
             type: 'block-link-with-time',

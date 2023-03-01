@@ -98,25 +98,32 @@ export default {
 .s-nav-tabbar {
   width: 100%;
   display: flex;
-  border-bottom: 1px solid #ddd;
+  // border-bottom: 1px solid #ddd;
+  margin-bottom: 1rem;
   word-wrap: break-word;
   flex-wrap: wrap;
+  .nav-item + .nav-item {
+    margin-left: 8px;
+  }
   .nav-item {
-    font-size: 15px;
+    font-size: 95%;
     font-weight: bold;
-    padding: 9px 12px;
+    padding: 4px 8px;
     align-items: center;
     color: #192a56;
     justify-content: center;
+    border-radius: 0.5rem;
+    background-color: #e9ecef;
     &:hover {
       cursor: pointer;
-      background: #f0f2ff;
-      border-radius: 5px 5px 0 0;
+      background-color: darken(#e9ecef, 10%);
+      color: darken(#192a56, 10%);
     }
     &.active {
       font-weight: bold;
-      color: #003cb2;
-      border-bottom: 2px solid #003cb2;
+      color: #e9ecef;
+      // border-bottom: 2px solid #003cb2;
+      background-color: #003cb2;
       // border: 1px solid #ddd;
       // border-bottom: none;
       // border-radius: 5px 5px 0 0;
