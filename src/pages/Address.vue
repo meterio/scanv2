@@ -13,7 +13,7 @@ export default {
   name: 'Address',
   components: {
     UserAddress,
-    ContractAddress
+    ContractAddress,
   },
   data() {
     return {
@@ -30,7 +30,7 @@ export default {
         txCount: 0,
         transfersCount: 0,
         holdersCount: 0,
-        internalTxCount: 0
+        internalTxCount: 0,
       },
       userDataCount: {
         txCount: 0,
@@ -39,14 +39,14 @@ export default {
         erc721TxCount: 0,
         bidCount: 0,
         proposedCount: 0,
-        bucketCount: 0
+        bucketCount: 0,
       },
       proxyContract: {
         isProxy: false,
         proxyType: '',
         implAddr: '',
         prevImplAddr: '',
-        adminAddr: ''
+        adminAddr: '',
       },
       logoURI: '',
     };
@@ -65,7 +65,7 @@ export default {
         verifiedFrom: this.verifiedFrom,
         proxyContract: this.proxyContract,
       };
-    }
+    },
   },
   methods: {
     init() {
@@ -79,7 +79,7 @@ export default {
 
         const res = await this.$api.account.getAccountDetail(this.network, address);
 
-        console.log('res', res)
+        console.log('res', res);
 
         const { account } = res;
         this.isContract = account.type !== undefined;
@@ -108,15 +108,15 @@ export default {
             mtrToken: this.currentChain.symbol,
             mtrgToken: this.currentChain.gSymbol,
             type: 'balance',
-            precision: -1
+            precision: -1,
           },
           {
             key: 'Staked',
             value: account.mtrgBounded,
             type: 'amount',
             token: this.currentChain.gSymbol,
-            precision: -1
-          }
+            precision: -1,
+          },
         ]);
         if (account.name) {
           this.summary.push({ key: 'Name', value: account.name });
@@ -126,7 +126,7 @@ export default {
             key: 'First Seen',
             type: 'block-link-with-time',
             value: account.firstSeen.timestamp,
-            block: account.firstSeen.number
+            block: account.firstSeen.number,
           });
         }
         if (account.lastUpdate && account.lastUpdate.number > 0) {
@@ -134,7 +134,7 @@ export default {
             key: 'Last Updated',
             type: 'block-link-with-time',
             value: account.lastUpdate.timestamp,
-            block: account.lastUpdate.number
+            block: account.lastUpdate.number,
           });
         }
         if (account.hasCode) {
@@ -143,13 +143,13 @@ export default {
         if (account.tokenName && account.tokenSymbol) {
           this.summary.push({
             key: `${this.tokenType} Token`,
-            value: `${account.tokenName || 'Unnamed Token'} (${account.tokenSymbol || 'ERC20'})`
+            value: `${account.tokenName || 'Unnamed Token'} (${account.tokenSymbol || 'ERC20'})`,
           });
         }
         if (account.tokenSymbol && account.type === 'ERC20') {
           this.summary.push({
             key: 'Decimals',
-            value: account.tokenDecimals || 18
+            value: account.tokenDecimals || 18,
           });
         }
         if (account.totalSupply && account.type === 'ERC20') {
@@ -159,24 +159,9 @@ export default {
               type: 'amount',
               value: account.totalSupply,
               token: account.tokenSymbol,
-              decimals: account.tokenDecimals
+              decimals: account.tokenDecimals,
             });
           }
-        }
-        if (account.holdersCount) {
-          this.summary.push({
-            key: 'Holders',
-            type: 'holders',
-            value: account.holdersCount
-          });
-        }
-
-        if (account.transfersCount) {
-          this.summary.push({
-            key: 'Transfers',
-            type: 'transfers',
-            value: account.transfersCount
-          });
         }
 
         if (this.isContract) {
@@ -186,11 +171,11 @@ export default {
           this.deployStatus = account.deployStatus ? account.deployStatus : '';
           this.summary.push({
             key: 'owner',
-            value: account.master
+            value: account.master,
           });
           this.summary.push({
             key: 'creationTxHash',
-            value: account.creationTxHash
+            value: account.creationTxHash,
           });
           this.contractDataCount = {
             txCount: account.txCount,
@@ -199,7 +184,7 @@ export default {
             erc20TxCount: account.erc20TxCount,
             erc20TokenCount: account.erc20TokenCount,
             internalTxCount: account.internalTxCount,
-            eventsCount: account.eventsCount
+            eventsCount: account.eventsCount,
           };
         } else {
           this.userDataCount = {
@@ -211,7 +196,7 @@ export default {
             bidCount: account.bidCount,
             proposedCount: account.proposedCount,
             bucketCount: account.bucketCount,
-            eventsCount: account.eventsCount
+            eventsCount: account.eventsCount,
           };
         }
 
@@ -221,16 +206,16 @@ export default {
             proxyType: account.proxyType,
             implAddr: account.implAddr,
             prevImplAddr: account.prevImplAddr,
-            adminAddr: account.adminAddr
-          }
+            adminAddr: account.adminAddr,
+          };
         } else {
-          this.proxyContract.isProxy = false
+          this.proxyContract.isProxy = false;
         }
       } catch (e) {
         console.log(e);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

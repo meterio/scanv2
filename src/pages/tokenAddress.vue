@@ -95,8 +95,6 @@ export default {
         'Official Site': this.tokenProfile.officialSite,
         'Total Supply': this.tokenProfile.totalSupply,
         Circulation: this.tokenProfile.circulation,
-        Holders: this.tokenProfile.holdersCount,
-        Transfers: this.tokenProfile.transfersCount,
       };
       const profile = [];
       for (const key of Object.keys(data)) {
@@ -323,5 +321,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

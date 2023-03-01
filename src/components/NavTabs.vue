@@ -8,8 +8,9 @@ div
     ) {{ tab.name }}
       b-icon(
         v-if="isShowCheck(tab.name)",
-        icon="check-circle",
-        variant="primary"
+        icon="check-circle-fill",
+        class="ml-1"
+        variant="success"
       )
       b-icon(
         v-if="tab.download"
@@ -29,21 +30,21 @@ export default {
   props: {
     tabs: {
       type: Array,
-      required: true
+      required: true,
     },
     value: {
       type: Number,
-      default: 0
+      default: 0,
     },
     verified: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       localTabIndex: 0,
-      chosenText: ''
+      chosenText: '',
     };
   },
 
@@ -53,7 +54,7 @@ export default {
     },
     computedTab() {
       return this.value;
-    }
+    },
   },
   created() {
     const q = this.$route.query;
@@ -80,7 +81,7 @@ export default {
       this.chosenText = this.tabs[tabIndex].name;
       console.log('chosen text: ', this.chosenText);
       this.$router.replace({
-        query: { ...this.$route.query, tab: tabIndex, p: 1 }
+        query: { ...this.$route.query, tab: tabIndex, p: 1 },
       });
     },
     isShowCheck(name) {
@@ -88,8 +89,8 @@ export default {
     },
     clickDownload(tabIndex) {
       this.$emit('download', tabIndex);
-    }
-  }
+    },
+  },
 };
 </script>
 
