@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="function-container m-2 p-1" v-if="abi">
+    <div class="function-container my-2 p-1 px-3" v-if="abi">
       <div class="function-name d-flex justify-content-between" @click="isOpenFolder">
         <span>{{ index + '. ' + computedFunName }}</span>
         <span class="d-flex align-center">
           <b-icon v-if="!v" icon="arrow-right"></b-icon>
-          <b-icon @click.stop="refresh" v-else icon="arrow-clockwise"></b-icon>
+          <b-icon @click.stop="refresh" v-else icon="arrow-down"></b-icon>
         </span>
       </div>
       <b-collapse v-model="v">
@@ -14,6 +14,7 @@
           <b-form v-else @submit.prevent="onSubmit">
             <b-form-group v-if="computedPayable" :label="computedFunName">
               <b-form-input
+                size="sm"
                 required
                 v-model="options.value"
                 trim
@@ -28,10 +29,10 @@
                   <AddNumberModal v-model="showNumberModal" @ok="ok" @close="closeAddNumberModel" />
                 </div>
               </div>
-              <b-form-input required v-model="params[index]" trim :placeholder="item.name"></b-form-input>
+              <b-form-input size="sm" required v-model="params[index]" trim :placeholder="item.name"></b-form-input>
             </div>
             <section>
-              <b-button type="submit" variant="primary">Write</b-button>
+              <b-button type="submit" size="sm" variant="success" class="mb-2">Write</b-button>
               <b-button class="ml-2" v-if="!!hash" @click="viewTransaction" type="button" variant="primary"
                 >View Transaction</b-button
               >
@@ -143,7 +144,7 @@ export default {
               value: '0x' + Number(value).toString(16),
             });
           }
-          const abiName = `${this.abi.name}(${this.abi.inputs.map(input => input.type).join(',')})`
+          const abiName = `${this.abi.name}(${this.abi.inputs.map((input) => input.type).join(',')})`;
           const tx = await this.contract[abiName].apply(null, parameters);
 
           await tx.wait();
@@ -174,8 +175,11 @@ export default {
 
 <style lang="scss" scoped>
 .function-container {
-  border-radius: 4px;
+  border-radius: 0.75rem;
   background-color: #f8f9fa;
   cursor: pointer;
+}
+.card-body {
+  padding: 0.25rem 0.75rem;
 }
 </style>

@@ -4,7 +4,7 @@
     <b-card>
       <div class="loading" v-if="loading">
         <div class="text-center text-primary my-2">
-          <b-spinner class="align-middle mr-2"></b-spinner>
+          <b-spinner small type="grow" class="align-middle mr-2"></b-spinner>
           <strong>Loading...</strong>
         </div>
       </div>
@@ -21,7 +21,7 @@
               <router-link
                 :to="{
                   name: 'address',
-                  params: { address: item.value }
+                  params: { address: item.value },
                 }"
                 v-if="item.type === 'address-link'"
                 >{{ item.value }}</router-link
@@ -30,11 +30,7 @@
               <a v-if="item.type === 'http-link'" :href="item.value">{{ item.value }}</a>
               <!-- amount -->
               <span v-if="item.type === 'amount'">
-                <AmountTag
-                  :amount="item.value"
-                  :token="item.token"
-                  :decimals="item.decimals"
-                ></AmountTag>
+                <AmountTag :amount="item.value" :token="item.token" :decimals="item.decimals"></AmountTag>
               </span>
             </b-col>
           </b-row>
@@ -45,25 +41,25 @@
 </template>
 
 <script>
-import AmountTag from "@/components/AmountTag.vue";
+import AmountTag from '@/components/AmountTag.vue';
 
 export default {
   components: { AmountTag },
-  name: "DataList",
+  name: 'DataList',
   props: {
     title: {
       type: String,
-      default: ''
+      default: '',
     },
     data: {
       type: Array,
       default() {
-        return []
-      }
+        return [];
+      },
     },
     wide: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   data() {
@@ -79,7 +75,7 @@ export default {
     contentCols() {
       return this.wide ? 9 : 10;
     },
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>

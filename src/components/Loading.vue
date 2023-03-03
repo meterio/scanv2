@@ -4,7 +4,7 @@
     <!-- <p>Loading...</p> -->
 
     <div class="text-center text-primary my-2">
-      <b-spinner class="align-middle mr-2"></b-spinner>
+      <b-spinner small type="grow" class="align-middle mr-2"></b-spinner>
       <strong>Loading...</strong>
     </div>
   </div>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: "Loading",
+  name: 'Loading',
 };
 </script>
 
@@ -24,7 +24,7 @@ export default {
   transform: translate(-50%, -50%);
   text-align: center;
   opacity: 0.55;
-  font-size: 14px;
+  // font-size: 14px;
   p {
     color: $secondary-font-color;
     margin-top: 6px;

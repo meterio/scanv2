@@ -19,14 +19,14 @@
       </section>
     </div>
     <div v-else-if="computedFiles.length">
-      <section class="d-flex flex-wrap justify-content-between my-2">
-        <div v-for="item in computedVerifyParams" :key="item.name" class="border rounded px-4 py-2 text-nowrap">
-          <span class="verify-params-name">{{ item.name }}</span>
-          <span>{{ item.value }}</span>
-        </div>
-      </section>
-      <b-tabs content-class="mt-3">
+      <b-tabs small pills content-class="mt-3">
         <b-tab title="Code" active>
+          <b-row class="d-flex flex-wrap justify-content-between my-2">
+            <b-col v-for="item in computedVerifyParams" :key="item.name" b-col sm="12" md="6">
+              <span class="verify-params-name">{{ item.name }}</span>
+              <b>{{ item.value }}</b>
+            </b-col>
+          </b-row>
           <code-text-area
             v-for="(item, index) in computedFiles"
             :key="item.path"
@@ -62,9 +62,12 @@
           />
         </b-tab>
         <b-tab v-if="proxyContract.isProxy" title="Read as Proxy">
-          <div>ABI for the implemention contract at 
+          <div>
+            ABI for the implemention contract at
             <address-link :address="proxyContract.implAddr" />
-            <span v-if="proxyContract.implAddr !== proxyContract.prevImplAddr">, Previously recorded to be on <address-link :address="proxyContract.prevImplAddr" /></span>
+            <span v-if="proxyContract.implAddr !== proxyContract.prevImplAddr"
+              >, Previously recorded to be on <address-link :address="proxyContract.prevImplAddr"
+            /></span>
           </div>
           <b-button @click="connect" :variant="variantBtn" pill size="sm">
             {{ computedBtnText }}
@@ -79,9 +82,12 @@
           />
         </b-tab>
         <b-tab v-if="proxyContract.isProxy" title="Write as Proxy">
-          <div>ABI for the implemention contract at 
+          <div>
+            ABI for the implemention contract at
             <address-link :address="proxyContract.implAddr" />
-            <span v-if="proxyContract.implAddr !== proxyContract.prevImplAddr">, Previously recorded to be on <address-link :address="proxyContract.prevImplAddr" /></span>
+            <span v-if="proxyContract.implAddr !== proxyContract.prevImplAddr"
+              >, Previously recorded to be on <address-link :address="proxyContract.prevImplAddr"
+            /></span>
           </div>
           <b-button @click="connect" :variant="variantBtn" pill size="sm">
             {{ computedBtnText }}
@@ -108,7 +114,7 @@ import ContractWriteFunction from './ContractWriteFunction.vue';
 import CodeTextArea from '@/components/CodeTextArea.vue';
 import CopyData from '../components/CopyData.vue';
 import { ethers } from 'ethers';
-import AddressLink from '../components/AddressLink.vue'
+import AddressLink from '../components/AddressLink.vue';
 
 export default {
   name: 'Contract',
@@ -117,7 +123,7 @@ export default {
     ContractWriteFunction,
     CodeTextArea,
     CopyData,
-    AddressLink
+    AddressLink,
   },
   props: {
     verified: {
@@ -133,8 +139,8 @@ export default {
     implFiles: {
       type: Array,
       default() {
-        return []
-      }
+        return [];
+      },
     },
     address: {
       type: String,
@@ -148,14 +154,14 @@ export default {
           proxyType: '',
           implAddr: '',
           prevImplAddr: '',
-          adminAddr: ''
-        }
-      }
+          adminAddr: '',
+        };
+      },
     },
     deployStatus: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {
@@ -176,9 +182,9 @@ export default {
   computed: {
     variantBtn() {
       if (this.account && this.chainId == this.currentChain.chainId) {
-        return 'primary';
+        return 'outline-success';
       } else {
-        return 'danger';
+        return 'outline-danger';
       }
     },
     computedFiles() {
@@ -234,9 +240,9 @@ export default {
         if (this.chainId != this.currentChain.chainId) {
           return `Wrong Network`;
         }
-        return this.account.substr(0, 4) + '...' + this.account.substr(-2);
+        return `Connected: ` + this.account.substr(0, 4) + '...' + this.account.substr(-2);
       } else {
-        return 'Connect';
+        return 'Connect to Web3';
       }
     },
     openable() {
@@ -246,8 +252,8 @@ export default {
       return this.implContract && this.account && this.chainId == this.currentChain.chainId;
     },
     contractCallEnable() {
-      return this.deployStatus !== 'selfDestructed'
-    }
+      return this.deployStatus !== 'selfDestructed';
+    },
   },
   async created() {
     this.initAbi();
@@ -285,10 +291,10 @@ export default {
   },
   methods: {
     async emitImportApi() {
-      console.log('emit import verified contract files')
+      console.log('emit import verified contract files');
       const res = await this.$api.known.emitImportApi(this.network, this.address);
       if (res && res.verified) {
-        window.location.reload()
+        window.location.reload();
       } else {
         this.getContractBytecode();
       }
@@ -320,9 +326,9 @@ export default {
     },
     initImplAbi() {
       if (!this.implFiles.length) {
-        this.implAbi = null
-        this.implReadAbi = []
-        this.implWriteAbi = []
+        this.implAbi = null;
+        this.implReadAbi = [];
+        this.implWriteAbi = [];
         return;
       }
       const readAbi = [];
@@ -356,7 +362,7 @@ export default {
           const signer = new ethers.providers.Web3Provider(this.provider).getSigner();
           this.contract = new ethers.Contract(this.address, this.abi, signer);
           if (this.implAbi) {
-            this.implContract = new ethers.Contract(this.address, this.implAbi, signer)
+            this.implContract = new ethers.Contract(this.address, this.implAbi, signer);
           }
         })
         .catch((err) => {
@@ -385,7 +391,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" global>
 .loading {
   opacity: 0.55;
   font-size: 14px;
@@ -393,6 +399,36 @@ export default {
 }
 .verify-params-name {
   color: '#77838f';
-  font-size: 0.8rem;
+}
+.btn.rounded-pill {
+  border-radius: 0.75rem !important;
+  padding-left: 0.3rem !important;
+  padding-right: 0.3rem !important;
+}
+.nav-pills {
+  .nav-item + .nav-item {
+    margin-left: 8px;
+  }
+  .nav-item a {
+    color: #192a56;
+    justify-content: center;
+    border-radius: 0.5rem;
+    background-color: #e9ecef;
+    padding: 4px 8px;
+    &:hover {
+      cursor: pointer;
+      background-color: darken(#e9ecef, 10%);
+      color: darken(#192a56, 10%);
+    }
+    &.active {
+      font-weight: bold;
+      color: #e9ecef;
+      // border-bottom: 2px solid #003cb2;
+      background-color: #003cb2;
+      // border: 1px solid #ddd;
+      // border-bottom: none;
+      // border-radius: 5px 5px 0 0;
+    }
+  }
 }
 </style>

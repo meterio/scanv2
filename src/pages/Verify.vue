@@ -8,14 +8,14 @@
     <b-alert v-if="isSuccess.status" show variant="success">{{ isSuccess.msg }}</b-alert>
     <section class="form-container">
       <b-form-group label="Add Files">
-        <b-form-file multiple v-model="files"
+        <b-form-file
+          multiple
+          v-model="files"
           placeholder="Meter uses sourcify.dev for contract verifications.  Add the solidity source and metadata files or a zip file "
         >
           <template slot="file-name" slot-scope="{ names }">
             <b-badge variant="dark">{{ names[0] }}</b-badge>
-            <b-badge v-if="names.length > 1" variant="dark" class="ml-1">
-              + {{ names.length - 1 }} More files
-            </b-badge>
+            <b-badge v-if="names.length > 1" variant="dark" class="ml-1"> + {{ names.length - 1 }} More files </b-badge>
           </template>
         </b-form-file>
       </b-form-group>
@@ -34,11 +34,11 @@
           {{ c.name + ': ' + c.path }}
         </b-form-checkbox>
       </b-form-group>
-      
+
       <section class="text-center">
         <b-button class="mr-1" variant="light" @click="goBack">Back</b-button>
         <b-button :disabled="loading" @click="verify" variant="primary">
-          <b-spinner v-if="loading" small></b-spinner>
+          <b-spinner v-if="loading" small type="grow"></b-spinner>
           <span class="ml-1">Verify</span>
         </b-button>
         <b-button :disabled="loading" class="ml-1" @click="reset" variant="secondary">Reset</b-button>
@@ -48,13 +48,12 @@
 </template>
 
 <script>
-
 export default {
-  name: "Verify",
+  name: 'Verify',
   props: {
     address: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
@@ -62,11 +61,11 @@ export default {
       loading: false,
       isError: {
         status: false,
-        msg: "Some error occur.",
+        msg: 'Some error occur.',
       },
       isSuccess: {
         status: false,
-        msg: "Verification successful!"
+        msg: 'Verification successful!',
       },
       files: [],
       contracts: [],
@@ -74,70 +73,70 @@ export default {
     };
   },
   watch: {
-    'chosenContract'(val) {
+    chosenContract(val) {
       if (val.length > 1) {
-        this.chosenContract = val.slice(val.length - 1)
+        this.chosenContract = val.slice(val.length - 1);
       }
-    }
+    },
   },
   methods: {
     async verify() {
-      this.isError.status = false
-      this.isSuccess.status = false
+      this.isError.status = false;
+      this.isSuccess.status = false;
 
       if (!this.files.length) {
-        return this.isError = {
+        return (this.isError = {
           status: true,
-          msg: 'Please add files'
-        }
+          msg: 'Please add files',
+        });
       }
 
-      this.loading = true
+      this.loading = true;
       const data = {
         address: this.address,
         files: [...this.files],
       };
       if (this.chosenContract.length) {
-        data.chosenContract = this.chosenContract[0]
+        data.chosenContract = this.chosenContract[0];
       }
 
-      this.verifyCount ++
+      this.verifyCount++;
 
       const res = await this.$api.verify.verifyFormData(this.network, data);
 
       if (res.error) {
         if (this.verifyCount < 2) {
-          this.verify()
-          return
+          this.verify();
+          return;
         }
-        this.loading = false
+        this.loading = false;
         if (res.msg.contractsToChoose) {
-          this.contracts = res.msg.contractsToChoose
+          this.contracts = res.msg.contractsToChoose;
         }
         this.isError = {
           status: true,
           msg: res.msg.error || res.msg,
         };
       } else {
-        const status = res.data.result[0].status
-        if (status === "perfect" || status === "partial") {
+        const status = res.data.result[0].status;
+        if (status === 'perfect' || status === 'partial') {
           this.isSuccess = {
             status: true,
-            msg: `Verification successful! ${status}ly verified at ${this.currentChain.name}:${this.address}`
-          }
+            msg: `Verification successful! ${status}ly verified at ${this.currentChain.name}:${this.address}`,
+          };
           // success
-          await this.emitImportApi()
+          await this.emitImportApi();
         }
       }
 
-      this.verifyCount = 0
+      this.verifyCount = 0;
     },
     reset() {
-      this.files = []
-      this.contracts = []
-      this.chosenContract = []
-      this.isError.status = false
-      this.isSuccess.status = false
+      this.files = [];
+      this.contracts = [];
+      this.chosenContract = [];
+      this.isError.status = false;
+      this.isSuccess.status = false;
     },
     async emitImportApi() {
       const res = await this.$api.known.emitImportApi(this.network, this.address);
@@ -152,11 +151,9 @@ export default {
       }
     },
     goBack() {
-      this.$router.go(-1)
-    }
+      this.$router.go(-1);
+    },
   },
 };
 </script>
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

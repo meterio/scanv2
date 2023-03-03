@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="function-container m-2 p-1" v-if="abi">
+    <div class="function-container my-2 p-1 px-3" v-if="abi">
       <div class="function-name d-flex justify-content-between" @click="isOpenFolder">
         <span>{{ index + '. ' + computedFunName }}</span>
         <span class="d-flex align-center">
@@ -12,7 +12,7 @@
         <b-card>
           <Loading v-if="readLoading" />
           <b-form v-if="paramsLength" @submit.prevent="onSubmit">
-            <div class="my-2" v-for="(item, index) in computedParams" :key="item.label">
+            <div class="my-1" v-for="(item, index) in computedParams" :key="item.label">
               <div class="d-flex">
                 <label>{{ item.name }}</label>
                 <div v-if="item.isUnit">
@@ -20,13 +20,13 @@
                   <AddNumberModal v-model="showNumberModal" @ok="ok" @close="closeAddNumberModel" />
                 </div>
               </div>
-              <b-form-input required v-model="params[index]" trim :placeholder="item.name"></b-form-input>
+              <b-form-input size="sm" required v-model="params[index]" trim :placeholder="item.name"></b-form-input>
             </div>
             <section>
-              <b-button type="submit" variant="primary">Read</b-button>
+              <b-button type="submit" size="sm" variant="success" class="mb-2">Read</b-button>
             </section>
           </b-form>
-          <div class="mt-2">{{ res }}</div>
+          <div>{{ res }}</div>
         </b-card>
       </b-collapse>
     </div>
@@ -123,16 +123,16 @@ export default {
         try {
           this.readLoading = true;
           const params = this.paramsLength === 0 ? [] : [...this.params];
-          const abiName = `${this.abi.name}(${this.abi.inputs.map(input => input.type).join(',')})`
+          const abiName = `${this.abi.name}(${this.abi.inputs.map((input) => input.type).join(',')})`;
           const res = await this.contract[abiName].apply(null, params);
-          let r = ''
+          let r = '';
           if (Array.isArray(res)) {
-            r = []
+            r = [];
             for (let i = 0; i < res.length; i++) {
-              r.push(String(res[i]))
+              r.push(String(res[i]));
             }
           } else {
-            r = res
+            r = res;
           }
           this.res = r;
 
@@ -157,8 +157,11 @@ export default {
 
 <style lang="scss" scoped>
 .function-container {
-  border-radius: 4px;
+  border-radius: 0.75rem;
   background-color: #f8f9fa;
   cursor: pointer;
+}
+.card-body {
+  padding: 0.25rem 0.75rem;
 }
 </style>

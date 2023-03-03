@@ -21,7 +21,7 @@
     <b-card>
       <div class="loading" v-if="loading">
         <div class="text-center text-primary my-2">
-          <b-spinner class="align-middle mr-2"></b-spinner>
+          <b-spinner small type="grow" class="align-middle mr-2"></b-spinner>
           <strong>Loading...</strong>
         </div>
       </div>

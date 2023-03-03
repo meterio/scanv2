@@ -28,7 +28,7 @@
       div(slot='otherData')
         <div class="loading" v-if="filesLoading">
           <div class="text-center text-primary my-2">
-            b-spinner.align-middle.mr-2
+            b-spinner.align-middle.mr-2(small, type="grow" )
             strong Loading...
           </div>
         </div>

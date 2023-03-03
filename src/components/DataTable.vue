@@ -14,13 +14,11 @@
       >
         <template #table-busy>
           <div class="text-center">
-            <b-spinner variant="primary" type="grow" label="Spinning"></b-spinner>
+            <b-spinner small type="grow" label="Spinning"></b-spinner>
           </div>
         </template>
         <template slot="empty">
-          <div class="text-center pt15 text-grey" style="color: #5c6f8c">
-            No data available.
-          </div>
+          <div class="text-center pt15 text-grey" style="color: #5c6f8c">No data available.</div>
         </template>
 
         <template v-for="slotName in Object.keys($scopedSlots)" v-slot:[slotName]="slotScope">
@@ -54,7 +52,7 @@
               class="link"
               :to="{
                 name: 'txDetail',
-                params: { hash: data.value }
+                params: { hash: data.value },
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -68,7 +66,7 @@
               class="link"
               :to="{
                 name: 'bucket',
-                params: { id: data.value }
+                params: { id: data.value },
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -106,7 +104,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value }
+                params: { revision: data.value },
               }"
               >#{{ data.value }}</router-link
             >
@@ -120,7 +118,7 @@
               class="link"
               :to="{
                 name: 'blockDetail',
-                params: { revision: data.value }
+                params: { revision: data.value },
               }"
               >{{ shortHash(data.value) }}</router-link
             >
@@ -137,9 +135,7 @@
         <!-- Mining Reward -->
         <template v-slot:cell(powReward)="data">
           <div class="dt-row">
-            <router-link :to="{ name: 'powRewards', params: { epoch: data.value } }">
-              Rewards
-            </router-link>
+            <router-link :to="{ name: 'powRewards', params: { epoch: data.value } }"> Rewards </router-link>
           </div>
         </template>
 
@@ -188,54 +184,54 @@ export default {
   name: 'DataTable',
   props: {
     title: {
-      type: String
+      type: String,
     },
     minHeight: {
       type: String,
-      default: 'auto'
+      default: 'auto',
     },
     data: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           title: '',
           items: [],
-          fields: []
+          fields: [],
         };
-      }
+      },
     },
     pagination: {
       type: Object,
-      default: function() {
+      default: function () {
         return {
           show: false,
-          align: 'right'
+          align: 'right',
         };
-      }
+      },
     },
     loading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     paginateTotal: {
       type: Number,
-      default: 0
+      default: 0,
     },
     paginateCurrentPage: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
   },
   data() {
     return {
-      currentPage: 1
+      currentPage: 1,
     };
   },
   methods: {
     pgChange(val) {
       this.$emit('tablePaginationChange', val);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -234,12 +234,14 @@ export default {
     text-align: center;
   }
 }
-.btn-block.btn-outline-primary {
-  color: $color-gray-450;
-  border: none;
-  border-radius: 0 0 0.75rem 0.75rem !important;
-  &:hover {
-    color: white;
+.card-footer {
+  .btn-block.btn-outline-primary {
+    color: $color-gray-450;
+    border: none;
+    border-radius: 0 0 0.75rem 0.75rem !important;
+    &:hover {
+      color: white;
+    }
   }
 }
 </style>

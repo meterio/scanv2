@@ -94,7 +94,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" global>
 .s-nav-tabbar {
   width: 100%;
   display: flex;

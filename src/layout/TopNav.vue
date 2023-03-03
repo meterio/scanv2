@@ -284,8 +284,10 @@ export default {
     width: 100% !important;
   }
 }
-.btn-outline-primary.btn-sm {
-  padding: 0.25rem 0.5rem !important;
-  border-radius: 0.75rem !important;
+.mx-2 {
+  .btn-outline-primary.btn-sm {
+    padding: 0.25rem 0.5rem !important;
+    border-radius: 0.75rem !important;
+  }
 }
 </style>
