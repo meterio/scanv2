@@ -4,12 +4,13 @@
       <div class="text-center">Search No More Data</div>
     </b-modal>
     <b-navbar toggleable="lg" type="light" variant="light" class="px-4">
-      <b-navbar-brand href="/" class="mr-5">
-        <b-img :src="computedLogo" height="40" class="mr-1" />
+      <div class="container">
+        <b-navbar-brand href="/" class="mr-5">
+          <b-img :src="computedLogo" height="40" class="mr-1" />
 
-        <!-- <span class="ml-1" style="font-size: 19px; font-weight: bold">{{ currentChain.title }}</span> -->
-        <!-- Upgrade Badge -->
-        <!--<b-badge
+          <!-- <span class="ml-1" style="font-size: 19px; font-weight: bold">{{ currentChain.title }}</span> -->
+          <!-- Upgrade Badge -->
+          <!--<b-badge
           class="ml-2"
           variant="warning"
           v-b-tooltip.hover
@@ -17,13 +18,13 @@
           >upgrading ...</b-badge
         >
         -->
-      </b-navbar-brand>
+        </b-navbar-brand>
 
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-      <!-- collapse in mobile view -->
-      <b-collapse id="nav-collapse" is-nav>
-        <!-- <b-nav-form>
+        <!-- collapse in mobile view -->
+        <b-collapse id="nav-collapse" is-nav>
+          <!-- <b-nav-form>
          <b-form-input
             size="sm"
             class="mr-sm-2"
@@ -33,9 +34,9 @@
             >Search</b-button
           >
         </b-nav-form> -->
-        <b-nav-form>
-          <auto-search-input @selected="selected" v-if="!homeActive" />
-          <!-- <b-input-group class="search-group" v-if="!homeActive">
+          <b-nav-form>
+            <auto-search-input @selected="selected" v-if="!homeActive" />
+            <!-- <b-input-group class="search-group" v-if="!homeActive">
             <b-form-input
               list="domain-list1"
               v-model="searchKey"
@@ -49,44 +50,45 @@
               </b-button>
             </b-input-group-append>
           </b-input-group> -->
-        </b-nav-form>
-        <!-- <datalist id="domain-list1">
+          </b-nav-form>
+          <!-- <datalist id="domain-list1">
           <option v-for="name in domainnames" :key="name">{{ name }}</option>
         </datalist> -->
 
-        <!-- Right aligned nav items -->
-        <b-navbar-nav class="m-bar ml-auto">
-          <b-nav-item>
-            <router-link :to="{ name: 'home' }" :class="homeActive ? 'active' : ''">Home</router-link>
-          </b-nav-item>
+          <!-- Right aligned nav items -->
+          <b-navbar-nav class="m-bar ml-auto">
+            <b-nav-item>
+              <router-link :to="{ name: 'home' }" :class="homeActive ? 'active' : ''">Home</router-link>
+            </b-nav-item>
 
-          <b-nav-item-dropdown text="Blockchain" right :class="blockActive ? 'top-dropdown active' : ''">
-            <b-dropdown-item :to="{ name: 'pos' }">PoS</b-dropdown-item>
-            <b-dropdown-item v-if="currentChain.pow" :to="{ name: 'pow' }">PoW</b-dropdown-item>
-            <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item :to="{ name: 'txList' }">View Txs</b-dropdown-item>
-            <b-dropdown-item :to="{ name: 'blockList' }">View Blocks</b-dropdown-item>
-            <b-dropdown-item :to="{ name: 'epochList' }">View Epochs</b-dropdown-item>
-            <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item :to="{ name: 'topMTR' }">Top {{ currentChain.symbol }} Accounts</b-dropdown-item>
-            <b-dropdown-item :to="{ name: 'topMTRG' }">Top {{ currentChain.gSymbol }} Accounts</b-dropdown-item>
-          </b-nav-item-dropdown>
+            <b-nav-item-dropdown text="Blockchain" right :class="blockActive ? 'top-dropdown active' : ''">
+              <b-dropdown-item :to="{ name: 'pos' }">PoS</b-dropdown-item>
+              <b-dropdown-item v-if="currentChain.pow" :to="{ name: 'pow' }">PoW</b-dropdown-item>
+              <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-item :to="{ name: 'txList' }">View Txs</b-dropdown-item>
+              <b-dropdown-item :to="{ name: 'blockList' }">View Blocks</b-dropdown-item>
+              <b-dropdown-item :to="{ name: 'epochList' }">View Epochs</b-dropdown-item>
+              <b-dropdown-divider></b-dropdown-divider>
+              <b-dropdown-item :to="{ name: 'topMTR' }">Top {{ currentChain.symbol }} Accounts</b-dropdown-item>
+              <b-dropdown-item :to="{ name: 'topMTRG' }">Top {{ currentChain.gSymbol }} Accounts</b-dropdown-item>
+            </b-nav-item-dropdown>
 
-          <b-nav-item v-if="currentChain.pow"
-            ><router-link
-              :to="{ name: 'auction', network: $route.params.network }"
-              :class="auctionActive ? 'active' : ''"
-              >Auctions</router-link
-            ></b-nav-item
-          >
+            <b-nav-item v-if="currentChain.pow"
+              ><router-link
+                :to="{ name: 'auction', network: $route.params.network }"
+                :class="auctionActive ? 'active' : ''"
+                >Auctions</router-link
+              ></b-nav-item
+            >
 
-          <b-dropdown :text="currentNetwork" size="sm" variant="outline-primary" class="mx-2" right>
-            <b-dropdown-item v-for="item in chainList" :key="item.chainId" @click="changeNetwork(item.chainId)">{{
-              item.name
-            }}</b-dropdown-item>
-          </b-dropdown>
-        </b-navbar-nav>
-      </b-collapse>
+            <b-dropdown :text="currentNetwork" size="sm" variant="outline-primary" class="mx-2" right>
+              <b-dropdown-item v-for="item in chainList" :key="item.chainId" @click="changeNetwork(item.chainId)">{{
+                item.name
+              }}</b-dropdown-item>
+            </b-dropdown>
+          </b-navbar-nav>
+        </b-collapse>
+      </div>
     </b-navbar>
   </div>
 </template>
@@ -250,10 +252,12 @@ export default {
 
 <style lang="scss">
 .navbar {
-  padding-top: 3px;
-  padding-bottom: 3px;
+  padding: 1px !important;
   border-bottom: 1px solid #dfdfdf;
   background: white !important;
+  .container {
+    padding: 0;
+  }
 }
 
 .navbar-nav .nav-link {
