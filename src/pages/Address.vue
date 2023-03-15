@@ -9,6 +9,8 @@ div
 <script>
 import UserAddress from './UserAddress.vue';
 import ContractAddress from './ContractAddress.vue';
+import BigNumber from 'bignumber.js';
+
 export default {
   name: 'Address',
   components: {
