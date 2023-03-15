@@ -122,7 +122,18 @@ export default {
       if (this.contract) {
         try {
           this.readLoading = true;
-          const params = this.paramsLength === 0 ? [] : [...this.params];
+          let params = this.paramsLength === 0 ? [] : [...this.params];
+          params = params.map(p => {
+            if (p.includes('[') && p.includes(']')) {
+              let _p = p
+              if (p.includes("'")) {
+                _p = p.replaceAll("'", '"')
+              }
+              const parsedP = JSON.parse(_p)
+              return parsedP
+            }
+            return p
+          })
           const abiName = `${this.abi.name}(${this.abi.inputs.map((input) => input.type).join(',')})`;
           const res = await this.contract[abiName].apply(null, params);
           let r = '';

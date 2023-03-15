@@ -137,7 +137,18 @@ export default {
       if (this.contract) {
         this.writeLoading = true;
         try {
-          const parameters = [...this.params];
+          let parameters = [...this.params];
+          parameters = parameters.map(p => {
+            if (p.includes('[') && p.includes(']')) {
+              let _p = p
+              if (p.includes("'")) {
+                _p = p.replaceAll("'", '"')
+              }
+              const parsedP = JSON.parse(_p)
+              return parsedP
+            }
+            return p
+          })
           if (this.options.value) {
             const value = this.options.value;
             parameters.push({
@@ -145,7 +156,8 @@ export default {
             });
           }
           const abiName = `${this.abi.name}(${this.abi.inputs.map((input) => input.type).join(',')})`;
-          const tx = await this.contract[abiName].apply(null, parameters);
+          console.log('parameters', parameters)
+          const tx = await this.contract[abiName].apply(this, parameters);
 
           await tx.wait();
           this.hash = tx.hash;
