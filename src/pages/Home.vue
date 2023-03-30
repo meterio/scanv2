@@ -37,12 +37,12 @@ export default {
     DataDashboard,
     RecentBlocks,
     RecentTxs,
-    AutoSearchInput
+    AutoSearchInput,
   },
   computed: {
     ...mapState({
-      home_block_height: state => state.home_block_height
-    })
+      home_block_height: (state) => state.home_block_height,
+    }),
   },
 
   data() {
@@ -53,7 +53,7 @@ export default {
       nav_tabs: ['PoS', 'PoW'],
       // fake data
       msg: 'Welcome to Index!!!',
-      data: []
+      data: [],
     };
   },
   watch: {
@@ -64,7 +64,7 @@ export default {
           return;
         }
       }
-    }
+    },
   },
   mounted() {
     this.running = true;
@@ -75,7 +75,7 @@ export default {
       this.loading = false;
       const { mtr, mtrg, pos, pow, staking, committee } = res;
 
-      const stakingRatio = new BigNumber(staking.totalStaked).dividedBy(1e18).dividedBy(40e6);
+      const stakingRatio = new BigNumber(staking.stakingRatio);
       this.data = [
         { label: 'Block Height', content: pos.best, cols: 3 },
         { label: 'Epoch', content: pos.epoch, cols: 3 },
@@ -84,12 +84,12 @@ export default {
         {
           label: 'Healthy / Total Nodes',
           content: `${staking.healthyNodes} / ${staking.candidates}`,
-          cols: 3
+          cols: 3,
         },
         {
           label: 'Staking Ratio',
           content: stakingRatio.times(100).toFixed(2) + '%',
-          cols: 3
+          cols: 3,
           // content:
           //   new BigNumber(staking.totalCirculationStaked)
           //     .dividedBy(1e18)
@@ -109,8 +109,8 @@ export default {
         {
           label: 'Address Count',
           content: pos.addressCount,
-          cols: 3
-        }
+          cols: 3,
+        },
       ];
 
       if (this.currentChain.priceEnable) {
@@ -119,19 +119,19 @@ export default {
             label: `${this.currentChain.gSymbol} Price`,
             content: '$ ' + mtrg.price,
             change: mtrg.priceChange,
-            cols: 3
+            cols: 3,
           },
           {
             label: `${this.currentChain.gSymbol} Circulation`,
             content: formatNum(mtrg.circulation, 0),
-            cols: 3
+            cols: 3,
           },
 
           {
             label: `${this.currentChain.symbol} Price`,
             content: '$ ' + mtr.price,
             change: mtr.priceChange,
-            cols: 3
+            cols: 3,
           },
           { label: `${this.currentChain.symbol} Circulation`, content: formatNum(mtr.circulation, 0), cols: 3 }
         );
@@ -165,7 +165,7 @@ export default {
         this.$router.push(jump_url);
       } else {
       }
-    }
+    },
     // async searchKeyWords(key) {
     //   try {
     //     const str = key.replace(/\r?\n|\r/g, '');
@@ -199,7 +199,7 @@ export default {
   },
   beforeDestroy() {
     this.running = false;
-  }
+  },
 };
 </script>
 
