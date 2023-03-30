@@ -75,7 +75,7 @@ export default {
       this.loading = false;
       const { mtr, mtrg, pos, pow, staking, committee } = res;
 
-      const stakingRatio = new BigNumber(staking.stakingRatio);
+      const stakingAPY = new BigNumber(staking.stakingAPY);
       this.data = [
         { label: 'Block Height', content: pos.best, cols: 3 },
         { label: 'Epoch', content: pos.epoch, cols: 3 },
@@ -87,8 +87,8 @@ export default {
           cols: 3,
         },
         {
-          label: 'Staking Ratio',
-          content: stakingRatio.times(100).toFixed(2) + '%',
+          label: 'Staking APY',
+          content: stakingAPY.times(100).toFixed(2) + '%',
           cols: 3,
           // content:
           //   new BigNumber(staking.totalCirculationStaked)
