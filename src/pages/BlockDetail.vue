@@ -8,7 +8,7 @@
             class="link"
             :to="{
               name: 'txDetail',
-              params: { hash: data.value }
+              params: { hash: data.value },
             }"
             >{{ shortHash(data.value) }}</router-link
           >
@@ -40,7 +40,7 @@ export default {
   components: {
     DataTableV2,
     StatusTag,
-    DataSummary
+    DataSummary,
   },
   data() {
     return {
@@ -55,10 +55,10 @@ export default {
           { key: 'amount', label: 'Amount' },
           { key: 'fee', label: 'Fee' },
           { key: 'clauseCount', label: 'nClause' },
-          { key: 'result', label: 'Result' }
+          { key: 'result', label: 'Result' },
         ],
-        items: []
-      }
+        items: [],
+      },
     };
   },
   methods: {
@@ -67,41 +67,41 @@ export default {
       this.loading = true;
       const res = await this.$api.block.getBlockDetail(this.network, revision);
       const b = res.block;
-      this.summaryTitleValue = `#${b.number}`;
+      this.summaryTitleValue = `${b.number}`;
       if (!!b) {
         this.summary = [
           { key: 'Hash', value: b.hash },
-          { key: 'Number', value: b.number },
-          { key: 'QC Height', value: b.qcHeight, type: 'block-link' },
+          { key: 'Type / Number', value: (b.blockType === 1 ? 'KBlock' : 'MBlock') + ' / ' + b.number },
           { key: 'Timestamp', value: b.timestamp, type: 'full-timestamp' },
-          { key: 'Block Type', value: b.blockType === 1 ? 'KBlock' : 'MBlock' },
-          { key: 'Epoch', value: b.epoch, type: 'epoch-link' },
-          {
-            key: 'KBlock Height',
-            value: b.lastKBlockHeight,
-            type: 'block-link'
-          },
+          { key: 'QC', value: b.qcHeight, type: 'block-link' },
+          // { key: 'Block Type', value:  },
+          { key: 'Epoch / KBlock', epoch: b.epoch, kblock: b.lastKBlockHeight, type: 'epoch-kblock-link' },
+          // {
+          //   key: 'KBlock Height',
+          //   value: b.lastKBlockHeight,
+          //   type: 'block-link',
+          // },
           {
             key: 'Proposer',
             value: { address: b.beneficiary, name: b.beneficiaryName },
-            type: 'address-or-name-link'
+            type: 'address-or-name-link',
           },
           { key: 'Gas Used', value: b.gasUsed },
           { key: 'Txs Count', value: b.txCount },
           { key: 'Parent Hash', value: b.parentID, type: 'block-hash' },
           { key: 'State Root', value: b.stateRoot },
-          {
-            key: 'Reward',
-            value: b.actualReward,
-            type: 'amount',
-            precision: -1,
-            token: this.currentChain.symbol
-          }
+          // {
+          //   key: 'Reward',
+          //   value: b.actualReward,
+          //   type: 'amount',
+          //   precision: -1,
+          //   token: this.currentChain.symbol,
+          // },
         ];
       }
       let items = [];
       if (res.block.txSummaries) {
-        items = res.block.txSummaries.map(tx => {
+        items = res.block.txSummaries.map((tx) => {
           let totalClauseAmount = new BigNumber(0);
           if (tx.clauses) {
             for (const c of tx.clauses) {
@@ -115,22 +115,22 @@ export default {
               type: 'amount',
               amount: totalClauseAmount.toFixed(),
               token: tx.token,
-              precision: 8
+              precision: 8,
             },
             fee: {
               type: 'amount',
               amount: tx.paid,
               token: this.currentChain.symbol,
-              precision: 8
+              precision: 8,
             },
             result: tx.reverted ? 'reverted' : 'success',
-            clauseCount: tx.clauseCount
+            clauseCount: tx.clauseCount,
           };
         });
       }
       this.txs.items = items;
       this.loading = false;
-    }
-  }
+    },
+  },
 };
 </script>

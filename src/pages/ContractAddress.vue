@@ -358,7 +358,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 5,
+          perPage: 20,
           limit: 10,
         },
         fields: [
