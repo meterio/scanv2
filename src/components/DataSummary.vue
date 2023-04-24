@@ -58,9 +58,9 @@
                 <span class="value" :title="item.time"> (<time-tag :timestamp="item.value" />)</span>
               </span>
               <span v-if="item.type == 'epoch-kblock-link'">
-                <b-link href="#" :to="{ name: 'epochDetail', params: { revision: item.epoch } }"
-                  >*{{ item.epoch }}</b-link
-                >
+                <b-link href="#" :to="{ name: 'epochDetail', params: { revision: item.epoch } }">{{
+                  item.epoch
+                }}</b-link>
                 <span class="ml-1 mr-1">/</span>
                 <b-link href="#" :to="{ name: 'blockDetail', params: { revision: item.kblock } }"
                   >#{{ item.kblock }}</b-link

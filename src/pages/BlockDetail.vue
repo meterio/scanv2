@@ -71,7 +71,7 @@ export default {
       if (!!b) {
         this.summary = [
           { key: 'Hash', value: b.hash },
-          { key: 'Type / Number', value: (b.blockType === 1 ? 'KBlock' : 'MBlock') + ' / ' + b.number },
+          { key: 'Number', value: (b.blockType === 1 ? 'KBlock' : 'MBlock') + ' ' + b.number },
           { key: 'Timestamp', value: b.timestamp, type: 'full-timestamp' },
           { key: 'QC', value: b.qcHeight, type: 'block-link' },
           // { key: 'Block Type', value:  },
