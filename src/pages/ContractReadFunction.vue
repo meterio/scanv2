@@ -134,8 +134,18 @@ export default {
             }
             return p
           })
-          const abiName = `${this.abi.name}(${this.abi.inputs.map((input) => input.type).join(',')})`;
+          // console.log('abi', this.abi)
+          const abiName = `${this.abi.name}(${this.abi.inputs.map((input) => {
+            if (input.type.includes('[]') && input.components && input.components.length) {
+              return `(${input.components.map(c => c.type).join(',')})[]`
+            } else {
+              return input.type
+            }
+          }).join(',')})`;
+          // console.log({abiName, params})
+          // console.log(this.contract, this.contract[abiName])
           const res = await this.contract[abiName].apply(null, params);
+          // console.log('res', res)
           let r = '';
           if (Array.isArray(res)) {
             r = [];
