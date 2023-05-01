@@ -218,9 +218,11 @@
                   :key="index"
                   v-for="(row, index) in computedTransfer"
                 >
-                  <address-link class="mr-3" short :address="row.from" />
-                  <span class="mr-3">to</span>
-                  <address-link class="mr-3" short :address="row.to" />
+                  <span class="mr-2"><b>From</b></span>
+                  <address-link class="mr-2" short :address="row.from" :name="row.fromName" />
+                  <span class="mr-2"><b>To</b></span>
+                  <address-link class="mr-2" short :address="row.to" :name="row.toName" />
+                  <span class="mr-2"><b>For</b></span>
                   <template v-if="row.type === 'ERC20'">
                     <AmountTag
                       :amount="row.amount"
@@ -535,9 +537,13 @@ export default {
   .row {
     padding: 8px 0;
   }
+  font-size: 90%;
+
+  b {
+    font-weight: 600 !important;
+  }
 
   .label {
-    font-size: 90%;
     color: #5c6f8c;
   }
 
