@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span class="text-wrap">
     <span v-if="disabled" class="nft-link">
       <span>[</span><span>{{ tokenId }}</span
       ><span>]</span>
