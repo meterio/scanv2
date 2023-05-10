@@ -118,6 +118,13 @@ export default {
       if (this.isToken) {
         return [
           {
+            name:
+              this.contractDataCount.transfersCount > 0
+                ? `Transfers(${this.contractDataCount.transfersCount})`
+                : 'Transfers',
+            download: true,
+          },
+          {
             name: this.contractDataCount.txCount > 0 ? `Txs(${this.contractDataCount.txCount})` : 'Txs',
             download: true,
           },
@@ -126,12 +133,6 @@ export default {
               this.contractDataCount.internalTxCount > 0
                 ? `Internal Txs(${this.contractDataCount.internalTxCount})`
                 : 'Internal Txs',
-          },
-          {
-            name:
-              this.contractDataCount.transfersCount > 0
-                ? `Transfers(${this.contractDataCount.transfersCount})`
-                : 'Transfers',
           },
           {
             name:
@@ -175,12 +176,12 @@ export default {
     fields() {
       if (this.isERC20) {
         switch (this.loadTarget) {
+          case 'transfers':
+            return this.transfers.fields;
           case 'txs':
             return this.txs.fields;
           case 'internaltxs':
             return this.internaltxs.fields;
-          case 'transfers':
-            return this.transfers.fields;
           case 'holders':
             return this.holders.fields;
           case 'erc20Tokens':
@@ -188,9 +189,11 @@ export default {
           case 'events':
             return this.events.fields;
         }
-        return this.txs.fields;
+        return this.transfers.fields;
       } else {
         switch (this.loadTarget) {
+          case 'transfers':
+            return this.transfers.fields2;
           case 'txs':
             return this.txs.fields;
           case 'internaltxs':
@@ -222,7 +225,7 @@ export default {
         case 'events':
           return this.events.pagination;
       }
-      return this.txs.pagination;
+      return this.transfers.pagination;
     },
     loadItems() {
       switch (this.loadTarget) {
@@ -241,7 +244,7 @@ export default {
         case 'erc20Txs':
           return this.loadTxs20;
       }
-      return this.loadTxs;
+      return this.loadTransfers;
     },
     isTableData() {
       if (this.loadTarget === 'contract') {
@@ -257,7 +260,7 @@ export default {
       files: [],
       implFiles: [],
       tabValue: 0,
-      loadTarget: 'txs',
+      loadTarget: 'transfers',
       holders: {
         pagination: { show: true, align: 'center', perPage: 20 },
         fields: [
@@ -395,6 +398,15 @@ export default {
           name: 'exportData',
           params: {
             address: this.address,
+            type: 'transfers',
+          },
+        });
+      }
+      if (tabIndex == 1) {
+        this.$router.push({
+          name: 'exportData',
+          params: {
+            address: this.address,
             type: 'txs',
           },
         });
@@ -434,13 +446,13 @@ export default {
       if (this.isToken) {
         switch (val) {
           case 0:
-            this.loadTarget = 'txs';
+            this.loadTarget = 'transfers';
             break;
           case 1:
-            this.loadTarget = 'internaltxs';
+            this.loadTarget = 'txs';
             break;
           case 2:
-            this.loadTarget = 'transfers';
+            this.loadTarget = 'internaltxs';
             break;
           case 3:
             this.loadTarget = 'holders';
@@ -455,7 +467,7 @@ export default {
             this.loadTarget = 'events';
             break;
           default:
-            this.loadTarget = 'txs';
+            this.loadTarget = 'transfers';
         }
       } else {
         switch (val) {
