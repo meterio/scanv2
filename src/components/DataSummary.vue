@@ -292,6 +292,12 @@
 
               <span v-if="item.type === 'media'">
                 <b-img-lazy v-if="item.value" thumbnail fluid :src="item.value" blank-color="#777" width="100" />
+                <a
+                  href="#"
+                  @click="updateTokenInfo(item.network, item.address, item.tokenId)"
+                  v-if="item.status == 'new'"
+                  >update</a
+                >
               </span>
             </b-col>
           </b-row>
@@ -488,6 +494,10 @@ export default {
     },
   },
   methods: {
+    async updateTokenInfo(network, address, tokenId) {
+      await this.$api.nft.updateTokenInfo(network, address, tokenId);
+      location.reload();
+    },
     async copyTitleToClipBoard(text) {
       await navigator.clipboard.writeText(text);
       this.titleCopied = true;
