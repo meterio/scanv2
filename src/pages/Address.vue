@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   .text-center.text-primary(v-if='isContract === null')
-    b-spinner.my-5(small="true", type="grow")
+    b-spinner.my-5(:small="true", type="grow")
   ContractAddress(v-else-if='isContract', :address-info='addressInfo', :contract-data-count='contractDataCount')
   UserAddress(v-else, :address-info='addressInfo', :user-data-count='userDataCount')
 </template>

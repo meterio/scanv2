@@ -334,7 +334,7 @@
             <b-col sm="12" :md="contentCols">
               <template v-if="verified">
                 <span>{{ computedVerifiedDesc }}</span>
-                <address-link v-if="verifiedFrom" :address="verifiedFrom" short="true" />
+                <address-link v-if="verifiedFrom" :address="verifiedFrom" :short="true" />
               </template>
               <template v-else>
                 <span>Not verified yet.</span>

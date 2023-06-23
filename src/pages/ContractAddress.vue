@@ -146,6 +146,9 @@ export default {
           },
           { name: 'Contract' },
           { name: this.contractDataCount.eventsCount > 0 ? `Events(${this.contractDataCount.eventsCount})` : 'Events' },
+          {
+            name: this.contractDataCount.bucketCount > 0 ? `Buckets(${this.contractDataCount.bucketCount})` : 'Buckets',
+          },
         ];
       }
       return [
@@ -171,6 +174,7 @@ export default {
         },
         { name: 'Contract' },
         { name: this.contractDataCount.eventsCount > 0 ? `Events(${this.contractDataCount.eventsCount})` : 'Events' },
+        { name: this.contractDataCount.bucketCount > 0 ? `Buckets(${this.contractDataCount.bucketCount})` : 'Buckets' },
       ];
     },
     fields() {
@@ -188,6 +192,8 @@ export default {
             return this.erc20Tokens.fields;
           case 'events':
             return this.events.fields;
+          case 'buckets':
+            return this.buckets.fields;
         }
         return this.transfers.fields;
       } else {
@@ -206,6 +212,8 @@ export default {
             return this.erc20Tokens.fields;
           case 'events':
             return this.events.fields;
+          case 'buckets':
+            return this.buckets.fields;
         }
         return this.txs.fields;
       }
@@ -224,6 +232,8 @@ export default {
           return this.erc20Tokens.pagination;
         case 'events':
           return this.events.pagination;
+        case 'buckets':
+          return this.buckets.pagination;
       }
       return this.transfers.pagination;
     },
@@ -243,6 +253,8 @@ export default {
           return this.loadEvents;
         case 'erc20Txs':
           return this.loadTxs20;
+        case 'buckets':
+          return this.loadBuckets;
       }
       return this.loadTransfers;
     },
@@ -376,6 +388,16 @@ export default {
         ],
         items: [],
       },
+      buckets: {
+        pagination: { show: true, align: 'center', perPage: 20 },
+        fields: [
+          { key: 'bucketid', label: 'ID' },
+          { key: 'address', label: 'Candidate Address' },
+          { key: 'totalVotes', label: 'Votes' },
+          { key: 'timestamp', label: 'Time' },
+          { key: 'status', label: 'Status' },
+        ],
+      },
     };
   },
   watch: {
@@ -466,6 +488,9 @@ export default {
           case 6:
             this.loadTarget = 'events';
             break;
+          case 7:
+            this.loadTarget = 'buckets';
+            break;
           default:
             this.loadTarget = 'transfers';
         }
@@ -489,10 +514,33 @@ export default {
           case 5:
             this.loadTarget = 'events';
             break;
+          case 6:
+            this.loadTarget = 'buckets';
+            break;
           default:
             this.loadTarget = 'txs';
         }
       }
+    },
+    async loadBuckets(network, page, limit) {
+      const { address } = this.$route.params;
+      const res = await this.$api.account.getBuckets(network, address, page, limit);
+      const { buckets, totalRows } = res;
+      const items = buckets.map((b) => {
+        return {
+          bucketid: b.id,
+          address: b.candidate,
+          totalVotes: {
+            type: 'amount',
+            amount: b.totalVotes,
+            precision: 6,
+            token: this.currentChain.gSymbol,
+          },
+          timestamp: b.createTime,
+          status: b.unbounded ? 'Unbounded' : 'Created',
+        };
+      });
+      return { items, totalRows };
     },
     async loadTxs20(network, page, limit) {
       const { address } = this.$route.params;
