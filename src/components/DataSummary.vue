@@ -211,10 +211,19 @@
                 ></AmountTag>
               </span>
 
-              <!-- status -->
+              <span v-if="item.type === 'bucket-highlight'">
+                <div
+                  class="d-flex justify-content-start flex-wrap mt-0"
+                  :key="index"
+                  v-for="(row, index) in item.value"
+                >
+                  <BucketHighlight :row="row" />
+                </div>
+              </span>
+              <!-- transfer-highlight -->
               <span v-if="item.type === 'transfer-highlight'">
                 <div
-                  class="d-flex justify-content-start flex-wrap"
+                  class="d-flex justify-content-start flex-wrap mt-0"
                   :key="index"
                   v-for="(row, index) in computedTransfer"
                 >
@@ -363,9 +372,10 @@ import TimeTag from '@/components/TimeTag.vue';
 import FullTimeTag from '@/components/FullTimeTag.vue';
 import NftLink from './NftLink.vue';
 import { formatNum } from '@/utils';
+import BucketHighlight from '@/components/BucketHighlight.vue';
 
 export default {
-  components: { StatusTag, AddressLink, AmountTag, NftLink, TimeTag, FullTimeTag },
+  components: { StatusTag, AddressLink, AmountTag, NftLink, TimeTag, FullTimeTag, BucketHighlight },
   name: 'DataList',
   props: {
     logoURI: {

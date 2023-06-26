@@ -261,6 +261,14 @@ export default {
           });
         }
 
+        if (tx.bucketHighlights && tx.bucketHighlights.length > 0) {
+          this.summary.push({
+            key: 'Staking',
+            value: tx.bucketHighlights,
+            type: 'bucket-highlight',
+          });
+        }
+
         const toValue = [];
         if (Array.isArray(tx.contractAddress) && tx.contractAddress.length) {
           toValue.push({
