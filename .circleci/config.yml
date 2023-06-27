@@ -67,22 +67,22 @@ jobs:
           command: VUE_APP_CHAIN_ID=83 npm run build
       - run:
           name: s3 sync
-          command: aws s3 sync ./dist/ s3://scan-testnet.meter/ --delete --acl public-read
+          command: aws s3 sync ./dist/ s3://scan-testnet.meter.io/ --delete
       - run:
           name: invalidation
-          command: aws cloudfront create-invalidation --distribution-id E3SX1H5GDFV16U --paths "/*"
+          command: aws cloudfront create-invalidation --distribution-id E3G7XKFWIRL6MA --paths "/*"
 
 workflows:
   fresh_deploy:
     jobs:
       - build_and_deploy_testnet:
-          context: aws-s3
+          context: aws-2023
           filters:
             branches:
               only:
                 - master
       - build_and_deploy_mainnet:
-          context: aws-s3
+          context: aws-2023
           filters:
             tags:
               only: /^v.*/
