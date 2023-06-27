@@ -6,7 +6,7 @@
       <b class="ml-2">With</b>
       <span class="ml-2"><AmountTag :amount="row.amount" token="MTRG" :precision="2" :decimals="18" /></span>
     </span>
-    <span v-if="row.name === 'NativeBucketOpen'">
+    <span v-if="row.name === 'NativeBucketClose'">
       <b>Close</b>
       <BucketLink class="ml-2" :id="row.bucketID" short />
     </span>
