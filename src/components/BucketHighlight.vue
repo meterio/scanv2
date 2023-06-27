@@ -42,9 +42,9 @@
       <b>Update Candidate on</b>
       <BucketLink class="ml-2" :id="row.bucketID" short />
       <b>From</b>
-      <BucketLink class="ml-2" :id="row.fromBucketID" short />
+      <AddressLink class="ml-2" :address="row.fromCandidate" short />
       <b class="ml-2">To</b>
-      <BucketLink class="ml-2" :id="row.toBucketID" short />
+      <AddressLink class="ml-2" :address="row.toCandidate" short />
     </span>
   </div>
 </template>
@@ -52,10 +52,11 @@
 <script>
 import AmountTag from '@/components/AmountTag.vue';
 import BucketLink from '@/components/BucketLink.vue';
+import AddressLink from '@/components/AddressLink.vue';
 
 export default {
   name: 'BucketHighlight',
-  components: { AmountTag, BucketLink },
+  components: { AmountTag, BucketLink, AddressLink },
   props: ['row'],
   computed: {},
 };
