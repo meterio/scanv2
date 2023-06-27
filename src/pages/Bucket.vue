@@ -5,11 +5,12 @@
 
 <script>
 import DataSummary from '@/components/DataSummary.vue';
+import BigNumber from 'bignumber.js';
 
 export default {
   name: 'Bucket',
   components: {
-    DataSummary
+    DataSummary,
   },
   data() {
     return { id: '', summary: {} };
@@ -49,26 +50,38 @@ export default {
             value: bucket.value,
             type: 'amount',
             token: this.currentChain.gSymbol,
-            precision: -1
+            precision: -1,
           },
-          { key: 'Lock Option', value: this.getLockOption(bucket.option) },
           { key: 'Created At', value: bucket.createTime, type: 'full-timestamp' },
+          {
+            key: 'BonusVotes',
+            value: new BigNumber(bucket.totalVotes).minus(bucket.value),
+            type: 'amount',
+            token: '',
+            precision: -1,
+          },
+          { key: 'TotalVotes', value: bucket.totalVotes, type: 'amount', token: '', precision: -1 },
           { key: 'Nonce', value: bucket.nonce },
-          { key: 'Unbounded', value: bucket.unbounded ? 'Yes' : 'No' }
+          // { key: 'Lock Option', value: this.getLockOption(bucket.option) },
+
+          { key: 'Unbounded', value: bucket.unbounded ? 'Yes' : 'No' },
         ];
 
         if (bucket.unbounded) {
           this.summary.push({
-            key: 'Mature Time',
+            key: 'Release Time',
             value: bucket.matureTime,
-            type: 'timestamp'
+            type: 'full-timestamp',
           });
+        }
+        if (bucket.autobid) {
+          this.summary.push({ key: 'Autobid', value: bucket.autobid + '%' });
         }
       } catch (e) {
         console.log(e);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

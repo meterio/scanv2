@@ -148,6 +148,7 @@
 
               <!-- timestamp -->
               <span v-if="item.type === 'timestamp'">
+                {{ item.value }}
                 <span v-if="item.value">
                   <time-tag :timestamp="item.value" />
                 </span>
