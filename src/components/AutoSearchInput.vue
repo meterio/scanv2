@@ -31,6 +31,7 @@
       v-model="keyword"
       placeholder="Search by address / txHash / blockHash / name"
       @keypress="keypress"
+      debounce="800"
     />
     <b-input-group-append>
       <b-button size="sm" :variant="btnVariant" @click="search">

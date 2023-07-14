@@ -6,7 +6,7 @@
         :placeholder="placeholder"
         v-model="searchWord"
         @keypress="keypress"
-        debounce="500"
+        debounce="800"
       ></b-form-input>
       <b-input-group-append>
         <b-button class="query" variant="primary" v-if="btnType == 1" @click="btnClick">
