@@ -27,7 +27,7 @@ export default {
       tabValue: 0,
       loadTarget: 'transfers',
       holders: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
           { key: 'fullAddress', label: 'Holder Address' },
           { key: 'balance', label: 'Amount' },
@@ -38,7 +38,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 25,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -56,7 +56,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 25,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },

@@ -88,7 +88,7 @@ export default {
           { key: 'index', label: 'Index' },
           { key: 'clause', label: 'Clause' },
         ],
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         items: [],
       },
       transfers: {
@@ -98,7 +98,7 @@ export default {
           { key: 'to', label: 'Recipient' },
           { key: 'amountStr', label: 'Amount' },
         ],
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         items: [],
       },
       internaltxs: {
@@ -110,7 +110,7 @@ export default {
           { key: 'value', label: 'Value' },
           { key: 'gasLimit', label: 'gasLimit' },
         ],
-        pagination: { show: false, align: 'center', perPage: 20 },
+        pagination: { show: false, align: 'center', perPage: 25 },
         items: [],
       },
       events: {
@@ -118,7 +118,7 @@ export default {
           { key: 'index', label: 'Index' },
           { key: 'event', label: 'Log' },
         ],
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         items: [],
       },
     };

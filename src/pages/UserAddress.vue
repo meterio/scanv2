@@ -147,7 +147,7 @@ export default {
       account: {},
       loadTarget: 'txs',
       holders: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
           { key: 'fullAddress', label: 'Holder Address' },
           { key: 'balance', label: 'Amount' },
@@ -155,7 +155,7 @@ export default {
         ],
       },
       transfers: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
           { key: 'from', label: 'From' },
           { key: 'direct', label: '' },
@@ -167,7 +167,7 @@ export default {
         ],
       },
       proposedBlocks: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
           { key: 'blockNum', label: 'Height' },
           { key: 'blockhash', label: 'Block Hash' },
@@ -180,7 +180,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 25,
         },
         fields: [
           { key: 'blockNum', label: 'Block' },
@@ -196,7 +196,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 25,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -215,7 +215,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 25,
           limit: 10,
         },
         fields: [
@@ -234,7 +234,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 25,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -249,7 +249,7 @@ export default {
         items: [],
       },
       buckets: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
           { key: 'bucketid', label: 'ID' },
           { key: 'address', label: 'Candidate Address' },
@@ -259,7 +259,7 @@ export default {
         ],
       },
       erc20Tokens: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
           { key: 'tokenType', label: 'Type' },
           { key: 'fullAddress', label: 'Token Address' },
@@ -268,7 +268,7 @@ export default {
         ],
       },
       nfts: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
           { key: 'type', label: 'Type' },
           // { key: "name", label: "Name" },

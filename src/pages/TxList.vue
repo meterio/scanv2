@@ -9,25 +9,25 @@
 </template>
 
 <script>
-import DataTableV2 from "@/components/DataTableV2.vue";
+import DataTableV2 from '@/components/DataTableV2.vue';
 
 export default {
-  name: "TxList",
+  name: 'TxList',
   components: {
     DataTableV2,
   },
   data() {
     return {
       txs: {
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
-          { key: "txhash", label: "Hash" },
-          { key: "methodName", label: "Method" },
-          { key: "blocknum", label: "Block" },
-          { key: "timestamp", label: "Time" },
-          { key: "from", label: "From" },
-          { key: "to", label: "To" },
-          { key: "amount", label: "Amount" },
+          { key: 'txhash', label: 'Hash' },
+          { key: 'methodName', label: 'Method' },
+          { key: 'blocknum', label: 'Block' },
+          { key: 'timestamp', label: 'Time' },
+          { key: 'from', label: 'From' },
+          { key: 'to', label: 'To' },
+          { key: 'amount', label: 'Amount' },
         ],
       },
     };
@@ -35,15 +35,11 @@ export default {
 
   methods: {
     async loadTxs(network, page, limit) {
-      const { txs, totalRows } = await this.$api.transaction.getRecentTxs(
-        network,
-        page,
-        limit
-      );
+      const { txs, totalRows } = await this.$api.transaction.getRecentTxs(network, page, limit);
       const items = txs.map((tx) => {
         let methodName = tx.method;
-        if (String(tx.method).includes("(")) {
-          const index = String(tx.method).indexOf("(");
+        if (String(tx.method).includes('(')) {
+          const index = String(tx.method).indexOf('(');
           methodName = String(tx.method).substring(0, index);
         }
         return {
@@ -52,17 +48,17 @@ export default {
           blocknum: tx.block.number,
           from: {
             address: tx.from,
-            isContract: tx.fromIsContract
+            isContract: tx.fromIsContract,
           },
           to: {
             address: tx.to,
-            isContract: tx.toIsContract
+            isContract: tx.toIsContract,
           },
           amount: {
-            type: "amount",
+            type: 'amount',
             amount: tx.mtr || tx.mtrg,
             precision: 6,
-            token: tx.mtrg !== "" ? this.currentChain.gSymbol : this.currentChain.symbol,
+            token: tx.mtrg !== '' ? this.currentChain.gSymbol : this.currentChain.symbol,
           },
           timestamp: tx.block.timestamp,
         };

@@ -9,43 +9,39 @@
 </template>
 
 <script>
-import DataTableV2 from "@/components/DataTableV2.vue";
-import BigNumber from "bignumber.js";
+import DataTableV2 from '@/components/DataTableV2.vue';
+import BigNumber from 'bignumber.js';
 
 export default {
-  name: "TopMTRAccounts",
+  name: 'TopMTRAccounts',
   components: {
     DataTableV2,
   },
   data() {
     return {
       accounts: {
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
-          { key: "mtrRank", label: "Rank" },
-          { key: "name", label: "Name" },
-          { key: "fullAddress", label: "Address" },
-          { key: "totalMTR", label: "Balance" },
+          { key: 'mtrRank', label: 'Rank' },
+          { key: 'name', label: 'Name' },
+          { key: 'fullAddress', label: 'Address' },
+          { key: 'totalMTR', label: 'Balance' },
         ],
       },
     };
   },
   computed: {
     title() {
-      return `Top ${this.currentChain.symbol} Accounts`
-    }
+      return `Top ${this.currentChain.symbol} Accounts`;
+    },
   },
   methods: {
     async loadTopMTR(network, page, limit) {
-      const { accounts, totalRows } = await this.$api.account.getTopMTR(
-        network,
-        page,
-        limit
-      );
+      const { accounts, totalRows } = await this.$api.account.getTopMTR(network, page, limit);
       const items = accounts.map((a) => {
         return {
           totalMTR: {
-            type: "amount",
+            type: 'amount',
             amount: new BigNumber(a.mtrBalance).plus(a.mtrBounded).toFixed(),
             token: this.currentChain.symbol,
             precision: 4,

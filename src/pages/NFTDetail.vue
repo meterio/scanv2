@@ -39,7 +39,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 25,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },

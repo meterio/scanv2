@@ -21,7 +21,7 @@ export default {
   name: 'EpochDetail',
   components: {
     DataSummary,
-    DataTableV2
+    DataTableV2,
   },
   data() {
     return {
@@ -33,10 +33,10 @@ export default {
           { key: 'name', label: 'Name' },
           { key: 'fullAddress', label: 'Address' },
           { key: 'netAddr', label: 'IP Address' },
-          { key: 'shortPubKey', label: 'Public Key' }
+          { key: 'shortPubKey', label: 'Public Key' },
         ],
-        pagination: { show: true, align: 'center', perPage: 20 }
-      }
+        pagination: { show: true, align: 'center', perPage: 25 },
+      },
     };
   },
   async mounted() {
@@ -56,9 +56,9 @@ export default {
         {
           key: 'Duration',
           value: summary.duration * 1000,
-          type: 'duration'
+          type: 'duration',
         },
-        { key: 'Committee Size', value: summary.committeeSize }
+        { key: 'Committee Size', value: summary.committeeSize },
       ];
 
       if (this.currentChain.pow) {
@@ -71,16 +71,16 @@ export default {
       const { epoch } = this.$route.params;
       const res = await this.$api.epoch.getMembers(network, epoch, page, limit);
       const { members, totalRows } = res;
-      const items = members.map(m => {
+      const items = members.map((m) => {
         return {
           ...m,
           shortPubKey: shortHash(m.pubKey),
-          fullAddress: m.address
+          fullAddress: m.address,
         };
       });
       return { items, totalRows };
-    }
-  }
+    },
+  },
 };
 </script>
 

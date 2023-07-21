@@ -20,21 +20,21 @@
 </template>
 
 <script>
-import DataTableV2 from "@/components/DataTableV2.vue";
+import DataTableV2 from '@/components/DataTableV2.vue';
 export default {
-  name: "BlockList",
+  name: 'BlockList',
   components: {
     DataTableV2,
   },
   data() {
     return {
       blocks: {
-        pagination: { show: true, align: "center", perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
-          { key: "number", label: "Block" },
-          { key: "timestamp", label: "Time" },
-          { key: "txCount", label: "Txns" },
-          { key: "beneficiary", label: "Proposer" },
+          { key: 'number', label: 'Block' },
+          { key: 'timestamp', label: 'Time' },
+          { key: 'txCount', label: 'Txns' },
+          { key: 'beneficiary', label: 'Proposer' },
         ],
       },
     };
@@ -42,11 +42,7 @@ export default {
   methods: {
     async loadBlocks(network, page, limit) {
       this.loading = true;
-      const { blocks, totalRows } = await this.$api.block.getRecentBlocks(
-        network,
-        page,
-        limit
-      );
+      const { blocks, totalRows } = await this.$api.block.getRecentBlocks(network, page, limit);
       const items = blocks;
       return { items, totalRows };
     },

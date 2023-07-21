@@ -274,7 +274,7 @@ export default {
       tabValue: 0,
       loadTarget: 'transfers',
       holders: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
           { key: 'rank', label: 'Rank' },
           { key: 'fullAddress', label: 'Address' },
@@ -290,7 +290,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 25,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -309,7 +309,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 25,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Parent Tx Hash' },
@@ -327,7 +327,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 25,
         },
         fields: [
           { key: 'txInfo', label: 'Tx Hash' },
@@ -340,7 +340,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 25,
         },
         fields: [
           { key: 'txhashWithStatus', label: 'Hash' },
@@ -361,7 +361,7 @@ export default {
         items: [],
       },
       erc20Tokens: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
           { key: 'tokenType', label: 'Type' },
           { key: 'fullAddress', label: 'Token Address' },
@@ -373,7 +373,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 20,
+          perPage: 25,
           limit: 10,
         },
         fields: [
@@ -389,7 +389,7 @@ export default {
         items: [],
       },
       buckets: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
           { key: 'bucketid', label: 'ID' },
           { key: 'address', label: 'Candidate Address' },

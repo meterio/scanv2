@@ -27,7 +27,7 @@ export default {
       infractions: {},
 
       explains: {
-        pagination: { show: false, align: 'center', perPage: 20 },
+        pagination: { show: false, align: 'center', perPage: 25 },
         fields: [
           { key: 'type', label: 'Infraction' },
           { key: 'explain', label: 'Detail' },

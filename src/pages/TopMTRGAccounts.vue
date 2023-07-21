@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       accounts: {
-        pagination: { show: true, align: 'center', perPage: 20 },
+        pagination: { show: true, align: 'center', perPage: 25 },
         fields: [
           { key: 'mtrgRank', label: 'Rank' },
           { key: 'name', label: 'Name' },
