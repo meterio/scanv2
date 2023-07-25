@@ -16,7 +16,7 @@ import { getCurrentChain } from '@/config';
 // }
 
 // 请求超时时间
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 30000;
 
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
@@ -37,7 +37,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 // 响应拦截器
 axios.interceptors.response.use(
-  response => {
+  (response) => {
     if (response.status === 200) {
       return Promise.resolve(response);
     } else {
@@ -45,7 +45,7 @@ axios.interceptors.response.use(
     }
   },
   // 服务器状态码不是200的情况
-  error => {
+  (error) => {
     return error;
     // if (error.response.status) {
     //   switch (error.response.status) {
@@ -115,7 +115,7 @@ export function get(network, url, params) {
   return new Promise((resolve, reject) => {
     axios
       .get(url, { params })
-      .then(res => {
+      .then((res) => {
         // get data success
         // console.log(res);
         if (res && res.data) {
@@ -124,7 +124,7 @@ export function get(network, url, params) {
           resolve(res);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         reject(err);
       });
@@ -144,7 +144,7 @@ export function post(network, url, params) {
   return new Promise((resolve, reject) => {
     axios
       .post(url, params)
-      .then(res => {
+      .then((res) => {
         // console.log("res", res);
         // get data success
         if (res && res.data) {
@@ -153,7 +153,7 @@ export function post(network, url, params) {
           resolve(res);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err', err);
         if (err && err.data) {
           reject(err.data);
@@ -172,12 +172,12 @@ export function commonGet(url, params) {
   return new Promise((resolve, reject) => {
     axios
       .get(url, {
-        params: { ...params }
+        params: { ...params },
       })
-      .then(res => {
+      .then((res) => {
         resolve(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err.data);
       });
   });
