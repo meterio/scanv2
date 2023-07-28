@@ -60,7 +60,7 @@ export default {
     home_block_height(newVal) {
       for (const item of this.data) {
         if (item.label === 'Block Height') {
-          item['content'] = newVal;
+          item['content'] = formatNum(newVal);
           return;
         }
       }
@@ -77,9 +77,9 @@ export default {
 
       const stakingAPY = new BigNumber(staking.stakingAPY);
       this.data = [
-        { label: 'Block Height', content: pos.best, cols: 3 },
-        { label: 'Epoch', content: pos.epoch, cols: 3 },
-        { label: 'Transactions', content: pos.txsCount, cols: 3 },
+        { label: 'Block Height', content: formatNum(pos.best), cols: 3 },
+        { label: 'Epoch', content: formatNum(pos.epoch), cols: 3 },
+        { label: 'Transactions', content: formatNum(pos.txsCount), cols: 3 },
         { label: 'Avg Block Time', content: pos.avgBlockTime + ' sec', cols: 3 },
         {
           label: 'Healthy / Total Nodes',
@@ -108,7 +108,7 @@ export default {
         // },
         {
           label: 'Address Count',
-          content: pos.addressCount,
+          content: formatNum(pos.addressCount),
           cols: 3,
         },
       ];
