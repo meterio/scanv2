@@ -10,7 +10,9 @@
     "deployDomain": "scan.meter.io",
     "pow": true,
     "priceEnable": true,
-    "nftImageUrlBase": "https://nft-image.meter.io/"
+    "nftImageUrlBase": "https://nft-image.meter.io/",
+    "rpcUrl": "https://rpc.meter.io",
+    "blockExplorer": "https://scan.meter.io"
   },
   {
     "name": "Meter Testnet",
@@ -23,6 +25,8 @@
     "deployDomain": "scan-warringstakes.meter.io",
     "pow": true,
     "priceEnable": true,
-    "nftImageUrlBase": "https://nft-image.meter.io/"
+    "nftImageUrlBase": "https://nft-image.meter.io/",
+    "rpcUrl": "https://rpctest.meter.io",
+    "blockExplorer": "https://scan-warringstakes.meter.io"
   }
 ]

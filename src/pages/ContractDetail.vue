@@ -115,6 +115,8 @@ import CodeTextArea from '@/components/CodeTextArea.vue';
 import CopyData from '../components/CopyData.vue';
 import { ethers } from 'ethers';
 import AddressLink from '../components/AddressLink.vue';
+import { mapActions, mapMutations, mapState } from 'vuex';
+import { WalletBoardBus } from "@/WalletBoard"
 
 export default {
   name: 'Contract',
@@ -123,7 +125,7 @@ export default {
     ContractWriteFunction,
     CodeTextArea,
     CopyData,
-    AddressLink,
+    AddressLink
   },
   props: {
     verified: {
@@ -165,10 +167,7 @@ export default {
   },
   data() {
     return {
-      provider: null,
       contract: null,
-      account: null,
-      chainId: null,
       abi: null,
       readAbi: [],
       writeAbi: [],
@@ -180,6 +179,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('wallet', ['chainId', 'account', 'signer']),
     variantBtn() {
       if (this.account && this.chainId == this.currentChain.chainId) {
         return 'outline-success';
@@ -236,7 +236,7 @@ export default {
       return params;
     },
     computedBtnText() {
-      if (this.account) {
+      if (this.account !== '0x') {
         if (this.chainId != this.currentChain.chainId) {
           return `Wrong Network`;
         }
@@ -259,10 +259,10 @@ export default {
     this.initAbi();
     this.initImplAbi();
 
-    const provider = await detectEthereumProvider();
-    this.provider = provider;
+    // const provider = await detectEthereumProvider();
+    // this.provider = provider;
 
-    this.connect();
+    // this.connect();
 
     if (!this.verified) {
       // this.getContractBytecode();
@@ -274,13 +274,21 @@ export default {
   },
   watch: {
     async chainId(newVal, oldVal) {
-      if (!oldVal) {
-        return;
+      // if (!oldVal) {
+      //   return;
+      // }
+      // this.removeAllListeners();
+      // const provider = await detectEthereumProvider();
+      // this.provider = provider;
+      // this.connect();
+    },
+    signer(val) {
+      if (val) {
+        this.contract = new ethers.Contract(this.address, this.abi, val);
+        if (this.implAbi) {
+          this.implContract = new ethers.Contract(this.address, this.implAbi, val);
+        }
       }
-      this.removeAllListeners();
-      const provider = await detectEthereumProvider();
-      this.provider = provider;
-      this.connect();
     },
     files() {
       this.initAbi();
@@ -349,28 +357,29 @@ export default {
       this.implWriteAbi = writeAbi;
     },
     connect() {
-      if (!this.provider) {
-        return;
-      }
-      this.provider.on('chainChanged', this.chainChangedHandle);
-      this.provider.on('accountsChanged', this.accountsChangeHandle);
+      WalletBoardBus.$emit('connect')
+      // if (!this.signer) {
+      //   return;
+      // }
+      // this.provider.on('chainChanged', this.chainChangedHandle);
+      // this.provider.on('accountsChanged', this.accountsChangeHandle);
 
-      this.provider
-        .request({ method: 'eth_requestAccounts' })
-        .then((accounts) => {
-          this.account = accounts[0];
-          const signer = new ethers.providers.Web3Provider(this.provider).getSigner();
-          this.contract = new ethers.Contract(this.address, this.abi, signer);
-          if (this.implAbi) {
-            this.implContract = new ethers.Contract(this.address, this.implAbi, signer);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      this.provider.request({ method: 'eth_chainId' }).then((chainId) => {
-        this.chainId = chainId;
-      });
+      // this.provider
+      //   .request({ method: 'eth_requestAccounts' })
+      //   .then((accounts) => {
+      //     this.account = accounts[0];
+      //     const signer = new ethers.providers.Web3Provider(this.provider).getSigner();
+      //     this.contract = new ethers.Contract(this.address, this.abi, signer);
+      //     if (this.implAbi) {
+      //       this.implContract = new ethers.Contract(this.address, this.implAbi, signer);
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      // this.provider.request({ method: 'eth_chainId' }).then((chainId) => {
+      //   this.chainId = chainId;
+      // });
     },
     chainChangedHandle(chainId) {
       this.chainId = chainId;
