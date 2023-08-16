@@ -316,6 +316,7 @@ export default {
     },
     async loadTransfers() {
       const { transfers } = await this.$api.transaction.getTransfers(this.network, this.txHash);
+      console.log('transfers: ', transfers);
       this.transfers.items = transfers.map((transfer, index) => {
         return {
           from: transfer.sender,

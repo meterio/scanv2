@@ -6,12 +6,12 @@
           :to="{
             name: 'verify',
             params: {
-              address,
-            },
+              address
+            }
           }"
           >VERIFY</router-link
         >
-        <span> contract source code.</span>
+        <span> contract source code.</span>
       </section>
       <section v-if="bytecode">
         <copy-data class="my-2" :data="bytecode" />
@@ -116,7 +116,7 @@ import CopyData from '../components/CopyData.vue';
 import { ethers } from 'ethers';
 import AddressLink from '../components/AddressLink.vue';
 import { mapActions, mapMutations, mapState } from 'vuex';
-import { WalletBoardBus } from "@/WalletBoard"
+import { WalletBoardBus } from '@/WalletBoard';
 
 export default {
   name: 'Contract',
@@ -130,23 +130,23 @@ export default {
   props: {
     verified: {
       type: Boolean,
-      default: false,
+      default: false
     },
     files: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     implFiles: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     address: {
       type: String,
-      default: '',
+      default: ''
     },
     proxyContract: {
       type: Object,
@@ -156,14 +156,14 @@ export default {
           proxyType: '',
           implAddr: '',
           prevImplAddr: '',
-          adminAddr: '',
+          adminAddr: ''
         };
-      },
+      }
     },
     deployStatus: {
       type: String,
-      default: '',
-    },
+      default: ''
+    }
   },
   data() {
     return {
@@ -175,7 +175,7 @@ export default {
       implAbi: null,
       implReadAbi: [],
       implWriteAbi: [],
-      implContract: null,
+      implContract: null
     };
   },
   computed: {
@@ -201,7 +201,7 @@ export default {
     computedVerifyParams() {
       const params = [];
       try {
-        const metadata = this.files.find((f) => f.name === 'metadata.json');
+        const metadata = this.files.find(f => f.name === 'metadata.json');
         const jsonData = JSON.parse(metadata.content);
         const compilerVersion = jsonData.compiler.version;
         const settings = jsonData.settings;
@@ -214,19 +214,19 @@ export default {
         params.push(
           {
             name: 'Contract Name: ',
-            value: contractName,
+            value: contractName
           },
           {
             name: 'Optimization Enabled: ',
-            value: optimizationEnable,
+            value: optimizationEnable
           },
           {
             name: 'Compiler Version: ',
-            value: compilerVersion,
+            value: compilerVersion
           },
           {
             name: 'EVM Version: ',
-            value: evmVersion,
+            value: evmVersion
           }
         );
       } catch (e) {
@@ -253,7 +253,7 @@ export default {
     },
     contractCallEnable() {
       return this.deployStatus !== 'selfDestructed';
-    },
+    }
   },
   async created() {
     this.initAbi();
@@ -295,7 +295,7 @@ export default {
     },
     implFiles(val) {
       this.initImplAbi();
-    },
+    }
   },
   methods: {
     async emitImportApi() {
@@ -317,7 +317,7 @@ export default {
       }
       const readAbi = [];
       const writeAbi = [];
-      const metadata = this.files.find((item) => item.name === 'metadata.json');
+      const metadata = this.files.find(item => item.name === 'metadata.json');
       const abi = JSON.parse(metadata.content).output.abi;
       for (const f of abi) {
         if (f.type === 'function') {
@@ -341,7 +341,7 @@ export default {
       }
       const readAbi = [];
       const writeAbi = [];
-      const metadata = this.implFiles.find((item) => item.name === 'metadata.json');
+      const metadata = this.implFiles.find(item => item.name === 'metadata.json');
       const abi = JSON.parse(metadata.content).output.abi;
       for (const f of abi) {
         if (f.type === 'function') {
@@ -357,7 +357,8 @@ export default {
       this.implWriteAbi = writeAbi;
     },
     connect() {
-      WalletBoardBus.$emit('connect')
+      console.log('emit connect');
+      WalletBoardBus.$emit('try-connect');
       // if (!this.signer) {
       //   return;
       // }
@@ -392,11 +393,11 @@ export default {
         this.provider.removeListener('chainChanged', this.chainChangedHandle);
         this.provider.removeListener('accountsChanged', this.accountsChangeHandle);
       }
-    },
+    }
   },
   beforeDestroy() {
     this.removeAllListeners();
-  },
+  }
 };
 </script>
 
