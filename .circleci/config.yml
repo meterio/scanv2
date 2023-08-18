@@ -6,7 +6,7 @@ jobs:
   build_and_deploy_mainnet:
     resource_class: large
     docker:
-      - image: 'cimg/node:16.7'
+      - image: 'cimg/node:16.10'
     steps:
       - checkout
       - run:
@@ -20,7 +20,7 @@ jobs:
           key: scanv2-deps-{{ checksum "package.json" }}
       - run:
           name: install npm dependencies
-          command: npm install
+          command: npm install --force
       - save_cache:
           key: scanv2-deps-{{ checksum "package.json" }}
           paths:

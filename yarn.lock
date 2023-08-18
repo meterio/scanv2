@@ -2090,13 +2090,21 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
-"@safe-global/safe-apps-provider@^0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@safe-global/safe-apps-provider/-/safe-apps-provider-0.18.0.tgz#81f1f00684840832e4fe2f92f26891533abd7b10"
-  integrity sha512-C6xN+rRfDn1ShF2Om08h1htuK6M6CttUdahCOSiNVdzGqW5d0nv2RHSO1IntvdQnyd5tBMo31Fy+7XrCve7ORA==
+"@safe-global/safe-apps-provider@^0.17.0":
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/@safe-global/safe-apps-provider/-/safe-apps-provider-0.17.1.tgz#72df2a66be5343940ed505efe594ed3b0f2f7015"
+  integrity sha512-lYfRqrbbK1aKU1/UGkYWc/X7PgySYcumXKc5FB2uuwAs2Ghj8uETuW5BrwPqyjBknRxutFbTv+gth/JzjxAhdQ==
   dependencies:
-    "@safe-global/safe-apps-sdk" "^8.1.0"
+    "@safe-global/safe-apps-sdk" "8.0.0"
     events "^3.3.0"
+
+"@safe-global/safe-apps-sdk@8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@safe-global/safe-apps-sdk/-/safe-apps-sdk-8.0.0.tgz#9bdfe0e0d85e1b2d279bb840f40c4b930aaf8bc1"
+  integrity sha512-gYw0ki/EAuV1oSyMxpqandHjnthZjYYy+YWpTAzf8BqfXM3ItcZLpjxfg+3+mXW8HIO+3jw6T9iiqEXsqHaMMw==
+  dependencies:
+    "@safe-global/safe-gateway-typescript-sdk" "^3.5.3"
+    viem "^1.0.0"
 
 "@safe-global/safe-apps-sdk@^8.1.0":
   version "8.1.0"
