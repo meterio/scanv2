@@ -1,11 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-// import modules from './modules';
-import { wallet } from '@/store/modules/wallet';
-import auth from '@/store/modules/auth';
-import user from '@/store/modules/user';
-import dom from '@/store/modules/dom';
-import toast from '@/store/modules/toast';
+import modules from './modules';
 
 Vue.use(Vuex);
 
@@ -23,6 +18,6 @@ export default new Vuex.Store({
       commit('CONFIGVAL', { key: key, val: val });
     },
   },
-  modules: { user, auth, dom, toast, wallet },
+  modules,
   // strict: process.env.NODE_ENV === 'development'
 });

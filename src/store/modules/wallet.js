@@ -9,7 +9,7 @@ const state = {
   chainId: 0,
 
   walletIcon: '',
-  walletLabel: ''
+  walletLabel: '',
 };
 
 const getters = {};
@@ -43,7 +43,7 @@ const mutations = {
   },
   setWalletLabel(state, label) {
     state.walletLabel = label;
-  }
+  },
 };
 
 const actions = {
@@ -71,7 +71,7 @@ const actions = {
     if (label) {
       commit('setWalletLabel', label);
     }
-  }
+  },
 };
 
-export const wallet = { namespaced, state, getters, mutations, actions };
+export default { namespaced, state, getters, mutations, actions };
