@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import StatusTag from "@/components/StatusTag.vue";
-import DataTableV2 from "@/components/DataTableV2.vue";
-import DataSummary from "@/components/DataSummary.vue";
-import NavTabs from "@/components/NavTabs.vue";
-import { bigNum, bigNumMinus } from "@/utils";
-import BigNumber from "bignumber.js";
+import StatusTag from '@/components/StatusTag.vue';
+import DataTableV2 from '@/components/DataTableV2.vue';
+import DataSummary from '@/components/DataSummary.vue';
+import NavTabs from '@/components/NavTabs.vue';
+import { bigNum, bigNumMinus } from '@/utils';
+import BigNumber from 'bignumber.js';
 
 export default {
   components: {
@@ -57,36 +57,36 @@ export default {
   },
   data() {
     return {
-      summaryTitle: "Auction Detail",
+      summaryTitle: 'Auction Detail',
       summary: [],
-      tabs: [{ name: "Autobids" }, { name: "Userbids" }],
+      tabs: [{ name: 'Autobids' }, { name: 'Userbids' }],
       tabValue: 0,
       autobids: {
         fields: [
-          { key: "epoch", label: "Epoch" },
-          { key: "blockNum", label: "Block" },
-          { key: "amount", label: "Total Amount" },
-          { key: "bidCount", label: "Bids" },
+          { key: 'epoch', label: 'Epoch' },
+          { key: 'blockNum', label: 'Block' },
+          { key: 'amount', label: 'Total Amount' },
+          { key: 'bidCount', label: 'Bids' },
         ],
         items: [],
         pagination: {
           show: false,
-          align: "center",
+          align: 'center',
           perPage: 15,
         },
       },
       userbids: {
         fields: [
-          { key: "fullAddress", label: "Address" },
-          { key: "type", label: "Type" },
-          { key: "blockNum", label: "Block" },
-          { key: "amount", label: "Amount" },
-          { key: "lotAmount", label: "Lot Amount" },
+          { key: 'fullAddress', label: 'Address' },
+          { key: 'type', label: 'Type' },
+          { key: 'blockNum', label: 'Block' },
+          { key: 'amount', label: 'Amount' },
+          { key: 'lotAmount', label: 'Lot Amount' },
         ],
         items: [],
         pagination: {
           show: true,
-          align: "center",
+          align: 'center',
           perPage: 15,
         },
       },
@@ -98,41 +98,33 @@ export default {
     },
     async loadUserbids(network, page, limit) {
       const { auctionID } = this.$route.params;
-      const { userbids, totalRows } = await this.$api.auction.getUserbids(
-        auctionID,
-        network,
-        page,
-        limit
-      );
+      const { userbids, totalRows } = await this.$api.auction.getUserbids(auctionID, network, page, limit);
       const items = userbids.map((b) => ({
         ...b,
         fullAddress: b.address,
         amount: {
-          type: "amount",
+          type: 'amount',
           amount: b.amount,
-          token: "MTR",
+          token: 'MTR',
           precision: 6,
         },
         lotAmount: b.lotAmount
           ? {
-              type: "amount",
+              type: 'amount',
               amount: b.lotAmount,
-              token: "MTRG",
+              token: 'MTRG',
               precision: 6,
             }
-          : "-",
+          : '-',
       }));
       return { items, totalRows };
     },
     async loadAutobidSummaries(network, page, limit) {
       const { auctionID } = this.$route.params;
-      const { autobidSummaries } = await this.$api.auction.getAutobidSummaries(
-        auctionID,
-        network
-      );
+      const { autobidSummaries } = await this.$api.auction.getAutobidSummaries(auctionID, network);
       const items = autobidSummaries.map((b) => ({
         ...b,
-        amount: { type: "amount", amount: b.total, token: "MTR", precision: 6 },
+        amount: { type: 'amount', amount: b.total, token: 'MTR', precision: 6 },
       }));
       return { items, totalRows: items.length };
     },
@@ -143,63 +135,60 @@ export default {
       const { summary } = res;
       let actualPrice = summary.actualPrice;
       if (!summary.auctionEndHeight) {
-        actualPrice = new BigNumber(summary.received)
-          .dividedBy(summary.released)
-          .times(1e18)
-          .toFixed();
+        actualPrice = new BigNumber(summary.received).dividedBy(summary.released).times(1e18).toFixed();
       }
       this.summary = [
-        { key: "ID", value: summary.id },
+        { key: 'ID', value: summary.id },
         {
-          key: "Height Range",
+          key: 'Height Range',
           start: summary.auctionStartHeight,
           end: summary.auctionEndHeight,
-          type: "block-range",
+          type: 'block-range',
         },
         {
-          key: "Epoch Range",
+          key: 'Epoch Range',
           start: summary.auctionStartEpoch,
           end: summary.auctionEndEpoch,
-          type: "epoch-range",
+          type: 'epoch-range',
         },
         {
-          key: "MTRG on Auction",
-          type: "amount",
+          key: 'MTRG on Auction',
+          type: 'amount',
           value: bigNumMinus(summary.released, summary.leftover),
-          token: "MTRG",
+          token: 'MTRG',
           precision: -1,
         },
         {
-          key: "MTRG on Auction Generated Heights",
+          key: 'MTRG on Auction Generated Heights',
           value: `${summary.startHeight} - ${summary.endHeight}`,
         },
         {
-          key: "Userbid Total",
-          type: "amount",
+          key: 'Userbid Total',
+          type: 'amount',
           value: summary.userbidTotal,
-          token: "MTR",
+          token: 'MTR',
           precision: -1,
         },
         {
-          key: "Autobid Total",
-          type: "amount",
+          key: 'Autobid Total',
+          type: 'amount',
           value: summary.autobidTotal,
-          token: "MTR",
+          token: 'MTR',
           precision: -1,
         },
         {
-          key: "Total Received",
-          type: "amount",
+          key: 'Total Received',
+          type: 'amount',
           value: summary.received,
-          token: "MTR",
+          token: 'MTR',
           precision: -1,
         },
-        { key: "Bids Count", value: summary.bidCount },
+        { key: 'Bids Count', value: summary.bidCount },
         {
-          key: "Actual Price",
-          type: "amount",
+          key: 'Actual Price',
+          type: 'amount',
           value: actualPrice,
-          token: "MTR",
+          token: 'MTR',
           precision: 4,
         },
       ];

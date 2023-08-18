@@ -14,8 +14,8 @@ export const WalletBoardBus = new Vue();
 const injected = injectedModule();
 const walletConnect = walletConnectModule({
   version: 2,
-  projectId: '044c51f926b4cff9197d1bfc11e909da',
-  dappUrl: 'https://wallet.meter.io'
+  projectId: 'e707678becb6e8d7d6ab2176ef531f59',
+  dappUrl: 'https://scan.meter.io',
 });
 const coinbaseWalletSdk = coinbaseWalletModule();
 
@@ -24,8 +24,8 @@ const options = {
     /^https:\/\/safe\.meter\.io/,
     /^https:\/\/gnosis-safe\.io$/,
     /^https:\/\/app\.safe\.global$/,
-    /^https:\/\/safe\.global$/
-  ]
+    /^https:\/\/safe\.global$/,
+  ],
 };
 const gnosis = gnosisModule(options);
 
@@ -34,13 +34,13 @@ export default {
   props: {
     chains: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       onboard: null,
-      unsubscribe: null
+      unsubscribe: null,
     };
   },
   created() {
@@ -58,17 +58,17 @@ export default {
         chains: this.chains,
         accountCenter: {
           desktop: {
-            enabled: false
+            enabled: false,
           },
           mobile: {
-            enabled: false
-          }
+            enabled: false,
+          },
         },
         appMetadata: {
           name: 'Meter Wallet',
           icon: '<svg></svg>',
-          description: 'Meter Wallet'
-        }
+          description: 'Meter Wallet',
+        },
       });
 
       if (this.onboard) {
@@ -88,7 +88,7 @@ export default {
 
           // You can also auto connect "silently" and disable all onboard modals to avoid them flashing on page load
           await this.onboard.connectWallet({
-            autoSelect: { label: previouslyConnectedWallets[0], disableModals: true }
+            autoSelect: { label: previouslyConnectedWallets[0], disableModals: true },
           });
         } else {
           await this.onboard.connectWallet();
@@ -105,7 +105,7 @@ export default {
     },
     subscribe() {
       const state = this.onboard.state.select();
-      const { unsubscribe } = state.subscribe(update => {
+      const { unsubscribe } = state.subscribe((update) => {
         console.log('state update: ', update);
         this.updateState(update.wallets);
 
@@ -139,13 +139,13 @@ export default {
           this.onboard.disconnectWallet({ label: wallets[1].label });
         }
       }
-    }
+    },
   },
   beforeDestroy() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
-  }
+  },
 };
 </script>
 

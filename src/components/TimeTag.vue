@@ -11,8 +11,8 @@ export default {
   props: {
     timestamp: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {};
@@ -23,9 +23,9 @@ export default {
     },
     formatted() {
       return formatTime(this.timestamp * 1000);
-    }
+    },
   },
-  methods: {}
+  methods: {},
 };
 </script>
 

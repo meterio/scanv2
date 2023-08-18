@@ -14,24 +14,24 @@
 </template>
 
 <script>
-import DataTableV2 from "@/components/DataTableV2.vue";
-import { formatNum, bigNumDiv, bigNumCompare } from "@/utils";
-import BigNumber from "bignumber.js";
+import DataTableV2 from '@/components/DataTableV2.vue';
+import { formatNum, bigNumDiv, bigNumCompare } from '@/utils';
+import BigNumber from 'bignumber.js';
 
 export default {
-  name: "ActiveAuctions",
+  name: 'ActiveAuctions',
   data() {
     return {
       // Note `isActive` is left out and will not appear in the rendered table
       auction: {
         fields: [
-          { key: "end_height", label: "Start KBlock" },
-          { key: "current_epoch", label: "Current Epoch" },
-          { key: "auction_end_epoch", label: "End Epoch" },
-          { key: "mtrg_on_auction", label: "MTRG on Auction" },
-          { key: "mtr_received", label: "Received MTR" },
-          { key: "expected_final_price", label: "Expected Price" },
-          { key: "auctionDetail", label: "Bids" },
+          { key: 'end_height', label: 'Start KBlock' },
+          { key: 'current_epoch', label: 'Current Epoch' },
+          { key: 'auction_end_epoch', label: 'End Epoch' },
+          { key: 'mtrg_on_auction', label: 'MTRG on Auction' },
+          { key: 'mtr_received', label: 'Received MTR' },
+          { key: 'expected_final_price', label: 'Expected Price' },
+          { key: 'auctionDetail', label: 'Bids' },
         ],
         items: [],
       },
@@ -53,38 +53,34 @@ export default {
         this.load = false;
         const items = [];
         if (present.startHeight) {
-          let actualPrice = new BigNumber(
-            bigNumDiv(present.received, present.released)
-          ).times(1e18);
+          let actualPrice = new BigNumber(bigNumDiv(present.received, present.released)).times(1e18);
           const reservedPrice = present.reservedPrice;
           if (bigNumCompare(actualPrice, reservedPrice) < 0) {
             actualPrice = reservedPrice;
           }
           let leftoverEpoch = present.endEpoch + 24 - best.epoch || 0;
           items.push({
-            prefix: "",
+            prefix: '',
             epoch_range: `${present.startEpoch} - ${present.endEpoch}`,
-            end_height: { type: "block", block: present.endHeight },
-            auction_end_epoch: `${
-              present.endEpoch + 24
-            } (in ${leftoverEpoch} hour${leftoverEpoch > 1 ? "s" : ""})`,
+            end_height: { type: 'block', block: present.endHeight },
+            auction_end_epoch: `${present.endEpoch + 24} (in ${leftoverEpoch} hour${leftoverEpoch > 1 ? 's' : ''})`,
             current_epoch: best.epoch,
             mtr_received: {
-              type: "amount",
+              type: 'amount',
               amount: present.received,
-              token: "MTR",
+              token: 'MTR',
               precision: 4,
             },
             mtrg_on_auction: {
-              type: "amount",
+              type: 'amount',
               amount: present.released,
-              token: "MTRG",
+              token: 'MTRG',
               precision: 4,
             },
             expected_final_price: {
-              type: "amount",
+              type: 'amount',
               amount: new BigNumber(actualPrice).toFixed(),
-              token: "MTR",
+              token: 'MTR',
               precision: 4,
             },
             auctionDetail: {
@@ -104,7 +100,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-tr[role="row"] {
+tr[role='row'] {
   padding: 20px !important;
 }
 </style>

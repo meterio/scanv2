@@ -6,7 +6,7 @@ export const shortHash = (hash, num) => {
   return shortStr(hash, num || 18);
 };
 
-export const shortName = hash => {
+export const shortName = (hash) => {
   return shortStr(hash, 10);
 };
 

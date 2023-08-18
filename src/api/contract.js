@@ -1,4 +1,4 @@
-import { get } from "@/utils/http";
+import { get } from '@/utils/http';
 
 export default {
   getContractFiles(network, address) {
@@ -6,5 +6,5 @@ export default {
   },
   getContractBytecode(network, address) {
     return get(network, `contract/${address}`);
-  }
-}
+  },
+};

@@ -1,4 +1,4 @@
-import { get } from "@/utils/http";
+import { get } from '@/utils/http';
 
 const block = {
   getBest(network) {
@@ -11,7 +11,7 @@ const block = {
 
   getBlockDetail(network, revision) {
     return get(network, `blocks/${revision}`);
-  }
+  },
 };
 
 export default block;

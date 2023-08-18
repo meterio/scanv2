@@ -26,23 +26,23 @@ export default {
       default() {
         return {
           address: '0x',
-          isContract: false
-        }
-      }
+          isContract: false,
+        };
+      },
     },
     name: {
       type: String,
-      default: ''
+      default: '',
     },
     short: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       copied: false,
-      timer: null
+      timer: null,
     };
   },
   computed: {
@@ -70,7 +70,7 @@ export default {
         return this.shortAddr(this.data.address.toLowerCase(), 14);
       }
       return this.data.address.toLowerCase();
-    }
+    },
   },
   methods: {
     handleHover(hovered) {
@@ -86,8 +86,8 @@ export default {
     },
     clearCopied() {
       this.copied = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

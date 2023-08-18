@@ -55,6 +55,7 @@ export default {
     },
     getWallets(wallets) {
       const { accounts, chains, provider, icon, label } = wallets[0];
+      console.log('provider type: ', typeof provider);
 
       this.initWallet({ account: accounts[0].address, chainId: Number(chains[0].id), provider, icon, label });
     }

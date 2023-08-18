@@ -5,10 +5,10 @@ div
 </template>
 
 <script>
-import AddressLink from "@/components/AddressLink";
-import AmountTag from "@/components/AmountTag";
+import AddressLink from '@/components/AddressLink';
+import AmountTag from '@/components/AmountTag';
 export default {
-  name: "AddressLinkPage",
+  name: 'AddressLinkPage',
   components: { AddressLink, AmountTag },
   computed: {
     address() {

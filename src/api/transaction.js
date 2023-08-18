@@ -18,7 +18,7 @@ const transaction = {
   },
   getInternalTxs(network, hash) {
     return get(network, `txs/${hash}/internaltxs`);
-  }
+  },
 };
 
 export default transaction;

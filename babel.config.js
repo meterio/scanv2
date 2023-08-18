@@ -1,12 +1,9 @@
+const proPlugins = [];
+// if (process.env.NODE_ENV === 'production') {
+//     proPlugins.push('transform-remove-console');
+// }
+
 module.exports = {
-  presets: [
-    "@vue/cli-plugin-babel/preset",
-    [
-      "@babel/preset-env",
-      {
-        useBuiltIns: "entry",
-        corejs: 3.9
-      }
-    ]
-  ]
+  presets: ['@vue/cli-plugin-babel/preset'],
+  plugins: [...proPlugins]
 };

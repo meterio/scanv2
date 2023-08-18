@@ -1,18 +1,18 @@
-@import "reset";
+@import 'reset';
 
 // import bootstrap style
-@import "node_modules/bootstrap/scss/bootstrap.scss";
-@import "node_modules/bootstrap-vue/src/index.scss";
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
+@import 'node_modules/bootstrap-vue/src/index.scss';
 
-@import "color";
-@import "variables";
-@import "media";
-@import "fonts";
-@import "global";
-@import "table";
-@import "helpers";
+@import 'color';
+@import 'variables';
+@import 'media';
+@import 'fonts';
+@import 'global';
+@import 'table';
+@import 'helpers';
 
-@import "theme";
+@import 'theme';
 
 .detail-page {
   margin-top: 30px;

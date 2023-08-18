@@ -25,7 +25,7 @@ export default {
   components: {
     DataDashboard,
     ValidatorTable,
-    DataTableV2
+    DataTableV2,
   },
   data() {
     return {
@@ -37,7 +37,7 @@ export default {
         pagination: {
           show: true,
           align: 'center',
-          perPage: 8
+          perPage: 8,
         },
 
         fields: [
@@ -47,9 +47,9 @@ export default {
           { key: 'timestamp', label: 'Time' },
           { key: 'autobidCount', label: 'nAutobid' },
           { key: 'transferCount', label: 'nTransfer' },
-          { key: 'posReward', label: 'More' }
-        ]
-      }
+          { key: 'posReward', label: 'More' },
+        ],
+      },
     };
   },
   computed: {
@@ -63,9 +63,9 @@ export default {
         { key: 'amount', label: 'Total Rewards' },
         { key: 'timestamp', label: 'Time' },
         { key: 'transferCount', label: 'nTransfer' },
-        { key: 'posReward', label: 'More' }
+        { key: 'posReward', label: 'More' },
       ];
-    }
+    },
   },
   methods: {
     init() {
@@ -75,16 +75,16 @@ export default {
       this.load = true;
       const res = await this.$api.validator.getValidateReward(network, page, limit);
       const { rewards, totalRows } = res;
-      const items = rewards.map(r => {
+      const items = rewards.map((r) => {
         return {
           ...r,
           amount: {
             type: 'amount',
             amount: r.totalReward,
             precision: 6,
-            token: this.currentChain.symbol
+            token: this.currentChain.symbol,
           },
-          posReward: r.epoch
+          posReward: r.epoch,
         };
       });
       return { items, totalRows };
@@ -102,13 +102,13 @@ export default {
           {
             content: staking.candidates,
             label: 'Validators',
-            cols: 3
+            cols: 3,
           },
           {
             content: fromWei(staking.totalStaked, 0) + ' ' + this.currentChain.gSymbol,
             label: 'Total Staked',
-            cols: 3
-          }
+            cols: 3,
+          },
         ];
 
         if (this.currentChain.priceEnable) {
@@ -118,7 +118,7 @@ export default {
             {
               content: `${committee.healthy} Healthy / ${committee.invalid} Invalid`,
               label: 'Active Committee',
-              cols: 3
+              cols: 3,
             }
           );
         } else {
@@ -127,15 +127,15 @@ export default {
             {
               content: `${committee.healthy} Healthy / ${committee.invalid} Invalid`,
               label: 'Active Committee',
-              cols: 3
+              cols: 3,
             }
           );
         }
       } catch (e) {
         console.error(e);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

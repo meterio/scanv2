@@ -1,18 +1,13 @@
 <template>
   <transition-group name="slide" tag="div" class="ui-toast-list component">
-    <UiToast
-      @remove="onRemove"
-      v-for="item in toastsList"
-      :item="item"
-      :key="item.id"
-    />
+    <UiToast @remove="onRemove" v-for="item in toastsList" :item="item" :key="item.id" />
   </transition-group>
 </template>
 
 <script>
-import UiToast from "./UiToast";
+import UiToast from './UiToast';
 export default {
-  name: "UiToastList",
+  name: 'UiToastList',
 
   components: {
     UiToast,
@@ -20,8 +15,8 @@ export default {
 
   watch: {
     $route: {
-      handler: "clearToastList",
-      deep: "true",
+      handler: 'clearToastList',
+      deep: 'true',
     },
   },
 
@@ -33,11 +28,11 @@ export default {
 
   methods: {
     onRemove(id) {
-      this.$store.commit("toast/REMOVE", { id });
+      this.$store.commit('toast/REMOVE', { id });
     },
     clearToastList() {
       if (this.toastsList.length) {
-        this.$store.commit("toast/CLEAR_LIST");
+        this.$store.commit('toast/CLEAR_LIST');
       }
     },
   },

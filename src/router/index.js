@@ -1,5 +1,5 @@
-import Vue from "vue";
-import Router from "vue-router";
+import Vue from 'vue';
+import Router from 'vue-router';
 
 // import NProgress from 'nprogress'
 
@@ -8,21 +8,21 @@ import {
   checkAccessMiddleware,
   setPageTitleMiddleware,
   redirectNetwork,
-} from "./middlewares";
-import { routes } from "./routes";
+} from './middlewares';
+import { routes } from './routes';
 
 Vue.use(Router);
 
 const router = new Router({
-  linkActiveClass: "is-active",
-  mode: "history",
+  linkActiveClass: 'is-active',
+  mode: 'history',
   routes,
 });
 
 router.beforeEach((to, from, next) => {
   let { network } = to.params;
   if (!network) {
-    network = "main";
+    network = 'main';
   }
   next();
 });

@@ -8,10 +8,7 @@ export function routePropResolver(routeOptions) {
 
   Object.keys(query).forEach((key) => {
     // parse strings
-    if (
-      query[key].length &&
-      !["0", "null", "undefined", "NaN"].includes(query[key])
-    ) {
+    if (query[key].length && !['0', 'null', 'undefined', 'NaN'].includes(query[key])) {
       resultQuery[key] = query[key];
     }
     // parse numbers

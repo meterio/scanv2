@@ -31,10 +31,10 @@ export default {
         datasets: [
           {
             data: [67, 5.78, 23.4, 15.68, 5.44],
-            backgroundColor: ['#003CB2', '#80d2e4', '#a6b5cc', '#b871ff', '#42DCFE']
-          }
+            backgroundColor: ['#003CB2', '#80d2e4', '#a6b5cc', '#b871ff', '#42DCFE'],
+          },
         ],
-        labels: ['Total Avaliable', 'Delegated', 'Unbounded', 'Reward', 'Commision']
+        labels: ['Total Avaliable', 'Delegated', 'Unbounded', 'Reward', 'Commision'],
       },
       // #5c6f8c
       options: {
@@ -42,15 +42,15 @@ export default {
           position: 'right',
           labels: {
             padding: 25,
-            usePointStyle: true
-          }
-        }
-      }
+            usePointStyle: true,
+          },
+        },
+      },
     };
   },
   components: {
-    PieChart
-  }
+    PieChart,
+  },
 };
 </script>
 

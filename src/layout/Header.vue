@@ -30,13 +30,13 @@
 </template>
 
 <script>
-import { AuthService } from "../services/auth.service";
+import { AuthService } from '../services/auth.service';
 
-import UiHeaderDropdownMenu from "@/components/UiHeaderDropdownMenu.vue";
-import UiToastList from "@/components/UiToastList";
+import UiHeaderDropdownMenu from '@/components/UiHeaderDropdownMenu.vue';
+import UiToastList from '@/components/UiToastList';
 
 export default {
-  name: "Header",
+  name: 'Header',
   components: {
     UiToastList,
     UiHeaderDropdownMenu,

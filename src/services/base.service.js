@@ -1,12 +1,12 @@
-import qs from "qs";
-import { assert } from "@/core";
+import qs from 'qs';
+import { assert } from '@/core';
 
-import { Http } from "./http.init";
-import { ResponseWrapper, ErrorWrapper } from "./util";
+import { Http } from './http.init';
+import { ResponseWrapper, ErrorWrapper } from './util';
 
 export class BaseService {
   static get entity() {
-    throw new Error("entity getter not defined");
+    throw new Error('entity getter not defined');
   }
   /**
    * ------------------------------
@@ -57,9 +57,7 @@ export class BaseService {
 
       return new ResponseWrapper(response, data);
     } catch (error) {
-      const message = error.response.data
-        ? error.response.data.error
-        : error.response.statusText;
+      const message = error.response.data ? error.response.data.error : error.response.statusText;
       throw new ErrorWrapper(error, message);
     }
   }
@@ -71,9 +69,7 @@ export class BaseService {
       const response = await this.request().get(`${this.entity}/${id}`);
       return new ResponseWrapper(response, response.data.data);
     } catch (error) {
-      const message = error.response.data
-        ? error.response.data.error
-        : error.response.statusText;
+      const message = error.response.data ? error.response.data.error : error.response.statusText;
       throw new ErrorWrapper(error, message);
     }
   }
@@ -88,14 +84,10 @@ export class BaseService {
     assert.id(id, { required: true });
 
     try {
-      const response = await this.request({ auth: true }).get(
-        `${this.entity}/${id}`
-      );
+      const response = await this.request({ auth: true }).get(`${this.entity}/${id}`);
       return new ResponseWrapper(response, response.data.data);
     } catch (error) {
-      const message = error.response.data
-        ? error.response.data.error
-        : error.response.statusText;
+      const message = error.response.data ? error.response.data.error : error.response.statusText;
       throw new ErrorWrapper(error, message);
     }
   }
@@ -104,10 +96,7 @@ export class BaseService {
     assert.object(data, { required: true });
 
     try {
-      const response = await this.request({ auth: true }).post(
-        `${this.entity}`,
-        data
-      );
+      const response = await this.request({ auth: true }).post(`${this.entity}`, data);
       return new ResponseWrapper(response, response.data.data);
     } catch (error) {
       throw new ErrorWrapper(error);
@@ -119,10 +108,7 @@ export class BaseService {
     assert.object(data, { required: true });
 
     try {
-      const response = await this.request({ auth: true }).patch(
-        `${this.entity}/${id}`,
-        data
-      );
+      const response = await this.request({ auth: true }).patch(`${this.entity}/${id}`, data);
       return new ResponseWrapper(response, response.data.data);
     } catch (error) {
       throw new ErrorWrapper(error);
@@ -133,9 +119,7 @@ export class BaseService {
     assert.id(id, { required: true });
 
     try {
-      const response = await this.request({ auth: true }).delete(
-        `${this.entity}/${id}`
-      );
+      const response = await this.request({ auth: true }).delete(`${this.entity}/${id}`);
       return new ResponseWrapper(response, response.data.data);
     } catch (error) {
       throw new ErrorWrapper(error);

@@ -108,7 +108,6 @@
 </template>
 
 <script>
-import detectEthereumProvider from '@metamask/detect-provider';
 import ContractReadFunction from './ContractReadFunction.vue';
 import ContractWriteFunction from './ContractWriteFunction.vue';
 import CodeTextArea from '@/components/CodeTextArea.vue';
@@ -242,7 +241,7 @@ export default {
         }
         return `Connected: ` + this.account.substr(0, 4) + '...' + this.account.substr(-2);
       } else {
-        return 'Connect to Web3';
+        return 'Connect Wallet';
       }
     },
     openable() {
@@ -358,7 +357,7 @@ export default {
     },
     connect() {
       console.log('emit connect');
-      WalletBoardBus.$emit('try-connect');
+      WalletBoardBus.$emit('connect');
       // if (!this.signer) {
       //   return;
       // }

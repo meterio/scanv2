@@ -58,5 +58,5 @@ export default {
   },
   getInternalTxs(network, address, page, limit = 8) {
     return get(network, `accounts/${address}/internaltxs?page=${page}&limit=${limit}`);
-  }
+  },
 };

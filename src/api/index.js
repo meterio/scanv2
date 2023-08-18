@@ -29,5 +29,5 @@ export default {
   verify,
   token,
   contract,
-  nft
+  nft,
 };

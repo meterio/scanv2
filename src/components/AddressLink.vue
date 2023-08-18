@@ -19,21 +19,21 @@ export default {
   props: {
     address: {
       type: String,
-      default: '0x'
+      default: '0x',
     },
     name: {
       type: String,
-      default: ''
+      default: '',
     },
     short: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       copied: false,
-      timer: null
+      timer: null,
     };
   },
   computed: {
@@ -58,7 +58,7 @@ export default {
         return this.shortAddr(this.address.toLowerCase(), 14);
       }
       return this.address.toLowerCase();
-    }
+    },
   },
   methods: {
     handleHover(hovered) {
@@ -74,8 +74,8 @@ export default {
     },
     clearCopied() {
       this.copied = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

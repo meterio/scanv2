@@ -4,14 +4,14 @@ export default class BaseModel {
   }
 
   get schema() {
-    throw new Error("Model schema not defined.");
+    throw new Error('Model schema not defined.');
   }
 
   buildModel(src = {}, schema = {}) {
     Object.keys(schema).forEach((schemaProp) => {
       const srcPropType = typeof src[schemaProp];
       if (
-        ["number", "boolean", "string", "object"].includes(srcPropType) &&
+        ['number', 'boolean', 'string', 'object'].includes(srcPropType) &&
         ![undefined, null].includes(src[schemaProp])
       ) {
         this[schemaProp] = src[schemaProp];
@@ -31,7 +31,7 @@ export default class BaseModel {
       if (Array.isArray(this[key]) && !this[key].length) {
         delete this[key];
       }
-      if (["", undefined].includes(this[key])) {
+      if (['', undefined].includes(this[key])) {
         delete this[key];
       }
     });

@@ -1,4 +1,4 @@
-import { get } from "@/utils/http";
+import { get } from '@/utils/http';
 
 export default {
   getAddresses(network) {
@@ -8,6 +8,6 @@ export default {
     return get(network, `knowns/token`);
   },
   emitImportApi(network, address) {
-    return get(network, `knowns/import/${address}`)
-  }
+    return get(network, `knowns/import/${address}`);
+  },
 };

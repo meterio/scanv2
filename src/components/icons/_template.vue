@@ -1,11 +1,6 @@
 <template>
   <!-- don't forget change viewBox and fill params -->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    :width="width"
-    :height="height"
-    viewBox="0 0 320 512"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" :width="width" :height="height" viewBox="0 0 320 512">
     <!-- begin -->
 
     <g :fill="color">

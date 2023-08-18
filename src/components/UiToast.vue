@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "UiToast",
+  name: 'UiToast',
   props: {
     item: {
       type: Object,
@@ -15,18 +15,18 @@ export default {
 
   methods: {
     remove() {
-      this.$emit("remove", this.item.id);
+      this.$emit('remove', this.item.id);
     },
   },
 
   computed: {
     classList() {
       return {
-        default: this.item.type === "default",
-        success: this.item.type === "success",
-        info: this.item.type === "info",
-        warning: this.item.type === "warning",
-        error: this.item.type === "error",
+        default: this.item.type === 'default',
+        success: this.item.type === 'success',
+        info: this.item.type === 'info',
+        warning: this.item.type === 'warning',
+        error: this.item.type === 'error',
       };
     },
   },

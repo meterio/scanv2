@@ -24,21 +24,21 @@ import 'prismjs/themes/prism-tomorrow.css'; // import syntax highlighting styles
 export default {
   name: 'CodeTextArea',
   components: {
-    PrismEditor
+    PrismEditor,
   },
   props: {
     code: {
       type: Object,
-      required: true
+      required: true,
     },
     index: {
       type: Number,
-      required: true
+      required: true,
     },
     total: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     codeContent() {
@@ -49,7 +49,7 @@ export default {
     },
     fileName() {
       return `File ${this.index} of ${this.total}: ${this.code.name}`;
-    }
+    },
   },
   methods: {
     highlighter(code) {
@@ -58,8 +58,8 @@ export default {
       } else {
         return code;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

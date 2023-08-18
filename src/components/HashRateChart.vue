@@ -14,11 +14,11 @@ export default {
   props: {
     dataCollection: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
-    LineChart
+    LineChart,
   },
   data() {
     return {
@@ -29,34 +29,34 @@ export default {
             {
               id: 'LEFT',
               gridLines: {
-                display: true
+                display: true,
               },
-              position: 'left'
+              position: 'left',
             },
             {
               id: 'RIGHT',
               gridLines: { display: false },
-              position: 'right'
-            }
+              position: 'right',
+            },
           ],
           xAxes: [
             {
               gridLines: {
-                display: false
-              }
-            }
-          ]
+                display: false,
+              },
+            },
+          ],
         },
         legend: {
           display: true,
           position: 'bottom',
           labels: {
-            usePointStyle: true
-          }
+            usePointStyle: true,
+          },
         },
         responsive: true,
-        maintainAspectRatio: false
-      }
+        maintainAspectRatio: false,
+      },
     };
   },
   mounted() {
@@ -74,7 +74,7 @@ export default {
             pointBorderColor: '#003CB2',
             pointBackgroundColor: '#003CB2',
             data: this.dataCollection.values,
-            yAxisID: 'LEFT'
+            yAxisID: 'LEFT',
           },
           {
             label: 'Mining Reward (TH/s)',
@@ -83,12 +83,12 @@ export default {
             pointBorderColor: '#42DCFE',
             pointBackgroundColor: '#42DCFE',
             data: this.dataCollection.diffs,
-            yAxisID: 'RIGHT'
-          }
-        ]
+            yAxisID: 'RIGHT',
+          },
+        ],
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

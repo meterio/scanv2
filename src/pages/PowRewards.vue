@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import StatusTag from "@/components/StatusTag.vue";
-import DataTable from "@/components/DataTable.vue";
-import DataSummary from "@/components/DataSummary.vue";
+import StatusTag from '@/components/StatusTag.vue';
+import DataTable from '@/components/DataTable.vue';
+import DataSummary from '@/components/DataSummary.vue';
 export default {
   components: {
     DataTable,
@@ -20,13 +20,13 @@ export default {
       summary: [],
       rewards: {
         fields: [
-          { key: "fullAddress", label: "Address" },
-          { key: "subTotalStr", label: "Amount" },
+          { key: 'fullAddress', label: 'Address' },
+          { key: 'subTotalStr', label: 'Amount' },
         ],
         items: [],
         pagination: {
           show: true,
-          align: "center",
+          align: 'center',
         },
       },
     };
@@ -38,11 +38,11 @@ export default {
       const res = await this.$api.pow.getRewardsByEpoch(this.network, epoch);
       this.loading = false;
       this.summary = [
-        { key: "Epoch", value: res.epoch },
-        { key: "Pos Block", value: res.posBlock },
-        { key: "Pow Block", value: res.powBlock },
-        { key: "Time", value: res.timestamp, type: "timestamp" },
-        { key: "Total Amount", value: res.totalAmountStr },
+        { key: 'Epoch', value: res.epoch },
+        { key: 'Pos Block', value: res.posBlock },
+        { key: 'Pow Block', value: res.powBlock },
+        { key: 'Time', value: res.timestamp, type: 'timestamp' },
+        { key: 'Total Amount', value: res.totalAmountStr },
       ];
       this.rewards.items.push(
         ...res.details.map((d) => {

@@ -45,7 +45,7 @@ export default {
 
   components: {
     ActiveAuctions,
-    PastAuctions
+    PastAuctions,
   },
 
   data() {
@@ -53,7 +53,7 @@ export default {
       msg: 'Welcome to Index!!!',
       mtrPrice: '$ -.--',
       mtrgPrice: '$ -.--',
-      mtrgPriceInMtr: '- MTR'
+      mtrgPriceInMtr: '- MTR',
     };
   },
 
@@ -64,8 +64,8 @@ export default {
       this.mtrPrice = '$ ' + mtr.price;
       this.mtrgPrice = '$ ' + mtrg.price;
       this.mtrgPriceInMtr = Math.floor((100 * mtrg.price) / mtr.price) / 100 + ' MTR';
-    }
-  }
+    },
+  },
 };
 </script>
 

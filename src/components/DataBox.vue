@@ -2,10 +2,7 @@
   <div class="data-box component">
     <SpinnerWave class="spinner-wrapper" v-if="loading"></SpinnerWave>
 
-    <div
-      :class="{ 'data-box-content': true, loading: loading }"
-      v-if="!isEmpty && !error"
-    >
+    <div :class="{ 'data-box-content': true, loading: loading }" v-if="!isEmpty && !error">
       <slot></slot>
     </div>
 
@@ -23,10 +20,10 @@
 </template>
 
 <script>
-import SpinnerWave from "./SpinnerWave.vue";
+import SpinnerWave from './SpinnerWave.vue';
 
 export default {
-  name: "DataBox",
+  name: 'DataBox',
   props: {
     loading: {
       type: Boolean,

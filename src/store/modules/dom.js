@@ -14,7 +14,7 @@ export default {
     widthTablet: 1024,
     knownAddresses: {},
     knownTokens: {},
-    network: !!VUE_APP_CHAIN_ID ? Number(VUE_APP_CHAIN_ID) : 82
+    network: !!VUE_APP_CHAIN_ID ? Number(VUE_APP_CHAIN_ID) : 82,
   },
 
   mutations: {
@@ -30,18 +30,18 @@ export default {
     },
     SET_KNOWN_TOKENS(state, valMap) {
       state.knownTokens = valMap;
-    }
+    },
   },
   actions: {
     changeNetwork({ commit }, network) {
       return commit('SET_NETWORK', network);
-    }
+    },
   },
 
   getters: {
-    isExtraSmall: state => state.windowWidth <= state.widthExtraSmall,
-    isSmall: state => state.windowWidth <= state.widthSmall,
-    isTablet: state => state.windowWidth <= state.widthTablet,
-    isDesktop: state => state.windowWidth > state.widthTablet
-  }
+    isExtraSmall: (state) => state.windowWidth <= state.widthExtraSmall,
+    isSmall: (state) => state.windowWidth <= state.widthSmall,
+    isTablet: (state) => state.windowWidth <= state.widthTablet,
+    isDesktop: (state) => state.windowWidth > state.widthTablet,
+  },
 };

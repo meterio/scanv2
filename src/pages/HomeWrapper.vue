@@ -5,6 +5,6 @@ div
 
 <script>
 export default {
-  name: "HomeWrapper",
+  name: 'HomeWrapper',
 };
 </script>

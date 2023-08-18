@@ -1,9 +1,10 @@
-import 'core-js/stable';
+// import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 import Vue from 'vue';
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue';
 import AppLayout from './layout/index.vue';
+import App from './App';
 import router from './router';
 import store from './store';
 import { fromWei, fromNow, shortHash, shortAddress, formatTime, formatDuration } from '@/utils';
@@ -33,15 +34,15 @@ Vue.use(BootstrapVueIcons);
 
 Vue.config.productionTip = false;
 
-Vue.filter('shortName', function(value) {
+Vue.filter('shortName', function (value) {
   return shortName(value);
 });
 
-Vue.filter('duration', function(value) {
+Vue.filter('duration', function (value) {
   return formatDuration(value);
 });
 
-Vue.filter('fromNow', function(value) {
+Vue.filter('fromNow', function (value) {
   return fromNow(value);
 });
 
@@ -52,7 +53,7 @@ var mixin = {
     },
     currentChain() {
       return getCurrentChain(this.network);
-    }
+    },
   },
   beforeMount() {
     if (this.init) this.init();
@@ -65,7 +66,7 @@ var mixin = {
     },
     network(to, from) {
       if (this.init) this.init();
-    }
+    },
   },
   methods: {
     fromNow(time) {
@@ -85,53 +86,23 @@ var mixin = {
     },
     formatDuration(duration) {
       return formatDuration(duration);
-    }
-  }
+    },
+  },
 };
 
 Vue.mixin(mixin);
-const StakingModuleAddress =
-  '0x' +
-  Buffer.from('staking-module-address')
-    .toString('hex')
-    .padStart(40, '0')
-    .slice(-40);
-const AuctionModuleAddress =
-  '0x' +
-  Buffer.from('auction-account-address')
-    .toString('hex')
-    .padStart(40, '0')
-    .slice(-40);
+const StakingModuleAddress = '0x' + Buffer.from('staking-module-address').toString('hex').padStart(40, '0').slice(-40);
+const AuctionModuleAddress = '0x' + Buffer.from('auction-account-address').toString('hex').padStart(40, '0').slice(-40);
 const AccountLockModuleAddress =
-  '0x' +
-  Buffer.from('account-lock-address')
-    .toString('hex')
-    .padStart(40, '0')
-    .slice(-40);
+  '0x' + Buffer.from('account-lock-address').toString('hex').padStart(40, '0').slice(-40);
 const ValidatorBenefitAddress =
-  '0x' +
-  Buffer.from('validator-benefit-address')
-    .toString('hex')
-    .padStart(40, '0')
-    .slice(-40);
+  '0x' + Buffer.from('validator-benefit-address').toString('hex').padStart(40, '0').slice(-40);
 const AuctionAccountAddress =
-  '0x' +
-  Buffer.from('auction-account-address')
-    .toString('hex')
-    .padStart(40, '0')
-    .slice(-40);
+  '0x' + Buffer.from('auction-account-address').toString('hex').padStart(40, '0').slice(-40);
 const AuctionLeftOverAddress = '0xe852f654dfaee0e2b60842657379a56e1cafa292';
 
-export const ParamsAddress =
-  '0x' +
-  Buffer.from('Params')
-    .toString('hex')
-    .padStart(40, '0');
-export const ExecutorAddress =
-  '0x' +
-  Buffer.from('Executor')
-    .toString('hex')
-    .padStart(40, '0');
+export const ParamsAddress = '0x' + Buffer.from('Params').toString('hex').padStart(40, '0');
+export const ExecutorAddress = '0x' + Buffer.from('Executor').toString('hex').padStart(40, '0');
 export const BridgePoolAddress = '0x5c5713656c6819ebe3921936fd28bed2a387cda5';
 
 new Vue({
@@ -153,7 +124,7 @@ new Vue({
     } else if (this.network == 'test') {
       knownTokens['0x8A419EF4941355476CF04933E90BF3BBF2F73814'.toLowerCase()] = {
         symbol: 'MTRG',
-        decimals: 18
+        decimals: 18,
       };
     }
     try {
@@ -219,5 +190,5 @@ new Vue({
   beforeDestroy() {
     window.removeEventListener('resize', () => store.commit('dom/SET_WINDOW_WIDTH', window.innerWidth));
   },
-  render: h => h(AppLayout)
+  render: (h) => h(AppLayout),
 }).$mount('#app');

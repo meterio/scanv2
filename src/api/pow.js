@@ -1,4 +1,4 @@
-import { get } from "@/utils/http";
+import { get } from '@/utils/http';
 
 export default {
   getRewards(network, page, limit = 8) {

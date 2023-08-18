@@ -16,7 +16,7 @@ export const formatNum = (val /* number|string|BigNumber */, precision = -1) => 
   return commaSeparated(num);
 };
 
-export const numFilter = val => {
+export const numFilter = (val) => {
   return formatNum(val, 2);
 };
 
@@ -59,7 +59,7 @@ export const bigNum = (a, precision = undefined) => {
   return '';
 };
 
-export const formatHashrate = hr => {
+export const formatHashrate = (hr) => {
   let numStr = '';
   if (typeof hr === 'number') {
     numStr = new BigNumber(hr).toFixed(0);

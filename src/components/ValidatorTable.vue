@@ -47,9 +47,7 @@
         stacked="lg"
       >
         <template slot="empty">
-          <div class="text-center pt15 text-grey" style="color: #5c6f8c">
-            No data available.
-          </div>
+          <div class="text-center pt15 text-grey" style="color: #5c6f8c">No data available.</div>
         </template>
         <template v-slot:cell(addressWithName)="data">
           <div class="dt-row">
@@ -62,7 +60,7 @@
               v-if="data.value.penalty > 0"
               :to="{
                 name: 'statDetail',
-                params: { address: data.value.address }
+                params: { address: data.value.address },
               }"
               >{{ data.value.penalty }}</router-link
             >
@@ -80,7 +78,7 @@
               class="link"
               :to="{
                 name: 'validatorDetail',
-                params: { address: data.value }
+                params: { address: data.value },
               }"
             >
               {{ data.value }}
@@ -141,20 +139,20 @@ export default {
       validate_right_search: '',
       validator_data: {
         fields: [],
-        items: []
-      }
+        items: [],
+      },
     };
   },
   components: {
     Loading,
     AmountTag,
     AddressLink,
-    TimeTag
+    TimeTag,
   },
   watch: {
     validate_right_search(newVal) {
       this.loadData();
-    }
+    },
   },
   methods: {
     sortingChanged({ sortBy, sortDesc }) {
@@ -207,18 +205,18 @@ export default {
             { key: 'votingPower', label: 'Total Votes', sortable: true },
             { key: 'commission%', label: 'Commission Rate', sortable: true },
             // { key: "shares%", label: "Pool Share%" },
-            { key: 'totalPoints', label: 'Penalty Points', sortable: true }
+            { key: 'totalPoints', label: 'Penalty Points', sortable: true },
           ];
-          this.validator_data.items = res.delegates.map(d => ({
+          this.validator_data.items = res.delegates.map((d) => ({
             ...d,
             votingPower: {
               type: 'amount',
               amount: d.votingPower,
               token: this.currentChain.gSymbol,
-              precision: 2
+              precision: 2,
             },
             addressWithName: { address: d.address, name: d.name },
-            totalPoints: { address: d.address, penalty: d.totalPoints }
+            totalPoints: { address: d.address, penalty: d.totalPoints },
           }));
         }
         if (this.current_tab === 'Candidates') {
@@ -226,18 +224,18 @@ export default {
             { key: 'addressWithName', label: 'Address' },
             { key: 'totalVotes', label: 'Total Votes', sortable: true },
             { key: 'commission%', label: 'Commission Rate', sortable: true },
-            { key: 'totalPoints', label: 'Penalty Points', sortable: true }
+            { key: 'totalPoints', label: 'Penalty Points', sortable: true },
           ];
-          this.validator_data.items = res.candidates.map(c => ({
+          this.validator_data.items = res.candidates.map((c) => ({
             ...c,
             totalVotes: {
               type: 'amount',
               amount: c.totalVotes,
               token: this.currentChain.gSymbol,
-              precision: 2
+              precision: 2,
             },
             addressWithName: { address: c.address, name: c.name },
-            totalPoints: { address: c.address, penalty: c.totalPoints }
+            totalPoints: { address: c.address, penalty: c.totalPoints },
           }));
         }
         if (this.current_tab === 'Jailed') {
@@ -245,19 +243,19 @@ export default {
             { key: 'addressWithName', label: 'Address' },
             { key: 'totalPoints', label: 'Penalty Points', sortable: true },
             { key: 'jailedTime', label: 'Jailed Time', sortable: true },
-            { key: 'bailAmount', label: 'Bail Amount', sortable: true }
+            { key: 'bailAmount', label: 'Bail Amount', sortable: true },
           ];
-          this.validator_data.items = res.jailed.map(j => ({
+          this.validator_data.items = res.jailed.map((j) => ({
             ...j,
             addressWithName: { address: j.address, name: j.name },
-            totalPoints: { address: j.address, penalty: j.totalPoints }
+            totalPoints: { address: j.address, penalty: j.totalPoints },
           }));
         }
       } catch (e) {
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

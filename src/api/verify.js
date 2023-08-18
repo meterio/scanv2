@@ -1,5 +1,5 @@
-import { fetch } from "@/utils/http1";
-import { getCurrentChain } from "@/config";
+import { fetch } from '@/utils/http1';
+import { getCurrentChain } from '@/config';
 
 export default {
   verifyFormData(network, { address, files, chosenContract }) {
@@ -7,17 +7,17 @@ export default {
     const url = chain.sourcifyApiBase;
     const chainId = chain.chainId;
     let data = new FormData();
-    data.append("address", address);
-    data.append("chain", chainId);
+    data.append('address', address);
+    data.append('chain', chainId);
     if (chosenContract !== undefined) {
-      data.append("chosenContract", chosenContract);
+      data.append('chosenContract', chosenContract);
     }
     if (files.length > 0) {
-      files.forEach((file) => data.append("files", file));
+      files.forEach((file) => data.append('files', file));
     }
-    return fetch(url, "POST", data, {
+    return fetch(url, 'POST', data, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
     });
   },

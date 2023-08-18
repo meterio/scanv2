@@ -1,4 +1,4 @@
-import { datetime } from "../config";
+import { datetime } from '../config';
 
 export default {
   computed: {

@@ -24,8 +24,8 @@ export default {
       } else {
         return this.direct;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

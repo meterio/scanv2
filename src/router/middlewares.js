@@ -1,6 +1,6 @@
-import $store from "../store";
-import { AuthService } from "@/services/auth.service";
-import { getCurrentChain } from "../config";
+import $store from '../store';
+import { AuthService } from '@/services/auth.service';
+import { getCurrentChain } from '../config';
 /**
  * Current user state initialization
  * @WARN Must be always first in middleware chain
@@ -11,7 +11,7 @@ export async function initCurrentUserStateMiddleware(to, from, next) {
   if (AuthService.hasRefreshToken() && !currentUserId) {
     try {
       await AuthService.debounceRefreshTokens();
-      await $store.dispatch("user/getCurrent");
+      await $store.dispatch('user/getCurrent');
       next();
     } catch (e) {
       console.log(e);
@@ -26,18 +26,18 @@ export async function initCurrentUserStateMiddleware(to, from, next) {
  */
 export function checkAccessMiddleware(to, from, next) {
   const currentUserId = $store.state.user.currentUser.id;
-  const isAuthRoute = to.matched.some(item => item.meta.isAuth);
+  const isAuthRoute = to.matched.some((item) => item.meta.isAuth);
 
   if (isAuthRoute && currentUserId) return next();
-  if (isAuthRoute) return next({ name: "login" });
+  if (isAuthRoute) return next({ name: 'login' });
   next();
 }
 
 export function setPageTitleMiddleware(to, from, next) {
-  const { network } = $store.state.dom
-  const chain = getCurrentChain(network)
+  const { network } = $store.state.dom;
+  const chain = getCurrentChain(network);
 
-  const pageTitle = to.matched.find(item => item.meta.title);
+  const pageTitle = to.matched.find((item) => item.meta.title);
 
   if (pageTitle) window.document.title = chain.title + ' | ' + pageTitle.meta.title;
   next();
@@ -46,18 +46,18 @@ export function setPageTitleMiddleware(to, from, next) {
 export function redirectNetwork(to, from, next) {
   const { network } = to.params;
   const curNetwork = $store.state.dom.network;
-  const tgtNetwork = curNetwork || from.params.network || "main";
+  const tgtNetwork = curNetwork || from.params.network || 'main';
 
   if (!network) {
-    $store.dispatch("dom/changeNetwork", tgtNetwork);
+    $store.dispatch('dom/changeNetwork', tgtNetwork);
     next({ path: `/${tgtNetwork}${to.fullPath}` });
   } else {
-    if (network !== "main" && network !== "test") {
-      $store.dispatch("dom/changeNetwork", tgtNetwork);
+    if (network !== 'main' && network !== 'test') {
+      $store.dispatch('dom/changeNetwork', tgtNetwork);
       next({ path: `/${tgtNetwork}${to.fullPath}` });
     }
 
-    $store.dispatch("dom/changeNetwork", network);
+    $store.dispatch('dom/changeNetwork', network);
     next();
   }
 }

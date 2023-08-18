@@ -1,17 +1,16 @@
-import { get } from "@/utils/http";
+import { get } from '@/utils/http';
 
 const validateTypeUrl = {
-  Delegates: "validators/delegate",
-  Candidates: "validators/candidate",
-  Jailed: "validators/jailed"
+  Delegates: 'validators/delegate',
+  Candidates: 'validators/candidate',
+  Jailed: 'validators/jailed',
 };
 
 export default {
   getValidateTypeList(network, page, limit, type, searchName, sortBy, sortDesc) {
     return get(
       network,
-      validateTypeUrl[type] +
-      `?page=${page}&limit=${limit}&search=${searchName}&sortBy=${sortBy}&sortDesc=${sortDesc}`
+      validateTypeUrl[type] + `?page=${page}&limit=${limit}&search=${searchName}&sortBy=${sortBy}&sortDesc=${sortDesc}`
     );
   },
   getValidateReward(network, page, limit) {
@@ -32,5 +31,5 @@ export default {
 
   getStats(network) {
     return get(network, `validators/stats`);
-  }
+  },
 };
