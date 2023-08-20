@@ -72,7 +72,7 @@ export default {
       });
 
       if (this.onboard) {
-        this.connect();
+        //this.connect();
 
         this.subscribe();
       }
