@@ -12,12 +12,12 @@
         </section>
 
         <section class="row mt-1">
-          <div class="col-md-4"><span class="success">B</span> success round producing mBlock<br /></div>
-          <div class="col-md-4"><span class="success">KB</span> success round producing KBlock<br /></div>
-          <div class="col-md-4"><span class="fail">F</span> failed round, no block produced</div>
-          <div class="col-md-4"><span class="success delay-5s">B</span> success round, delays 5-20s<br /></div>
-          <div class="col-md-4"><span class="success delay-20s">B</span> success round, delays 20-60s<br /></div>
-          <div class="col-md-4"><span class="success delay-1m">B</span> success round, delays &gt; 1min<br /></div>
+          <div class="col-md-4 d-flex align-center"><span class="success m-1 px-2">B</span> success round producing mBlock<br /></div>
+          <div class="col-md-4 d-flex align-center"><span class="success m-1 px-2">KB</span> success round producing KBlock<br /></div>
+          <div class="col-md-4 d-flex align-center"><span class="fail m-1 px-2">F</span> failed round, no block produced</div>
+          <div class="col-md-4 d-flex align-center"><span class="success delay-5s m-1 px-2">B</span> success round, delays 5-20s<br /></div>
+          <div class="col-md-4 d-flex align-center"><span class="success delay-20s m-1 px-2">B</span> success round, delays 20-60s<br /></div>
+          <div class="col-md-4 d-flex align-center"><span class="success delay-1m m-1 px-2">B</span> success round, delays &gt; 1min<br /></div>
         </section>
         <hr />
         <section class="d-flex justify-content-between flex-wrap mb-1 hints">
@@ -26,6 +26,7 @@
         <section class="d-flex flex-wrap">
           <span v-for="(summary, round) in stats" :key="round">
             <span
+              class="d-block m-1 px-2"
               :style="{ cursor: 'pointer' }"
               :id="'round-' + round"
               :title="memberAt(round).name"
@@ -40,7 +41,7 @@
                   ? 'delay-5s'
                   : 'no-delay')
               "
-              >&nbsp;
+              >
               {{ summary.status == 1 ? (summary.k ? 'KB' : 'B') : 'F' }}
             </span>
             <b-tooltip :target="'round-' + round">
