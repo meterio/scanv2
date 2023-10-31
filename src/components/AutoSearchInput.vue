@@ -45,6 +45,7 @@
 <script>
 import MersenneTwister from 'mersenne-twister';
 import Color from 'color';
+import { ethers } from 'ethers';
 const allColors = [
   '#f44336',
   '#e91e63',
@@ -142,7 +143,7 @@ export default {
     },
     async updateItems(val) {
       if (val && this.keyword) {
-        val = val.toLowerCase();
+        val = ethers.utils.isAddress(val) && !val.startsWith('0x') ? `0x${val.toLowerCase()}` : val.toLowerCase();
         const { type, data } = await this.$api.search.searchKeyWord(this.network, val);
 
         console.log(`search result type: ${type}, data:`, data);
