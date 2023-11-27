@@ -279,7 +279,7 @@
 
             <div class="col-12 col-md-3">
               <b-button
-                v-if="data.item.decoded"
+                v-if="data.item.decoded || data.item.clause.methodId === '0x64617461'"
                 size="sm"
                 variant="outline-secondary"
                 @click="data.toggleDetails"

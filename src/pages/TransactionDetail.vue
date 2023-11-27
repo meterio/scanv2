@@ -39,9 +39,12 @@
 
       <template #row-details="row">
         <b-card>
-          <!-- <div style="word-break: break-all"> -->
-          <VueJsonPretty :data="row.item.decoded" />
-          <!-- </div> -->
+          <div v-if="row.item.decoded">
+            <VueJsonPretty :data="row.item.decoded" />
+          </div>
+          <div v-else>
+            <VueJsonPretty :data="getHexToUTF8(row.item.clause.data)"></VueJsonPretty>
+          </div>
         </b-card>
       </template>
     </DataTableV2>
@@ -58,6 +61,7 @@ import { bigNum } from '@/utils';
 // import { abi, ScriptEngine } from '@meterio/devkit';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
+import { decode } from 'hex-encryption'
 
 // const TransferABI = new abi.Event({
 //   anonymous: false,
@@ -178,6 +182,14 @@ export default {
     },
   },
   methods: {
+    getHexToUTF8(data) {
+      if (!data) return ''
+      let hex = data
+      if (String(data).startsWith('0x')) {
+        hex = data.substring(2)
+      }
+      return decode(hex)
+    },
     navTabChange(val) {
       this.tabValue = val;
       this.loadData();
