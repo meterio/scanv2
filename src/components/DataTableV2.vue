@@ -284,7 +284,11 @@
                 @click="data.toggleDetails"
                 class="mr-2 float-right mb-2"
               >
-                <span v-if="!data.detailsShowing"> <b-icon icon="chevron-double-down"></b-icon> Decode </span>
+                <span v-if="!data.detailsShowing">
+                  <b-icon icon="chevron-double-down"></b-icon>
+                  <span v-if="data.item.decoded">Decode</span>
+                  <span v-else>UTF-8</span>
+                </span>
                 <span v-else> <b-icon icon="chevron-double-up"></b-icon>Hide</span>
               </b-button>
               <copy-data v-if="data.value.data !== '0x'" :data="data.value.data" />
