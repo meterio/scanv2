@@ -19,9 +19,15 @@ export default {
   },
   computed: {
     ago() {
+      if (!this.timestamp) {
+        return 'unknown'
+      }
       return fromNow(this.timestamp * 1000);
     },
     formatted() {
+      if (!this.timestamp) {
+        return 'unknown'
+      }
       return formatTime(this.timestamp * 1000);
     },
   },
