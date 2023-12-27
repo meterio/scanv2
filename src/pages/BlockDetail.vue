@@ -68,10 +68,10 @@ export default {
       const res = await this.$api.block.getBlockDetail(this.network, revision);
       const b = res.block;
       this.summaryTitleValue = `${b.number}`;
-      if (!!b) {
+      if (b) {
         this.summary = [
           { key: 'Hash', value: b.hash },
-          { key: 'Number', value: (b.blockType === 1 ? 'KBlock' : 'MBlock') + ' ' + b.number },
+          { key: 'Number', value: b.blockType + ' ' + b.number },
           { key: 'Timestamp', value: b.timestamp, type: 'full-timestamp' },
           { key: 'QC', value: b.qcHeight, type: 'block-link' },
           // { key: 'Block Type', value:  },
