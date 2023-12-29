@@ -124,7 +124,7 @@
 
         <!-- fullAddress column template -->
         <template v-slot:cell(fullAddress)="data">
-          <div class="dt-row">
+          <div class="dt-row text-break">
             <address-link :address="data.value" />
           </div>
         </template>

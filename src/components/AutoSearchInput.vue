@@ -16,9 +16,10 @@
             <div v-else class="addressSvgContainer">
               <span class="addressSvg" v-html="getAddressSvg(item.address)"></span>
             </div>
-            <span class="ml-1"
-              >{{ item.symbol ? '[' + item.symbol + ']' : '' }} {{ item.name }} - {{ item.address }}</span
-            >
+            <div class="_max-width ml-1">
+              <span class="d-block text-truncate">{{ item.symbol ? '[' + item.symbol + ']' : '' }} {{ item.name }}</span>
+              <span class="d-block text-truncate" >{{ item.address }}</span>
+            </div>
           </div>
         </b-dropdown-item>
       </b-dropdown>
@@ -284,5 +285,15 @@ export default {
 .dropdown-menu {
   max-height: 600px;
   overflow-y: auto;
+}
+
+._max-width {
+  max-width: 1000px;
+}
+
+@media all and (max-width:500px){
+  ._max-width {
+    max-width: 300px;
+  }
 }
 </style>

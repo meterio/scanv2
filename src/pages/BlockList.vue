@@ -13,7 +13,7 @@
         ) {{ '#' + data.item.number }}
 
     template(v-slot:cell(beneficiary)="data")
-      .dt-row
+      .dt-row.text-break
         router-link.link(
           :to="{ name: 'address', params: { address: data.item.beneficiary } }"
         ) {{ data.item.beneficiary }}
