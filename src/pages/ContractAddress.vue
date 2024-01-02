@@ -14,8 +14,7 @@
     :deployStatus='deployStatus'
   )
 
-  b-container.summary
-    .px-5
+  b-container.summary.px-0
     data-table-v3.mt-1pert.px-0(
       :isTableData='isTableData',
       :loadItems='loadItems',

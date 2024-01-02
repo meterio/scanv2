@@ -3,7 +3,7 @@
     <b-modal v-model="modal_show" hide-footer hide-header>
       <div class="text-center">Search No More Data</div>
     </b-modal>
-    <b-navbar toggleable="lg" type="light" variant="light" class="px-4">
+    <b-navbar toggleable="lg" type="light" variant="light" class="px-1">
       <div class="container">
         <b-navbar-brand href="/" class="mr-5">
           <b-img :src="computedLogo" height="40" class="mr-1" />

@@ -1,5 +1,5 @@
 <template>
-  <b-container class="summary">
+  <b-container class="summary px-0">
     <h2 class="title-row d-xl-flex">
       <div class="text-nowrap d-flex align-items-center">
         <img v-if="logoURI" class="mr-1" :src="logoURI" width="25" height="25" alt="" />

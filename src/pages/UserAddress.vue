@@ -2,7 +2,7 @@
 .detail-page
   data-summary(title='Address', :titleValue="address", :data='addressInfo.summary' :titleCopyable="true")
 
-  b-container.summary
+  b-container.summary.px-0
     #b-card.px-5
       #pie-chart.px-0
 

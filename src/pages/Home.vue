@@ -11,9 +11,9 @@
     //- node statistic
   b-container.px-0
     b-row
-      b-col(cols='12', lg='6')
+      b-col(cols='12', lg='6', class="px-lg-3 pr-1")
         recent-blocks
-      b-col(cols='12', lg='6')
+      b-col(cols='12', lg='6', class="px-lg-3 pr-1")
         recent-txs
   b-modal(v-model='modal_show', hide-footer, hide-header)
     .text-center Search No More Data
