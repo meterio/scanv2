@@ -12,12 +12,24 @@
         </section>
 
         <section class="row mt-1">
-          <div class="col-md-4 d-flex align-center"><span class="success m-1 px-2">B</span> success round producing mBlock<br /></div>
-          <div class="col-md-4 d-flex align-center"><span class="success m-1 px-2">KB</span> success round producing KBlock<br /></div>
-          <div class="col-md-4 d-flex align-center"><span class="fail m-1 px-2">F</span> failed round, no block produced</div>
-          <div class="col-md-4 d-flex align-center"><span class="success delay-5s m-1 px-2">B</span> success round, delays 5-20s<br /></div>
-          <div class="col-md-4 d-flex align-center"><span class="success delay-20s m-1 px-2">B</span> success round, delays 20-60s<br /></div>
-          <div class="col-md-4 d-flex align-center"><span class="success delay-1m m-1 px-2">B</span> success round, delays &gt; 1min<br /></div>
+          <div class="col-md-4 d-flex align-center">
+            <span class="success m-1 px-2">B</span> success round producing mBlock<br />
+          </div>
+          <div class="col-md-4 d-flex align-center">
+            <span class="success m-1 px-2">KB</span> success round producing KBlock<br />
+          </div>
+          <div class="col-md-4 d-flex align-center">
+            <span class="fail m-1 px-2">F</span> failed round, no block produced
+          </div>
+          <div class="col-md-4 d-flex align-center">
+            <span class="success delay-5s m-1 px-2">B</span> success round, delays 5-20s<br />
+          </div>
+          <div class="col-md-4 d-flex align-center">
+            <span class="success delay-20s m-1 px-2">B</span> success round, delays 20-60s<br />
+          </div>
+          <div class="col-md-4 d-flex align-center">
+            <span class="success delay-1m m-1 px-2">B</span> success round, delays &gt; 1min<br />
+          </div>
         </section>
         <hr />
         <section class="d-flex justify-content-between flex-wrap mb-1 hints">
@@ -41,14 +53,17 @@
                   ? 'delay-5s'
                   : 'no-delay')
               "
-              >
+            >
               {{ summary.status == 1 ? (summary.k ? 'KB' : 'B') : 'F' }}
             </span>
             <b-tooltip :target="'round-' + round">
               <div>Round: {{ round }}</div>
 
               <div v-if="summary.status == 1">{{ summary.k ? 'K' : 'm' }}Block: {{ summary.b }}</div>
-              <div v-else>Status: timeout</div>
+              <div v-else>
+                <div>Status: timeout</div>
+                <div>Expected Block: {{ summary.b }}</div>
+              </div>
 
               <div v-if="summary.status == 1">Used: {{ summary.intvl }} sec</div>
 
