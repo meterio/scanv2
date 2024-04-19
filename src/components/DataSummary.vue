@@ -374,6 +374,7 @@ import FullTimeTag from '@/components/FullTimeTag.vue';
 import NftLink from './NftLink.vue';
 import { formatNum } from '@/utils';
 import BucketHighlight from '@/components/BucketHighlight.vue';
+import { ethers } from 'ethers';
 
 export default {
   components: { StatusTag, AddressLink, AmountTag, NftLink, TimeTag, FullTimeTag, BucketHighlight },
@@ -510,7 +511,11 @@ export default {
       location.reload();
     },
     async copyTitleToClipBoard(text) {
-      await navigator.clipboard.writeText(text);
+      let _text = text
+      if (ethers.utils.isAddress(text)) {
+        _text = ethers.utils.getAddress(text)
+      }
+      await navigator.clipboard.writeText(_text);
       this.titleCopied = true;
       if (this.timer) {
         clearTimeout(this.timer);
@@ -524,7 +529,11 @@ export default {
       this.copied = false;
     },
     async copyToClipBoard(text) {
-      await navigator.clipboard.writeText(text);
+      let _text = text
+      if (ethers.utils.isAddress(text)) {
+        _text = ethers.utils.getAddress(text)
+      }
+      await navigator.clipboard.writeText(_text);
       this.copied = true;
       if (this.timer) {
         clearTimeout(this.timer);

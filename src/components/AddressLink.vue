@@ -14,6 +14,7 @@
 
 <script>
 import { randomHex } from '@/utils';
+import { ethers } from 'ethers';
 export default {
   name: 'AddressLink',
   props: {
@@ -65,7 +66,7 @@ export default {
       this.isHovered = hovered;
     },
     async copyToClipBoard() {
-      await navigator.clipboard.writeText(this.address);
+      await navigator.clipboard.writeText(ethers.utils.getAddress(this.address));
       this.copied = true;
       if (this.timer) {
         clearTimeout(this.timer);
