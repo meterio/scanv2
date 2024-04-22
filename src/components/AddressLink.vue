@@ -51,14 +51,15 @@ export default {
       if (this.name) {
         return this.name;
       }
+      const formatAddr = ethers.utils.getAddress(this.address)
       const knowns = this.$store.state.dom.knownAddresses;
-      if (this.address.toLowerCase() in knowns) {
+      if (formatAddr.toLowerCase() in knowns) {
         return knowns[this.address.toLowerCase()];
       }
       if (this.short) {
-        return this.shortAddr(this.address.toLowerCase(), 14);
+        return this.shortAddr(formatAddr, 14);
       }
-      return this.address.toLowerCase();
+      return formatAddr;
     },
   },
   methods: {

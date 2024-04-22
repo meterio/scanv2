@@ -6,7 +6,7 @@
         <span class="title">{{ title }}</span>
       </div>
       <div class="text-break d-flex align-items-center">
-        <span class="title-value">{{ titleValue }}</span>
+        <span class="title-value">{{ computedTitleValue }}</span>
 
         <span v-if="titleValue && titleCopyable">
           <b-button v-if="titleCopied" variant="outline-success" pill size="sm">
@@ -435,6 +435,12 @@ export default {
     },
   },
   computed: {
+    computedTitleValue() {
+      if (ethers.utils.isAddress(this.titleValue)) {
+        return ethers.utils.getAddress(this.titleValue)
+      }
+      return this.titleValue
+    },
     loading() {
       return !(this.data instanceof Array && this.data.length > 0);
     },
