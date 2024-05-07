@@ -11,6 +11,10 @@
       class="px-0"
     >
     </DataTableV2>
+
+    <b-card v-if="network === 82" class="container mt-3" title="Validator Map">
+      <iframe width="100%" :height="mobile ? 300 : 600" src="https://vermillion-lokum-ed1b11.netlify.app/" frameborder="0"></iframe>
+    </b-card>
   </div>
 </template>
 

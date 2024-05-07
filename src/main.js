@@ -54,6 +54,9 @@ var mixin = {
     currentChain() {
       return getCurrentChain(this.network);
     },
+    mobile() {
+      return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    }
   },
   beforeMount() {
     if (this.init) this.init();
