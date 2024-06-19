@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="function-container my-2 p-1 px-3" v-if="abi">
+      <!-- <div>{{ abi }}</div> -->
       <div class="function-name d-flex justify-content-between" @click="isOpenFolder">
         <span>{{ index + '. ' + computedFunName }}</span>
         <span class="d-flex align-center">
@@ -33,7 +34,13 @@
             </div>
             <section>
               <b-button type="submit" size="sm" variant="success" class="mb-2">Write</b-button>
-              <b-button class="ml-2" v-if="!!hash" @click="viewTransaction" type="button" variant="primary"
+              <b-button
+                size="sm"
+                class="ml-2 mb-2"
+                v-if="!!hash"
+                @click="viewTransaction"
+                type="button"
+                variant="primary"
                 >View Transaction</b-button
               >
             </section>
@@ -94,10 +101,19 @@ export default {
       const inputs = [];
 
       for (const i of this.abi.inputs) {
-        inputs.push({
-          name: `${i.name}(${i.type})`,
-          isUnit: i.type.includes('uint'),
-        });
+        const isUnit = i.type.includes('uint');
+        if (i.type == 'tuple') {
+          let details = i.components.map((c) => `${c.type} ${c.name}`);
+          inputs.push({
+            name: `${i.name} ${i.type}(${details.join(',')})`,
+            isUnit,
+          });
+        } else {
+          inputs.push({
+            name: `${i.name} (${i.type})`,
+            isUnit,
+          });
+        }
       }
 
       return inputs;
@@ -133,19 +149,23 @@ export default {
       if (this.writeLoading) {
         return;
       }
+      console.log(`abi:`, this.abi);
 
       if (this.contract) {
         this.writeLoading = true;
         try {
           let parameters = [...this.params];
+          console.log('parms: ', ...this.params);
           parameters = parameters.map((p) => {
+            const _p = p.replaceAll("'", '"').replaceAll('"true"', 'true').replaceAll('"false"', 'false');
             if (p.includes('[') && p.includes(']')) {
-              let _p = p;
-              if (p.includes("'")) {
-                _p = p.replaceAll("'", '"');
-              }
               const parsedP = JSON.parse(_p);
               return parsedP;
+            }
+            if (_p == 'true') {
+              return true;
+            } else if (_p == 'false') {
+              return false;
             }
             return p;
           });
@@ -155,7 +175,8 @@ export default {
               value: '0x' + Number(value).toString(16),
             });
           }
-          const abiName = `${this.abi.name}(${this.abi.inputs.map((input) => input.type).join(',')})`;
+          // const abiName = `${this.abi.name}(${this.abi.inputs.map((input) => input.type).join(',')})`;
+          const abiName = this.abi.name;
           console.log('parameters', parameters);
           const tx = await this.contract[abiName].apply(this, parameters);
 
