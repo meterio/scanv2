@@ -26,17 +26,17 @@
     </span>
     <span v-if="row.name === 'NativeBucketMerge'">
       <b>Merge</b>
-      <BucketLink class="ml-2" :id="row.fromBucketID" short />
+      <BucketLink class="ml-2" :id="row.fromBktID" short />
       <b class="ml-2">To</b>
-      <BucketLink class="ml-2" :id="row.toBucketID" short />
+      <BucketLink class="ml-2" :id="row.toBktID" short />
     </span>
     <span v-if="row.name === 'NativeBucketTransferFund'">
       <b>Transfer</b>
       <span class="ml-2"><AmountTag :amount="row.amount" token="MTRG" :precision="2" :decimals="18" /></span>
       <b class="ml-2">From</b>
-      <BucketLink class="ml-2" :id="row.fromBucketID" short />
+      <BucketLink class="ml-2" :id="row.fromBktID" short />
       <b class="ml-2">To</b>
-      <BucketLink class="ml-2" :id="row.toBucketID" short />
+      <BucketLink class="ml-2" :id="row.toBktID" short />
     </span>
     <span v-if="row.name === 'NativeBucketUpdateCandidate'">
       <b>Update Candidate on</b>

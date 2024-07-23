@@ -10,11 +10,13 @@
         tokenId
       }}</b-link>
       <span>]</span>
-      <span v-if="value > 1">({{ value }})</span>
       <b-popover v-if="mediaUrl" triggers="hover" :target="id">
         <img :src="mediaUrl" width="110" class="thumbnail" />
       </b-popover>
     </span>
+    <span v-if="value > 1">({{ value }})</span>
+
+    {{ mediaUrl }}
   </span>
 </template>
 
@@ -29,17 +31,18 @@ export default {
     mediaUrl: { type: String, default: '' },
     disabled: { type: Boolean, default: false },
   },
+  created() {
+    this.id = randomHex();
+    console.log(this.id);
+  },
   data() {
     return {
+      id: '',
       hint: '',
       timer: null,
     };
   },
-  computed: {
-    id() {
-      return randomHex();
-    },
-  },
+  computed: {},
   methods: {},
 };
 </script>
