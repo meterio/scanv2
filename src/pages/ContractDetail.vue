@@ -36,14 +36,14 @@
           />
         </b-tab>
         <b-tab v-if="contractCallEnable" title="Read">
-          <b-button @click="connect" :variant="variantBtn" pill size="sm">
+          <!-- <b-button @click="connect" :variant="variantBtn" pill size="sm">
             {{ computedBtnText }}
-          </b-button>
+          </b-button> -->
           <ContractReadFunction
             v-for="(item, index) in readAbi"
             :key="index"
             :abi="item"
-            :contract="contract"
+            :contract="readContract"
             :open="openable"
             :index="index + 1"
           />
@@ -69,14 +69,14 @@
               >, Previously recorded to be on <address-link :address="proxyContract.prevImplAddr"
             /></span>
           </div>
-          <b-button @click="connect" :variant="variantBtn" pill size="sm">
+          <!-- <b-button @click="connect" :variant="variantBtn" pill size="sm">
             {{ computedBtnText }}
-          </b-button>
+          </b-button> -->
           <ContractReadFunction
             v-for="(item, index) in implReadAbi"
             :key="index"
             :abi="item"
-            :contract="implContract"
+            :contract="readImplContract"
             :open="implOpenable"
             :index="index + 1"
           />
@@ -167,6 +167,7 @@ export default {
   data() {
     return {
       contract: null,
+      readContract: null,
       abi: null,
       readAbi: [],
       writeAbi: [],
@@ -174,7 +175,8 @@ export default {
       implAbi: null,
       implReadAbi: [],
       implWriteAbi: [],
-      implContract: null
+      implContract: null,
+      readImplContract: null,
     };
   },
   computed: {
@@ -330,6 +332,7 @@ export default {
       this.abi = abi;
       this.readAbi = readAbi;
       this.writeAbi = writeAbi;
+      this.readContract = new ethers.Contract(this.address, abi, new ethers.providers.JsonRpcProvider(this.currentChain.rpcUrl));
     },
     initImplAbi() {
       if (!this.implFiles.length) {
@@ -354,6 +357,8 @@ export default {
       this.implAbi = abi;
       this.implReadAbi = readAbi;
       this.implWriteAbi = writeAbi;
+
+      this.readImplContract = new ethers.Contract(this.address, abi, new ethers.providers.JsonRpcProvider(this.currentChain.rpcUrl));
     },
     connect() {
       console.log('emit connect');

@@ -16,7 +16,7 @@
     </span>
     <span v-if="value > 1">({{ value }})</span>
 
-    {{ mediaUrl }}
+    <!-- {{ mediaUrl }} -->
   </span>
 </template>
 

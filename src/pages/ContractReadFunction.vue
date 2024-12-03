@@ -125,7 +125,7 @@ export default {
       this.showNumberModal = true;
     },
     isOpenFolder() {
-      if (this.open) {
+      if (this.contract) {
         this.v = !this.v;
       }
     },
