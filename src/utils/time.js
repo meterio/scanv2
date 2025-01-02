@@ -9,6 +9,11 @@ export const fromNow = (timestamp) => {
   if (diff < 60) {
     return `${diff} seconds ago`;
   }
+
+  const daysDiff = moment().diff(timestamp, 'days');
+  if (daysDiff > 1) {
+    return `${daysDiff} days ago`;
+  }
   return moment(timestamp).fromNow();
 };
 
