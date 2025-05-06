@@ -1,21 +1,26 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@4.7.0
+  node: circleci/node@7.0.0
 jobs:
   build_and_deploy_mainnet:
     resource_class: large
     docker:
-      - image: 'cimg/node:16.10'
+      - image: 'cimg/node:20.19'
+    environment:
+      DEPLOY_HOST: 34.53.102.108
+      DEPLOY_FOLDER: scan-meter-io
+      SSH_OPTIONS: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:48o4O3yWCP1MbjxhyGvDL+NNUsYcRJVodZjzg7nV0C4"
+      - run:
+          name: install rsync
+          command: |
+            sudo apt-get update 
+            sudo apt-get install -y rsync
       - checkout
-      - run:
-          name: download & unzip awscli v2
-          command: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip
-      - run:
-          name: install awscli v2
-          command: sudo ./aws/install
-      # look for existing cache and restore if found
       - restore_cache:
           key: scanv2-deps-{{ checksum "package.json" }}
       - run:
@@ -32,24 +37,29 @@ jobs:
           name: production build
           command: NODE_ENV=production VUE_APP_CHAIN_ID=82 npm run build
       - run:
-          name: s3 sync
-          command: aws s3 sync ./dist/ s3://scan-meter-io/ --delete
-      - run:
-          name: invalidation
-          command: aws cloudfront create-invalidation --distribution-id E23I92R91V76ES --paths "/*"
+          name: deploy
+          command: |
+            rsync -e "ssh $SSH_OPTIONS" -rzvh --delete ./dist/ root@$DEPLOY_HOST:/var/www/$DEPLOY_FOLDER/
+            ssh $SSH_OPTIONS root@$DEPLOY_HOST "service nginx restart"
 
   build_and_deploy_testnet:
     resource_class: large
     docker:
       - image: 'cimg/node:16.7'
+    environment:
+      DEPLOY_HOST: 34.53.102.108
+      DEPLOY_FOLDER: scan-testnet-meter-io
+      SSH_OPTIONS: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:48o4O3yWCP1MbjxhyGvDL+NNUsYcRJVodZjzg7nV0C4"
+      - run:
+          name: install rsync
+          command: |
+            sudo apt-get update 
+            sudo apt-get install -y rsync
       - checkout
-      - run:
-          name: download & unzip awscli v2
-          command: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip
-      - run:
-          name: install awscli v2
-          command: sudo ./aws/install
       - restore_cache:
           key: scanv2-deps-{{ checksum "package.json" }}
       - run:
@@ -66,23 +76,20 @@ jobs:
           name: testnet build
           command: VUE_APP_CHAIN_ID=83 npm run build
       - run:
-          name: s3 sync
-          command: aws s3 sync ./dist/ s3://scan-testnet-meter-io/ --delete
-      - run:
-          name: invalidation
-          command: aws cloudfront create-invalidation --distribution-id E23NZWCMNUUIEZ --paths "/*"
+          name: deploy
+          command: |
+            rsync -e "ssh $SSH_OPTIONS" -rzvh --delete ./dist/ root@$DEPLOY_HOST:/var/www/$DEPLOY_FOLDER/
+            ssh $SSH_OPTIONS root@$DEPLOY_HOST "service nginx restart"
 
 workflows:
   fresh_deploy:
     jobs:
       - build_and_deploy_testnet:
-          context: aws-2023
           filters:
             branches:
               only:
                 - master
       - build_and_deploy_mainnet:
-          context: aws-2023
           filters:
             tags:
               only: /^v.*/
